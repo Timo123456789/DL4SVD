@@ -1,0 +1,102 @@
+% Author: Jannes Bantje
+% Modified: Lars Haalck lars.haalck@wwu.de
+% please ask Lars Haalck first if you have any questions
+\input{preamble.tex}
+
+%Informationen zur Arbeit
+\newcommand{\printname}{Timo Lietmeyer}
+\newcommand{\printnumber}{459 169}
+
+\newcommand{\printtitle}{Formbasiertes Objekttracking \\ mit der Discrete Curve Evolution}
+\newcommand{\printalttitle}{Shape-based object tracking \\ with the Discrete Curve Evolution}
+\newcommand{\printcity}{Münster}
+\newcommand{\printtype}{Bachelorarbeit}
+\newcommand{\printdegree}{Bachelor of Science}
+\newcommand{\printsupervisor}{Dr. Christian Knoth}
+\newcommand{\printfirstassessor}{Prof. Dr. Reinhard Moratz}
+\newcommand{\printsecondassessor}{Dr. Christian Knoth}
+\newcommand{\printinstitute}{Fachbereich Geowissenschaften \\
+    Institut für Geoinformatik}
+
+% !!!only for pseudo text, can be deleted!!!
+\usepackage{blindtext}
+
+\hypersetup{pdfinfo = {
+	Title={Formbasiertes Objekttracking mit der Discrete Curve Evolution},
+	Author=\printname,
+	Keywords = {Discrete Curve Evolution, DCE, YOLO, Bachelorarbeit, Thesis, \printdegree, Formbasiertes Objekttracking mit der Discrete Curve Evolution, Formbasiertes Objekttracking}}}
+
+\begin{document}
+% set the pager numbering to big roman numbers for firt few pages
+\pagenumbering{Roman}
+\listoftodos
+
+
+% titlepage does not need cleardoubleoddemptypage
+\begin{titlepage}
+	\input{chapter/title_page.tex}
+\end{titlepage}
+
+\begin{titlepage}
+	\input{chapter/title_page2.tex}
+\end{titlepage}
+
+\input{chapter/001abstract.tex}
+\cleardoubleoddemptypage
+
+\tableofcontents
+\cleardoubleoddemptypage
+
+% set the page numbering back to arabic
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\input{chapter/01intro.tex}
+\cleardoubleoddemptypage
+
+\input{chapter/02Objekterkennung.tex}
+\cleardoubleoddemptypage
+
+\input{chapter/03Formverarbeitung.tex}
+\cleardoubleoddemptypage
+
+\input{chapter/04verwendeteTechnologie.tex}
+\cleardoubleoddemptypage
+
+\input{chapter/05implementierung.tex}
+\cleardoubleoddemptypage
+
+
+\input{chapter/06evaluation.tex}
+\cleardoubleoddemptypage
+
+
+\input{chapter/07discussion.tex}
+\cleardoubleoddemptypage
+
+
+\input{chapter/08conclusion.tex}
+\cleardoubleoddemptypage
+
+% when adding a new chapter comment out this line
+%\input{chapter/chapterFile.tex}
+%cleardoubleoddemptypage
+
+\appendix % hier beginnt der Anhang
+\input{chapter/09appendix_chapter.tex}
+\cleardoubleoddemptypage
+
+\listoffigures
+\cleardoubleoddemptypage
+
+\listoftables
+\cleardoubleoddemptypage
+
+\lstlistoflistings
+\cleardoubleoddemptypage
+
+
+\printbibliography
+\cleardoubleoddemptypage
+\input{chapter/signature.tex}
+
+\end{document}
