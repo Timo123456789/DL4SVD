@@ -1,23 +1,171 @@
 import cv2
 import numpy as np
 from scipy.spatial import ConvexHull
+import os
 
 def main():
     oriented = True
-    path_folds = r'Code\data\folds\txts\fold01.txt'
+    path_folds = r'Code\data\folds\txts'
     path_all_images = r'Code\data\all_vedai_images'
     path_labels = r'Code\data\all_vedai_images\annotation.txt'
    
-    lines_fold = read_file(path_folds)
+    #lines_fold = read_file(path_folds)
     
-    show_every_picture_with_oriented_bounding_box(path_all_images,path_folds,path_labels,oriented)
+    #show_every_picture_with_oriented_bounding_box(path_all_images,r'Code\data\folds\txts\fold01.txt',path_labels,oriented, False,False)
+    for fold_nr in range(9):
+        try:
+            create_fold(fold_nr,path_all_images,path_folds,path_labels, False)
+        except:
+            print("keine Nummer  gefunden")
 
-    #create_folds(path_all_images,path_folds,path_labels)
+def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir):
 
-def create_folds(path_all_images,path_folds,path_labels):
+    fold_train_images_path = rf'Code\data\folds\txts\fold0{fold_nr}.txt'
+    fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_nr}test.txt'
 
+    paths_object = create_folder_structure(fold_nr)
+
+    lines_fold_train = read_file(fold_train_images_path)
+    lines_fold_val = read_file(fold_val_images_path)
+    labels = read_file(path_labels)
+   
+    counter = 0
+    for line in lines_fold_train:
+        counter += 1
+        target = line
+        if ir == True:
+            image_path = f"{path_all_images}\{target}_ir.png"
+        else:
+            image_path = f"{path_all_images}\{target}_co.png"
+
+        filtered_labels = select_all_labels_in_img(target, labels)
+        copy_image(image_path, paths_object['path_train_images'])
+        create_label_file(target, filtered_labels, paths_object['path_train_labels'], image_path)
+        print("Fold Nr:"+str(fold_nr)+" /  train image: "+str(counter) + "/" + str(len(lines_fold_train)))
+
+
+    counter = 0
+    for line in lines_fold_val:
+        counter += 1
+        target = line
+        if ir == True:
+            image_path = f"{path_all_images}\{target}_ir.png"
+        else:
+            image_path = f"{path_all_images}\{target}_co.png"
+
+        filtered_labels = select_all_labels_in_img(target, labels)
+        copy_image(image_path, paths_object['path_val_images'])
+        create_label_file(target, filtered_labels, paths_object['path_val_labels'], image_path)
+        print("Fold Nr:"+str(fold_nr)+"val image: " + str(counter) + "/" + str(len(lines_fold_val)))
+        
+        
+    
+    create_yaml()
     return 0
-def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, path_labels, oriented, ir):
+
+
+
+
+
+def create_label_file(target, labels, path, img_path):
+    file_path = f"{path}\{target}.txt"
+
+    arr_labels = []
+    img = cv2.imread(img_path)
+  
+    try:
+        with open(file_path, 'w') as datei:
+            for label in labels:
+                transf_label = calc_pixel_like_authors(img, label, True, True) 
+                px_corner = [transf_label[1][1],transf_label[1][0],transf_label[2][1],transf_label[2][0],transf_label[3][1],transf_label[3][0],transf_label[4][1],transf_label[4][0]]
+                yolo_transf_label = convert_to_yolo_obb(px_corner, img.shape[1], img.shape[0])
+                datei.write(
+                     transf_label[0] + " "+
+                   str(yolo_transf_label[0])+" "+
+                   str(yolo_transf_label[1])+" "+
+                   str(yolo_transf_label[2])+" "+ 
+                   str(yolo_transf_label[3])+" "+ 
+                   str(yolo_transf_label[4])+" "+ 
+                   str(yolo_transf_label[5])+" "+
+                   str(yolo_transf_label[6])+" "+
+                   str(yolo_transf_label[7]) + '\n')
+            #datei.write(inhalt)
+        #print(f"Die Datei '{file_path}' wurde erfolgreich mit Inhalt erstellt.")
+    except Exception as e:
+        print(f"Ein Fehler ist aufgetreten: {e}")
+    
+
+def convert_to_yolo_obb(corners_pixel, img_width, img_height):
+    """
+    Konvertiert Pixelkoordinaten von Eckpunkten in das normalisierte
+    YOLO OBB Format.
+
+    Args:
+        corners_pixel (list or tuple): Eine Liste oder ein Tupel mit 8
+            Integer-Werten (x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px).
+        img_width (int): Die Breite des Bildes in Pixeln.
+        img_height (int): Die Höhe des Bildes in Pixeln.
+
+    Returns:
+        tuple: Ein Tupel mit 8 Float-Werten (x1_norm, y1_norm, x2_norm, y2_norm,
+               x3_norm, y3_norm, x4_norm, y4_norm) im Bereich [0, 1].
+    """
+    x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px = corners_pixel
+
+    x1_norm = x1_px / img_width
+    y1_norm = y1_px / img_height
+    x2_norm = x2_px / img_width
+    y2_norm = y2_px / img_height
+    x3_norm = x3_px / img_width
+    y3_norm = y3_px / img_height
+    x4_norm = x4_px / img_width
+    y4_norm = y4_px / img_height
+
+    return [x1_norm, y1_norm, x2_norm, y2_norm, x3_norm, y3_norm, x4_norm, y4_norm]
+
+def copy_image(source_image_path, destination_folder):
+    try:
+        with open(source_image_path, 'rb') as source_file:
+            image_data = source_file.read()
+            filename = os.path.basename(source_image_path)
+            destination_image_path = os.path.join(destination_folder, filename)
+            with open(destination_image_path, 'wb') as destination_file:
+                destination_file.write(image_data)
+            #print(f"Image '{filename}' manually copied to '{destination_folder}'.")
+    except FileNotFoundError:
+        print(f"Error: The source file '{source_image_path}' was not found.")
+    except PermissionError:
+        print(f"Error: No permission to read the source file or write to the destination folder.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+def create_folder_structure(fold_nr):
+    def make_directories(path):
+        try:
+            os.makedirs(path)
+            print(f"Ordnerstruktur '{path}' erfolgreich erstellt.")
+        except FileExistsError:
+            print(f"Einige oder alle Ordner in '{path}' existieren bereits.")
+        except Exception as e:
+            print(f"Ein Fehler ist aufgetreten: {e}")
+
+    
+    path_obj = {
+        'path_train_images' : f"code/data/folds/fold{fold_nr}/train/images",
+        'path_train_labels' : f"code/data/folds/fold{fold_nr}/train/labels",
+        'path_val_images' : f"code/data/folds/fold{fold_nr}/val/images",
+        'path_val_labels' : f"code/data/folds/fold{fold_nr}/val/labels",
+    }
+  
+    
+    make_directories(path_obj['path_train_images'])
+    make_directories(path_obj['path_train_labels'])
+    
+    make_directories(path_obj['path_val_images'])
+    make_directories(path_obj['path_val_labels'])
+   
+    return path_obj
+def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, path_labels, oriented, ir, ret_pts):
     lines_fold = read_file(path_folds)
     labels = read_file(path_labels)
     print(labels[0])
@@ -38,7 +186,7 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
 
         for i in filtered_labels:
             
-            img = calc_pixel_like_authors(img,i, oriented)
+            img = calc_pixel_like_authors(img,i, oriented, ret_pts)
             #pts = calc_pixel_like_authors(i)
             
 
@@ -178,7 +326,7 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
     cv2.line(image, p4, p1, color, thickness)
 
     print("Anzahl der pixel in einer oriented bb sind: " + str(calculate_oriented_bounding_box_area([p1,p2,p3,p4])))
-    print(veh_type)
+  
     if veh_type is not None:
         label = f"{veh_type}"
     else:
@@ -201,9 +349,8 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
         label = 'pick-up'
     elif veh_type == '031':
         label = 'plane'
-    print("x1")
+
     if label:
-        print("t1")
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.5
         font_thickness = 1
@@ -228,7 +375,7 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
 
 
 
-def calc_pixel_like_authors(img, label, oriented):
+def calc_pixel_like_authors(img, label, oriented, ret_pts):
     indice_vehicle = label.split()
     Xvehicle = np.float64(indice_vehicle[1])
     Yvehicle = np.float64(indice_vehicle[2])
@@ -236,10 +383,9 @@ def calc_pixel_like_authors(img, label, oriented):
 
 
     veh_type = indice_vehicle[12]
-    x = np.array(indice_vehicle[4:8], np.int32)
-    y = np.array(indice_vehicle[8:12], np.int32)
-    print(x)
-    print(y)
+    x = np.array(indice_vehicle[4:8], np.float32)
+    y = np.array(indice_vehicle[8:12], np.float32)
+   
 
   
     l_1 = np.sqrt((x[0]-x[1])**2 + (y[0]-y[1])**2)
@@ -247,7 +393,7 @@ def calc_pixel_like_authors(img, label, oriented):
     l_3 = np.sqrt((x[2]-x[3])**2 + (y[2]-y[3])**2)
     l_4 = np.sqrt((x[3]-x[0])**2 + (y[3]-y[0])**2)
     l = np.array([l_1,l_2,l_3,l_4])
-    print(l)
+
     ktri = np.argsort(l)[::-1] #key triangle
     ltri = l[ktri]              # längen Triangle
 
@@ -295,7 +441,6 @@ def calc_pixel_like_authors(img, label, oriented):
         Xvehicle - (width_car / 2) * sin_theta - (length_car / 2) * cos_theta
     ])
 
-    print(label)
 
     p1 = np.array(pt1, np.int64)
     p2 = np.array(pt2, np.int64)
@@ -303,10 +448,43 @@ def calc_pixel_like_authors(img, label, oriented):
     p4 = np.array(pt4, np.int64)
     pts = [p1, p2, p3, p4]
 
-    if oriented == True:
+
+    if ret_pts == True and oriented == True :
+        p1 = (int(pt1[1]), int(pt1[0]))
+        p2 = (int(pt2[1]), int(pt2[0]))
+        p3 = (int(pt3[1]), int(pt3[0]))
+        p4 = (int(pt4[1]), int(pt4[0]))
+        return [veh_type,p1,p2,p3,p4]
+    elif ret_pts == True and oriented == False:
+        cos_theta = np.cos(-orientationVehicle)
+        sin_theta = np.sin(-orientationVehicle)
+
+        # Berechne die Eckpunkte des ROTIERTEN Fahrzeugs
+        pt1 = np.array([Yvehicle + (width_car / 2) * cos_theta + (length_car / 2) * sin_theta,
+                    Xvehicle + (width_car / 2) * sin_theta - (length_car / 2) * cos_theta])
+        pt2 = np.array([Yvehicle + (width_car / 2) * cos_theta - (length_car / 2) * sin_theta,
+                    Xvehicle + (width_car / 2) * sin_theta + (length_car / 2) * cos_theta])
+        pt3 = np.array([Yvehicle - (width_car / 2) * cos_theta - (length_car / 2) * sin_theta,
+                    Xvehicle - (width_car / 2) * sin_theta + (length_car / 2) * cos_theta])
+        pt4 = np.array([Yvehicle - (width_car / 2) * cos_theta + (length_car / 2) * sin_theta,
+                    Xvehicle - (width_car / 2) * sin_theta - (length_car / 2) * cos_theta])
+
+        # Finde die min/max Koordinaten der rotierten Eckpunkte
+        all_points = np.array([pt1, pt2, pt3, pt4])
+        min_y = int(np.min(all_points[:, 0]))
+        max_y = int(np.max(all_points[:, 0]))
+        min_x = int(np.min(all_points[:, 1]))
+        max_x = int(np.max(all_points[:, 1]))
+
+        # Zeichne die achsenparallele Bounding Box
+        bbox_pt1 = (min_x, min_y)
+        bbox_pt2 = (max_x, max_y)
+        return [bbox_pt1, bbox_pt2]
+    elif oriented == True:
         return draw_oriented_vehicle_box(img,Xvehicle,Yvehicle,pt1,pt2,pt3,pt4,veh_type,(255,0,0),2)
     else:
         return draw_axis_aligned_vehicle_bbox(img,Xvehicle,Yvehicle,width_car,length_car,orientationVehicle,veh_type)
+    
 
 def calculate_bounding_box_area(points):
     """
@@ -411,7 +589,7 @@ def transform_labels_to_yolo_format(labels, width, height):
                 y4 = int(label_parts[11])
 
                 # Konvertiere die Teile in das YOLO-Format
-                yolo_label = convert_to_yolo(
+                yolo_label = convert_to_yolo_classic(
                     class_id, x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, width, height
                 )
                 yolo_labels.append(yolo_label)
@@ -421,7 +599,7 @@ def transform_labels_to_yolo_format(labels, width, height):
             print(f"Ungültiges Label-Format: {label}")
     return yolo_labels
 
-def convert_to_yolo(image_id, x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, img_width, img_height):
+def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, img_width, img_height):
     x_min = min(x1, x2, x3, x4)
     y_min = min(y1, y2, y3, y4)
     x_max = max(x1, x2, x3, x4)
