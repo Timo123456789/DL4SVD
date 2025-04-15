@@ -283,7 +283,7 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
             cv2.destroyAllWindows()  # Fenster schließen
       
 
-def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=2):
+def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=1):
     """
     Zeichnet die achsenparallele Bounding Box eines Fahrzeugs auf ein OpenCV-Bild.
 
@@ -296,7 +296,7 @@ def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_
         orientationVehicle (float): Orientierung des Fahrzeugs in Radiant.
         veh_type (int): Typ des Fahrzeugs für die Textanzeige.
         color (tuple): Farbe der Bounding Box im BGR-Format (Standard: Blau).
-        thickness (int): Dicke der Linien der Bounding Box (Standard: 2).
+        thickness (int): Dicke der Linien der Bounding Box (Standard: 1).
     """
     cos_theta = np.cos(-orientationVehicle)
     sin_theta = np.sin(-orientationVehicle)
@@ -368,7 +368,7 @@ def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_
 
 
 
-def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh_type, color=(0, 255, 0), thickness=2):
+def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh_type, color=(0, 255, 0), thickness=1):
     """
     Zeichnet ein Fahrzeugpolygon und optional einen Textlabel auf ein OpenCV-Bild.
 
