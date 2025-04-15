@@ -10,33 +10,89 @@ def main():
     path_labels = r'Code\data\all_vedai_images\annotation.txt'
    
     #lines_fold = read_file(path_folds)
+    test_rgb_img = r'Code\data\all_vedai_images\00000124_co.png'
+    test_ir_img = r'Code\data\all_vedai_images\00000124_ir.png'
+    destination_path = r'Code\data\all_vedai_images\00000124_ir.png'
+
+    #merge_RGB_and_IR_image(test_rgb_img, test_ir_img, destination_path)
+
     
-    #show_every_picture_with_oriented_bounding_box(path_all_images,r'Code\data\folds\txts\fold01.txt',path_labels,oriented, False,False)
-    for fold_nr in range(9):
-        try:
-            create_fold(fold_nr,path_all_images,path_folds,path_labels, False)
-        except:
-            print("keine Nummer  gefunden")
+    show_every_picture_with_oriented_bounding_box(path_all_images,r'Code\data\folds\txts\fold01.txt',path_labels,oriented, False,False)
+    # for fold_nr in range(10):
+    #     try:
+    #         create_fold(fold_nr,path_all_images,path_folds,path_labels, False, False)
+    #     except:
+    #         print("No fold number found")
+    # create_fold(10,path_all_images, path_folds,path_labels,False, True)
 
-def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir):
+    # print("RGB Folds successful created")
 
-    fold_train_images_path = rf'Code\data\folds\txts\fold0{fold_nr}.txt'
-    fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_nr}test.txt'
+
+
+def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
+    # Load the RGB image
+    rgb_img = cv2.imread(rgb_path)
+
+    # Load the IR image (as grayscale, as IR is typically a single intensity band)
+    ir_img = cv2.imread(ir_path, cv2.IMREAD_GRAYSCALE)
+
+    if rgb_img is None or ir_img is None:
+         print("One or both images could not be loaded.")
+    elif rgb_img.shape[:2] != ir_img.shape[:2]:
+         print("RGB and IR images must have the same height and width.")
+    else:
+    # Split the RGB image into its individual channels (Blue, Green, Red)
+        b, g, r = cv2.split(rgb_img)
+
+        # Add the IR image as the fourth band
+        merged_img = cv2.merge([b, r, g, ir_img])
+
+        # The resulting image now has 4 channels: Blue, Green, Red, Infrared.
+        # Note that the interpretation and visualization of such a
+        # 4-channel image depend on the subsequent processing.
+        # Standard image viewers usually expect RGB or RGBA.
+
+        # Save the image with the added IR band (e.g., as PNG, which supports alpha)
+        # Even though we call it 'merged_img', it's essentially a 4-channel image.
+        cv2.imwrite('rgb_ir_merged.png', merged_img)
+        #print("RGB image with IR band successfully saved.")
+
+        return merged_img
+
+        # Displaying the image is not trivial as it has 4 channels that cannot be
+        # directly interpreted as RGB. You would need to decide how to combine
+        # these 4 channels for visualization (e.g., mapping IR to a color channel).
+        # Here, we only show it as a raw 4-channel array (which might not look meaningful).
+        # cv2.imshow('RGB + IR', merged_img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+
+def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
+    if fold10bool == True:
+        fold_train_images_path = rf'Code\data\folds\txts\fold10.txt'
+        fold_val_images_path = rf'Code\data\folds\txts\fold10test.txt'
+        yaml_path = rf'Code\data\folds\data\fold10'
+    else:
+        fold_train_images_path = rf'Code\data\folds\txts\fold0{fold_nr}.txt'
+        fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_nr}test.txt'
+        yaml_path = rf'Code\data\folds\data\fold{fold_nr}'
 
     paths_object = create_folder_structure(fold_nr)
 
     lines_fold_train = read_file(fold_train_images_path)
     lines_fold_val = read_file(fold_val_images_path)
     labels = read_file(path_labels)
-   
+    
+
+    create_yaml(yaml_path)
     counter = 0
     for line in lines_fold_train:
         counter += 1
         target = line
         if ir == True:
-            image_path = f"{path_all_images}\{target}_ir.png"
+            image_path = f"{path_all_images}/{target}_ir.png"
         else:
-            image_path = f"{path_all_images}\{target}_co.png"
+            image_path = f"{path_all_images}/{target}_co.png"
 
         filtered_labels = select_all_labels_in_img(target, labels)
         copy_image(image_path, paths_object['path_train_images'])
@@ -49,37 +105,35 @@ def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir):
         counter += 1
         target = line
         if ir == True:
-            image_path = f"{path_all_images}\{target}_ir.png"
+            image_path = f"{path_all_images}/{target}_ir.png"
         else:
-            image_path = f"{path_all_images}\{target}_co.png"
+            image_path = f"{path_all_images}/{target}_co.png"
 
         filtered_labels = select_all_labels_in_img(target, labels)
         copy_image(image_path, paths_object['path_val_images'])
         create_label_file(target, filtered_labels, paths_object['path_val_labels'], image_path)
-        print("Fold Nr:"+str(fold_nr)+"val image: " + str(counter) + "/" + str(len(lines_fold_val)))
+        print("Fold Nr: "+str(fold_nr)+" val image: " + str(counter) + "/" + str(len(lines_fold_val)))
         
-        
-    
-    create_yaml()
     return 0
 
 
 
 
+   
 
 def create_label_file(target, labels, path, img_path):
-    file_path = f"{path}\{target}.txt"
+    file_path = f"{path}/{target}.txt"
 
     arr_labels = []
     img = cv2.imread(img_path)
   
     try:
-        with open(file_path, 'w') as datei:
+        with open(file_path, 'w') as file:
             for label in labels:
                 transf_label = calc_pixel_like_authors(img, label, True, True) 
                 px_corner = [transf_label[1][1],transf_label[1][0],transf_label[2][1],transf_label[2][0],transf_label[3][1],transf_label[3][0],transf_label[4][1],transf_label[4][0]]
                 yolo_transf_label = convert_to_yolo_obb(px_corner, img.shape[1], img.shape[0])
-                datei.write(
+                file.write(
                      transf_label[0] + " "+
                    str(yolo_transf_label[0])+" "+
                    str(yolo_transf_label[1])+" "+
@@ -151,10 +205,10 @@ def create_folder_structure(fold_nr):
 
     
     path_obj = {
-        'path_train_images' : f"code/data/folds/fold{fold_nr}/train/images",
-        'path_train_labels' : f"code/data/folds/fold{fold_nr}/train/labels",
-        'path_val_images' : f"code/data/folds/fold{fold_nr}/val/images",
-        'path_val_labels' : f"code/data/folds/fold{fold_nr}/val/labels",
+        'path_train_images' : f"code/data/folds/data/fold{fold_nr}/train/images",
+        'path_train_labels' : f"code/data/folds/data/fold{fold_nr}/train/labels",
+        'path_val_images' : f"code/data/folds/data/fold{fold_nr}/val/images",
+        'path_val_labels' : f"code/data/folds/data/fold{fold_nr}/val/labels",
     }
   
     
@@ -165,28 +219,38 @@ def create_folder_structure(fold_nr):
     make_directories(path_obj['path_val_labels'])
    
     return path_obj
+
+
 def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, path_labels, oriented, ir, ret_pts):
     lines_fold = read_file(path_folds)
     labels = read_file(path_labels)
-    print(labels[0])
+    
+   
+
 
     for line in lines_fold:
         target = line
-        if ir == True:
-            image_path = f"{path_all_images}\{target}_ir.png"
-        else:
-            image_path = f"{path_all_images}\{target}_co.png"
+        # if ir == True:
+        #     image_path = image_path_rgb
+        # else:
+        #     image_path = image_path_ir
+        image_path_rgb = f'{path_all_images}\\{target}_co.png'
+        image_path_ir = f'{path_all_images}\\{target}_ir.png'
 
         filtered_labels = select_all_labels_in_img(target, labels)
-        print(filtered_labels)
 
-        img = cv2.imread(image_path)
+        img_rgb = cv2.imread(image_path_rgb)
+        img_ir = cv2.imread(image_path_ir)
+        img_merged = merge_RGB_and_IR_image(image_path_rgb, image_path_ir, None)
 
-        transf_labels = transform_labels_to_yolo_format(filtered_labels, img.shape[1], img.shape[0])
+        #transf_labels = transform_labels_to_yolo_format(filtered_labels, img.shape[1], img.shape[0])
 
         for i in filtered_labels:
             
-            img = calc_pixel_like_authors(img,i, oriented, ret_pts)
+            img_rgb = calc_pixel_like_authors(img_rgb,i, oriented, ret_pts)
+            img_ir = calc_pixel_like_authors(img_ir,i, oriented, ret_pts)
+            img_merged = calc_pixel_like_authors(img_merged,i,oriented, ret_pts)
+           
             #pts = calc_pixel_like_authors(i)
             
 
@@ -202,15 +266,22 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
 
         # labels = read_file(label_path)
         # labels = transform_labels_to_yolo_format(labels)
-        print(transf_labels)
+       
         # for i in transf_labels:
         #     img = draw_label_on_image(img, i)
-
-        if img is not None:
-            cv2.imshow("Gefundene PNG-Datei", img)  # Bild anzeigen
+        window_name_rgb = f"{target}"+"_co.png"
+        window_name_ir = f"{target}"+"_ir.png"
+        window_name_merged = f"{target}"+"_merged.png"
+        if img_rgb is not None and img_ir is not None:
+            cv2.imshow(window_name_rgb, img_rgb)  # Bild anzeigen
+            cv2.resizeWindow(window_name_rgb, 1024, 1024)
+            cv2.imshow(window_name_ir, img_ir)  # Bild anzeigen
+            cv2.resizeWindow(window_name_ir, 1024, 1024)
+            cv2.imshow(window_name_merged, img_merged)  # Bild anzeigen
+            cv2.resizeWindow(window_name_merged, 1024, 1024)
             cv2.waitKey(0)  # Warten, bis eine Taste gedrückt wird
             cv2.destroyAllWindows()  # Fenster schließen
-        print(target)
+      
 
 def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=2):
     """
@@ -578,7 +649,7 @@ def transform_labels_to_yolo_format(labels, width, height):
                 class_id = int(label_parts[0])  # Konvertiere die Klasse in eine Ganzzahl
                 x_center = float(label_parts[1])  # Konvertiere x_center in eine Gleitkommazahl
                 y_center = float(label_parts[2])  # Konvertiere y_center in eine Gleitkommazahl
-                print("label parts "+str(label_parts[2]))
+              
                 x1 = int(label_parts[4])
                 y1 = int(label_parts[5])
                 x2 = int(label_parts[6])
@@ -590,7 +661,7 @@ def transform_labels_to_yolo_format(labels, width, height):
 
                 # Konvertiere die Teile in das YOLO-Format
                 yolo_label = convert_to_yolo_classic(
-                    class_id, x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, width, height
+                    x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, width, height
                 )
                 yolo_labels.append(yolo_label)
             except ValueError as e:
@@ -615,6 +686,18 @@ def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, 
 
     return f"{class_id} {x_center_norm:.6f} {y_center_norm:.6f} {width_norm:.6f} {height_norm:.6f}"
 
+
+def create_yaml(path):
+    file_path = f"{path}/data.yaml"
+    print(file_path)
+    file_string = "train: ./train/images " +'\n'+ "val: ./val/images" +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
+
+    try:
+        with open(file_path, 'w') as file:
+            file.write(file_string)
+        print("YAML erfolgreich erstellt")
+    except IOError as e:
+        print(f"Fehler beim Schreiben der YAML-Datei: {e}")
 
 def read_file(path):
     with open(path, 'r', encoding='utf-8') as file:
