@@ -5,6 +5,7 @@ import os
 
 def main():
     oriented = True
+    ir = False
     path_folds = r'Code\data\folds\txts'
     path_all_images = r'Code\data\all_vedai_images'
     path_labels = r'Code\data\all_vedai_images\annotation.txt'
@@ -17,13 +18,15 @@ def main():
     #merge_RGB_and_IR_image(test_rgb_img, test_ir_img, destination_path)
 
     
-    show_every_picture_with_oriented_bounding_box(path_all_images,r'Code\data\folds\txts\fold01.txt',path_labels,oriented, False,False)
-    # for fold_nr in range(10):
-    #     try:
-    #         create_fold(fold_nr,path_all_images,path_folds,path_labels, False, False)
-    #     except:
-    #         print("No fold number found")
-    # create_fold(10,path_all_images, path_folds,path_labels,False, True)
+    #show_every_picture_with_oriented_bounding_box(path_all_images,r'Code\data\folds\txts\fold01.txt',path_labels,oriented, False,False)
+    fold_nr = 1
+    for fold_nr in range(10):
+        if fold_nr != 0:
+            create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, False)
+
+        #except:
+        #    print("No fold number found")
+    create_fold(10,path_all_images, path_folds,path_labels,False, True)
 
     # print("RGB Folds successful created")
 
@@ -68,6 +71,21 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
         # cv2.destroyAllWindows()
 
 def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
+    def create_image_and_label(lines,  string_tag):
+        counter = 0
+        for line in lines:
+            counter += 1
+            target = line
+            if ir == True:
+                image_path = f"{path_all_images}/{target}_ir.png"
+            else:
+                image_path = f"{path_all_images}/{target}_co.png"
+
+            filtered_labels = select_all_labels_in_img(target, labels)
+            copy_image(image_path, paths_object['path_'+string_tag+'_images'])
+            create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir)
+            print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines)))
+
     if fold10bool == True:
         fold_train_images_path = rf'Code\data\folds\txts\fold10.txt'
         fold_val_images_path = rf'Code\data\folds\txts\fold10test.txt'
@@ -83,37 +101,13 @@ def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
     lines_fold_val = read_file(fold_val_images_path)
     labels = read_file(path_labels)
     
-
+   
     create_yaml(yaml_path)
-    counter = 0
-    for line in lines_fold_train:
-        counter += 1
-        target = line
-        if ir == True:
-            image_path = f"{path_all_images}/{target}_ir.png"
-        else:
-            image_path = f"{path_all_images}/{target}_co.png"
 
-        filtered_labels = select_all_labels_in_img(target, labels)
-        copy_image(image_path, paths_object['path_train_images'])
-        create_label_file(target, filtered_labels, paths_object['path_train_labels'], image_path)
-        print("Fold Nr:"+str(fold_nr)+" /  train image: "+str(counter) + "/" + str(len(lines_fold_train)))
-
-
-    counter = 0
-    for line in lines_fold_val:
-        counter += 1
-        target = line
-        if ir == True:
-            image_path = f"{path_all_images}/{target}_ir.png"
-        else:
-            image_path = f"{path_all_images}/{target}_co.png"
-
-        filtered_labels = select_all_labels_in_img(target, labels)
-        copy_image(image_path, paths_object['path_val_images'])
-        create_label_file(target, filtered_labels, paths_object['path_val_labels'], image_path)
-        print("Fold Nr: "+str(fold_nr)+" val image: " + str(counter) + "/" + str(len(lines_fold_val)))
-        
+    create_image_and_label(lines_fold_train, "train")
+    create_image_and_label(lines_fold_val, "val")
+   
+  
     return 0
 
 
@@ -121,8 +115,12 @@ def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
 
    
 
-def create_label_file(target, labels, path, img_path):
-    file_path = f"{path}/{target}.txt"
+def create_label_file(target, labels, path, img_path, ir):
+
+    if ir == True:
+        file_path = f"{path}/{target}_ir.txt"
+    else:
+        file_path = f"{path}/{target}_co.txt"
 
     arr_labels = []
     img = cv2.imread(img_path)
