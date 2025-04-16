@@ -274,11 +274,11 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
         window_name_merged = f"{target}"+"_merged.png"
         if img_rgb is not None and img_ir is not None:
             cv2.imshow(window_name_rgb, img_rgb)  # Bild anzeigen
-            cv2.resizeWindow(window_name_rgb, 1024, 1024)
+            #cv2.resizeWindow(window_name_rgb, 1024, 1024)
             cv2.imshow(window_name_ir, img_ir)  # Bild anzeigen
-            cv2.resizeWindow(window_name_ir, 1024, 1024)
+            #cv2.resizeWindow(window_name_ir, 1024, 1024)
             cv2.imshow(window_name_merged, img_merged)  # Bild anzeigen
-            cv2.resizeWindow(window_name_merged, 1024, 1024)
+            #cv2.resizeWindow(window_name_merged, 1024, 1024)
             cv2.waitKey(0)  # Warten, bis eine Taste gedrückt wird
             cv2.destroyAllWindows()  # Fenster schließen
       

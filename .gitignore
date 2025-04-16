@@ -1,5 +1,8 @@
 Code/data/
 Code/IR-yolov9-main/
+Code/yolov9u/
+runs/
+
 
 
 #*.png
