@@ -3,4 +3,5 @@ yolo detect train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\u
 
 
 yolo train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\ultralytics\cfg\models\v9\yolov9-obb.yaml name='T' epochs=1 device=cpu imgsz=1024
+yolo obb train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\ultralytics\cfg\models\v9\yolov9-obb.yaml name='T' epochs=1 device=cpu imgsz=1024
 

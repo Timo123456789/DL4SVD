@@ -7,7 +7,7 @@ def main():
     oriented = True
     ir = False
     bool_create_yaml = False
-    limiter = 25
+    limiter = 110
     #path_folds = r'Code\data\folds\txts'
     path_all_images = r'Code\data\all_vedai_images'
     path_labels = r'Code\data\all_vedai_images\annotation.txt'
@@ -24,28 +24,80 @@ def main():
 
     #create_all_folds(path_all_images,path_folds, path_labels, ir, oriented, bool_create_yaml)
     
-    show_one_picture_with_yolo_label(1,'00000060', False)
+    #show_one_picture_with_yolo_label(1,'00000000', False)
     create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter)
 
     # print("RGB Folds successful created")
 
 def show_one_picture_with_yolo_label(fold_nr,img_nr,ir):
     if ir == True:
-        image_path = rf'Code\data\folds\data\fold0{fold_nr}\train\images\{img_nr}_co.png'
+        image_path = rf'Code\data\folds\data\fold{fold_nr}\train\images\{img_nr}_co.png'
     else:
-        image_path = rf'Code\data\folds\data\fold0{fold_nr}\train\images\{img_nr}_co.png'
-    label_path = rf'Code\data\folds\data\fold0{fold_nr}\train\labels\{img_nr}_co.txt'
+        image_path = rf'Code\data\folds\data\fold{fold_nr}\train\images\{img_nr}_co.png'
+    label_path = rf'Code\data\folds\data\fold{fold_nr}\train\labels\{img_nr}_co.txt'
+
+  
+    print(label_path)
     img = cv2.imread(image_path)
 
     labels = read_file(label_path)
-    labels.split()
+    for label in labels:
+        img = add_labeled_normalized_coordinates_as_points(image_path, label)
 
-    print(labels)
-
-    cv2.imshow('RGB + IR', img)
+    cv2.imshow("Bild mit Punkten", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    return 0   
+
+def add_labeled_normalized_coordinates_as_points(image_path, labels_string, point_color=(0, 0, 255), point_radius=5, point_thickness=-1):
+    """
+    Fügt normierte Koordinaten aus einer Label-Zeichenkette als farbige Punkte in ein Bild ein.
+    Das erste Element der Label-Zeile wird übersprungen.
+
+    Args:
+        image_path (str): Der Pfad zum Bild.
+        labels_string (str): Eine Zeichenkette mit den Labels und normierten Koordinaten,
+                             z.B. "8 0.32421875 0.1240234375 ...".
+                             Es wird erwartet, dass die Koordinaten paarweise folgen.
+        point_color (tuple): Die Farbe der Punkte im BGR-Format (Standard: Rot).
+        point_radius (int): Der Radius der Punkte in Pixeln (Standard: 5).
+        point_thickness (int): Die Dicke der Punkte (-1 für gefüllte Kreise, Standard: -1).
+    """
+    try:
+        img = cv2.imread(image_path)
+        if img is None:
+            print(f"Fehler: Bild nicht gefunden unter {image_path}")
+            return
+
+        height, width, _ = img.shape
+
+        # Teile die Label-Zeichenkette auf und überspringe das erste Element
+        parts = labels_string.split()
+        coordinates_str = parts[1:]
+
+        # Konvertiere die Koordinaten-Strings in Floats
+        coordinates = [float(coord) for coord in coordinates_str]
+
+        # Konvertiere die flache Liste der Koordinaten in Paare
+        points = []
+        for i in range(0, len(coordinates), 2):
+            if i + 1 < len(coordinates):
+                x_norm = coordinates[i]
+                y_norm = coordinates[i+1]
+                x_pixel = int(x_norm * width)
+                y_pixel = int(y_norm * height)
+                points.append((x_pixel, y_pixel))
+            else:
+                print("Warnung: Ungerade Anzahl von Koordinaten. Letzte Koordinate wird ignoriert.")
+                break
+      
+
+        for p in points:
+            cv2.circle(img, p, point_radius, point_color, point_thickness)
+
+        return img
+
+    except Exception as e:
+        print(f"Ein Fehler ist aufgetreten: {e}")
 
 def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter):
     fold_nr = 1
@@ -113,8 +165,11 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
             copy_image(image_path, paths_object['path_'+string_tag+'_images'])
             create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir)
             print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines)))
-            if counter == limiter:
-                print("using Limiter! BREAK "+ string_tag+" at " + str(limiter))
+            if counter == limiter and string_tag == 'train':
+                print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
+                break
+            elif counter == (limiter/10) and string_tag == 'val':
+                print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
                 break
             
 
@@ -200,14 +255,14 @@ def create_label_file(target, labels, path, img_path, ir):
                 yolo_transf_label = convert_to_yolo_obb(px_corner, img.shape[1], img.shape[0])
                 #print(convert_class_to_yolo(transf_label[0]))
                 file_string = (convert_class_to_yolo(transf_label[0]) + " "+
-                   str(yolo_transf_label[0])+" "+
                    str(yolo_transf_label[1])+" "+
-                   str(yolo_transf_label[2])+" "+ 
+                   str(yolo_transf_label[0])+" "+
                    str(yolo_transf_label[3])+" "+ 
-                   str(yolo_transf_label[4])+" "+ 
-                   str(yolo_transf_label[5])+" "+
-                   str(yolo_transf_label[6])+" "+
-                   str(yolo_transf_label[7]) + '\n')
+                   str(yolo_transf_label[2])+" "+ 
+                   str(yolo_transf_label[5])+" "+ 
+                   str(yolo_transf_label[4])+" "+
+                   str(yolo_transf_label[7])+" "+
+                   str(yolo_transf_label[6]) + '\n')
                 #print(file_string)
                 file.write(file_string)
             #datei.write(inhalt)
