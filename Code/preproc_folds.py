@@ -6,7 +6,9 @@ import os
 def main():
     oriented = True
     ir = False
-    path_folds = r'Code\data\folds\txts'
+    bool_create_yaml = False
+    limiter = 25
+    #path_folds = r'Code\data\folds\txts'
     path_all_images = r'Code\data\all_vedai_images'
     path_labels = r'Code\data\all_vedai_images\annotation.txt'
    
@@ -19,17 +21,43 @@ def main():
 
     
     #show_every_picture_with_oriented_bounding_box(path_all_images,r'Code\data\folds\txts\fold01.txt',path_labels,oriented, False,False)
-    fold_nr = 1
-    for fold_nr in range(10):
-        if fold_nr != 0:
-            create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, False)
 
-        #except:
-        #    print("No fold number found")
-    create_fold(10,path_all_images, path_folds,path_labels,False, True)
+    #create_all_folds(path_all_images,path_folds, path_labels, ir, oriented, bool_create_yaml)
+    
+    show_one_picture_with_yolo_label(1,'00000060', False)
+    create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter)
 
     # print("RGB Folds successful created")
 
+def show_one_picture_with_yolo_label(fold_nr,img_nr,ir):
+    if ir == True:
+        image_path = rf'Code\data\folds\data\fold0{fold_nr}\train\images\{img_nr}_co.png'
+    else:
+        image_path = rf'Code\data\folds\data\fold0{fold_nr}\train\images\{img_nr}_co.png'
+    label_path = rf'Code\data\folds\data\fold0{fold_nr}\train\labels\{img_nr}_co.txt'
+    img = cv2.imread(image_path)
+
+    labels = read_file(label_path)
+    labels.split()
+
+    print(labels)
+
+    cv2.imshow('RGB + IR', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    return 0   
+
+def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter):
+    fold_nr = 1
+
+
+    for fold_nr in range(10):
+        if fold_nr != 0:
+            create_fold(fold_nr,path_all_images,path_labels, ir, False, bool_create_yaml, limiter)
+
+        #except:
+        #    print("No fold number found")
+    create_fold(10,path_all_images,path_labels,False, True, bool_create_yaml)
 
 
 def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
@@ -70,7 +98,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
-def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
+def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter):
     def create_image_and_label(lines,  string_tag):
         counter = 0
         for line in lines:
@@ -85,6 +113,10 @@ def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
             copy_image(image_path, paths_object['path_'+string_tag+'_images'])
             create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir)
             print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines)))
+            if counter == limiter:
+                print("using Limiter! BREAK "+ string_tag+" at " + str(limiter))
+                break
+            
 
     if fold10bool == True:
         fold_train_images_path = rf'Code\data\folds\txts\fold10.txt'
@@ -101,13 +133,15 @@ def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
     lines_fold_val = read_file(fold_val_images_path)
     labels = read_file(path_labels)
     
-   
-    create_yaml(yaml_path)
+    if bool_create_yaml:
+        create_yaml(yaml_path)
+        print("Yaml successfull created.")
+    
 
     create_image_and_label(lines_fold_train, "train")
     create_image_and_label(lines_fold_val, "val")
    
-  
+    print("Fold " + str(fold_nr) + " successfull created.")
     return 0
 
 
@@ -116,6 +150,37 @@ def create_fold(fold_nr,path_all_images,path_folds,path_labels, ir, fold10bool):
    
 
 def create_label_file(target, labels, path, img_path, ir):
+    def convert_class_to_yolo(class_id):
+        if class_id == '001':
+            label = 'Car'
+            return str(0)
+        elif class_id == '002':
+            label = 'Truck'
+            return str(1)
+        elif class_id == '023':
+            label = 'Ship'
+            return str(2)
+        elif class_id == '004':
+            label = 'Tractor'
+            return str(3)
+        elif class_id == '005':
+            label = 'Camping Car'
+            return str(4)
+        elif class_id == '009':
+            label = 'van'
+            return str(5)
+        elif class_id == '010':
+            label = 'vehicle'
+            return str(6)
+        elif class_id == '011':
+            label = 'pick-up'
+            return str(7)
+        elif class_id == '031':
+            label = 'plane'
+            return str(8)
+        else:
+            return str(6)
+        return 0
 
     if ir == True:
         file_path = f"{path}/{target}_ir.txt"
@@ -124,6 +189,8 @@ def create_label_file(target, labels, path, img_path, ir):
 
     arr_labels = []
     img = cv2.imread(img_path)
+
+    
   
     try:
         with open(file_path, 'w') as file:
@@ -131,8 +198,8 @@ def create_label_file(target, labels, path, img_path, ir):
                 transf_label = calc_pixel_like_authors(img, label, True, True) 
                 px_corner = [transf_label[1][1],transf_label[1][0],transf_label[2][1],transf_label[2][0],transf_label[3][1],transf_label[3][0],transf_label[4][1],transf_label[4][0]]
                 yolo_transf_label = convert_to_yolo_obb(px_corner, img.shape[1], img.shape[0])
-                file.write(
-                     transf_label[0] + " "+
+                #print(convert_class_to_yolo(transf_label[0]))
+                file_string = (convert_class_to_yolo(transf_label[0]) + " "+
                    str(yolo_transf_label[0])+" "+
                    str(yolo_transf_label[1])+" "+
                    str(yolo_transf_label[2])+" "+ 
@@ -141,6 +208,8 @@ def create_label_file(target, labels, path, img_path, ir):
                    str(yolo_transf_label[5])+" "+
                    str(yolo_transf_label[6])+" "+
                    str(yolo_transf_label[7]) + '\n')
+                #print(file_string)
+                file.write(file_string)
             #datei.write(inhalt)
         #print(f"Die Datei '{file_path}' wurde erfolgreich mit Inhalt erstellt.")
     except Exception as e:
@@ -173,7 +242,37 @@ def convert_to_yolo_obb(corners_pixel, img_width, img_height):
     x4_norm = x4_px / img_width
     y4_norm = y4_px / img_height
 
-    return [x1_norm, y1_norm, x2_norm, y2_norm, x3_norm, y3_norm, x4_norm, y4_norm]
+    norm_values = check_normalvalues([x1_norm, y1_norm, x2_norm, y2_norm, x3_norm, y3_norm, x4_norm, y4_norm], corners_pixel)
+
+    return norm_values
+
+
+def check_normalvalues(normalized_values, cp):
+    """
+    Prüft eine Liste von normierten Werten und wirft einen Fehler,
+    wenn ein Wert kleiner als 0 oder größer als 1 ist.
+
+    Args:
+        normwerte: Eine Liste von numerischen Werten.
+
+    Raises:
+        ValueError: Wenn ein Wert in der Liste kleiner als 0 oder größer als 1 ist.
+    """
+    found = False
+    cp_normalized_values = normalized_values
+    for i in range(len(cp_normalized_values)): # Iteriere über die Indizes der Liste
+        if cp_normalized_values[i] < 0:
+            cp_normalized_values[i] = 0
+            found = True
+        elif cp_normalized_values[i] > 1:
+            cp_normalized_values[i] = 1
+            #found = True
+
+    # if found:
+    #     print(cp_normalized_values)
+    return cp_normalized_values
+    #raise ValueError(f"Ungültiger Normwert gefunden: {wert}. Normwerte müssen zwischen 0 und 1 liegen.")
+    
 
 def copy_image(source_image_path, destination_folder):
     try:
