@@ -4,10 +4,10 @@ from scipy.spatial import ConvexHull
 import os
 
 def main():
-    oriented = True
+    oriented = False
     ir = False
     bool_create_yaml = False
-    limiter = 110
+    limiter = None
     #path_folds = r'Code\data\folds\txts'
     path_all_images = r'Code\data\all_vedai_images'
     path_labels = r'Code\data\all_vedai_images\annotation.txt'
@@ -24,17 +24,17 @@ def main():
 
     #create_all_folds(path_all_images,path_folds, path_labels, ir, oriented, bool_create_yaml)
     
-    #show_one_picture_with_yolo_label(1,'00000000', False)
-    create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter)
+    #show_one_picture_with_yolo_label(1,'00000010', False, "val")
+    create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter, oriented)
 
     # print("RGB Folds successful created")
 
-def show_one_picture_with_yolo_label(fold_nr,img_nr,ir):
+def show_one_picture_with_yolo_label(fold_nr,img_nr,ir, string_tag):
     if ir == True:
-        image_path = rf'Code\data\folds\data\fold{fold_nr}\train\images\{img_nr}_co.png'
+        image_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\images\{img_nr}_co.png'
     else:
-        image_path = rf'Code\data\folds\data\fold{fold_nr}\train\images\{img_nr}_co.png'
-    label_path = rf'Code\data\folds\data\fold{fold_nr}\train\labels\{img_nr}_co.txt'
+        image_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\images\{img_nr}_co.png'
+    label_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\labels\{img_nr}_co.txt'
 
   
     print(label_path)
@@ -150,7 +150,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
-def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter):
+def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented):
     def create_image_and_label(lines,  string_tag):
         counter = 0
         for line in lines:
@@ -163,13 +163,15 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
 
             filtered_labels = select_all_labels_in_img(target, labels)
             copy_image(image_path, paths_object['path_'+string_tag+'_images'])
-            create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir)
+            create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir, oriented, string_tag)
             print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines)))
-            if counter == limiter and string_tag == 'train':
-                print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
-                break
-            elif counter == (limiter/10) and string_tag == 'val':
-                print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
+            
+            if limiter != None:
+                if counter == limiter and string_tag == 'train':
+                    print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
+                    break
+                elif counter == (limiter/10) and string_tag == 'val':
+                    print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
                 break
             
 
@@ -204,7 +206,8 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
 
    
 
-def create_label_file(target, labels, path, img_path, ir):
+
+def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
     def convert_class_to_yolo(class_id):
         if class_id == '001':
             label = 'Car'
@@ -242,7 +245,6 @@ def create_label_file(target, labels, path, img_path, ir):
     else:
         file_path = f"{path}/{target}_co.txt"
 
-    arr_labels = []
     img = cv2.imread(img_path)
 
     
@@ -250,26 +252,83 @@ def create_label_file(target, labels, path, img_path, ir):
     try:
         with open(file_path, 'w') as file:
             for label in labels:
-                transf_label = calc_pixel_like_authors(img, label, True, True) 
+                transf_label = calc_pixel_like_authors(img, label, oriented, True) 
                 px_corner = [transf_label[1][1],transf_label[1][0],transf_label[2][1],transf_label[2][0],transf_label[3][1],transf_label[3][0],transf_label[4][1],transf_label[4][0]]
-                yolo_transf_label = convert_to_yolo_obb(px_corner, img.shape[1], img.shape[0])
-                #print(convert_class_to_yolo(transf_label[0]))
-                file_string = (convert_class_to_yolo(transf_label[0]) + " "+
-                   str(yolo_transf_label[1])+" "+
-                   str(yolo_transf_label[0])+" "+
-                   str(yolo_transf_label[3])+" "+ 
-                   str(yolo_transf_label[2])+" "+ 
-                   str(yolo_transf_label[5])+" "+ 
-                   str(yolo_transf_label[4])+" "+
-                   str(yolo_transf_label[7])+" "+
-                   str(yolo_transf_label[6]) + '\n')
-                #print(file_string)
+
+                if oriented == True:
+                    yolo_transf_label = convert_to_yolo_obb(px_corner, img.shape[1], img.shape[0])
+                    #print(convert_class_to_yolo(transf_label[0]))
+                    #if string_tag == "train":
+                    file_string = (convert_class_to_yolo(transf_label[0]) + " "+
+                        str(yolo_transf_label[0])+" "+
+                        str(yolo_transf_label[1])+" "+
+                        str(yolo_transf_label[2])+" "+ 
+                        str(yolo_transf_label[3])+" "+ 
+                        str(yolo_transf_label[4])+" "+ 
+                        str(yolo_transf_label[5])+" "+
+                        str(yolo_transf_label[6])+" "+
+                        str(yolo_transf_label[7]) + '\n')
+                elif oriented == False:
+                    yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
+                    file_string = (convert_class_to_yolo(transf_label[0]) + " "+
+                        str(yolo_transf_label[0])+" "+
+                        str(yolo_transf_label[1])+" "+
+                        str(yolo_transf_label[2])+" "+ 
+                        str(yolo_transf_label[3]) + '\n')
+                    
                 file.write(file_string)
             #datei.write(inhalt)
         #print(f"Die Datei '{file_path}' wurde erfolgreich mit Inhalt erstellt.")
     except Exception as e:
-        print(f"Ein Fehler ist aufgetreten: {e}")
+        print(f"Ein Fehler ist aufgetreten in der create_label_file: {e}")
     
+def convert_label_to_yolo_classic(corners_pixel, img_width, img_height):
+    """
+    Converts the coordinates of four pixels defining a polygon
+    into the YOLOv9 label format.
+
+    Args:
+    x1, y1, x2, y2, x3, y3, x4, y4: Coordinates of the four corner points of the polygon.
+    image_width (int): Width of the image in pixels.
+    image_height (int): Height of the image in pixels.
+
+    Returns:
+    str: A YOLOv9-compliant label string in the format
+        'class_id center_x center_y width height', where the coordinates
+        are normalized.
+    """
+
+    x1=corners_pixel[0]
+    y1=corners_pixel[1]
+    x2=corners_pixel[2]
+    y2=corners_pixel[3]
+    x3=corners_pixel[4]
+    y3=corners_pixel[5]
+    x4=corners_pixel[6]
+    y4=corners_pixel[7]
+    # Find the minimum and maximum x and y values to define the bounding box
+    min_x = min(x1, x2, x3, x4)
+    max_x = max(x1, x2, x3, x4)
+    min_y = min(y1, y2, y3, y4)
+    max_y = max(y1, y2, y3, y4)
+
+    # Calculate the center of the bounding box
+    center_x = (min_x + max_x) / 2.0
+    center_y = (min_y + max_y) / 2.0
+
+    # Calculate the width and height of the bounding box
+    width = max_x - min_x
+    height = max_y - min_y
+
+    # Normalize the values to the range [0, 1]
+    center_x_normalized = center_x / img_width
+    center_y_normalized = center_y / img_height
+    width_normalized = width / img_width
+    height_normalized = height / img_height
+
+    return [center_x_normalized, center_y_normalized, width_normalized, height_normalized]
+
+   
 
 def convert_to_yolo_obb(corners_pixel, img_width, img_height):
     """
@@ -596,8 +655,6 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
     return image
 
 
-
-
 def calc_pixel_like_authors(img, label, oriented, ret_pts):
     indice_vehicle = label.split()
     Xvehicle = np.float64(indice_vehicle[1])
@@ -673,10 +730,10 @@ def calc_pixel_like_authors(img, label, oriented, ret_pts):
 
 
     if ret_pts == True and oriented == True :
-        p1 = (int(pt1[1]), int(pt1[0]))
-        p2 = (int(pt2[1]), int(pt2[0]))
-        p3 = (int(pt3[1]), int(pt3[0]))
-        p4 = (int(pt4[1]), int(pt4[0]))
+        p1 = (int(pt1[0]), int(pt1[1]))
+        p2 = (int(pt2[0]), int(pt2[1]))
+        p3 = (int(pt3[0]), int(pt3[1]))
+        p4 = (int(pt4[0]), int(pt4[1]))
         return [veh_type,p1,p2,p3,p4]
     elif ret_pts == True and oriented == False:
         cos_theta = np.cos(-orientationVehicle)
@@ -700,13 +757,19 @@ def calc_pixel_like_authors(img, label, oriented, ret_pts):
         max_x = int(np.max(all_points[:, 1]))
 
         # Zeichne die achsenparallele Bounding Box
-        bbox_pt1 = (min_x, min_y)
-        bbox_pt2 = (max_x, max_y)
-        return [bbox_pt1, bbox_pt2]
+        bbox_pt1 = [min_x, min_y]
+        bbox_pt2 = [max_x, max_y]
+
+        p1 = [bbox_pt1[1], bbox_pt1[0]]
+        p2 = [bbox_pt2[1], bbox_pt2[0]]
+        p3 = [min_y, max_x]
+        p4 = [max_y, min_x]
+        return [veh_type,p1,p2,p3,p4]
     elif oriented == True:
         return draw_oriented_vehicle_box(img,Xvehicle,Yvehicle,pt1,pt2,pt3,pt4,veh_type,(255,0,0),2)
     else:
         return draw_axis_aligned_vehicle_bbox(img,Xvehicle,Yvehicle,width_car,length_car,orientationVehicle,veh_type)
+    
     
 
 def calculate_bounding_box_area(points):

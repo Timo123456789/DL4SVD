@@ -3,5 +3,9 @@ yolo detect train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\u
 
 
 yolo train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\ultralytics\cfg\models\v9\yolov9-obb.yaml name='T' epochs=1 device=cpu imgsz=1024
-yolo obb train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\ultralytics\cfg\models\v9\yolov9-obb.yaml name='T' epochs=1 device=cpu imgsz=1024
+yolo obb train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\ultralytics\cfg\models\v9\yolov9-obb.yaml name='Img110_Ep2_sameTV' epochs=2 device=cpu imgsz=1024
+yolo obb train data=Code\data\folds\data\fold1\data.yaml model=Code\yolov9u\ultralytics\cfg\models\v9\yolov9-obb.yaml name='Img110_Ep40' epochs=40 device=cpu imgsz=1024 patience=5
+
+
+yolo obb train data=/scratch/tmp/t_liet02/data/fold1_oriented_true/data.yaml model=master_thesis/yolov9u/ultralytics/cfg/models/v9/yolov9-obb.yaml name='Img110_Ep2_sameTV' epochs=2 device=cpu imgsz=1024
 
