@@ -8,9 +8,21 @@ def main():
     ir = False
     bool_create_yaml = False
     limiter = None
+    palma = True
+    merge_ir_bool= True
+    namestring = "oriented_false"
+
+    if palma == True:
+        path_all_images = r'../../../scratch/tmp/t_liet02/all_vedai_images'
+        path_labels = r'../../../scratch/tmp/t_liet02/annotations/annotation.txt'
+    else:
+        path_all_images = r'Code\data\all_vedai_images'
+        path_labels = r'Code\data\all_vedai_images\annotation.txt'
+
     #path_folds = r'Code\data\folds\txts'
-    path_all_images = r'Code\data\all_vedai_images'
-    path_labels = r'Code\data\all_vedai_images\annotation.txt'
+
+
+    
    
     #lines_fold = read_file(path_folds)
     test_rgb_img = r'Code\data\all_vedai_images\00000124_co.png'
@@ -25,7 +37,7 @@ def main():
     #create_all_folds(path_all_images,path_folds, path_labels, ir, oriented, bool_create_yaml)
     
     #show_one_picture_with_yolo_label(1,'00000010', False, "val")
-    create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter, oriented)
+    create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter, oriented, merge_ir_bool,namestring, palma)
 
     # print("RGB Folds successful created")
 
@@ -112,7 +124,7 @@ def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml
     create_fold(10,path_all_images,path_labels,False, True, bool_create_yaml)
 
 
-def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
+def merge_RGB_and_IR_image(rgb_path, ir_path):
     # Load the RGB image
     rgb_img = cv2.imread(rgb_path)
 
@@ -128,7 +140,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
         b, g, r = cv2.split(rgb_img)
 
         # Add the IR image as the fourth band
-        merged_img = cv2.merge([b, r, g, ir_img])
+        merged_img = cv2.merge([r, g, ir_img])
 
         # The resulting image now has 4 channels: Blue, Green, Red, Infrared.
         # Note that the interpretation and visualization of such a
@@ -137,7 +149,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
 
         # Save the image with the added IR band (e.g., as PNG, which supports alpha)
         # Even though we call it 'merged_img', it's essentially a 4-channel image.
-        cv2.imwrite('rgb_ir_merged.png', merged_img)
+        #cv2.imwrite('rgb_ir_merged.png', merged_img)
         #print("RGB image with IR band successfully saved.")
 
         return merged_img
@@ -150,20 +162,20 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, destination_path):
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
-def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented):
+def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma_bool):
     def create_image_and_label(lines,  string_tag):
         counter = 0
         for line in lines:
             counter += 1
             target = line
-            if ir == True:
-                image_path = f"{path_all_images}/{target}_ir.png"
-            else:
-                image_path = f"{path_all_images}/{target}_co.png"
+          
+            image_path = f"{path_all_images}/{target}_ir.png"
+         
+            image_path_ir = f"{path_all_images}/{target}_co.png"
 
-            filtered_labels = select_all_labels_in_img(target, labels)
-            copy_image(image_path, paths_object['path_'+string_tag+'_images'])
-            create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir, oriented, string_tag)
+            #filtered_labels = select_all_labels_in_img(target, labels)
+            copy_image(image_path, paths_object['path_'+string_tag+'_images'], merge_ir_bool, image_path, image_path_ir)
+            #create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir, oriented, string_tag)
             print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines)))
             
             if limiter != None:
@@ -175,30 +187,38 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
                 break
             
 
-    if fold10bool == True:
+    if fold10bool == True and palma_bool == True:
+        fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold10.txt'
+        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold10test.txt'
+        yaml_path = rf'../../../scratch/tmp/t_liet02/folds/data/fold10_{namestring}'
+    elif fold10bool == True and palma_bool == False:
         fold_train_images_path = rf'Code\data\folds\txts\fold10.txt'
         fold_val_images_path = rf'Code\data\folds\txts\fold10test.txt'
         yaml_path = rf'Code\data\folds\data\fold10'
-    else:
+    elif fold10bool == False and palma_bool == True:
+        fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}.txt'
+        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}test.txt'
+        yaml_path = rf'../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}'
+    elif fold10bool == False and palma_bool == False:
         fold_train_images_path = rf'Code\data\folds\txts\fold0{fold_nr}.txt'
         fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_nr}test.txt'
         yaml_path = rf'Code\data\folds\data\fold{fold_nr}'
 
-    paths_object = create_folder_structure(fold_nr)
+    paths_object = create_folder_structure(fold_nr,namestring, palma_bool)
 
     lines_fold_train = read_file(fold_train_images_path)
     lines_fold_val = read_file(fold_val_images_path)
     labels = read_file(path_labels)
     
     if bool_create_yaml:
-        create_yaml(yaml_path)
+        create_yaml(yaml_path, fold_nr, namestring,palma_bool)
         print("Yaml successfull created.")
     
 
     create_image_and_label(lines_fold_train, "train")
     create_image_and_label(lines_fold_val, "val")
    
-    print("Fold " + str(fold_nr) + " successfull created.")
+    print("Fold " + str(fold_nr) + " / " + namestring + " successfull created.")
     return 0
 
 
@@ -388,15 +408,26 @@ def check_normalvalues(normalized_values, cp):
     #raise ValueError(f"Ungültiger Normwert gefunden: {wert}. Normwerte müssen zwischen 0 und 1 liegen.")
     
 
-def copy_image(source_image_path, destination_folder):
+def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_rgb, image_path_ir):
     try:
-        with open(source_image_path, 'rb') as source_file:
-            image_data = source_file.read()
-            filename = os.path.basename(source_image_path)
-            destination_image_path = os.path.join(destination_folder, filename)
-            with open(destination_image_path, 'wb') as destination_file:
-                destination_file.write(image_data)
+        if merge_ir_bool == True:
+            with open(source_image_path, 'rb') as source_file:
+                image_data = merge_RGB_and_IR_image(image_path_rgb, image_path_ir)
+                filename = os.path.basename(source_image_path)
+                destination_image_path = os.path.join(destination_folder, filename)
+                with open(destination_image_path, 'wb') as destination_file:
+                    #destination_file.write(image_data)
+                    destination_file.write(image_data)
             #print(f"Image '{filename}' manually copied to '{destination_folder}'.")
+        else:
+            with open(source_image_path, 'rb') as source_file:
+                image_data = source_file.read()
+                filename = os.path.basename(source_image_path)
+                destination_image_path = os.path.join(destination_folder, filename)
+                with open(destination_image_path, 'wb') as destination_file:
+                    #destination_file.write(image_data)
+                    destination_file.write(image_data)
+                #print(f"Image '{filename}' manually copied to '{destination_folder}'.")
     except FileNotFoundError:
         print(f"Error: The source file '{source_image_path}' was not found.")
     except PermissionError:
@@ -404,7 +435,7 @@ def copy_image(source_image_path, destination_folder):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-def create_folder_structure(fold_nr):
+def create_folder_structure(fold_nr, namestring, palma_bool):
     def make_directories(path):
         try:
             os.makedirs(path)
@@ -414,13 +445,20 @@ def create_folder_structure(fold_nr):
         except Exception as e:
             print(f"Ein Fehler ist aufgetreten: {e}")
 
-    
-    path_obj = {
-        'path_train_images' : f"code/data/folds/data/fold{fold_nr}/train/images",
-        'path_train_labels' : f"code/data/folds/data/fold{fold_nr}/train/labels",
-        'path_val_images' : f"code/data/folds/data/fold{fold_nr}/val/images",
-        'path_val_labels' : f"code/data/folds/data/fold{fold_nr}/val/labels",
-    }
+    if palma_bool == True:
+        path_obj = {
+            'path_train_images' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/train/images",
+            'path_train_labels' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/train/labels",
+            'path_val_images' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/val/images",
+            'path_val_labels' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/val/labels",
+            }
+    elif palma_bool == False:
+        path_obj = {
+            'path_train_images' : f"code/data/folds/data/fold{fold_nr}/train/images",
+            'path_train_labels' : f"code/data/folds/data/fold{fold_nr}/train/labels",
+            'path_val_images' : f"code/data/folds/data/fold{fold_nr}/val/images",
+            'path_val_labels' : f"code/data/folds/data/fold{fold_nr}/val/labels",
+        }
   
     
     make_directories(path_obj['path_train_images'])
@@ -902,10 +940,16 @@ def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, 
     return f"{class_id} {x_center_norm:.6f} {y_center_norm:.6f} {width_norm:.6f} {height_norm:.6f}"
 
 
-def create_yaml(path):
+def create_yaml(path, fold_nr, namestring, palma):
     file_path = f"{path}/data.yaml"
     print(file_path)
-    file_string = "train: ./train/images " +'\n'+ "val: ./val/images" +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
+
+    if palma == True:
+        train_image_path = f"/scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/train/images"
+        val_image_path = f"/scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/val/images"
+        file_string = f"train: {train_image_path} " +'\n'+ {val_image_path} +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
+    else:
+        file_string = "train: ./train/images " +'\n'+ "val: ./val/images" +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
 
     try:
         with open(file_path, 'w') as file:
