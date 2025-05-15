@@ -4,13 +4,13 @@ from scipy.spatial import ConvexHull
 import os
 
 def main():
-    oriented = False
+    oriented = True
     ir = False
-    bool_create_yaml = False
-    limiter = None
-    palma = True
+    bool_create_yaml = True
+    limiter = 110
+    palma = False
     merge_ir_bool= True
-    namestring = "oriented_false"
+    namestring = "rgir"
 
     if palma == True:
         path_all_images = r'../../../scratch/tmp/t_liet02/all_vedai_images'
@@ -41,87 +41,6 @@ def main():
 
     # print("RGB Folds successful created")
 
-def show_one_picture_with_yolo_label(fold_nr,img_nr,ir, string_tag):
-    if ir == True:
-        image_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\images\{img_nr}_co.png'
-    else:
-        image_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\images\{img_nr}_co.png'
-    label_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\labels\{img_nr}_co.txt'
-
-  
-    print(label_path)
-    img = cv2.imread(image_path)
-
-    labels = read_file(label_path)
-    for label in labels:
-        img = add_labeled_normalized_coordinates_as_points(image_path, label)
-
-    cv2.imshow("Bild mit Punkten", img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-def add_labeled_normalized_coordinates_as_points(image_path, labels_string, point_color=(0, 0, 255), point_radius=5, point_thickness=-1):
-    """
-    Fügt normierte Koordinaten aus einer Label-Zeichenkette als farbige Punkte in ein Bild ein.
-    Das erste Element der Label-Zeile wird übersprungen.
-
-    Args:
-        image_path (str): Der Pfad zum Bild.
-        labels_string (str): Eine Zeichenkette mit den Labels und normierten Koordinaten,
-                             z.B. "8 0.32421875 0.1240234375 ...".
-                             Es wird erwartet, dass die Koordinaten paarweise folgen.
-        point_color (tuple): Die Farbe der Punkte im BGR-Format (Standard: Rot).
-        point_radius (int): Der Radius der Punkte in Pixeln (Standard: 5).
-        point_thickness (int): Die Dicke der Punkte (-1 für gefüllte Kreise, Standard: -1).
-    """
-    try:
-        img = cv2.imread(image_path)
-        if img is None:
-            print(f"Fehler: Bild nicht gefunden unter {image_path}")
-            return
-
-        height, width, _ = img.shape
-
-        # Teile die Label-Zeichenkette auf und überspringe das erste Element
-        parts = labels_string.split()
-        coordinates_str = parts[1:]
-
-        # Konvertiere die Koordinaten-Strings in Floats
-        coordinates = [float(coord) for coord in coordinates_str]
-
-        # Konvertiere die flache Liste der Koordinaten in Paare
-        points = []
-        for i in range(0, len(coordinates), 2):
-            if i + 1 < len(coordinates):
-                x_norm = coordinates[i]
-                y_norm = coordinates[i+1]
-                x_pixel = int(x_norm * width)
-                y_pixel = int(y_norm * height)
-                points.append((x_pixel, y_pixel))
-            else:
-                print("Warnung: Ungerade Anzahl von Koordinaten. Letzte Koordinate wird ignoriert.")
-                break
-      
-
-        for p in points:
-            cv2.circle(img, p, point_radius, point_color, point_thickness)
-
-        return img
-
-    except Exception as e:
-        print(f"Ein Fehler ist aufgetreten: {e}")
-
-def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter):
-    fold_nr = 1
-
-
-    for fold_nr in range(10):
-        if fold_nr != 0:
-            create_fold(fold_nr,path_all_images,path_labels, ir, False, bool_create_yaml, limiter)
-
-        #except:
-        #    print("No fold number found")
-    create_fold(10,path_all_images,path_labels,False, True, bool_create_yaml)
 
 
 def merge_RGB_and_IR_image(rgb_path, ir_path):
@@ -140,7 +59,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path):
         b, g, r = cv2.split(rgb_img)
 
         # Add the IR image as the fourth band
-        merged_img = cv2.merge([r, g, ir_img])
+        merged_img = cv2.merge([r, g ,b, ir_img])
 
         # The resulting image now has 4 channels: Blue, Green, Red, Infrared.
         # Note that the interpretation and visualization of such a
@@ -169,13 +88,12 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
             counter += 1
             target = line
           
-            image_path = f"{path_all_images}/{target}_ir.png"
-         
+            image_path = f"{path_all_images}/{target}_ir.png"         
             image_path_ir = f"{path_all_images}/{target}_co.png"
 
-            #filtered_labels = select_all_labels_in_img(target, labels)
+            filtered_labels = select_all_labels_in_img(target, labels)
             copy_image(image_path, paths_object['path_'+string_tag+'_images'], merge_ir_bool, image_path, image_path_ir)
-            #create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir, oriented, string_tag)
+            create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir, oriented, string_tag)
             print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines)))
             
             if limiter != None:
@@ -184,7 +102,7 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
                     break
                 elif counter == (limiter/10) and string_tag == 'val':
                     print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
-                break
+                    break
             
 
     if fold10bool == True and palma_bool == True:
@@ -260,10 +178,12 @@ def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
             return str(6)
         return 0
 
-    if ir == True:
-        file_path = f"{path}/{target}_ir.txt"
-    else:
-        file_path = f"{path}/{target}_co.txt"
+    # if ir == True:
+    #     file_path = f"{path}/{target}_ir.txt"
+    # else:
+    #     file_path = f"{path}/{target}_co.txt"
+
+    file_path = f"{path}/{target}.txt"
 
     img = cv2.imread(img_path)
 
@@ -414,15 +334,24 @@ def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_
             with open(source_image_path, 'rb') as source_file:
                 image_data = merge_RGB_and_IR_image(image_path_rgb, image_path_ir)
                 filename = os.path.basename(source_image_path)
+
+                parts = filename.split('_')
+                base_name_part = parts[0]
+                _, extension = os.path.splitext(filename)
+                filename = f"{base_name_part[:8]}{extension}"
+
                 destination_image_path = os.path.join(destination_folder, filename)
-                with open(destination_image_path, 'wb') as destination_file:
-                    #destination_file.write(image_data)
-                    destination_file.write(image_data)
-            #print(f"Image '{filename}' manually copied to '{destination_folder}'.")
+                cv2.imwrite(destination_image_path, image_data)
         else:
             with open(source_image_path, 'rb') as source_file:
                 image_data = source_file.read()
                 filename = os.path.basename(source_image_path)
+
+                parts = filename.split('_')
+                base_name_part = parts[0]
+                _, extension = os.path.splitext(filename)
+                filename = f"{base_name_part[:8]}{extension}"
+
                 destination_image_path = os.path.join(destination_folder, filename)
                 with open(destination_image_path, 'wb') as destination_file:
                     #destination_file.write(image_data)
@@ -938,6 +867,87 @@ def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, 
     height_norm = height / img_height
 
     return f"{class_id} {x_center_norm:.6f} {y_center_norm:.6f} {width_norm:.6f} {height_norm:.6f}"
+def show_one_picture_with_yolo_label(fold_nr,img_nr,ir, string_tag):
+    if ir == True:
+        image_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\images\{img_nr}_co.png'
+    else:
+        image_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\images\{img_nr}_co.png'
+    label_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\labels\{img_nr}_co.txt'
+
+  
+    print(label_path)
+    img = cv2.imread(image_path)
+
+    labels = read_file(label_path)
+    for label in labels:
+        img = add_labeled_normalized_coordinates_as_points(image_path, label)
+
+    cv2.imshow("Bild mit Punkten", img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+def add_labeled_normalized_coordinates_as_points(image_path, labels_string, point_color=(0, 0, 255), point_radius=5, point_thickness=-1):
+    """
+    Fügt normierte Koordinaten aus einer Label-Zeichenkette als farbige Punkte in ein Bild ein.
+    Das erste Element der Label-Zeile wird übersprungen.
+
+    Args:
+        image_path (str): Der Pfad zum Bild.
+        labels_string (str): Eine Zeichenkette mit den Labels und normierten Koordinaten,
+                             z.B. "8 0.32421875 0.1240234375 ...".
+                             Es wird erwartet, dass die Koordinaten paarweise folgen.
+        point_color (tuple): Die Farbe der Punkte im BGR-Format (Standard: Rot).
+        point_radius (int): Der Radius der Punkte in Pixeln (Standard: 5).
+        point_thickness (int): Die Dicke der Punkte (-1 für gefüllte Kreise, Standard: -1).
+    """
+    try:
+        img = cv2.imread(image_path)
+        if img is None:
+            print(f"Fehler: Bild nicht gefunden unter {image_path}")
+            return
+
+        height, width, _ = img.shape
+
+        # Teile die Label-Zeichenkette auf und überspringe das erste Element
+        parts = labels_string.split()
+        coordinates_str = parts[1:]
+
+        # Konvertiere die Koordinaten-Strings in Floats
+        coordinates = [float(coord) for coord in coordinates_str]
+
+        # Konvertiere die flache Liste der Koordinaten in Paare
+        points = []
+        for i in range(0, len(coordinates), 2):
+            if i + 1 < len(coordinates):
+                x_norm = coordinates[i]
+                y_norm = coordinates[i+1]
+                x_pixel = int(x_norm * width)
+                y_pixel = int(y_norm * height)
+                points.append((x_pixel, y_pixel))
+            else:
+                print("Warnung: Ungerade Anzahl von Koordinaten. Letzte Koordinate wird ignoriert.")
+                break
+      
+
+        for p in points:
+            cv2.circle(img, p, point_radius, point_color, point_thickness)
+
+        return img
+
+    except Exception as e:
+        print(f"Ein Fehler ist aufgetreten: {e}")
+
+def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter):
+    fold_nr = 1
+
+
+    for fold_nr in range(10):
+        if fold_nr != 0:
+            create_fold(fold_nr,path_all_images,path_labels, ir, False, bool_create_yaml, limiter)
+
+        #except:
+        #    print("No fold number found")
+    create_fold(10,path_all_images,path_labels,False, True, bool_create_yaml)
 
 
 def create_yaml(path, fold_nr, namestring, palma):
@@ -947,7 +957,7 @@ def create_yaml(path, fold_nr, namestring, palma):
     if palma == True:
         train_image_path = f"/scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/train/images"
         val_image_path = f"/scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/val/images"
-        file_string = f"train: {train_image_path} " +'\n'+ {val_image_path} +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
+        file_string = "train: "+train_image_path +'\n'+ "val: " +val_image_path +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
     else:
         file_string = "train: ./train/images " +'\n'+ "val: ./val/images" +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
 
