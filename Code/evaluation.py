@@ -58,7 +58,7 @@ plt.show()
 
 
 # Fenstergröße für den gleitenden Durchschnitt
-window_size = 20
+window_size = 100
 
 dataframes = {}
 try:

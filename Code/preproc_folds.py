@@ -7,17 +7,23 @@ def main():
     oriented = True
     ir = False
     bool_create_yaml = True
-    limiter = 110
+    limiter = None
     palma = False
-    merge_ir_bool= True
-    namestring = "rgir"
+    merge_ir_bool= False
+    namestring = "obb_true"
 
     if palma == True:
         path_all_images = r'../../../scratch/tmp/t_liet02/all_vedai_images'
         path_labels = r'../../../scratch/tmp/t_liet02/annotations/annotation.txt'
+        path_folds_destination =r'../../../scratch/tmp/t_liet02/data/cross_validation/obb_aab'
+        path_fold_dest_string = r'data/cross_validation/obb_aab'
+        path_folds =r'../../../scratch/tmp/t_liet02/folds\txts'
     else:
         path_all_images = r'Code\data\all_vedai_images'
         path_labels = r'Code\data\all_vedai_images\annotation.txt'
+        path_fold_dest_string = r'data/cross_validation/obb_aab'
+        path_folds = r'Code\data\folds\txts'
+
 
     #path_folds = r'Code\data\folds\txts'
 
@@ -34,14 +40,111 @@ def main():
     
     #show_every_picture_with_oriented_bounding_box(path_all_images,r'Code\data\folds\txts\fold01.txt',path_labels,oriented, False,False)
 
-    #create_all_folds(path_all_images,path_folds, path_labels, ir, oriented, bool_create_yaml)
+    create_all_folds(path_all_images, path_labels, ir, oriented, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string)
     
     #show_one_picture_with_yolo_label(1,'00000010', False, "val")
-    create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter, oriented, merge_ir_bool,namestring, palma)
+    #create_fold(1,path_all_images,path_labels, ir, False, bool_create_yaml, limiter, oriented, merge_ir_bool,namestring, palma)
 
     # print("RGB Folds successful created")
 
+def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string):
+    fold_nr = 1
+    create_fold_cross_validation(fold_nr, path_all_images,path_labels, ir, True,bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string)
 
+    for fold_nr in range(12):
+        if fold_nr != 0 and fold_nr < 11:
+           create_fold_cross_validation(fold_nr, path_all_images,path_labels, ir, True,bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string)
+
+        #except:
+        #    print("No fold number found")
+
+
+def create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma_bool, fold_dest_path):
+    def create_image_and_label(lines,  string_tag, current_fold_nr):
+        counter = 0
+        for line in lines:
+            counter += 1
+            target = line
+          
+            image_path = f"{path_all_images}/{target}_ir.png"         
+            image_path_ir = f"{path_all_images}/{target}_co.png"
+
+            filtered_labels = select_all_labels_in_img(target, labels)
+            copy_image(image_path, paths_object['path_'+string_tag+'_images'], merge_ir_bool, image_path, image_path_ir)
+            create_label_file(target, filtered_labels, paths_object['path_'+string_tag+'_labels'], image_path, ir, oriented, string_tag)
+            if current_fold_nr is not None:
+                print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines))+ " from train fold: " + str(current_fold_nr))
+            else:
+                print("Fold Nr:"+str(fold_nr)+" /  "+ string_tag+" image: "+str(counter) + "/" + str(len(lines)))
+            
+            if limiter != None:
+                if counter == limiter and string_tag == 'train':
+                    print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
+                    break
+                elif counter == (limiter/10) and string_tag == 'val':
+                    print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
+                    break
+            
+
+    if fold10bool == True and palma_bool == True:
+        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_nr}.txt'
+        fold_test_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_nr}test.txt'
+        yaml_path = rf'../../../scratch/tmp/t_liet02/folds/{fold_dest_path}/fold10_{namestring}'
+    elif fold10bool == True and palma_bool == False:
+        fold_val_images_path = rf'Code\data\folds\txts\fold{fold_nr}.txt'
+        fold_test_images_path = rf'Code\data\folds\txts\fold{fold_nr}test.txt'
+        yaml_path = rf'Code\data\folds\{fold_dest_path}\fold10'
+    elif fold10bool == False and palma_bool == True:
+        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}.txt'
+        fold_test_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}test.txt'
+        yaml_path = rf'../../../scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}_{namestring}'
+    elif fold10bool == False and palma_bool == False:
+        fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_nr}.txt'
+        fold_test_images_path = rf'Code\data\folds\txts\fold0{fold_nr}test.txt'
+        yaml_path = rf'Code\data\folds\{fold_dest_path}\fold{fold_nr}'
+
+
+    paths_object = create_folder_structure(fold_nr, namestring, palma_bool, fold_dest_path)
+
+    
+    if bool_create_yaml:
+        create_yaml(yaml_path, fold_nr, namestring, palma_bool, fold_dest_path)
+        print("Yaml successfull created.")
+
+    all_fold_nr = list(range(1,11))
+    all_fold_nr.remove(fold_nr)
+
+    all_fold_nr_without_current_fold = all_fold_nr
+    all_fold_nr = list(range(1,11))
+
+    labels = read_file(path_labels)
+
+
+    for i in all_fold_nr_without_current_fold:
+        if i == 10: 
+            fold10bool = True
+        else:
+            fold10bool = False
+
+        if fold10bool == True and palma_bool == True:
+            fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold10.txt'
+        elif fold10bool == True and palma_bool == False:
+            fold_train_images_path = rf'Code\data\folds\txts\fold10.txt'
+        elif fold10bool == False and palma_bool == True:
+            fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{i}.txt'
+        elif fold10bool == False and palma_bool == False:
+            fold_train_images_path = rf'Code\data\folds\txts\fold0{i}.txt'
+        lines_fold_train = read_file(fold_train_images_path)
+        create_image_and_label(lines_fold_train, "train", i)
+
+    lines_fold_val = read_file(fold_val_images_path)
+    lines_fold_test  = read_file(fold_test_images_path)
+
+    create_image_and_label(lines_fold_val, "val", None)
+    create_image_and_label(lines_fold_test, "test", None)
+   
+    print("Fold " + str(fold_nr) + " / " + namestring + " in ' "+fold_dest_path+ " successfull created.")
+    return 0
 
 def merge_RGB_and_IR_image(rgb_path, ir_path):
     # Load the RGB image
@@ -81,7 +184,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path):
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
-def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma_bool):
+def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma_bool, fold_dest_path, fold_test_nr):
     def create_image_and_label(lines,  string_tag):
         counter = 0
         for line in lines:
@@ -107,36 +210,46 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
 
     if fold10bool == True and palma_bool == True:
         fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold10.txt'
-        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold10test.txt'
-        yaml_path = rf'../../../scratch/tmp/t_liet02/folds/data/fold10_{namestring}'
+        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_test_nr}test.txt'
+        yaml_path = rf'../../../scratch/tmp/t_liet02/folds/{fold_dest_path}/fold10_{namestring}'
     elif fold10bool == True and palma_bool == False:
         fold_train_images_path = rf'Code\data\folds\txts\fold10.txt'
-        fold_val_images_path = rf'Code\data\folds\txts\fold10test.txt'
-        yaml_path = rf'Code\data\folds\data\fold10'
+        fold_val_images_path = rf'Code\data\folds\txts\fold{fold_test_nr}test.txt'
+        yaml_path = rf'Code\data\folds\{fold_dest_path}\fold10'
     elif fold10bool == False and palma_bool == True:
-        fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}.txt'
-        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}test.txt'
-        yaml_path = rf'../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}'
+        fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_nr}.txt'
+        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_test_nr}test.txt'
+        yaml_path = rf'../../../scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}_{namestring}'
     elif fold10bool == False and palma_bool == False:
         fold_train_images_path = rf'Code\data\folds\txts\fold0{fold_nr}.txt'
-        fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_nr}test.txt'
-        yaml_path = rf'Code\data\folds\data\fold{fold_nr}'
+        fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_test_nr}test.txt'
+        yaml_path = rf'Code\data\folds\{fold_dest_path}\fold{fold_nr}'
 
-    paths_object = create_folder_structure(fold_nr,namestring, palma_bool)
+    if fold_test_nr == 10:
+        if fold10bool == True and palma_bool == True:
+            fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_test_nr}test.txt'
+        elif fold10bool == True and palma_bool == False:
+            fold_val_images_path = rf'Code\data\folds\txts\fold{fold_test_nr}test.txt'
+        elif fold10bool == False and palma_bool == True:
+            fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_test_nr}test.txt'
+        elif fold10bool == False and palma_bool == False:
+            fold_val_images_path = rf'Code\data\folds\txts\fold{fold_test_nr}test.txt'
+
+    paths_object = create_folder_structure(fold_nr,namestring, palma_bool, fold_dest_path)
 
     lines_fold_train = read_file(fold_train_images_path)
     lines_fold_val = read_file(fold_val_images_path)
     labels = read_file(path_labels)
     
     if bool_create_yaml:
-        create_yaml(yaml_path, fold_nr, namestring,palma_bool)
+        create_yaml(yaml_path, fold_nr, namestring, palma_bool, fold_dest_path)
         print("Yaml successfull created.")
     
 
     create_image_and_label(lines_fold_train, "train")
     create_image_and_label(lines_fold_val, "val")
    
-    print("Fold " + str(fold_nr) + " / " + namestring + " successfull created.")
+    print("Fold " + str(fold_nr) + " / " + namestring + " in ' "+fold_dest_path+" ' with val nr "+str(fold_test_nr)+" successfull created.")
     return 0
 
 
@@ -364,7 +477,7 @@ def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-def create_folder_structure(fold_nr, namestring, palma_bool):
+def create_folder_structure(fold_nr, namestring, palma_bool, dest_path):
     def make_directories(path):
         try:
             os.makedirs(path)
@@ -376,17 +489,21 @@ def create_folder_structure(fold_nr, namestring, palma_bool):
 
     if palma_bool == True:
         path_obj = {
-            'path_train_images' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/train/images",
-            'path_train_labels' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/train/labels",
-            'path_val_images' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/val/images",
-            'path_val_labels' : f"../../../scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/val/labels",
+            'path_train_images' : f"../../../scratch/tmp/t_liet02/{dest_path}/fold{fold_nr}_{namestring}/train/images",
+            'path_train_labels' : f"../../../scratch/tmp/t_liet02/{dest_path}/fold{fold_nr}_{namestring}/train/labels",
+            'path_val_images' : f"../../../scratch/tmp/t_liet02/{dest_path}/fold{fold_nr}_{namestring}/val/images",
+            'path_val_labels' : f"../../../scratch/tmp/t_liet02/{dest_path}/fold{fold_nr}_{namestring}/val/labels",
+            'path_test_images' : f"../../../scratch/tmp/t_liet02/{dest_path}/fold{fold_nr}_{namestring}/test/images",
+            'path_test_labels' : f"../../../scratch/tmp/t_liet02/{dest_path}/fold{fold_nr}_{namestring}/test/labels",
             }
     elif palma_bool == False:
         path_obj = {
-            'path_train_images' : f"code/data/folds/data/fold{fold_nr}/train/images",
-            'path_train_labels' : f"code/data/folds/data/fold{fold_nr}/train/labels",
-            'path_val_images' : f"code/data/folds/data/fold{fold_nr}/val/images",
-            'path_val_labels' : f"code/data/folds/data/fold{fold_nr}/val/labels",
+            'path_train_images' : f"code/data/folds/{dest_path}/fold{fold_nr}/train/images",
+            'path_train_labels' : f"code/data/folds/{dest_path}/fold{fold_nr}/train/labels",
+            'path_val_images' : f"code/data/folds/{dest_path}/fold{fold_nr}/val/images",
+            'path_val_labels' : f"code/data/folds/{dest_path}/fold{fold_nr}/val/labels",
+            'path_test_images' : f"code/data/folds/{dest_path}/fold{fold_nr}/test/images",
+            'path_test_labels' : f"code/data/folds/{dest_path}/fold{fold_nr}/test/labels",
         }
   
     
@@ -395,6 +512,9 @@ def create_folder_structure(fold_nr, namestring, palma_bool):
     
     make_directories(path_obj['path_val_images'])
     make_directories(path_obj['path_val_labels'])
+
+    make_directories(path_obj['path_test_images'])
+    make_directories(path_obj['path_test_labels'])
    
     return path_obj
 
@@ -937,34 +1057,23 @@ def add_labeled_normalized_coordinates_as_points(image_path, labels_string, poin
     except Exception as e:
         print(f"Ein Fehler ist aufgetreten: {e}")
 
-def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter):
-    fold_nr = 1
 
 
-    for fold_nr in range(10):
-        if fold_nr != 0:
-            create_fold(fold_nr,path_all_images,path_labels, ir, False, bool_create_yaml, limiter)
 
-        #except:
-        #    print("No fold number found")
-    create_fold(10,path_all_images,path_labels,False, True, bool_create_yaml)
-
-
-def create_yaml(path, fold_nr, namestring, palma):
-    file_path = f"{path}/data.yaml"
-    print(file_path)
+def create_yaml(path, fold_nr, namestring, palma, fold_dest_path):
+    file_path = f"{path}\data.yaml"
 
     if palma == True:
-        train_image_path = f"/scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/train/images"
-        val_image_path = f"/scratch/tmp/t_liet02/data/fold{fold_nr}_{namestring}/val/images"
-        file_string = "train: "+train_image_path +'\n'+ "val: " +val_image_path +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
+        train_image_path = f"/scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}_{namestring}/train/images"
+        val_image_path = f"/scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}_{namestring}/val/images"
+        test_image_path = f"/scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}_{namestring}/test/images"
+        file_string = "train: "+train_image_path +'\n'+ "val: " +val_image_path +'\n'+"test: "+test_image_path +'\n' +  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
     else:
-        file_string = "train: ./train/images " +'\n'+ "val: ./val/images" +'\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
+        file_string = "train: ./train/images " +'\n'+ "val: ./val/images" +'\n' + "test: ./test/images" + '\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
 
     try:
         with open(file_path, 'w') as file:
             file.write(file_string)
-        print("YAML erfolgreich erstellt")
     except IOError as e:
         print(f"Fehler beim Schreiben der YAML-Datei: {e}")
 

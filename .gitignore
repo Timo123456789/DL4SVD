@@ -2,6 +2,7 @@ Code/data/
 Code/IR-yolov9-main/
 Code/yolov9u/
 runs/
+temp_yolo_labels/
 
 
 
@@ -492,3 +493,4 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+Code/temp_yolo_labels.zip
