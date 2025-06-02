@@ -1,4 +1,0 @@
-Schwellwertsegmentierung
-Segmentierungsverfahren
-Verkehrstracking
-Convolutional

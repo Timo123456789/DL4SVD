@@ -1,36 +1,28 @@
 %!TEX root = thesis.tex
 % Author: Jannes Bantje
-% Modified: Lars Haalck lars.haalck@wwu.de
+% Modified: Lars Haalck lars.haalck@uni-muenster.de
 % please ask Lars Haalck first if you have any questions
 
 \documentclass[%
 a4paper,
-%a5paper,
 parskip=half,
 index=totoc,
 toc=listof,
-fontsize = 10, %a5
-%fontsize=11, %a4
+fontsize=11,
 headinclude,
 twoside,
-%BCOR = 10mm, %a5
-BCOR=12mm, %a4 standard: 12
+BCOR=12mm,
 cleardoublepage=empty,
-DIV=13, %  a5
-%DIV=13, %a4
-numbers = noenddot,
-%draft=true
+DIV=13,
+% draft=false,
 final
 ]{scrreprt}
 
-% %Abänderung Lange/Kurze Version False = wenige Listings; True = alle Listings
-\newif\ifimportant
-\importanttrue
 
 \usepackage[usenames,x11names]{xcolor}
 \usepackage[final]{graphicx}
 \usepackage{subcaption}
-\usepackage[ngerman]{datetime}
+\usepackage{datetime}
 
 % typographic settings, fonts, and math
 \usepackage[utf8]{inputenc}
@@ -40,65 +32,16 @@ final
 \usepackage[varl]{zi4}
 \usepackage{mathtools,amssymb,amsthm} % Verbesserung von amsmath (die amsmath selbst lädt)
 \usepackage[libertine,cmintegrals,bigdelims,varbb]{newtxmath}
-\usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 \usepackage[babel=true, tracking=true,final]{microtype}
-
-%eigene Packages hinzgefügt für Listings und Courier New als Schriftart für Variablen
-\usepackage{courier}
 \usepackage{listings}
-\lstset{
-        basicstyle=\ttfamily\normalsize,
-        language = Python,
-        breaklines = true,
-        numbers=left,
-        stepnumber=1,
-        numbersep=5pt,
-        frame = lines,
-        %commentstyle = \color{white},
-        %morecomment  = [l][\@gobble]{\#}, 
-        %morecomment  = [is]{\"""}{\"""},
-        breakatwhitespace = false,
-}
-\lstdefinestyle{intext}{
-        basicstyle=\ttfamily\scriptsize,
-        language = Python,
-        breaklines = true,
-        numbers=left,
-        stepnumber=1,
-        numbersep=5pt,
-        frame = lines,
-        %commentstyle = \color{white},
-        morecomment  = [l][\@gobble]{\#}, 
-        morecomment  = [is]{\"""}{\"""},
-        breakatwhitespace = false,
-}
 
-%Package für Tabellen
-\usepackage[normalem]{ulem}
-\useunder{\uline}{\ul}{}
-%weitere Abänderungen von mir für Verhinderung von Schusterjunge
-\widowpenalty=10000
-\clubpenalty=10000
-\displaywidowpenalty = 10000
-
-%Abänderungen Parametersatz
-% \renewcommand{\topfraction}{0.9}
-% \renewcommand{\bottomfraction}{0.8}
-
-% \setcounter{topnumber}{2}
-% \setcounter{bottomnumber}{2}
-% \setcounter{totalnumber}{4}
-% \setcounter{dbltopnumber}{2}
-% \renewcommand{\dbltopfraction}{0.9}
-% \renewcommand{\textfraction}{0.7}
-
-% \renewcommand{\floatpagefraction}{0.7}
-% \renewcommand{\dblfloatpagefraction}{0.7}
+\lstset{language = Python, breaklines = true}
+\lstset{numbers=left, numberstyle=\small, stepnumber=2, numbersep=8pt, frame=single, aboveskip= 10pt, belowskip=10pt}
 
 % %Abänderung Lange/Kurze Version False = wenige Listings; True = alle Listings
-
-
-
+\newif\ifimportant
+\importanttrue
 
 % set line spacing
 \usepackage{setspace}
@@ -143,7 +86,7 @@ psdextra
 % enumeration settings
 \usepackage[shortlabels]{enumitem}
 \setlist[enumerate,description]{font=\sffamily\bfseries} % makes labels in enumeration bold
-\usepackage[german=quotes]{csquotes}
+\usepackage{csquotes}
 
 \usepackage{ifdraft}
 \setlength{\marginparwidth}{2.0cm}
@@ -166,6 +109,7 @@ psdextra
 \pagestyle{scrheadings}
 \clearpairofpagestyles % clear defaults
 \setkomafont{headsepline}{\color{gray}} % adds a gray line under the header
+
 % set section title on the right, and chapter title on the left page in a double page
 % document
 \automark[section]{chapter}
@@ -174,24 +118,20 @@ psdextra
 \lehead{\scshape\leftmark} % chapter title on the left side an in small caps
 \ofoot[\pagemark]{\pagemark} % page marks always on the outer site of the page
 
-\setcounter{secnumdepth}{4}
-\setcounter{tocdepth}{4}
-
-
 % sets page marks and footer and header texts to sans-serif in gray
 \renewcommand*{\pnumfont}{\sffamily}
 \renewcommand*{\footfont}{\sffamily\color{gray}}
 \renewcommand*{\headfont}{\sffamily\color{gray}}
 
 % change the chapter, section and subsection font sizes and spacings a bit for a5 format
-\setlength{\footskip}{1.75\baselineskip} % change the spacing a bit for a5 format
-\RedeclareSectionCommand[%
-afterskip=1\baselineskip,%
-beforeskip=-1\baselineskip]{chapter}
+% \setlength{\footskip}{1.75\baselineskip} % change the spacing a bit for a5 format
+% \RedeclareSectionCommand[%
+% afterskip=1\baselineskip,%
+% beforeskip=-1\baselineskip]{chapter}
 
-\setkomafont{chapter}{\LARGE}
-\setkomafont{section}{\Large}
-\setkomafont{subsection}{\large}
+% \setkomafont{chapter}{\LARGE}
+% \setkomafont{section}{\Large}
+% \setkomafont{subsection}{\large}
 
 % adds a thick gray line after the chapter number
 \renewcommand*{\chapterformat}{%

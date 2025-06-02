@@ -1,5 +1,5 @@
 % Author: Jannes Bantje
-% Modified: Lars Haalck lars.haalck@wwu.de
+% Modified: Lars Haalck lars.haalck@uni-muenster.de
 % please ask Lars Haalck first if you have any questions
 \input{preamble.tex}
 
@@ -7,41 +7,38 @@
 \newcommand{\printname}{Timo Lietmeyer}
 \newcommand{\printnumber}{459 169}
 
-\newcommand{\printtitle}{Formbasiertes Objekttracking \\ mit der Discrete Curve Evolution}
-\newcommand{\printalttitle}{Shape-based object tracking \\ with the Discrete Curve Evolution}
+\newcommand{\printtitle}{Deep Learning for Small Vehicle Classfication \\ on High-Resolution Multispectral Remote Sensing Imagery}
+\newcommand{\printalttitle}{Deep Learning zur Klassifikation kleiner Fahrzeuge \\ auf hochauflösenden multispektralen Fernerkundungsbildern}
 \newcommand{\printcity}{Münster}
-\newcommand{\printtype}{Bachelorarbeit}
-\newcommand{\printdegree}{Bachelor of Science}
-\newcommand{\printsupervisor}{Dr. Christian Knoth}
-\newcommand{\printfirstassessor}{Prof. Dr. Reinhard Moratz}
+\newcommand{\printtype}{Master's thesis}
+\newcommand{\printdegree}{Master of Science}
+\newcommand{\printsupervisor}{Sebastian Thiele}
+\newcommand{\printfirstassessor}{Prof. Dr. Benjamin Risse}
 \newcommand{\printsecondassessor}{Dr. Christian Knoth}
-\newcommand{\printinstitute}{Fachbereich Geowissenschaften \\
-    Institut für Geoinformatik}
+\newcommand{\printinstitute}{Institute for Geoinformatics}
 
 % !!!only for pseudo text, can be deleted!!!
 \usepackage{blindtext}
 
-\hypersetup{pdfinfo = {
-	Title={Formbasiertes Objekttracking mit der Discrete Curve Evolution},
-	Author=\printname,
-	Keywords = {Discrete Curve Evolution, DCE, YOLO, Bachelorarbeit, Thesis, \printdegree, Formbasiertes Objekttracking mit der Discrete Curve Evolution, Formbasiertes Objekttracking}}}
+\widowpenalty = 10000
+\clubpenalty = 10000
+\displaywidowpenalty = 10000
 
 \begin{document}
-% set the pager numbering to big roman numbers for firt few pages
+% set the pager numbering to big roman numbers for first few pages
 \pagenumbering{Roman}
 \listoftodos
 
-
 % titlepage does not need cleardoubleoddemptypage
 \begin{titlepage}
-	\input{chapter/title_page.tex}
+	\input{chapter/000title_page.tex}
 \end{titlepage}
 
 \begin{titlepage}
-	\input{chapter/title_page2.tex}
+	\input{chapter/001title_page2.tex}
 \end{titlepage}
 
-\input{chapter/001abstract.tex}
+\input{chapter/002abstract.tex}
 \cleardoubleoddemptypage
 
 \tableofcontents
@@ -50,31 +47,25 @@
 % set the page numbering back to arabic
 \pagenumbering{arabic}
 \setcounter{page}{1}
-\input{chapter/01intro.tex}
+\input{chapter/010intro.tex}
 \cleardoubleoddemptypage
 
-\input{chapter/02Objekterkennung.tex}
+\input{chapter/011Background.tex}
 \cleardoubleoddemptypage
 
-\input{chapter/03Formverarbeitung.tex}
+\input{chapter/012Database_and_Preproc.tex}
 \cleardoubleoddemptypage
 
-\input{chapter/04verwendeteTechnologie.tex}
+\input{chapter/013Methods.tex}
 \cleardoubleoddemptypage
 
-\input{chapter/05implementierung.tex}
+\input{chapter/014Results.tex}
 \cleardoubleoddemptypage
 
-
-\input{chapter/06evaluation.tex}
+\input{chapter/015Discussion.tex}
 \cleardoubleoddemptypage
 
-
-\input{chapter/07discussion.tex}
-\cleardoubleoddemptypage
-
-
-\input{chapter/08conclusion.tex}
+\input{chapter/019conclusion.tex}
 \cleardoubleoddemptypage
 
 % when adding a new chapter comment out this line
@@ -82,7 +73,7 @@
 %cleardoubleoddemptypage
 
 \appendix % hier beginnt der Anhang
-\input{chapter/09appendix_chapter.tex}
+\input{chapter/030appendix_chapter.tex}
 \cleardoubleoddemptypage
 
 \listoffigures
@@ -91,12 +82,8 @@
 \listoftables
 \cleardoubleoddemptypage
 
-\lstlistoflistings
-\cleardoubleoddemptypage
-
-
 \printbibliography
 \cleardoubleoddemptypage
-\input{chapter/signature.tex}
+\input{chapter/040signature.tex}
 
 \end{document}
