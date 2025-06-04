@@ -3,4 +3,16 @@
 \label{ch:intro}
 
 \section{Motivation}
+\ifimportant
+    Durch die leichte Verfügbarkeit von hochauflösenden Satelliten- und Luftbildern ist Detektion von Objekten weltweit möglich. Da außerdem die hohe Rechenleistung, die für maschinelles Lernen erforderlich ist, immer preiswerter wird, wird die Anwendung von künstlicher Intelligenz zur vollautomatischen Analyse immer leichter. \\
+    Das Monitoring von zerstörten (militärischen) Gerät oder Gebäudestrukturen in Konfliktregionen, wie Darfur \cite{Knoth2017} oder der Ukraine, kann durch künstliche Intelligenz unterstützt werden. Hier können Luftbiler gut genutzt werden, weil das Erstellen von Fotos vor Ort durch die Sicherheitslage am Boden in Konfliktregionen gefährlich sein kann. \\
+    Das Monitoring von militärischem Gerät an Ländergrenzen könnte benutzt werden um eine genauere Lageeinschätzung zu generieren, ob ein Konflikt bevorsteht. Es ist auch möglich die Arbeit von menschlichen Analysten unterstützen, da die Modelle Vorschläge für mögliche Detektionen und Klassifizierungen von Objekten liefern. \\
+    Maschinelles Lernen kann zur Automatisierung angewendet werden, um größere Datensätze zu verarbeiten. Eine Herausforderung hier besteht im Training der Algorithmen, da die Verfügbarkeit von Trainingsdaten limitiert ist.\\
+
+    Ein Anwendungszenario wäre die Auswertung des menschlichen Mobilitätsverhaltens im Rahmen des Zählen von Autos auf großen öffentlichen Parkplätzen. Hier kann auch ein Tracking von Verkehrsaufkommen durch die KI landesweit erfolgen, wenn Fahrzeuge auf einem Satellitenbild detektiert werden können. Dieser Ansatz kann genutzt werden um abzuschätzen ob mehr Parkflächen erforderlich sind oder die Anzahl der aktuellen Flächen ausreicht. Weitere Fragestellungen wären, ob es möglich ist fahrende und stehende Autos zu unterscheiden. 
+
+    Außerdem kann in dieser Arbeit evaluiert werden, ob die Präzision der  Objekterkennung und -klassifzierung von Fahrzeugen in elektro-optischen, multi-spektralen Luftaufnahmen durch die Nutzung von mehr Bildkanälen (NIR, IR) verbessert werden kann. Dies kann durch einen Vergleich der Ergebnisse beim Trainieren desselben Deep Learning Modells geschehen, welches jeweils nur mit 3 und einmal mit  mehr Kanälen trainiert wurde. Da Fahrzeuge relativ klein auf hochauflösenden Satellitenbildern dargestellt werden, kann auch evaluiert werden, wie gut sich ein Deep Learning Modell zur Klassifizierung sehr kleiner Objekte eignet, bzw. ob ein weiterer Kanal die Präzision verbessert.
+\else
+english
+\fi
 \section{Structure of the thesis}

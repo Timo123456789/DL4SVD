@@ -2,3 +2,20 @@
 \chapter{Methodology}
 \label{ch:methodology}
 
+\ifimportant
+
+Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der 'You Only Look Once' (YOLO) Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde, ermöglicht eine schnelle und präzise Objekterkennung. YOLO basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
+
+Die Hauptvorteile von YOLO sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird YOLO verwendet, um Fahrzeuge auf Satellitenbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie NIR oder IR integriert werden, um einen Vergleich zu dem reinen 3 Kanal RGB Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
+
+\subsection*{Database}
+
+Das 'Vehicle Detection in Aerial Images' (VEDAI) Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl RGB-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie NIR oder IR auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in über 1200 Bildern annotiert. Diese Objekte sind in 8 Klassen (Boat, Camping Car, Car, Pickup Plane, Tractor, Truck, Van und Others) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht. \\
+Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was ausreichend ist um einzelne Fahrzeuge zu erkennen. Möglicherweise ist eine Downskalierung auf 30cm pro Pixel sinnvoll, um die Auflösung von Satellitenbildern zu imitieren.
+ 
+
+Die Datenaufbereitung umfasst Schritte wie das Unterteilen der Bilder in Trainings- und Testdaten, sowie die Aufbereitung der Annotationen für den YOLO Algorithmus. Nach diesen Schritten kann das Training auf dem High-Performance-Cluster (HPC) PALMA der Uni Münster erfolgen. Anhand der Ergebnismatrix wird dann ein Vergleich der beiden Modelle erfolgen, da der einzige Unterschied das weitere Band ist. 
+\else
+\blindtext
+\fi
+
