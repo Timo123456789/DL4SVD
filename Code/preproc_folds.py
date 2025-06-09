@@ -7,7 +7,7 @@ def main():
     oriented = False
     ir = False
     bool_create_yaml = True
-    limiter = None
+    limiter = 5
     palma = False
     merge_ir_bool= True
     namestring = ""

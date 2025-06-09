@@ -20,7 +20,7 @@ def main():
     fold_paths_obb = [
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F1/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F2/results.csv",
-        #r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F3/results.csv",
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F3/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F4/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F5/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F6/results.csv",
@@ -31,13 +31,13 @@ def main():
     ]
 
     bool_arr = {
-        "mAP@50-95": False,
+        "mAP@50-95": True,
         "mAP@50": False,
         "recall": False,
-        "precision": True,
+        "precision": False,
     }
     
-    window_size = 50
+    window_size = 20
     all_folds_aab, string_title = get_smooth_Folds(fold_paths_aab,window_size, bool_arr)
     all_folds_obb, string_title = get_smooth_Folds(fold_paths_obb,window_size, bool_arr)
 
