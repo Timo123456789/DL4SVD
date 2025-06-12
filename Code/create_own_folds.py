@@ -18,7 +18,7 @@ def main():
         
     else:
         path_all_images = r'Code\data\all_vedai_images'
-        path_labels = r'Code\data\all_vedai_images\annotation.txt'
+        path_labels = r'Code\data\annotation.txt'
 
     list_all_files = list_files(path_all_images)
     print(len(list_files(path_all_images)))

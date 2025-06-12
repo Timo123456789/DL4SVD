@@ -26,7 +26,7 @@ def main():
         
     else:
         path_all_images = r'Code\data\all_vedai_images'
-        path_labels = r'Code\data\all_vedai_images\annotation.txt'
+        path_labels = r'Code\data\annotation.txt'
         
 
     #create_aab_oob(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object)
