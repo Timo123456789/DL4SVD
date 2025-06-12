@@ -8,7 +8,7 @@ def main():
     ir = False
     bool_create_yaml = True
     limiter = None
-    palma = True
+    palma = False
     merge_ir_bool= False
     namestring = ""
 
@@ -26,7 +26,7 @@ def main():
         
     else:
         path_all_images = r'Code\data\all_vedai_images'
-        path_labels = r'Code\data\all_vedai_images\annotation.txt'
+        path_labels = r'Code\data\annotation.txt'
         
 
     create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
@@ -39,28 +39,18 @@ def main():
 
 def create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma):
 
-    # path_fold_dest_string = r'data/cross_validation_right/aab'
-    # oriented = False
-
-    # fold_nr = 1
-    # for fold_nr in range(12):
-    #     if fold_nr != 0 and fold_nr < 11:
-    #         if fold_nr == 10:
-    #             create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
-    #         else:
-    #             create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, False, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
-    
-    # print_divideline()
+    path_fold_dest_string = r'data/cross_validation_right/aab'
+    fold_nr = 0
+    oriented=False
+    for fold_nr in range(5):  
+        create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
 
     path_fold_dest_string = r'data/cross_validation_right/obb'
-    fold_nr = 1
+    fold_nr = 0
     oriented=True
-    for fold_nr in range(12):
-        if fold_nr != 0 and fold_nr < 11:
-            if fold_nr == 10:
-                create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
-            else:
-                create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, False, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
+    for fold_nr in range(5):  
+        create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
+            
     return 0
 
 def create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object):
@@ -129,17 +119,7 @@ def create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limi
 
 
     return 0
-def create_aab_oob(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object):
 
-    path_fold_dest_string = r'data/cross_validation/aab'
-    oriented = False
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
-    print_divideline()
-
-    path_fold_dest_string = r'data/cross_validation/obb'
-    oriented=True
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
-    return 0
 
 
 
@@ -358,19 +338,57 @@ def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
                         str(yolo_transf_label[6])+" "+
                         str(yolo_transf_label[7]) + '\n')
                 elif oriented == False:
-                    yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
+                    #Ursprüngliches YOLO Format
+
+
+                    # yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
+                    # file_string = (convert_class_to_yolo(transf_label[0]) + " "+
+                    #     str(yolo_transf_label[0])+" "+
+                    #     str(yolo_transf_label[1])+" "+
+                    #     str(yolo_transf_label[2])+" "+ 
+                    #     str(yolo_transf_label[3]) + '\n')
+
+                    #obb YOLO Format aber keine obb boxen
+                    yolo_transf_label = convert_to_yolo_abb(px_corner, img.shape[1], img.shape[0])
                     file_string = (convert_class_to_yolo(transf_label[0]) + " "+
                         str(yolo_transf_label[0])+" "+
                         str(yolo_transf_label[1])+" "+
                         str(yolo_transf_label[2])+" "+ 
-                        str(yolo_transf_label[3]) + '\n')
+                        str(yolo_transf_label[3])+" "+ 
+                        str(yolo_transf_label[4])+" "+ 
+                        str(yolo_transf_label[5])+" "+
+                        str(yolo_transf_label[6])+" "+
+                        str(yolo_transf_label[7]) + '\n')
                     
                 file.write(file_string)
             #datei.write(inhalt)
         #print(f"Die Datei '{file_path}' wurde erfolgreich mit Inhalt erstellt.")
     except Exception as e:
         print(f"Ein Fehler ist aufgetreten in der create_label_file: {e}")
-    
+
+def convert_to_yolo_abb(corners_pixel, img_width, img_height):
+    """
+    Converts four corner points to YOLOv9 OBB label format.
+
+    Args:
+        corners_pixel (list): [x1, y1, x2, y2, x3, y3, x4, y4] in pixels
+        img_width (int): Image width in pixels
+        img_height (int): Image height in pixels
+
+    Returns:
+        str: YOLOv9 OBB label with normalized coordinates
+                'class_id x1 y1 x2 y2 x3 y3 x4 y4'
+    """
+
+    normalized_points = []
+    for i in range(0, 8, 2):
+        x_norm = corners_pixel[i] / img_width
+        y_norm = corners_pixel[i+1] / img_height
+        normalized_points.extend([x_norm, y_norm])
+
+    return check_normalvalues(normalized_points)
+
+
 def convert_label_to_yolo_classic(corners_pixel, img_width, img_height):
     """
     Converts the coordinates of four pixels defining a polygon
@@ -1170,22 +1188,15 @@ def create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, fold10
                     break
             
 
-    if fold10bool == True and palma_bool == True:
+    if palma_bool == True:
         fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_nr}.txt'
-        fold_test_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{fold_nr}test.txt'
-        yaml_path = rf'../../../scratch/tmp/t_liet02/{fold_dest_path}/fold10{namestring}'
-    elif fold10bool == True and palma_bool == False:
-        fold_val_images_path = rf'Code\data\folds\txts\fold{fold_nr}.txt'
-        fold_test_images_path = rf'Code\data\folds\txts\fold{fold_nr}test.txt'
-        yaml_path = rf'Code\data\folds\{fold_dest_path}\fold10'
-    elif fold10bool == False and palma_bool == True:
-        fold_val_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}.txt'
-        fold_test_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{fold_nr}test.txt'
+        fold_test_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold5.txt'
         yaml_path = rf'../../../scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}{namestring}'
-    elif fold10bool == False and palma_bool == False:
-        fold_val_images_path = rf'Code\data\folds\txts\fold0{fold_nr}.txt'
-        fold_test_images_path = rf'Code\data\folds\txts\fold0{fold_nr}test.txt'
-        yaml_path = rf'Code\data\folds\{fold_dest_path}\fold{fold_nr}'
+    elif fold10bool == True and palma_bool == False:
+        fold_val_images_path = rf'Code\data\folds\own_folds\fold{fold_nr}.txt'
+        fold_test_images_path = rf'Code\data\folds\own_folds\fold5.txt'
+        yaml_path = rf'Code\data\folds\{fold_dest_path}\fold{fold_nr}{namestring}'
+   
 
 
     paths_object = create_folder_structure(fold_nr, namestring, palma_bool, fold_dest_path, True)
@@ -1195,29 +1206,23 @@ def create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, fold10
         create_yaml(yaml_path, fold_nr, namestring, palma_bool, fold_dest_path, True)
         print("Yaml successfull created.")
 
-    all_fold_nr = list(range(1,11))
+    all_fold_nr = list(range(0,5))
     all_fold_nr.remove(fold_nr)
 
     all_fold_nr_without_current_fold = all_fold_nr
-    all_fold_nr = list(range(1,11))
+    all_fold_nr = list(range(0,5))
 
     labels = read_file(path_labels)
 
 
     for i in all_fold_nr_without_current_fold:
-        if i == 10: 
-            fold10bool_intern = True
-        else:
-            fold10bool_intern = False
 
-        if fold10bool_intern == True and palma_bool == True:
-            fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold10.txt'
-        elif fold10bool_intern == True and palma_bool == False:
-            fold_train_images_path = rf'Code\data\folds\txts\fold10.txt'
-        elif fold10bool_intern == False and palma_bool == True:
-            fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold0{i}.txt'
-        elif fold10bool_intern == False and palma_bool == False:
-            fold_train_images_path = rf'Code\data\folds\txts\fold0{i}.txt'
+
+        if palma_bool == True:
+            fold_train_images_path = rf'../../../scratch/tmp/t_liet02/folds/txts/fold{i}.txt'
+        elif palma_bool == False:
+            fold_train_images_path = rf'Code\data\folds\own_folds\fold{i}.txt'
+       
         lines_fold_train = read_file(fold_train_images_path)
         create_image_and_label(lines_fold_train, "train", i)
 

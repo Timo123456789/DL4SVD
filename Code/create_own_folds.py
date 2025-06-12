@@ -50,6 +50,7 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
 
     i = img_counter
     error_counter =0
+    empty_images = []
     print( len(image_class_list))
     while img_counter != len(image_class_list):
         for i in image_class_list:
@@ -92,15 +93,11 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
                 fold_arr_object_counter = count_objects_in_fold_arr(fold_arr, image_class_list)
             else: #image is empty
                 error_counter +=1
-                min_len = float('inf')
-                for z in range(len(fold_arr)):
-                    if isinstance(fold_arr[z], list):
-                        current_len = len(fold_arr[z])
-                        if current_len < min_len:
-                            min_len = current_len
-                            min_index = z
-                fold_arr[min_index].append(i['image_id'])
-
+                
+                empty_images.append(i['image_id'])
+              
+            
+            
             
             img_counter += 1
             print("Image " + str(img_counter) + "/" + str(len(image_class_list)))
@@ -112,6 +109,26 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
 
     print("error_counter")
     print(error_counter)
+    print("__")
+    print(empty_images)
+
+    quotient, rest = divmod(error_counter, number_of_folds)
+
+    index = 0
+    for i in range(len(fold_arr)):
+        for _ in range(quotient):
+            fold_arr[i].append(empty_images.pop())
+
+    while empty_images:
+        # Bestimme das Fold mit der kleinsten Länge
+        min_index = min(range(len(fold_arr)), key=lambda i: len(fold_arr[i]) if isinstance(fold_arr[i], list) else float('inf'))
+
+        # Füge das nächste Element aus empty_images hinzu
+        fold_arr[min_index].append(empty_images.pop())  # oder pop() für schnellere Variante
+
+
+
+
         
     object_counter = count_objects_in_fold_arr(fold_arr, image_class_list)
     counter = 0
@@ -145,7 +162,7 @@ def write_folds(arr, object_counter, fold_image_count_arr, output_dir, error_cou
     os.makedirs(output_dir, exist_ok=True)
     for i in range(len(arr)):
         img_list = arr[i]
-        filename = os.path.join(output_dir, f"fold_{i}.txt")
+        filename = os.path.join(output_dir, f"fold{i}.txt")
         with open(filename, "w") as f:
             for line in img_list:
                 f.write(line + "\n")
