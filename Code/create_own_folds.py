@@ -111,6 +111,8 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
     print(error_counter)
     print("__")
     print(empty_images)
+    number_empty_images = np.zeros(number_of_folds, dtype=int)
+
 
     quotient, rest = divmod(error_counter, number_of_folds)
 
@@ -118,6 +120,7 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
     for i in range(len(fold_arr)):
         for _ in range(quotient):
             fold_arr[i].append(empty_images.pop())
+            number_empty_images[i] += 1
 
     while empty_images:
         # Bestimme das Fold mit der kleinsten Länge
@@ -125,6 +128,7 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
 
         # Füge das nächste Element aus empty_images hinzu
         fold_arr[min_index].append(empty_images.pop())  # oder pop() für schnellere Variante
+        number_empty_images[min_index] += 1
 
 
 
@@ -143,7 +147,7 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
         print("___")
 
 
-    write_folds(fold_arr, object_counter, fold_image_count_array, output_path, error_counter)
+    write_folds(fold_arr, object_counter, fold_image_count_array, output_path, error_counter, number_empty_images)
       
             
 
@@ -157,7 +161,7 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
 
     return 0
 
-def write_folds(arr, object_counter, fold_image_count_arr, output_dir, error_counter):
+def write_folds(arr, object_counter, fold_image_count_arr, output_dir, error_counter, number_empty_images):
     print("write data")
     os.makedirs(output_dir, exist_ok=True)
     for i in range(len(arr)):
@@ -170,7 +174,7 @@ def write_folds(arr, object_counter, fold_image_count_arr, output_dir, error_cou
     line_counter = 0
     with open(extra_filename, "w") as f:
         for line in object_counter:
-            f.write(str(line) +" img quantity: "+str(fold_image_count_arr[line_counter])+ "\n")
+            f.write(str(line) +" Images quantity: "+str(fold_image_count_arr[line_counter])+ " / Number of Background Images:  " + str(number_empty_images[line_counter]) +  "\n")
             line_counter += 1
         f.write("Images with no objects: " + str(error_counter) )
         print("write" + str(i))

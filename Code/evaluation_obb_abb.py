@@ -5,36 +5,35 @@ import os
 def main():
     # === Pfade zu deinen 10 Folds ===
     fold_paths_aab = [
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F0/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F1/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F2/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F3/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F4/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F5/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F6/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F7/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F8/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F9/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F10/results.csv",
+
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F0/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F1/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F2/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F3/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F4/results.csv",
     ]
 
     fold_paths_obb = [
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F0/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F1/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F2/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F3/results.csv",
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F4/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F5/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F6/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F7/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F8/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F9/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\obb\orTrue_Ep500_F10/results.csv",
     ]
 
+
+    
     bool_arr = {
         "mAP@50-95": True,
         "mAP@50": False,
         "recall": False,
         "precision": False,
+        "val/cls_ls": False,
     }
     
     window_size = 20
@@ -44,10 +43,10 @@ def main():
    
 
 
-    palette_blue = sns.color_palette("Blues", n_colors=10)
-    palette_orange = sns.color_palette("Oranges", n_colors=10)
+    palette_blue = sns.color_palette("Blues", n_colors=5)
+    palette_orange = sns.color_palette("Oranges", n_colors=5)
 
-    print("test")
+
 
 
 
@@ -87,15 +86,15 @@ def main():
         # Manuelle Legenden mit allen Folds
         from matplotlib.lines import Line2D
 
-        legend_elements_aab = [Line2D([0], [0], color=palette_blue[i], lw=2, label=f'AAB Fold {i+1}') for i in range(10)]
-        legend_elements_obb = [Line2D([0], [0], color=palette_orange[i], lw=2, label=f'OBB Fold {i+1}') for i in range(10)]
+        legend_elements_aab = [Line2D([0], [0], color=palette_blue[i], lw=2, label=f'AAB Fold {i+1}') for i in range(5)]
+        legend_elements_obb = [Line2D([0], [0], color=palette_orange[i], lw=2, label=f'OBB Fold {i+1}') for i in range(5)]
 
-        legend1 = plt.legend(handles=legend_elements_aab, title='AAB Folds', loc='upper left', bbox_to_anchor=(1.01, 1))
+        legend1 = plt.legend(handles=legend_elements_aab, title='irgb', loc='upper left', bbox_to_anchor=(1.01, 1))
         plt.gca().add_artist(legend1)
 
-        legend2 = plt.legend(handles=legend_elements_obb, title='OBB Folds', loc='upper left', bbox_to_anchor=(1.01, 0.5))
+        legend2 = plt.legend(handles=legend_elements_obb, title='rgbir', loc='upper left', bbox_to_anchor=(1.01, 0.5))
 
-        plt.title(f'{string_title} over Epochs – 10-Fold Cross Validation (window size: {window_size})')
+        plt.title(f'{string_title} over Epochs – 5-Fold Cross Validation (window size: {window_size})')
         plt.xlabel('Epoch')
         plt.ylabel(string_title)
         plt.grid(True, linestyle=':', alpha=0.6)
@@ -120,6 +119,9 @@ def get_smooth_Folds(fold_paths, window_size, bool_arr):
     elif bool_arr["precision"] == True:
         map_spalte = 'metrics/precision(B)'
         string_title = "precision(B)"
+    elif bool_arr["val/cls_ls"] == True:
+        map_spalte = 'val/cls_loss'
+        string_title = "val/cls_loss"
     else:
         print("Error bei Spaltenbezeichnung")
     epoch_spalte = 'epoch'
