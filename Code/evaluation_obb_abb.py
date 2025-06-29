@@ -5,17 +5,17 @@ import os
 def main():
     # === Pfade zu deinen 10 Folds ===
     fold_paths_aab = [
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F0/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F1/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F2/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F3/results.csv",
-        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F4/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F0/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F1/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F2/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F3/results.csv",
+        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab\orFalse_Ep500_F4/results.csv",
 
-        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F0/results.csv",
-        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F1/results.csv",
-        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F2/results.csv",
-        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F3/results.csv",
-        # r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F4/results.csv",
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F0/results.csv",
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F1/results.csv",
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F2/results.csv",
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F3/results.csv",
+        r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F4/results.csv",
     ]
 
     fold_paths_obb = [
@@ -89,10 +89,10 @@ def main():
         legend_elements_aab = [Line2D([0], [0], color=palette_blue[i], lw=2, label=f'AAB Fold {i+1}') for i in range(5)]
         legend_elements_obb = [Line2D([0], [0], color=palette_orange[i], lw=2, label=f'OBB Fold {i+1}') for i in range(5)]
 
-        legend1 = plt.legend(handles=legend_elements_aab, title='irgb', loc='upper left', bbox_to_anchor=(1.01, 1))
+        legend1 = plt.legend(handles=legend_elements_aab, title='obb', loc='upper left', bbox_to_anchor=(1.01, 1))
         plt.gca().add_artist(legend1)
 
-        legend2 = plt.legend(handles=legend_elements_obb, title='rgbir', loc='upper left', bbox_to_anchor=(1.01, 0.5))
+        legend2 = plt.legend(handles=legend_elements_obb, title='abb', loc='upper left', bbox_to_anchor=(1.01, 0.5))
 
         plt.title(f'{string_title} over Epochs – 5-Fold Cross Validation (window size: {window_size})')
         plt.xlabel('Epoch')

@@ -2,3 +2,19 @@
 \chapter{Results}
 \label{ch:results}
 
+\begin{itemize}
+    \item Gleitenden Mittelwert bei Darstellung mit Window Size 20 um das Grundrauschen zu minimieren
+\end{itemize}
+\section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
+\begin{itemize}
+    \item obb weil performance bei Map40-95 in allen Epochen besser
+    \item Map bei obb zwiscehn 0.5 und 0.6; bei abb bei 0.35 und 0.45
+    \item Bei gleichen Bounding box koordinaten ist obb bei 0.55 und 0.59 und abb 0.59 und 0.6
+    \item bessere Performance von abb wahrscheinlich weil geringe Änderungen in der Orientierung der Bounding Boxen eine hohe Auswirkung auf die Genauigkeit der Boxen haben
+\end{itemize}
+
+\section{RGBIR vs. ... (map5-95)}
+\begin{itemize}
+    \item Signifikant schlechtere map bei Modellen mit NDVI Kanal im Datensatz, unabhängig von Kanalanzahl (RGB NDVI und GB NDVI)
+    \item RGB: Performance relativ ähnlich, alles wenig schwankungen. Zusätzlicher kanal hat wenig auswirkugnen
+\end{itemize}

@@ -8,7 +8,7 @@ def main():
     ir = False
     bool_create_yaml = True
     limiter = None
-    palma = False
+    palma = True
     merge_ir_bool= False
     namestring = ""
 
@@ -30,28 +30,42 @@ def main():
         
 
     create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
-    #create_aab_oob(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object)
+
     #create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object)
 
-    #create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, "temp", perm_object)
-    # print("RGB Folds successful created")
+    merge_ir_bool=True
+    oriented = True
+    path_fold_dest_string = r'data/cross_validation/rgbndvi'
+    perm_object={"r":True,
+                 "g":True,
+                 "b":True,
+                 "ir":False,
+                 "ndvi":True,
+                 }
+    
+  
+    #create_fold_cross_validation(0,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    print_divideline()
 
 
 def create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma):
 
-    path_fold_dest_string = r'data/cross_validation_right/aab'
-    fold_nr = 0
+    path_fold_dest_string = r'data/cross_validation/aab_old'
+   
     oriented=False
+    fold_nr = 0
     for fold_nr in range(5):  
         create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
 
-    path_fold_dest_string = r'data/cross_validation_right/obb'
-    fold_nr = 0
-    oriented=True
-    for fold_nr in range(5):  
-        create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
+    #path_fold_dest_string = r'data/cross_validation/obb'
+    #fold_nr = 0
+    #oriented=True
+    #for fold_nr in range(5):  
+    #    create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
             
     return 0
+            
+
 
 def create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object):
     merge_ir_bool=True
@@ -64,38 +78,46 @@ def create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limi
                  "ndvi":False,
                  }
     
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    fold_nr = 0
+    for fold_nr in range(5):  
+        create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
     print_divideline()
 
-    path_fold_dest_string = r'data/cross_validation/irgb'
-    perm_object={"r":False,
-                 "g":True,
-                 "b":True,
-                 "ir":True,
-                 "ndvi":False,
-                 }
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
-    print_divideline()
+    # path_fold_dest_string = r'data/cross_validation/irgb'
+    # perm_object={"r":False,
+    #              "g":True,
+    #              "b":True,
+    #              "ir":True,
+    #              "ndvi":False,
+    #              }
+    # fold_nr = 0
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    # print_divideline()
 
-    path_fold_dest_string = r'data/cross_validation/rirb'
-    perm_object={"r":True,
-                 "g":False,
-                 "b":True,
-                 "ir":True,
-                 "ndvi":False,
-                 }
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
-    print_divideline()
+    # path_fold_dest_string = r'data/cross_validation/rirb'
+    # perm_object={"r":True,
+    #              "g":False,
+    #              "b":True,
+    #              "ir":True,
+    #              "ndvi":False,
+    #              }
+    # fold_nr = 0
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    # print_divideline()
 
-    path_fold_dest_string = r'data/cross_validation/rgir'
-    perm_object={"r":True,
-                 "g":True,
-                 "b":False,
-                 "ir":True,
-                 "ndvi":False,
-                 }
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
-    print_divideline()
+    # path_fold_dest_string = r'data/cross_validation/rgir'
+    # perm_object={"r":True,
+    #              "g":True,
+    #              "b":False,
+    #              "ir":True,
+    #              "ndvi":False,
+    #              }
+    # fold_nr = 0
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    # print_divideline()
 
     path_fold_dest_string = r'data/cross_validation/rgbndvi'
     perm_object={"r":True,
@@ -104,17 +126,22 @@ def create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limi
                  "ir":False,
                  "ndvi":True,
                  }
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
-
-    path_fold_dest_string = r'data/cross_validation/gbndvi'
-    perm_object={"r":False,
-                 "g":True,
-                 "b":True,
-                 "ir":False,
-                 "ndvi":True,
-                 }
-    create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    fold_nr = 0
+    for fold_nr in range(5):  
+        create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
     print_divideline()
+
+    # path_fold_dest_string = r'data/cross_validation/gbndvi'
+    # perm_object={"r":False,
+    #              "g":True,
+    #              "b":True,
+    #              "ir":False,
+    #              "ndvi":True,
+    #              }
+    # fold_nr = 0
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    # print_divideline()
 
 
 
@@ -177,7 +204,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, perm_object):
         if len(active_channels) >= 2:
             merged_img = cv2.merge(active_channels)
         else:
-            print("Mindestens zwei aktive Kanäle nötig für cv2.merge()")
+            print("Mindestens zwei aktive KanÃ¤le nÃ¶tig fÃ¼r cv2.merge()")
 
         # The resulting image now has 4 channels: Blue, Green, Red, Infrared.
         # Note that the interpretation and visualization of such a
@@ -338,15 +365,15 @@ def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
                         str(yolo_transf_label[6])+" "+
                         str(yolo_transf_label[7]) + '\n')
                 elif oriented == False:
-                    #Ursprüngliches YOLO Format
+                    #UrsprÃ¼ngliches YOLO Format
 
 
-                    # yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
-                    # file_string = (convert_class_to_yolo(transf_label[0]) + " "+
-                    #     str(yolo_transf_label[0])+" "+
-                    #     str(yolo_transf_label[1])+" "+
-                    #     str(yolo_transf_label[2])+" "+ 
-                    #     str(yolo_transf_label[3]) + '\n')
+                    #yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
+                    #file_string = (convert_class_to_yolo(transf_label[0]) + " "+
+                    #    str(yolo_transf_label[0])+" "+
+                    #    str(yolo_transf_label[1])+" "+
+                    #    str(yolo_transf_label[2])+" "+ 
+                    #    str(yolo_transf_label[3]) + '\n')
 
                     #obb YOLO Format aber keine obb boxen
                     yolo_transf_label = convert_to_yolo_abb(px_corner, img.shape[1], img.shape[0])
@@ -445,7 +472,7 @@ def convert_to_yolo_obb(corners_pixel, img_width, img_height):
         corners_pixel (list or tuple): Eine Liste oder ein Tupel mit 8
             Integer-Werten (x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px).
         img_width (int): Die Breite des Bildes in Pixeln.
-        img_height (int): Die Höhe des Bildes in Pixeln.
+        img_height (int): Die HÃ¶he des Bildes in Pixeln.
 
     Returns:
         tuple: Ein Tupel mit 8 Float-Werten (x1_norm, y1_norm, x2_norm, y2_norm,
@@ -469,18 +496,18 @@ def convert_to_yolo_obb(corners_pixel, img_width, img_height):
 
 def check_normalvalues(normalized_values):
     """
-    Prüft eine Liste von normierten Werten und wirft einen Fehler,
-    wenn ein Wert kleiner als 0 oder größer als 1 ist.
+    PrÃ¼ft eine Liste von normierten Werten und wirft einen Fehler,
+    wenn ein Wert kleiner als 0 oder grÃ¶ÃŸer als 1 ist.
 
     Args:
         normwerte: Eine Liste von numerischen Werten.
 
     Raises:
-        ValueError: Wenn ein Wert in der Liste kleiner als 0 oder größer als 1 ist.
+        ValueError: Wenn ein Wert in der Liste kleiner als 0 oder grÃ¶ÃŸer als 1 ist.
     """
     found = False
     cp_normalized_values = normalized_values
-    for i in range(len(cp_normalized_values)): # Iteriere über die Indizes der Liste
+    for i in range(len(cp_normalized_values)): # Iteriere Ã¼ber die Indizes der Liste
         if cp_normalized_values[i] < 0:
             cp_normalized_values[i] = 0
             found = True
@@ -491,10 +518,14 @@ def check_normalvalues(normalized_values):
     # if found:
     #     print(cp_normalized_values)
     return cp_normalized_values
-    #raise ValueError(f"Ungültiger Normwert gefunden: {wert}. Normwerte müssen zwischen 0 und 1 liegen.")
+    #raise ValueError(f"UngÃ¼ltiger Normwert gefunden: {wert}. Normwerte mÃ¼ssen zwischen 0 und 1 liegen.")
     
 
 def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_rgb, image_path_ir, perm_object):
+    if perm_object is not None:
+        number_of_channels = sum(1 for v in perm_object.values() if v)
+    else:
+        number_of_channels = 3
     try:
         if merge_ir_bool == True and perm_object is not None:
             with open(source_image_path, 'rb') as source_file:
@@ -504,7 +535,10 @@ def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_
                 parts = filename.split('_')
                 base_name_part = parts[0]
                 _, extension = os.path.splitext(filename)
+                if number_of_channels > 3:
+                    extension=".tiff"
                 filename = f"{base_name_part[:8]}{extension}"
+
 
                 destination_image_path = os.path.join(destination_folder, filename)
                 cv2.imwrite(destination_image_path, image_data)
@@ -649,8 +683,8 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
             #cv2.resizeWindow(window_name_ir, 1024, 1024)
             cv2.imshow(window_name_merged, img_merged)  # Bild anzeigen
             #cv2.resizeWindow(window_name_merged, 1024, 1024)
-            cv2.waitKey(0)  # Warten, bis eine Taste gedrückt wird
-            cv2.destroyAllWindows()  # Fenster schließen
+            cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
+            cv2.destroyAllWindows()  # Fenster schlieÃŸen
       
 
 def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=1):
@@ -659,12 +693,12 @@ def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_
 
     Args:
         image (np.ndarray): Das OpenCV-Bild.
-        Xvehicle (int): X-Koordinate des Fahrzeugmittelpunkts (Integer für Textpositionierung).
-        Yvehicle (int): Y-Koordinate des Fahrzeugmittelpunkts (Integer für Textpositionierung).
+        Xvehicle (int): X-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
+        Yvehicle (int): Y-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
         width_car (float): Breite des Fahrzeugs.
-        length_car (float): Länge des Fahrzeugs.
+        length_car (float): LÃ¤nge des Fahrzeugs.
         orientationVehicle (float): Orientierung des Fahrzeugs in Radiant.
-        veh_type (int): Typ des Fahrzeugs für die Textanzeige.
+        veh_type (int): Typ des Fahrzeugs fÃ¼r die Textanzeige.
         color (tuple): Farbe der Bounding Box im BGR-Format (Standard: Blau).
         thickness (int): Dicke der Linien der Bounding Box (Standard: 1).
     """
@@ -721,7 +755,7 @@ def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_
         text_x = int(Xvehicle + 15)
         text_y = int(Yvehicle - 15)
         text_bg_color = (0, 0, 0)  # Schwarz
-        text_color = (255, 255, 255)  # Weiß
+        text_color = (255, 255, 255)  # WeiÃŸ
         padding = 2
 
         # Zeichne den Hintergrund des Textes
@@ -744,17 +778,17 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
 
     Args:
         image (np.ndarray): Das OpenCV-Bild, auf das gezeichnet werden soll.
-        Xvehicle (int): X-Koordinate des Fahrzeugmittelpunkts (Integer für Textpositionierung).
-        Yvehicle (int): Y-Koordinate des Fahrzeugmittelpunkts (Integer für Textpositionierung).
+        Xvehicle (int): X-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
+        Yvehicle (int): Y-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
         pt1 (np.ndarray): Koordinaten des ersten Eckpunkts [y, x].
         pt2 (np.ndarray): Koordinaten des zweiten Eckpunkts [y, x].
         pt3 (np.ndarray): Koordinaten des dritten Eckpunkts [y, x].
         pt4 (np.ndarray): Koordinaten des vierten Eckpunkts [y, x].
-        veh_type (int): Typ des Fahrzeugs für die Textanzeige.
-        color (tuple): Farbe des Polygons im BGR-Format (Standard: Grün).
+        veh_type (int): Typ des Fahrzeugs fÃ¼r die Textanzeige.
+        color (tuple): Farbe des Polygons im BGR-Format (Standard: GrÃ¼n).
         thickness (int): Dicke der Polygonlinien (Standard: 2).
     """
-    # Konvertiere die Punktkoordinaten in Integer-Tupel für cv2.line
+    # Konvertiere die Punktkoordinaten in Integer-Tupel fÃ¼r cv2.line
     p1 = (int(pt1[1]), int(pt1[0]))
     p2 = (int(pt2[1]), int(pt2[0]))
     p3 = (int(pt3[1]), int(pt3[0]))
@@ -799,7 +833,7 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
         text_x = int(Xvehicle + 15)
         text_y = int(Yvehicle - 15)
         text_bg_color = (0, 0, 0)  # Schwarz
-        text_color = (255, 255, 255)  # Weiß
+        text_color = (255, 255, 255)  # WeiÃŸ
         padding = 2
 
         # Zeichne den Hintergrund des Textes
@@ -834,7 +868,7 @@ def calc_pixel_like_authors(img, label, oriented, ret_pts):
     l = np.array([l_1,l_2,l_3,l_4])
 
     ktri = np.argsort(l)[::-1] #key triangle
-    ltri = l[ktri]              # längen Triangle
+    ltri = l[ktri]              # lÃ¤ngen Triangle
 
     length_car = np.mean(ltri[:2])
     width_car = np.mean(ltri[2:])
@@ -933,7 +967,7 @@ def calc_pixel_like_authors(img, label, oriented, ret_pts):
 
 def calculate_bounding_box_area(points):
     """
-    Berechnet die Fläche (Anzahl der Pixel) der achsenparallelen Bounding Box
+    Berechnet die FlÃ¤che (Anzahl der Pixel) der achsenparallelen Bounding Box
     um eine Menge von Punkten.
 
     Args:
@@ -941,10 +975,10 @@ def calculate_bounding_box_area(points):
                                       der Form (n, 2) mit den (y, x)
                                       oder (x, y) Koordinaten der Punkte. Die Funktion
                                       versucht, die richtige Ordnung zu erkennen,
-                                      nimmt aber standardmäßig (y, x) an.
+                                      nimmt aber standardmÃ¤ÃŸig (y, x) an.
 
     Returns:
-        int: Die Anzahl der Pixel innerhalb der Bounding Box. Gibt 0 zurück,
+        int: Die Anzahl der Pixel innerhalb der Bounding Box. Gibt 0 zurÃ¼ck,
              wenn keine Punkte vorhanden sind.
     """
     if points is None or len(points) < 1:
@@ -953,12 +987,12 @@ def calculate_bounding_box_area(points):
     points_np = np.array(points)
 
     # Annahme: Punkte sind im Format [y, x]. Wenn nicht, transponieren wir.
-    # Überprüfen anhand des Mittelwerts, welche Spalte tendenziell größere Werte hat (oft x).
+    # ÃœberprÃ¼fen anhand des Mittelwerts, welche Spalte tendenziell grÃ¶ÃŸere Werte hat (oft x).
     if points_np.shape[1] == 2 and np.mean(points_np[:, 1]) > np.mean(points_np[:, 0]):
         points_np = points_np[:, [1, 0]]  # Spalten tauschen: [x, y] -> [y, x]
 
     if points_np.shape[1] != 2:
-        raise ValueError("Die Eingabepunkte müssen die Form (n, 2) haben.")
+        raise ValueError("Die Eingabepunkte mÃ¼ssen die Form (n, 2) haben.")
 
     min_y = int(np.min(points_np[:, 0]))
     max_y = int(np.max(points_np[:, 0]))
@@ -978,7 +1012,7 @@ def calculate_bounding_box_area(points):
 
 def calculate_oriented_bounding_box_area(points):
     """
-    Berechnet die Fläche (Anzahl der Pixel) der orientierten Bounding Box
+    Berechnet die FlÃ¤che (Anzahl der Pixel) der orientierten Bounding Box
     um eine Menge von Punkten.
 
     Args:
@@ -987,17 +1021,17 @@ def calculate_oriented_bounding_box_area(points):
                                       oder (x, y) Koordinaten der Punkte.
 
     Returns:
-        float: Die Fläche der orientierten Bounding Box in Pixeleinheiten.
-               Gibt 0.0 zurück, wenn keine oder weniger als 3 Punkte vorhanden sind.
+        float: Die FlÃ¤che der orientierten Bounding Box in Pixeleinheiten.
+               Gibt 0.0 zurÃ¼ck, wenn keine oder weniger als 3 Punkte vorhanden sind.
     """
     points_np = np.array(points)
     if points_np.shape[0] < 3:
         return 0.0
 
     if points_np.shape[1] != 2:
-        raise ValueError("Die Eingabepunkte müssen die Form (n, 2) haben.")
+        raise ValueError("Die Eingabepunkte mÃ¼ssen die Form (n, 2) haben.")
 
-    # Finde die konvexe Hülle der Punkte
+    # Finde die konvexe HÃ¼lle der Punkte
     hull = ConvexHull(points_np)
     hull_points = points_np[hull.vertices]
 
@@ -1009,16 +1043,16 @@ def calculate_oriented_bounding_box_area(points):
 
 
 def select_all_labels_in_img(target, labels):
-    # Filtert alle Labels, die mit den Anfangsziffern von 'target' übereinstimmen
+    # Filtert alle Labels, die mit den Anfangsziffern von 'target' Ã¼bereinstimmen
     filtered_labels = [label for label in labels if label.startswith(target)]
     return filtered_labels
 
  
 def transform_labels_to_yolo_format(labels, width, height):
-    yolo_labels = []  # Liste für die konvertierten YOLO-Labels
+    yolo_labels = []  # Liste fÃ¼r die konvertierten YOLO-Labels
     for label in labels:
         label_parts = label.split()  # Teilt das Label in Teile basierend auf Leerzeichen
-        if len(label_parts) >= 13:  # Sicherstellen, dass genügend Teile vorhanden sind
+        if len(label_parts) >= 13:  # Sicherstellen, dass genÃ¼gend Teile vorhanden sind
             try:
                 class_id = int(label_parts[0])  # Konvertiere die Klasse in eine Ganzzahl
                 x_center = float(label_parts[1])  # Konvertiere x_center in eine Gleitkommazahl
@@ -1041,7 +1075,7 @@ def transform_labels_to_yolo_format(labels, width, height):
             except ValueError as e:
                 print(f"Fehler beim Verarbeiten des Labels: {label} - {e}")
         else:
-            print(f"Ungültiges Label-Format: {label}")
+            print(f"UngÃ¼ltiges Label-Format: {label}")
     return yolo_labels
 
 def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, img_width, img_height):
@@ -1080,8 +1114,8 @@ def show_one_picture_with_yolo_label(fold_nr,img_nr,ir, string_tag):
 
 def add_labeled_normalized_coordinates_as_points(image_path, labels_string, point_color=(0, 0, 255), point_radius=5, point_thickness=-1):
     """
-    Fügt normierte Koordinaten aus einer Label-Zeichenkette als farbige Punkte in ein Bild ein.
-    Das erste Element der Label-Zeile wird übersprungen.
+    FÃ¼gt normierte Koordinaten aus einer Label-Zeichenkette als farbige Punkte in ein Bild ein.
+    Das erste Element der Label-Zeile wird Ã¼bersprungen.
 
     Args:
         image_path (str): Der Pfad zum Bild.
@@ -1090,7 +1124,7 @@ def add_labeled_normalized_coordinates_as_points(image_path, labels_string, poin
                              Es wird erwartet, dass die Koordinaten paarweise folgen.
         point_color (tuple): Die Farbe der Punkte im BGR-Format (Standard: Rot).
         point_radius (int): Der Radius der Punkte in Pixeln (Standard: 5).
-        point_thickness (int): Die Dicke der Punkte (-1 für gefüllte Kreise, Standard: -1).
+        point_thickness (int): Die Dicke der Punkte (-1 fÃ¼r gefÃ¼llte Kreise, Standard: -1).
     """
     try:
         img = cv2.imread(image_path)
@@ -1100,7 +1134,7 @@ def add_labeled_normalized_coordinates_as_points(image_path, labels_string, poin
 
         height, width, _ = img.shape
 
-        # Teile die Label-Zeichenkette auf und überspringe das erste Element
+        # Teile die Label-Zeichenkette auf und Ã¼berspringe das erste Element
         parts = labels_string.split()
         coordinates_str = parts[1:]
 
@@ -1132,13 +1166,15 @@ def add_labeled_normalized_coordinates_as_points(image_path, labels_string, poin
 
 
 
-def create_yaml(path, fold_nr, namestring, palma, fold_dest_path, test_dataset_bool):
+def create_yaml(path, fold_nr, namestring, palma, fold_dest_path, test_dataset_bool, number_of_channels):
     file_path = f"{path}/data.yaml"
+    number_channel_string = "channels: " + str(number_of_channels)
 
     if palma == True:
         train_image_path = f"/scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}{namestring}/train/images"
         val_image_path = f"/scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}{namestring}/val/images"
         test_image_path = f"/scratch/tmp/t_liet02/{fold_dest_path}/fold{fold_nr}{namestring}/test/images"
+        
         if test_dataset_bool:
             file_string = "train: "+train_image_path +'\n'+ "val: " +val_image_path +'\n'+"test: "+test_image_path +'\n' +  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
         else:
@@ -1148,6 +1184,9 @@ def create_yaml(path, fold_nr, namestring, palma, fold_dest_path, test_dataset_b
             file_string = "train: ./train/images " +'\n'+ "val: ./val/images" +'\n' + "test: ./test/images" + '\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
         else:
             file_string = "train: ./train/images " +'\n'+ "val: ./val/images" + '\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
+    
+    if number_of_channels > 3:
+        file_string += '\n'+ number_channel_string
 
     try:
         with open(file_path, 'w') as file:
@@ -1183,7 +1222,10 @@ def create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, fold10
                 if counter == limiter and string_tag == 'train':
                     print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
                     break
-                elif counter == (limiter/10) and string_tag == 'val':
+                elif counter == np.ceil(limiter/10).astype(int) and string_tag == 'val':
+                    print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
+                    break
+                elif counter == np.ceil(limiter/10).astype(int) and string_tag == 'test':
                     print("Limiter! BREAK "+ string_tag+" at " + str(limiter))
                     break
             
@@ -1197,13 +1239,15 @@ def create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, fold10
         fold_test_images_path = rf'Code\data\folds\own_folds\fold5.txt'
         yaml_path = rf'Code\data\folds\{fold_dest_path}\fold{fold_nr}{namestring}'
    
-
+    number_of_channels = 3	
 
     paths_object = create_folder_structure(fold_nr, namestring, palma_bool, fold_dest_path, True)
-
+    if perm_object is not None:
+        number_of_channels = sum(1 for v in perm_object.values() if v)
+	    
     
     if bool_create_yaml:
-        create_yaml(yaml_path, fold_nr, namestring, palma_bool, fold_dest_path, True)
+        create_yaml(yaml_path, fold_nr, namestring, palma_bool, fold_dest_path, True, number_of_channels)
         print("Yaml successfull created.")
 
     all_fold_nr = list(range(0,5))
