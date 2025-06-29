@@ -18,7 +18,10 @@ def main():
     setA = all_sets[0]
     
     window_size = 20
-
+    
+    head = None
+    tail = None
+    namestring = "_full"
     
     bool_arr = {
             "train/box_loss": False,
@@ -49,6 +52,7 @@ def main():
                 bool_arr[key] = False
 
 
+
         # Setzen Sie das aktuelle Element auf True
         bool_arr[key_to_set_true] = True
         create_sav_dir(bool_arr)
@@ -56,7 +60,7 @@ def main():
             if i != 0:
                 setB = i
                 setA_paths, setB_paths = load_best_model_files(setA, i)
-                create_graphs(setA_paths,setB_paths,setA,setB,window_size,bool_arr)
+                create_graphs(setA_paths,setB_paths,setA,setB,window_size,bool_arr, head, tail, namestring)
 
     print("All Graphs successfully saved! Program terminated successfully!")
 
@@ -143,7 +147,7 @@ def create_graphs_from_sets(set_paths_dict, window_size, bool_arr):
   
 
 
-def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_arr):
+def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_arr, head, tail, namestring):
 
     for key, value in bool_arr.items():
         if value is True:
@@ -177,9 +181,12 @@ def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_ar
     combined_df_setB = pd.concat(all_folds_setB, ignore_index=True)
     combined_df_setB['Type'] = 'setB'
 
-    if bool_arr['tail'] is not None:
-        combined_df_setA = combined_df_setA.groupby('Fold').tail(bool_arr['tail'])
-        combined_df_setB = combined_df_setB.groupby('Fold').tail(bool_arr['tail'])
+    if head is not None:
+        combined_df_setA = combined_df_setA.groupby('Fold').head(head)
+        combined_df_setB = combined_df_setB.groupby('Fold').head(head)
+    elif tail is not None:
+        combined_df_setA = combined_df_setA.groupby('Fold').tail(tail)
+        combined_df_setB = combined_df_setB.groupby('Fold').tail(tail)
 
     plt.figure(figsize=(14, 8))
 
@@ -215,7 +222,7 @@ def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_ar
 
     legend2 = plt.legend(handles=legend_elements_setB, title=setB, loc='upper left', bbox_to_anchor=(1.01, 0.5))
 
-    path = rf'C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\{str(comp_val)}\{setA}_vs_{setB}.png'
+    path = rf'C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\{setA}\{str(comp_val)}\{setA}_vs_{setB}{namestring}.png'
     
 
     plt.title(f'{string_title} at {setA} vs. {setB} over Epochs – 5-Fold Cross Validation (window size: {window_size})')
@@ -225,6 +232,7 @@ def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_ar
     sns.despine()
     plt.tight_layout()
     plt.savefig(path)
+    plt.close()
     print("Figure at: " + f'{string_title} at {setA} vs. {setB}' + " successfull saved!")
     #plt.show()
 
@@ -349,7 +357,7 @@ def create_sav_dir(bool_arr):
             break
 
    
-    path = rf'C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\{str(comp_val)}'
+    path = rf'C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\rgbir\{str(comp_val)}'
     
     try:
         os.makedirs(path)
