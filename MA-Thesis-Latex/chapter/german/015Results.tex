@@ -71,40 +71,57 @@ Als weitere Variante wurde der NDVI-Index als zusätzlicher Kanal zu den RGB-Dat
 
 
 \section{Comparision with Confusion Matrices}
-\begin{figure}[h] 
-    \centering
-    % Erste Subfigur
-    \begin{subfigure}[b]{0.85\textwidth} % [b] für bottom alignment, 0.48\textwidth damit noch Platz ist
-        \includegraphics[width=\textwidth]{images/confusion_matrices/rgbir_F4_confusion_matrix_normalized.png} % Bildpfad zum ersten Bild
-        \caption{r-g-b-ir} % Unterschrift für das erste Bild
-        \label{fig:cm_rgbir} % Label für Referenzierung von Bild 1
-    \end{subfigure}
-    \hfill % Fügt horizontalen Platz zwischen den Subfiguren ein
-    % Zweite Subfigur
-    \begin{subfigure}[b]{0.85\textwidth} % 0.48\textwidth für das zweite Bild
-        \includegraphics[width=\textwidth]{images/confusion_matrices/irgb_F4_confusion_matrix_normalized.png} % Bildpfad zum zweiten Bild
-        \caption{ir-g-b} % Unterschrift für das zweite Bild
-        \label{fig:cm_irgb} % Label für Referenzierung von Bild 2
-    \end{subfigure}
-    \caption{Comparison of Confusion Matrices between r-g-b-ir und ir-g-b for Fold 4} % Gemeinsame Unterschrift für beide Bilder
-    \label{fig:combined_maps} % Label für die gesamte Figure-Umgebung
-\end{figure}
+\begin{itemize}
+    \item Normalisierte Konfusions Matrix mit 9 Klassen und der Einteilung Background (Hintergrund)
+    \item Immer Fold 4 angewendet auf den Testdatensatz (F5)
+\end{itemize}
 
 \begin{figure}[h] 
-    \centering
-    % Erste Subfigur
-    \begin{subfigure}[b]{0.85\textwidth} % [b] für bottom alignment, 0.48\textwidth damit noch Platz ist
-        \includegraphics[width=\textwidth]{images/confusion_matrices/rgbir_F4_confusion_matrix_normalized.png} % Bildpfad zum ersten Bild
-        \caption{r-g-b-ir} % Unterschrift für das erste Bild
-        \label{fig:cm_trgbir} % Label für Referenzierung von Bild 1
-    \end{subfigure}
-    \hfill % Fügt horizontalen Platz zwischen den Subfiguren ein
-    % Zweite Subfigur
-    \begin{subfigure}[b]{0.85\textwidth} % 0.48\textwidth für das zweite Bild
-        \includegraphics[width=\textwidth]{images/confusion_matrices/irgb_F4_confusion_matrix_normalized.png} % Bildpfad zum zweiten Bild
-        \caption{ir-g-b} % Unterschrift für das zweite Bild
-        \label{fig:cm_irgb} % Label für Referenzierung von Bild 2
-    \end{subfigure}
-    \caption{Comparison of Confusion Matrices between r-g-b-ir und ir-g-b for Fold 4} % Gemeinsame Unterschrift für beide Bilder
-    \label{fig:combined_maps} % Label für die gesamte Figure-Umgebung
+    \centering % Centers the graphic horizontally
+    \includegraphics[width=\textwidth]{images/confusion_matrices/rgbir_F4_confusion_matrix_normalized.png} % Bildpfad zum ersten Bild
+        \caption{Confusion Matrix from the best RGBIR Model in Fold 4} % Unterschrift für das erste Bild
+        \label{fig:cm_rgbir} % Label für Referenzierung von Bild 1
 \end{figure}
+Die Analyse der Klassifikationsergebnisse zeigt eine sehr hohe Genauigkeit bei der Klasse \textit{Plane}, bei der sämtliche Instanzen korrekt erkannt wurden. Auch bei den Klassen \textit{Car} mit 78\% und \textit{Truck} mit 76\% ist die Leistung des Modells zufriedenstellend. Dennoch treten bei diesen beiden Klassen Verwechslungen auf. So werden 22\% der Objekte aus der Klasse \textit{Car} als \textit{Background} und 6\% als \textit{Truck} klassifiziert.\\
+Die Klasse \textit{Pick-Up} erreicht eine Erkennungsrate von 78\%, wobei auch hier fehlerhafte Zuordnungen zu den Klassen \textit{Car} (12\%) und \textit{Truck} (4\%) beobachtet werden. Ähnliche Tendenzen zeigen sich bei den Klassen \textit{Camping Car} und \textit{Van}, die mit 70\% beziehungsweise 56\% korrekt erkannt werden. Eine gegenseitige Verwechslung liegt bei jeweils 3\% der Fälle vor.\\
+Auffällig ist die schwache Leistung bei der Klasse \textit{Vehicle}, die lediglich in 58\% der Fälle korrekt identifiziert wird. Diese allgemeine Kategorie führt häufig zu Fehlklassifikationen mit spezifischeren Fahrzeugtypen wie \textit{Truck} (19\%), \textit{Pick-Up} (7\%), \textit{Car} (6\%), \textit{Camping Car} (6\%) und \textit{Van} (1\%).\\ Die Erkennungsgenauigkeit für die Klasse \textit{Ship} liegt bei 67\%, wobei 3\% der Objekte fälschlich als \textit{Vehicle} klassifiziert werden. Auch die Klasse \textit{Tractor} weist mit 63\% eine moderate Genauigkeit auf. Hier kommt es ebenfalls zu Verwechslungen mit \textit{Camping Car} und \textit{Vehicle}, jeweils in 3\% der Fälle. \\ Eine zentrale Herausforderung stellt die Klasse \textit{Background} dar. Diese fungiert häufig als Ziel fehlerhafter Klassifikationen. So werden 22\% der \textit{Car}-Instanzen, 14\% der \textit{Truck}-Objekte, 24\% der \textit{Vehicle}-Instanzen, 15\% der \textit{Camping Car}-Objekte, 15\% der \textit{Van}-Objekte sowie 15\% der \textit{Pick-Up}-Instanzen fälschlicherweise als \textit{Background} erkannt. Dies lässt auf Defizite bei der Trennung von Objekten und Hintergrund schließen.
+
+Zusammenfassend lässt sich feststellen, dass das Modell bei der Erkennung einzelner Klassen, insbesondere solcher mit klar unterscheidbaren Merkmalen wie \textit{Plane}, eine sehr hohe Genauigkeit aufweist. Schwächen bestehen jedoch bei der Differenzierung visuell ähnlicher Fahrzeugtypen sowie bei der korrekten Abgrenzung von Objekten gegenüber dem Hintergrund. 
+
+% \begin{figure}[h] 
+%     \centering
+%     % Erste Subfigur
+%     \begin{subfigure}[b]{0.85\textwidth} % [b] für bottom alignment, 0.48\textwidth damit noch Platz ist
+%         \includegraphics[width=\textwidth]{images/confusion_matrices/rgbir_F4_confusion_matrix_normalized.png} % Bildpfad zum ersten Bild
+%         \caption{r-g-b-ir} % Unterschrift für das erste Bild
+%         \label{fig:cm_rgbir} % Label für Referenzierung von Bild 1
+%     \end{subfigure}
+%     \hfill % Fügt horizontalen Platz zwischen den Subfiguren ein
+%     % Zweite Subfigur
+%     \begin{subfigure}[b]{0.85\textwidth} % 0.48\textwidth für das zweite Bild
+%         \includegraphics[width=\textwidth]{images/confusion_matrices/irgb_F4_confusion_matrix_normalized.png} % Bildpfad zum zweiten Bild
+%         \caption{ir-g-b} % Unterschrift für das zweite Bild
+%         \label{fig:cm_irgb} % Label für Referenzierung von Bild 2
+%     \end{subfigure}
+%     \caption{Comparison of Confusion Matrices between r-g-b-ir und ir-g-b for Fold 4} % Gemeinsame Unterschrift für beide Bilder
+%     \label{fig:combined_maps} % Label für die gesamte Figure-Umgebung
+% \end{figure}
+
+% \begin{figure}[h] 
+%     \centering
+%     % Erste Subfigur
+%     \begin{subfigure}[b]{0.85\textwidth} % [b] für bottom alignment, 0.48\textwidth damit noch Platz ist
+%         \includegraphics[width=\textwidth]{images/confusion_matrices/rgbir_F4_confusion_matrix_normalized.png} % Bildpfad zum ersten Bild
+%         \caption{r-g-b-ir} % Unterschrift für das erste Bild
+%         \label{fig:cm_trgbir} % Label für Referenzierung von Bild 1
+%     \end{subfigure}
+%     \hfill % Fügt horizontalen Platz zwischen den Subfiguren ein
+%     % Zweite Subfigur
+%     \begin{subfigure}[b]{0.85\textwidth} % 0.48\textwidth für das zweite Bild
+%         \includegraphics[width=\textwidth]{images/confusion_matrices/irgb_F4_confusion_matrix_normalized.png} % Bildpfad zum zweiten Bild
+%         \caption{ir-g-b} % Unterschrift für das zweite Bild
+%         \label{fig:cm_irgb} % Label für Referenzierung von Bild 2
+%     \end{subfigure}
+%     \caption{Comparison of Confusion Matrices between r-g-b-ir und ir-g-b for Fold 4} % Gemeinsame Unterschrift für beide Bilder
+%     \label{fig:combined_maps} % Label für die gesamte Figure-Umgebung
+% \end{figure}

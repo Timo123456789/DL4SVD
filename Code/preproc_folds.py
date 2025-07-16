@@ -8,7 +8,7 @@ def main():
     ir = False
     bool_create_yaml = True
     limiter = None
-    palma = True
+    palma = False
     merge_ir_bool= False
     namestring = ""
 
@@ -50,9 +50,9 @@ def main():
 
 def create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma):
 
-    path_fold_dest_string = r'data/cross_validation/aab_old'
+    path_fold_dest_string = r'data/cross_validation/obb'
    
-    oriented=False
+    oriented=True
     fold_nr = 0
     for fold_nr in range(5):  
         create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, None)
@@ -368,24 +368,24 @@ def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
                     #UrsprÃ¼ngliches YOLO Format
 
 
-                    #yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
-                    #file_string = (convert_class_to_yolo(transf_label[0]) + " "+
-                    #    str(yolo_transf_label[0])+" "+
-                    #    str(yolo_transf_label[1])+" "+
-                    #    str(yolo_transf_label[2])+" "+ 
-                    #    str(yolo_transf_label[3]) + '\n')
+                    yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
+                    file_string = (convert_class_to_yolo(transf_label[0]) + " "+
+                       str(yolo_transf_label[0])+" "+
+                       str(yolo_transf_label[1])+" "+
+                       str(yolo_transf_label[2])+" "+ 
+                       str(yolo_transf_label[3]) + '\n')
 
                     #obb YOLO Format aber keine obb boxen
-                    yolo_transf_label = convert_to_yolo_abb(px_corner, img.shape[1], img.shape[0])
-                    file_string = (convert_class_to_yolo(transf_label[0]) + " "+
-                        str(yolo_transf_label[0])+" "+
-                        str(yolo_transf_label[1])+" "+
-                        str(yolo_transf_label[2])+" "+ 
-                        str(yolo_transf_label[3])+" "+ 
-                        str(yolo_transf_label[4])+" "+ 
-                        str(yolo_transf_label[5])+" "+
-                        str(yolo_transf_label[6])+" "+
-                        str(yolo_transf_label[7]) + '\n')
+                    # yolo_transf_label = convert_to_yolo_abb(px_corner, img.shape[1], img.shape[0])
+                    # file_string = (convert_class_to_yolo(transf_label[0]) + " "+
+                    #     str(yolo_transf_label[0])+" "+
+                    #     str(yolo_transf_label[1])+" "+
+                    #     str(yolo_transf_label[2])+" "+ 
+                    #     str(yolo_transf_label[3])+" "+ 
+                    #     str(yolo_transf_label[4])+" "+ 
+                    #     str(yolo_transf_label[5])+" "+
+                    #     str(yolo_transf_label[6])+" "+
+                    #     str(yolo_transf_label[7]) + '\n')
                     
                 file.write(file_string)
             #datei.write(inhalt)

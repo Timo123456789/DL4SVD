@@ -1,0 +1,137 @@
+%!TEX root = ../thesis.tex
+\chapter{Fundamentals}
+\label{ch:fundamentals}
+
+\section{Computer Vision}
+\todo{Nochmal neu formulieren?}
+Computer Vision ist ein Teilbereich der künstlichen Intelligenz, der eng mit der Bildverarbeitung und dem maschinellen Lernen verknüpft ist. Dabei wird die Rohdatenerfassung durch Verfahren erweitert, die digitale Bildverarbeitung, Mustererkennung, maschinelles Lernen und Computergrafik kombinieren. Ziel ist es, Maschinen die menschliche Fähigkeit zu verleihen, aus Bildern Informationen zu extrahieren und zu interpretieren \cite{Wiley2018}. Zur Informationsgewinnung und zur Simulation menschlicher visueller Wahrnehmung werden Algorithmen sowie optische Sensoren eingesetzt \cite{Matiacevich2013}. Es lässt sich zwischen Bildbeschaffung und Bildanalyse unterscheiden. Wichtige Komponenten der Bildanalyse sind unter anderem:
+\begin{itemize}
+    \item \textbf{Bilderzeugung:} Das Speichern eines Objekts als digitales Bild.
+    \item \textbf{Bildverarbeitung:} Verbesserung der Bildqualität zur Erhöhung des Informationsgehalts.
+    \item \textbf{Bildsegmentierung:} Trennung des Objekts vom Hintergrund.
+    \item \textbf{Bildvermessung:} Ermittlung signifikanter Bildpunkte (sogenannter Features).
+    \item \textbf{Bildinterpretation:} Ableitung semantischer Informationen aus den Bilddaten \cite{Mery2013}. 
+\end{itemize}
+
+
+
+\section{Machine Learning}
+\todo{Nochmal neu formulieren?}
+Maschinelles Lernen beschreibt einen Ansatz in der Informatik, bei dem Algorithmen auf Basis von vorhandenen Daten selbstständig Muster erkennen, um ein definiertes Ziel zu erreichen – etwa die Klassifikation von Informationen. Im Gegensatz zu traditionellen Algorithmen, die feste, vom Menschen vorgegebene Regeln befolgen, entwickelt ein lernfähiger Algorithmus eigene Verarbeitungsstrategien. Die Entscheidungslogik entsteht dabei nicht durch manuelle Programmierung, sondern durch die Analyse von Daten und das Erkennen wiederkehrender Strukturen \cite{Shetty2022}.Der Begriff „Lernen“ bezieht sich allgemein auf den Prozess, bei dem Wissen oder Fähigkeiten durch Erfahrung, Versuch und Irrtum, Anleitung oder Beobachtung erworben werden. Übertragen auf den maschinellen Kontext bedeutet dies, dass Maschinen durch wiederholte Analyse und Rückmeldung in der Lage sind, aus Beispielen zu generalisieren und neue, unbekannte Daten zu verarbeiten. Maschinelles Lernen kann daher als rechnergestützte Nachbildung menschlicher Lernprozesse verstanden werden, bei der Algorithmen in der Lage sind, abstrahierte Regeln aus Rohdaten zu entwickeln und auf neue Situationen anzuwenden \cite{Fischer1999, Braga-Neto2020}. Diese Fähigkeit eröffnet neue Möglichkeiten bei der Lösung komplexer Probleme, die sich mit konventionellen, regelbasierten Methoden nur schwer oder gar nicht bearbeiten lassen \cite{Goodfellow-et-al-2016}.
+
+% Im Bereich des maschinellen Lernens lassen sich grundsätzlich drei Hauptarten unterscheiden: das überwachte Lernen (supervised learning), unüberwachte Lernen (unsupervised learning) und das Reinforcement Learning.
+
+% Beim überwachten Lernen liegt ein klar definiertes Ziel vor, das mithilfe gelabelter Trainingsdaten erlernt werden soll. Innerhalb dieses Ansatzes unterscheidet man vor allem zwischen zwei Formen: Klassifikation und Regression. Bei der Klassifikation geht es darum, Eingabedaten einer vordefinierten Anzahl an Klassen korrekt zuzuordnen. Die Trainingsdaten enthalten dafür bereits bekannte Klassenzugehörigkeiten, anhand derer das Modell lernen kann, auch neue, unbekannte Eingaben richtig einzuordnen.Im Gegensatz dazu steht die Regression, bei der das Ziel die Vorhersage eines kontinuierlichen Wertes ist. Die Ausgabe wird dabei durch verschiedene Eingabegrößen beeinflusst und basiert auf einer zugrunde liegenden funktionalen Beziehung zwischen Ein- und Ausgabegrößen \cite{Braga-Neto2020}.
+
+% Beim unüberwachten Lernen hingegen erhält der Algorithmus Daten ohne vorgegebene Labels. Ziel ist es, eigenständig Strukturen, Muster oder Auffälligkeiten in den Daten zu identifizieren und Gruppenbildungen (Cluster) zu erkennen \cite{Braga-Neto2020}.
+
+% Das sogenannte Reinforcement Learning stellt einen weiteren Lernansatz dar, bei dem ein Modell durch Interaktion mit seiner Umgebung lernt. Es wird dabei durch ein Belohnungssystem gesteuert: Für erwünschte Handlungen erhält es positive Rückmeldungen, während unerwünschtes Verhalten bestraft wird. So entwickelt das Modell schrittweise eine Strategie zur Optimierung seines Verhaltens \cite{Braga-Neto2020}.
+
+%In den folgenden Abschnitten wird der Fokus auf die Detektion und Klassifikation als Teilgebiet des überwachten Lernens gelegt.
+\section{Deep Learning}
+\begin{itemize}
+    \item Teilgebiet von Maschine Learning
+    \item Funktionsweise inspiriert von menschlichem Gehirn (neuronalen Prozessen) / simuliert den Prozess, der in den zentralen sensorischen Regionen des menschlichen Gehirns abläuft
+    \item Funktioniert ohne strikte von Menschen entworfene Regeln, sondern nutzt große Datenmengen um Muster zu erkennen um die Eingabe auf bestimmte Eigenschaften zu analysieren
+    \item DL nutzt zahlreiche Algorithmenschichten (artificial neural Networks, ANN), von denen jede die zugelieferte Information (einzigartig) interpretiert
+    \item Herkömmliche ML Techniken benutzen: Pre Processing, Featrue Extraction, Wise Featrue selection, learning and classification
+    \item DL kann das Lernen von Feature Sets für mehrere Aufgaben automatisiert
+    \item DL kann Lernen und Klassifizieren in einem Schritt vornehmen (Single Shot)
+    \item Vorteile Deep Learning
+    \begin{itemize}
+        \item Universeller Lernansatz (viele Anwendungsbereiche)
+        \item Robustheit: keine Präezise entworfenen MEkrmale, stattdessen optimierte Merkamlle in einem automatisierten Prozess ntuzen
+        \item Verallgemeinerung: Verschiedene Datentypen und Anwendungen können dieselbe DL Technik verwenden, (Transferlernen, TL); nützlicher Ansatz für Probleme bei denn die Daten nicht ausreichend sind
+        \item Skalierbarkeit: Einfache Erweiterung, wenn mehr Knoten benötigt werden 
+        \item 
+    \end{itemize}
+    \item DL Techniken haben drei Kategorien: Unsupervised, partially supervised (Semi-supervised), supervised
+    \begin{itemize}
+        \item Deep Supervised Learning
+        \item Der Algorithmus bekommt eine Sammlung von Eingabe- und Ausgabedaten
+        \item Intelligenter Agent schätzt $\hat{y}_t = f(x_t)$, wenn die Eingabe $x_t$ ist und erhält $tz(\hat{y}_t, y_t)$ als Verlustwert
+        \item Netzparameter werden neu berechnet, bis die Schätzung besser zu den bekannten Ausgaben passt
+        \item Agent erhält die Fähigkeit die richitgen Lösung für die Abfragen asu der Umgebung zu erhalten
+        \item Mehrere Möglichkeiten zum überwachten Lernen für DL: rekurrent neuronale Netze (RNNs), konvolutionale neuronale Netze (CNNs) und tiefe neuronale Netze (DNNs)
+    \end{itemize}
+    \begin{itemize}
+        \item Deep Semi supervised learning
+        \item Lernprozess auf halb beschrifteten Datensätzen
+        \item Vorteil: Minimierung der benötigten Menge an gelabelten Daten
+        \item Nachteil: irrelevante Eingangsmerkmale in den Trainingsdaten können zu falschen Entscheidungen führen
+        \item Bsp: Klassifizieren von Textdokumenten
+    \end{itemize}
+    \begin{itemize}
+        \item Deep unsupervised Learning
+        \item Lernprozess ohne gelabelte Daten
+        \item Agent lernt signifkante Merkmale oder die innere Repräsentation um nicht identifizierte Strukturen oder Beziehungen in den Eingabedaten zu entdecken
+        \item Hauptnachteil: keine genauen Informationen über die Datensortierung vom Algorithmus lieferbar und rechenintensiv 
+        \item Bsp: Clustering
+    \end{itemize}
+    
+    \item Arten von DL Netzwerken: RbNNs, RNNs und CNNs; Konzentration auf CNNs im folgenden Abschnitt da hohe Bedeutung
+    \begin{itemize}
+        \item CNN ist bekanntester und am häufigsten Verwendeter Algorithmus bei DL.
+        \item Struktur von CNNs wurde von Neuronen in menschlichen und tierischen Gehirn inspiriert
+        \item \cite{Goodfellow-et-al-2016} hat 3 Vorteile des CNNs identifziert: gleichwertige Darstellungen, spärliche Interaktion und gemeinsame Nutzung von Parametern
+        \item drei Dimensionen einer Eingabe $x$ jeder Schicht in einem CNN : Höhe, Breite, Tiefe; wobei Höhe gleich der Breite ist; Tiefe wird auch als die Anzahl der (Bild-) Kanäle bezeichnet
+        \item Merhere Kentel (Filter), die in jeder Faltungsschicht integriert sind, werde mit $k$ bezeichnet und haben ebenfalls drei Dimensionen ($n\times n  \times q$); Ähnlich zum Inputbild
+        \item es gilt jedoch $n \ll m \land q \le r$; Kernel bilden Grundlage für lokale Verbindugnen, die ähnliche Parameter (Bias$b\hat{k}$ und Gewicht $W\hat{k}$) zur Erzeugung von $k$ Feature Maps$h\hat{k}$ mit einer jeweiligen Groeße von $(m-n-1)$. Diese werden im Input Layer verwendet. 
+        \item Faltungsschicht berechnet Punktprodukt zwischen Eingabe und den Gewichten wie in \ref{eq:F1}
+        \begin{equation}
+        \label{eq:F1}
+        h^k = f(W^k \ast x + b^k)
+        \end{equation}
+        \item Nächster Schritt ist Down Sampling jeder Feature Map in den Sup Sampling Schichten, um die Netzparameter zu verringern, was den Trainingsprozess beschleunigt. Außerdem wird das Lösen Problem der Überanpassung dadurch ermöglicht.
+        \item Alle Feature Maps werden durch eine Pooling Funktion (max oder average) auf einen angrenzenden Berech der Größe $p \times p $ angewendet, wobei $p$ die Kernelgröße ist. Letztendlich erhalten die FC Schichten die Merkmale der mittleren und unteren Ebene und erstellen die Abstraktion der oberen Ebene, welches die letzte Schicht dastellt
+        \item  Die Klassifizierung wird mit der abschließenden Schicht, wie einer Support Vector Machine (SVM) erzeugt, um für die gegebene Instanz die Wahrscheinlichkeit einer bestimmten Klasse in einem Score darzustellen
+        \item Vorteile CNN Einsatz:
+        \begin{itemize}
+            \item Bessere Generalisierung des Netzwerkes und Verhinderung der Überanpassung durch Weight Sharing Featrue
+            \item Ausgabe des Models ist flexibel organiisert als auch flexibel von den extrahierten Merkmalen abhängig durch das Lernen von zwei Merkmalsextraktionsschichten und einer Klassifizierungsschicht
+            \item CNNs in großem Maßstab können sehr einfach entwickelt werden
+        \end{itemize}
+        \begin{itemize}
+            \item CNN Architecture
+            \item \textbf{Convolutional Layer}: Collektion von Convolutional Filtern (sog. Kernels); Eingabebild wird durch diesen Filter zur Output Feature Map Generierung genutzt
+            \item \textbf{Kernel definition}: Grid of discrete numbers, which each value is called kernel weight. Werte werden zufällig initialisiert zum Beginn des CNN Trainingsprozesses; Gewichte werden in jeder Trainingsepoche optimiert, sodass der Kernel lernt relevante Features zu extrahieren
+            \item Convolutional Operation: Übersprungen
+            \item \textbf{Pooling Layer}: Hauptaufgabe: Sub Sampling der Feature Maps, oder verkleinern der großen Feature Maps um kleiner Feature Maps zu erzeugen; meistgenutzt max, min und GAP Pooling als Methode dafür
+            \item \textbf{Activation Function (non linearity)}: Mapping the input to the output is core; input Value is the weight summation of the neuron input along with its bias (if present); Activation Function entscheidet ob eine Neuron aktiviert wird (feuert) oder nicht, mit Referenz zu einem Teil des Inputs  durch das Erstellen des dazugehörigen Outputs (d. Klasse?); (nicht lineare) Aktivierungsfunktion muss differenzierbar sein, um Backpropagation zu ermöglichne
+            \item ReLu: Meist eingesetzt Aktivierungsfunktion; konvertiert alle Ergebnisse in Positive Zahlen; (NACHTEILE NICHT ERWÄHNEN? DYING RELU?)
+            \item \textbf{Fully Connected Layer}: Am Ende jeder CNN Architecture; jedes Neuron ist mit allen Neuronen des letzten Layers verbunden, deshalb fully connected (FC) LAyer
+            \item \textbf{Loss Function}:loss funktion berechnet den predicted error über die Training samples; error ist die difference zwischen dem Aktuellen Output und dem vorhergesagten; dieser wird optimiert -> first parameter: estimated Output (Prediction); second parameter: actual output (label); Euclidean Loss Function bei Regressionsproeblemen (meist auch mean square error genannt) 
+        \end{itemize}
+    \end{itemize}
+    
+\end{itemize}
+\subsection{Backpropagation}
+\begin{itemize}
+    \item \cite{Goodfellow-et-al-2016}
+    \item Feedforward neural Network um INput x Und Output y zu produzieren. x enthält die initiale Informaiton für die Hidden Units in jedem Layer, sodass Final y rauskommen kann (forward propagation)
+    \item back propagation ist ein einfaches Verfahren um (Kosten (Berechnungszeit/Methode?)-) zurück durch das Netzwerk fließen zu lassen um einen Gradienten zu berechnen
+\end{itemize}
+\subsection{Vanishing}
+\subsection{Exploding Gradients}
+\subsection{Hyperparameter}
+\subsection{Overfitting}
+
+
+
+
+
+
+
+\section{YOLOv9}
+
+\section{Evaluation Metrics}
+\subsection{N Fold Cross Validation}
+\subsection{Mean Average Precision}
+\subsubsection{mAP@50}
+\subsubsection{mAP@90-95}
+
+% If you use underscores in section titles or anywhere in text, write \_ instead of _
+\subsubsection{mAP@50}
+\subsubsection{mAP@90-95}
+
+

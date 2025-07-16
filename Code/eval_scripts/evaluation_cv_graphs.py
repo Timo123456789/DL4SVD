@@ -5,13 +5,7 @@ import os
     # Manuelle Legenden mit allen Folds
 from matplotlib.lines import Line2D
 def main():
-    set_arr = {
-        "setA": r"rgbir",
-        "setB": r"rirb",
-        "setC": None,
-        "setD": None,
-        "setF": None,
-    }
+
 
     all_sets = ["rgbir", "rgb", "irgb", "rirb", "rgir", "gbndvi", "rgbndvi"]
     
@@ -41,6 +35,10 @@ def main():
             }
     
 
+    
+
+
+def create_graphs_main(bool_arr, setA, window_size):
     keys_to_toggle = [key for key in bool_arr.keys() if key != "tail"]
 
     for key_to_set_true in keys_to_toggle:
@@ -66,9 +64,6 @@ def main():
 
     #set_paths_dict = load_all_sets(set_arr)
     #create_graphs_from_sets(set_paths_dict, window_size, bool_arr)
-
-
-
   
 def create_graphs_from_sets(set_paths_dict, window_size, bool_arr):
     all_combined_dfs = []
