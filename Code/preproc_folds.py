@@ -13,11 +13,11 @@ def main():
     namestring = ""
 
 
-    perm_object={"r":False,
+    perm_object={"r":True,
                  "g":True,
                  "b":True,
                  "ir":False,
-                 "ndvi":True,
+                 "ndvi":False,
                  }
 
     if palma == True:
@@ -28,11 +28,13 @@ def main():
         path_all_images = r'Code\data\all_vedai_images'
         path_labels = r'Code\data\annotation.txt'
         
-
-    create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
+    #show_every_picture_with_oriented_bounding_box(path_all_images, r'Code\data\folds\tempfold\fold0.txt', path_labels, True, False, False, perm_object)
+    #create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
 
     #create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object)
 
+
+    create_ablation_datasets(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
     merge_ir_bool=True
     oriented = True
     path_fold_dest_string = r'data/cross_validation/rgbndvi'
@@ -46,6 +48,63 @@ def main():
   
     #create_fold_cross_validation(0,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
     print_divideline()
+
+def create_ablation_datasets(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma):
+    oriented=True
+    merge_ir_bool = True
+    # path_fold_dest_string = r'data/cross_validation_ablation/red'
+    # perm_object={"r":True,
+    #              "g":False,
+    #              "b":False,
+    #              "ir":False,
+    #              "ndvi":False,
+    #              }
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+
+    # path_fold_dest_string = r'data/cross_validation_ablation/green'
+    # perm_object={"r":False,
+    #              "g":True,
+    #              "b":False,
+    #              "ir":False,
+    #              "ndvi":False,
+    #              }
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+
+
+    # path_fold_dest_string = r'data/cross_validation_ablation/blue'
+    # perm_object={"r":False,
+    #              "g":False,
+    #              "b":True,
+    #              "ir":False,
+    #              "ndvi":False,
+    #              }
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+
+
+    # path_fold_dest_string = r'data/cross_validation_ablation/ir'
+    # perm_object={"r":False,
+    #              "g":False,
+    #              "b":False,
+    #              "ir":True,
+    #              "ndvi":False,
+    #              }
+    # for fold_nr in range(5):  
+    #     create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+
+    path_fold_dest_string = r'data/cross_validation_ablation/ndvi'
+    perm_object={"r":False,
+                 "g":False,
+                 "b":False,
+                 "ir":False,
+                 "ndvi":True,
+                 }
+    for fold_nr in range(5):  
+        create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, True, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object)
+    return 0
+
 
 
 def create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma):
@@ -193,16 +252,19 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, perm_object):
             "ir": ir_img,
             "ndvi": None,
         }
-        if perm_object["ndvi"] is True:
+        if perm_object is not None and perm_object["ndvi"] is True:
             channel_data["ndvi"] = calc_ndvi(r, ir_img)
         channel_order = ["r", "g", "b", "ir", "ndvi"]
-       
+        
+        
         active_channels = [channel_data[key] for key in channel_order if perm_object.get(key)]
         
 
         # Jetzt kannst du mit cv2.merge arbeiten
         if len(active_channels) >= 2:
             merged_img = cv2.merge(active_channels)
+        elif len(active_channels) == 1:
+            merged_img = active_channels[0]
         else:
             print("Mindestens zwei aktive KanÃ¤le nÃ¶tig fÃ¼r cv2.merge()")
 
@@ -625,7 +687,7 @@ def create_folder_structure(fold_nr, namestring, palma_bool, dest_path, test_dat
     return path_obj
 
 
-def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, path_labels, oriented, ir, ret_pts):
+def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, path_labels, oriented, ir, ret_pts, perm_object):
     lines_fold = read_file(path_folds)
     labels = read_file(path_labels)
     
@@ -645,7 +707,7 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
 
         img_rgb = cv2.imread(image_path_rgb)
         img_ir = cv2.imread(image_path_ir)
-        img_merged = merge_RGB_and_IR_image(image_path_rgb, image_path_ir, None)
+        img_merged = merge_RGB_and_IR_image(image_path_rgb, image_path_ir, perm_object)
 
         #transf_labels = transform_labels_to_yolo_format(filtered_labels, img.shape[1], img.shape[0])
 
@@ -676,8 +738,19 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
         window_name_rgb = f"{target}"+"_co.png"
         window_name_ir = f"{target}"+"_ir.png"
         window_name_merged = f"{target}"+"_merged.png"
+        cv2.imwrite(r"Code\data\folds\tempfold\output_image_smaller0.png", img_rgb)
+
+        if img_rgb is not None:
+    # Kanäle extrahieren
+            b, g, r = cv2.split(img_rgb)
+            # Speichern als Graustufenbilder
+            cv2.imwrite(r"Code\data\folds\tempfold\output_image_blue.png", b)
+            cv2.imwrite(r"Code\data\folds\tempfold\output_image_green.png", g)
+            cv2.imwrite(r"Code\data\folds\tempfold\output_image_red.png", r)
+            #cv2.imwrite(r"Code\data\folds\tempfold\output_image_schrott_ir.png", img_ir)
         if img_rgb is not None and img_ir is not None:
             cv2.imshow(window_name_rgb, img_rgb)  # Bild anzeigen
+         
             #cv2.resizeWindow(window_name_rgb, 1024, 1024)
             cv2.imshow(window_name_ir, img_ir)  # Bild anzeigen
             #cv2.resizeWindow(window_name_ir, 1024, 1024)
@@ -1185,7 +1258,7 @@ def create_yaml(path, fold_nr, namestring, palma, fold_dest_path, test_dataset_b
         else:
             file_string = "train: ./train/images " +'\n'+ "val: ./val/images" + '\n'+  "nc: 9"  +'\n'+"names: ['Car', 'Truck', 'Ship', 'Tractor', 'Camping Car', 'van', 'vehicle', 'pick-up', 'plane']"
     
-    if number_of_channels > 3:
+    if number_of_channels > 3 or number_of_channels == 1:
         file_string += '\n'+ number_channel_string
 
     try:
