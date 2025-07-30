@@ -3,91 +3,113 @@
 \label{ch:results}
 
 \begin{itemize}
-    \item Gleitenden Mittelwert bei Darstellung mit Window Size 20 um das Grundrauschen zu minimieren
     \item Konsistenz aller Modelle über die 5 Folds der Kreuzvalidierung ist gut, was eine robuste Trainierbarkeit bedeutet
 \end{itemize}
 \section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
 \begin{itemize}
-    \item obb weil performance bei Map40-95 in allen Epochen besser
-    \item Map bei obb zwiscehn 0.5 und 0.6; bei abb bei 0.35 und 0.45
-    \item Bei gleichen Bounding box koordinaten ist obb bei 0.55 und 0.59 und abb 0.59 und 0.6
-    \item bessere Performance von abb wahrscheinlich weil geringe Änderungen in der Orientierung der Bounding Boxen eine hohe Auswirkung auf die Genauigkeit der Boxen haben
+    \item Training Results by the mAP50-95 of all 5 Folds for every model 
+    \item Left Side (Blue): Yolov9 (without obb) and with axis aligned Bounding Boxes
+    \item Middle (Orange): Yolov9u with oriented bounding boxes
+    \item Uses Ultralytics as Backend for obb support
+    \item Right (Green): Yolov9u with axis aligned Bounding Boxes in the oriented Bounding Box format
+    \item Result -> aab performs better
+    \item \todo{Vergleichsbild eifnügen oder verweis}
+    \item This is probably due to the fact that small changes in the orientation of the bounding boxes lead to a greater deviation of the mean average precision 
+    \item Oriented Bounding boxes are smaller than the axis aligned bounding boxes -> higher inaccuracy of mAP50-95 (see next slide)
+    \item Red box at the right picture has a small deviation from the correct (blue) label
+\end{itemize}
+\begin{itemize}
+    \item \todo{Bild für Vergleich der BB Area einfügen (zw. obb, aab aab old)}
+    \item Oriented Bounding Boxes has an area from around 600 to 900 pixels 
+    \item Axis aligned Bounding boxes from around 750 to 1300 px
+    \item-> higher inaccuracy of mAP50-95
+
+    \item For the channel permutation I used the obb model
+
 \end{itemize}
 
 \section{Comparision at Mean Average Precision 50-95}
 
-\begin{figure}[h] 
-    \centering % Centers the graphic horizontally
-    \includegraphics[width=1\textwidth]{images/rgbir/mAP@50-95/rgbir_vs_rgb_full.png} % Path to the graphic file
-    \caption{Comparison of mAP50-95(B) over 500 Epochs for rgbir vs. rgb.} % Image caption
-    \label{fig:map_rgbir_rgb} % Label for references in the text
-\end{figure}
-In Abb. \ref{fig:map_rgbir_rgb} ist ein Vergleich der mAP50-95 Werte für über die verschiedenen Eingabedatensätze RGBIR und RGB zu sehen. Hier wurde eine 5 Fold Cross Validation durchgeführt, um die Robustheit zu beurteilen. Insgesamt ist ein ansteigender Trend über alle Epochen hinweg zu beobachten. Der Anstieg der Leistung ist in den Anfangsepochen signifikanter und flacht dann ab, um im weiteren Verlauf bis Epoche 500 zu konvergieren. RGBIR hat bessere Spitzenleistung als RGB und erreicht konsequent höhere absolute mAP Werte. Über die längere Trainingsdauer verfestigt sich der anfängliche Vorteil von RGBIR. Die RGB-Modelle liegen bei einer mAP von 0.60-0.62, während die besten RGBIR Modelle Werte um 0.62-0.65 mAP erreichen. Die RGB-Modelle weisen eine höhere Streuung als die RGBIR-Modelle auf, die robsuter sind und konsistentere Resultate liefern. Ab Epoche 300-400 erreichen beide Modelle ein Plateu, ab dem die Leistung nur noch geringfügig schwankt, was darauf hindeutet, dass die Modelle weitgehend konvergiert sind.
+\begin{itemize}
+    \item \todo{Bild einfügen best val dataset on val data}
+    \item See the performance of the best validation model on the validation data (per fold and model)
+    \item RGBIR has the best performance followed by irgb 
+    \item 3. place are rgb and rirb
+    \item Rgir and both ndvi models has the poorest map values
+\end{itemize}
 
-\begin{figure}[h] 
-    \centering % Centers the graphic horizontally
-    \includegraphics[width=1\textwidth]{images/rgbir/mAP@50-95/rgbir_vs_irgb_full.png} % Path to the graphic file
-    \caption{Comparison of mAP50-95(B) over 500 Epochs for rgbir vs. irgb.} % Image caption
-    \label{fig:map_rgbir_irgb} % Label for references in the text
-\end{figure}
-Aus Abb.\ref{fig:map_rgbir_irgb}, welche einen Vergleich der RGBIR- und IRGB-Modelle zeigt, ist ebenfalls ein klarer Performance Vorteil von RGBIR ersichtlich. Die IRGB-Modelle lernen zwar ebenfalls schnell, haben aber stärkere Schwankungen in den einzelnen Folds. Das Plateau der IRGB-Modelle liegt niedriger als bei RGBIR zwischen ca. 0.56 und 0.60. Es ist auffällig, dass die Konvergenz teilweise instabil ist, da manche Folds niedrigere Werte aufweisen. Außerdem erreicht keine einzige Fold Linie der IRGB-Modelle das Niveau der RGBIR-Modelle. \todo{Text an andere Beschreibungen anpassen (immer gleiches Schema verwenden?)}
+\begin{itemize}
+    \item \todo{Bild einfügen; best val dataset on test data}
+    \item Best Validation Models on the test data (Fold 5)
+    \item Red Dots are the best validation model at the validation data on the test data
+    \item (means the highest whisker from the previous slide)
+    \item Difference between the quantils, rgir performs at best
+    \item Then the rirb model and rgb model 
+\end{itemize}
 
-\begin{figure}[h] 
-    \centering % Centers the graphic horizontally
-    \includegraphics[width=1\textwidth]{images/rgbir/mAP@50-95/rgbir_vs_rirb_full.png} % Path to the graphic file
-    \caption{Comparison of mAP50-95(B) over 500 Epochs for rgbir vs. rirb.} % Image caption
-    \label{fig:map_rgbir_rirb} % Label for references in the text
-\end{figure}
-Die Abb. \ref{fig:map_rgbir_rirb} veranschaulicht die Leistungsentwicklung zwischen dem RGBIR- und RIRB-Modellen. Zunächst steigt der mAP Wert aller Folds sehr stark an, wie es in den ersten 150 Epochen zu sehen ist. Auch beim RIRB-Modell verlangsamt sich der Anstieg im weiteren Verlauf deutlich, bis die Kurven gegen Ende der Trainingszeit ein Plateau erreichen. Bis zu den 500 Epochen haben die meisten Folds ihren Höhepunkt erreicht oder sich diesem angenähert. \\
-Zu Beginn des Trainings in den ersten 150 Epochen ist die Leistung beider Modelle sehr ähnlich. Die orangen und blauen Kurven verlaufen in dieser Phase meist sehr eng beieinander und überschneiden sich häufig. In der mittleren bis späteren Phase (150 bis 500 Epochen) ist wieder zu sehen, dass das RGBIR-Modell sich von seinem Pendant absetzt, da die mAP Werte oberhalb der von dem RIRB-Modell liegen, was auf eine bessere Objekterkennung hindeutet. Hier ist insbesondere der Fold 3 des RGBIR-Modelles auffällig, da er die höchsten mAP Werte über viele der späteren Epochen erreicht, die häufig Werte über 0.6 erreichen und gelegentlich sogar nahe an 0.65 heranreichen. Es ist jedoch zu bemerken, dass einige Folds der RIRB-Modelle (z. B. Fold 4) ebenfalls gute mAP Werte erreichen und sich manchen RGBIR Folds annäheren oder diese übertreffen. Insgesamt ist jedoch die durchschnittliche Leistung von RGBIR besser. \\
-Die Leistung des RGBIR-Modelles ist über die 5 Folds relativ konsistent, da alle Folds ähnliche Trends aufweisen. Fold 3 weicht leicht positiv vom Rest ab, da er besonders hohe Genauigkeitswerte erzielt. Bei dem RIRB-Modell ist die Leistung über die Folds ebenfalls konsistent. Die Streuung zwischen den Folds ist vergleichbar mit dem RGBIR-Modell. Hier zeigt kein Fold ein drastisch schlechteres Verhalten als die anderen. \\
+\begin{itemize}
+    \item \todo{Tabelle einfügen}
+    \item Difference Between best mAP Fold at the validation data
+    \item From 0 to 4
+    \item Smaller difference at the mAP Performance at the test data
+    \item Fold 2 and 3
+    \item Now looking at the confusion and difference matrices
+\end{itemize}
 
-\begin{figure}[h] 
-    \centering % Centers the graphic horizontally
-    \includegraphics[width=1\textwidth]{images/rgbir/mAP@50-95/rgbir_vs_rgir_full.png} % Path to the graphic file
-    \caption{Comparison of mAP50-95(B) over 500 Epochs for rgbir vs. rgir.} % Image caption
-    \label{fig:map_rgbir_rgir} % Label for references in the text
-\end{figure}
-Zu Beginn zeigen beide Modelle bei Vergleich von dem RGBIR- und RGIR-Modell in Abb. \ref{fig:map_rgbir_rgir} einen typischen Verlauf mit steilem Anstieg, gefolgt von einer Verlangsamung und schließlich einer Stabilisierung der Leistung. Während der ersten 150 Epochen verlaufen die Kurven beider Modelle nahezu identisch, ohne dass sich eines deutlich absetzt. Es ist kein Leistungsvorsprung für eines der beiden Modelle zu sehen. In den mittleren bis späteren Epochen ist im Gegensatz zu den RGB-, IRGB- und RIRB-Modellen eine sehr ähnliche oder tendenziell bessere Performance abgebildet. Besonders Fold 4 und Fold 5 des RGIR-Modells fallen durch stabile und hohe mAP-Werte auf, die mit den besten Ergebnissen des RGBIR-Modells mithalten können oder sie stellenweise übertreffen. In den späteren Trainingsphasen zeigen die RGIR-Folds eine größere Varianz nach oben, was darauf hinweist, dass einzelne Folds besonders hohe Genauigkeitswerte erreichen können. \\
-Das RGIR-Modell ist eine gute Alternative zum RGBIR-Modell, da es eine potenziell überlegene Leistung bietet. Diese ist in den späteren Trainingsphasen zu erkennen, wo das RGIR-Modell ein gleichwertiges oder besseres Ergebnis erzielt. Dadurch ist es möglich, dass das RGIR-Modell eine ähnlich starke oder in einzelnen Fällen sogar überlegene Leistung zeigen könnte wie das RGBIR-Modell.
-
-
-
-\begin{figure}[h] 
-    \centering % Centers the graphic horizontally
-    \includegraphics[width=1\textwidth]{images/rgbir/mAP@50-95/rgbir_vs_rgbndvi_full.png} % Path to the graphic file
-    \caption{Comparison of mAP50-95(B) over 500 Epochs for rgbir vs. rgbndvi.} % Image caption
-    \label{fig:map_rgbir_rgbndvi} % Label for references in the text
-\end{figure}
-
-\begin{figure}[h] 
-    \centering % Centers the graphic horizontally
-    \includegraphics[width=1\textwidth]{images/rgbir/mAP@50-95/rgbir_vs_gbndvi_full.png} % Path to the graphic file
-    \caption{Comparison of mAP50-95(B) over 500 Epochs for rgbir vs. gbndvi.} % Image caption
-    \label{fig:map_rgbir_gbndvi} % Label for references in the text
-\end{figure}
-
-Als weitere Variante wurde der NDVI-Index als zusätzlicher Kanal zu den RGB-Daten (RGBNDVI-Modell) sowie einmal nur zu den Grün- und Blau-Kanälen (GBNDVI-Modell) hinzugefügt. Aufgrund der ähnlichen Ergebnisse werden die Resultate beider Modelle, die in den Abb. \ref{fig:map_rgbir_rgbndvi} (RGBNDVI) und \ref{fig:map_rgbir_gbndvi} (GBNDVI) mit dem RGBIR Modell zu sehen sind, im Folgenden gemeinsam verglichen. In beiden Abbildungen zeigt sich in den ersten 150 Epochen ein deutlicher Vorsprung des RGBIR-Modells: Die Kurven steigen schneller an und erreichen früh höhere mAP-Werte. Das RGBNDVI-Modell und auch das GBNDVI-Modell holen deutlich langsamer auf. In der mittleren Phase (150–500 Epochen) vergrößert sich der Leistungsunterschied weiter. Das RGBIR-Modell zeigt durchweg eine deutlich bessere Performance im Vergleich zu den RGBNDVI- und GBNDVI-Modellen. 
 
 
 \section{Comparision with Confusion Matrices}
 \begin{itemize}
+    \item \todo{beide confusionsmatricen einfügen}
     \item Normalisierte Konfusions Matrix mit 9 Klassen und der Einteilung Background (Hintergrund)
-    \item Immer Fold 4 angewendet auf den Testdatensatz (F5)
+    \item Right: Confusion Matric of RGBIR Modell on Fold 2:
+    \item Good Performance at Cars, Trucks, Ships, Tractors, Camping Cars, Pick Up and planes
+    \item Many confusion at vehicle with background
+    \item Nearly the same for RGIR at Fold 3
+    \item Both modells detected nearly all Planes
+    \item Difference Matrics at next slide
 \end{itemize}
 
-\begin{figure}[h] 
-    \centering % Centers the graphic horizontally
-    \includegraphics[width=\textwidth]{images/confusion_matrices/rgbir_F4_confusion_matrix_normalized.png} % Bildpfad zum ersten Bild
-        \caption{Confusion Matrix from the best RGBIR Model in Fold 4} % Unterschrift für das erste Bild
-        \label{fig:cm_rgbir} % Label für Referenzierung von Bild 1
-\end{figure}
-Die Analyse der Klassifikationsergebnisse zeigt eine sehr hohe Genauigkeit bei der Klasse \textit{Plane}, bei der sämtliche Instanzen korrekt erkannt wurden. Auch bei den Klassen \textit{Car} mit 78\% und \textit{Truck} mit 76\% ist die Leistung des Modells zufriedenstellend. Dennoch treten bei diesen beiden Klassen Verwechslungen auf. So werden 22\% der Objekte aus der Klasse \textit{Car} als \textit{Background} und 6\% als \textit{Truck} klassifiziert.\\
-Die Klasse \textit{Pick-Up} erreicht eine Erkennungsrate von 78\%, wobei auch hier fehlerhafte Zuordnungen zu den Klassen \textit{Car} (12\%) und \textit{Truck} (4\%) beobachtet werden. Ähnliche Tendenzen zeigen sich bei den Klassen \textit{Camping Car} und \textit{Van}, die mit 70\% beziehungsweise 56\% korrekt erkannt werden. Eine gegenseitige Verwechslung liegt bei jeweils 3\% der Fälle vor.\\
-Auffällig ist die schwache Leistung bei der Klasse \textit{Vehicle}, die lediglich in 58\% der Fälle korrekt identifiziert wird. Diese allgemeine Kategorie führt häufig zu Fehlklassifikationen mit spezifischeren Fahrzeugtypen wie \textit{Truck} (19\%), \textit{Pick-Up} (7\%), \textit{Car} (6\%), \textit{Camping Car} (6\%) und \textit{Van} (1\%).\\ Die Erkennungsgenauigkeit für die Klasse \textit{Ship} liegt bei 67\%, wobei 3\% der Objekte fälschlich als \textit{Vehicle} klassifiziert werden. Auch die Klasse \textit{Tractor} weist mit 63\% eine moderate Genauigkeit auf. Hier kommt es ebenfalls zu Verwechslungen mit \textit{Camping Car} und \textit{Vehicle}, jeweils in 3\% der Fälle. \\ Eine zentrale Herausforderung stellt die Klasse \textit{Background} dar. Diese fungiert häufig als Ziel fehlerhafter Klassifikationen. So werden 22\% der \textit{Car}-Instanzen, 14\% der \textit{Truck}-Objekte, 24\% der \textit{Vehicle}-Instanzen, 15\% der \textit{Camping Car}-Objekte, 15\% der \textit{Van}-Objekte sowie 15\% der \textit{Pick-Up}-Instanzen fälschlicherweise als \textit{Background} erkannt. Dies lässt auf Defizite bei der Trennung von Objekten und Hintergrund schließen.
+\begin{itemize}
+    \item \todo{Differenzmatrix RGBIR vs RGIR einfügen}
+    \item At all Difference Matrices is red for the better performance of the RGBIR Model and blue for the other modell
+    \item RGBIR detected Trucks, Ships and Tractor more accurate than the RGIR Model
+    \item RGBIR seems more robust for common ground vehicles
+    \item Both modells detect all planes (in short every modell detect all planes)
+    \item Both modells misclassifier background as any class (RGBIR is better at vehicle and Camping Car) 
+\end{itemize}
 
-Zusammenfassend lässt sich feststellen, dass das Modell bei der Erkennung einzelner Klassen, insbesondere solcher mit klar unterscheidbaren Merkmalen wie \textit{Plane}, eine sehr hohe Genauigkeit aufweist. Schwächen bestehen jedoch bei der Differenzierung visuell ähnlicher Fahrzeugtypen sowie bei der korrekten Abgrenzung von Objekten gegenüber dem Hintergrund. 
+\begin{itemize}
+    \item \todo{Differenzmatrix RGBIR vs RGB einfügen}
+    \item RGBIR is better for detecting Ships (12\%) and Vehicles (15\%), slightliy degrades performance of car detection
+    \item Vehicle is much better than in RGB Model (15\%)
+    \item IR input helps for common vehicle recognition (vehicle includes Excavators, construction equipment, etc.)
+    \item RGB is better in identifying ship and vehicle as background
+\end{itemize}
 
+
+\begin{itemize}
+    \item \todo{Differenzmatrix RGBIR vs IRGB einfügen}
+    \item RGBIR recognize Ships 21 \% better than the irgb model
+    \item Particulary stronger for camping car and van classification (6\%)
+    \item IRGB has more  background-ship and background-vehicle confusion
+\end{itemize}
+
+\begin{itemize}
+    \item \todo{Differenzmatrix RGBIR vs RIRB einfügen}
+    \item RGBIR detects Ships and vans better than RIRB Model
+    \item RIRB misclassified van and ship as background more often than RGBIR
+
+\end{itemize}
+
+
+\begin{itemize}
+    \item \todo{Differenzmatrix RGBIR vs GBNDBVI und RGBNDVI einfügen}
+    \item RGBIR have a better performance in Ship, Tractor and Vehicle
+    \item Both ndvi modells show  a tendency for confusing background with other classes
+\end{itemize}
+
+\section{Ablation Studies}
 % \begin{figure}[h] 
 %     \centering
 %     % Erste Subfigur

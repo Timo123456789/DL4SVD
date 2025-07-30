@@ -1,5 +1,6 @@
 %!TEX root = ../thesis.tex
 \chapter{Methodology}
+\todo{Ablaufdiagramm einfügen}
 \label{ch:methodology}
 
 \ifimportant
@@ -17,14 +18,52 @@ Die Hauptvorteile von YOLO sind seine Geschwindigkeit und Genauigkeit, die es er
 \section{Database}
 \subsection{Vehicle Detection on Aerial Images (VEDAI) Dataset}
 
-Das 'Vehicle Detection in Aerial Images' (VEDAI) Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl RGB-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie NIR oder IR auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in über 1200 Bildern annotiert. Diese Objekte sind in 8 Klassen (Boat, Camping Car, Car, Pickup Plane, Tractor, Truck, Van und Others) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht. \\
-Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was ausreichend ist um einzelne Fahrzeuge zu erkennen. Möglicherweise ist eine Downskalierung auf 30cm pro Pixel sinnvoll, um die Auflösung von Satellitenbildern zu imitieren.
- 
+Das 'Vehicle Detection in Aerial Images' (VEDAI) Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl RGB-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie NIR oder IR auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in ungefähr 1200 Bildern annotiert. Diese Objekte sind in 9 Klassen (Boat, Camping Car, Car, Pickup, Plane, Tractor, Truck, Van und Others) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht. \\
+Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was ausreichend ist um einzelne Fahrzeuge zu erkennen. Die Bilder mit einer Größe von 1024 \texttimes 1024 Pixeln sind bei einer Befliegung im Jahr 2012 in US Amerikanischen Bundesstaat Utah aufgenommen worden. 
+\todo{Bsp. Bild für jede Klasse zeigen (aus Paper nehmen!; Quellenverlinkung für text und bild nicht vergessen)}
 
 Die Datenaufbereitung umfasst Schritte wie das Unterteilen der Bilder in Trainings- und Testdaten, sowie die Aufbereitung der Annotationen für den YOLO Algorithmus. Nach diesen Schritten kann das Training auf dem High-Performance-Cluster (HPC) PALMA der Uni Münster erfolgen. Anhand der Ergebnismatrix wird dann ein Vergleich der beiden Modelle erfolgen, da der einzige Unterschied das weitere Band ist. 
 
-\subsection{DOTA Dataset}
+\subsection{Dataset for Object deTection in Aerial Images (DOTA) 1.5}
+\begin{itemize}
+    \item DOTA bietet sich als pretrained Model Datengrundlage für die Permutationsexperimente an, da es viele verschieden Klassen auf Satellitenbildern enthält
+    \item Bildgröße von 800 \texttimes 800 bis 20.000 \texttimes 20.000 Pixel
+    \item 3 Channel (Red, Green, Blue) und Grayscale Images (Panchromatic Band von GF2 und JL1 Satelliten)
+    \item Satellite Images von Google Earth und anderne Quellen
+    \item \todo{Bsp. Bild für jede Klasse zeigen (aus Paper nehmen!; Quellenverlinkung für text und bild nicht vergessen); habe alle 16 Klassen für das Training genutzt, wichtig sind trotzdem nur Large Vehicle, Plane, Ship, small vehicle}
+\end{itemize}
 
+
+\section{Umsetzung}
+\subsection{PALMA}
+\begin{itemize}
+    \item UV als Python Umgebung auf Palma genutzt
+    \item Bash Scripte geschrieben um die Modelle auf diversen GPUS (HGX, etc) zu trainieren
+\end{itemize}
+
+\subsection{Challenges Preprocessing}
+\subsubsection{VEDAI Dataset Challenges}
+\begin{itemize}
+    \item Label müssen in yolov9 obb format konvertiert werden
+    \item kleine Anzahl (7/3757) war kleiner als 0 oder größer als 1
+    \item Lösung mit Exception Handling und Runden der Werte
+    \item \todo{Beispielbilder einfügen}
+\end{itemize}
+
+\section{Workflow}
+\subsection{Axis Aligned vs. Oriented Bounding Boxes}
+\begin{itemize}
+    \item \todo{Vergleichsbilder (Schiff und Auto Vergleich) einfügen}
+    \item mehr Blankspace bei axis aligned Bbs
+    \item Concentration of the box on the actual object, significantly less surrounding area outlined. No overlap between bounding boxes (Bei Ship bb)
+    \item 
+\end{itemize}
+\subsection{Channel Permutation}
+\subsection{DOTA Training}
+\begin{itemize}
+    \item DOTA als Pretrained Modell für Channel Permutation, map50-95 around 0.4 and training over around 800 epcohs 
+    \item \todo{Result.png einfügen? oder doch sein lassen?}
+\end{itemize}
 \else
 \blindtext
 \fi

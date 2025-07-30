@@ -126,12 +126,27 @@ Maschinelles Lernen beschreibt einen Ansatz in der Informatik, bei dem Algorithm
 
 \section{Evaluation Metrics}
 \subsection{N Fold Cross Validation}
+\begin{itemize}
+    \item Cross validation to ensure robustness and better comparison of different models
+    \item create own folds, as the ones provided by the paper had the same images in training and validation data
+    \item  6 Folds
+    \item 5 for Training and Validation, 1 for Test (Fold 5)
+    \item Good object distribution between the folds
+    \item 207-221 Images per Fold, where 3 or 7 Images are only background
+    
+    \item Sorting method similar to bucketsort
+    \item Each fold gets an image at the beginning and the class that is least common in each fold is identified
+    \item then the next image is taken and the objects of the classes are counted (how often each class appears in the image). The image is placed in the fold with the fewest objects of that class
+    \item If there are the same number, priority is given to rarity
+    \item \todo{Tabelle mit Verteilung einfügen}
+
+
+\end{itemize}
+
 \subsection{Mean Average Precision}
 \subsubsection{mAP@50}
 \subsubsection{mAP@90-95}
 
-% If you use underscores in section titles or anywhere in text, write \_ instead of _
-\subsubsection{mAP@50}
-\subsubsection{mAP@90-95}
+
 
 

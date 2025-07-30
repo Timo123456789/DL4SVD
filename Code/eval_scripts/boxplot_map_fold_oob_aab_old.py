@@ -5,7 +5,7 @@ import os
 from matplotlib.lines import Line2D  # Manuelle Legenden mit allen Folds
 
 def main():
-    all_sets = ["rgbir", "rgb", "irgb", "rirb", "rgir", "gbndvi", "rgbndvi"]
+    all_sets = ["aab", "obb","aab_old"]
     set_arr = {s: s for s in all_sets}
     window_size = 20
 
@@ -95,11 +95,15 @@ def extract_map50_95(csv_path):
 
 def load_paths_for_set(set_name, test_bool):
     paths = []
+    if set_name == "obb":
+        file_name= "orTrue_Ep500_F"
+    else:
+        file_name= "orFalse_Ep500_F"
     for i in range(5):
         if test_bool:
-            path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation\new_val_detect\{set_name}\fold{i}\metrics_and_confusion_test.csv"
+            path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\{set_name}\{file_name}{i}\metrics_and_confusion_test.csv"
         else:
-            path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation\new_val_detect\{set_name}\fold{i}\metrics_and_confusion_val.csv"
+            path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\{set_name}\{file_name}{i}\metrics_and_confusion_val.csv"
         if os.path.exists(path):
             paths.append(path)
         else:
@@ -142,8 +146,8 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
         return
 
     df = pd.DataFrame(all_data)
+    df['Modell'] = df['Modell'].replace({'aab_old': 'AAB in OBB Model'})  # Hier ist die Änderung
     
-
     # Plot erstellen
     plt.figure(figsize=(10, 6))
     sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette='Set2')
@@ -152,9 +156,10 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
     plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
     plt.ylabel("mAP@50-95")
     plt.xlabel("Model")
-    plt.xticks(rotation=30)
+    plt.xticks(rotation=0)
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
-    plt.savefig("best_val_on_val.svg", format="svg", transparent=True)
+    allsets_string = "_".join(set_paths_dict.keys())
+    plt.savefig(allsets_string +"_best_val_on_val.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()
 
@@ -177,6 +182,7 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
         return
 
     df = pd.DataFrame(all_data)
+    df['Modell'] = df['Modell'].replace({'aab_old': 'aab in obb model'})  # Hier ist die Änderung
 
     plt.figure(figsize=(10, 6))
     sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette='Set2')
@@ -196,7 +202,7 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
     plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
     plt.ylabel("mAP@50-95")
     plt.xlabel("Model")
-    plt.xticks(rotation=30)
+    plt.xticks(rotation=0)
 
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
 
@@ -212,8 +218,8 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
         if 'Best Validation Fold' in labels:
             plt.legend(handles=[handles[labels.index('Best Validation Fold')]], labels=['Best Validation Fold'])
 
-
-    plt.savefig("best_val_on_test.svg", format="svg", transparent=True)
+    allsets_string = "_".join(set_paths_dict.keys()) 
+    plt.savefig(allsets_string + "_best_val_on_test.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()
 
@@ -291,7 +297,7 @@ def create_boxplot_top_folds(val_paths_dict, test_paths_dict, top_n=1):
     plt.title(f"Test mAP@50-95 of Top-{top_n} Validation Folds per Model")
     plt.ylabel("mAP@50-95 (Test)")
     plt.xlabel("Model")
-    plt.xticks(rotation=30)
+    plt.xticks(rotation=0)
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
     plt.tight_layout()
     plt.show()
