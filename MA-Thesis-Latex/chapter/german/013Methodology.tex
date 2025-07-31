@@ -3,11 +3,9 @@
 \todo{Ablaufdiagramm einfügen}
 \label{ch:methodology}
 
-\ifimportant
-
 Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der 'You Only Look Once' (YOLO) Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde, ermöglicht eine schnelle und präzise Objekterkennung. YOLO basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
 
-Die Hauptvorteile von YOLO sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird YOLO verwendet, um Fahrzeuge auf Satellitenbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie NIR oder IR integriert werden, um einen Vergleich zu dem reinen 3 Kanal RGB Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
+Die Hauptvorteile von YOLO sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird YOLO verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie NIR oder IR integriert werden, um einen Vergleich zu dem reinen 3 Kanal RGB Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
 
 \section{Preprocessing of input data}
 \section{YOLOv9}
@@ -40,6 +38,17 @@ Die Datenaufbereitung umfasst Schritte wie das Unterteilen der Bilder in Trainin
     \item UV als Python Umgebung auf Palma genutzt
     \item Bash Scripte geschrieben um die Modelle auf diversen GPUS (HGX, etc) zu trainieren
 \end{itemize}
+\begin{itemize}
+    \item Hersteller: MEGWARE\cite{palma_spec}
+    \item 16.272 Cores
+    \item 77.568 GB Memory
+    \item 444 Nodes
+    \item Processor: Intel Xeon Gold 6140 18C @ 2.30GHz (Skylake)
+    \item Interconnect 100Gbit/s Intel Omni-Path
+    \item GPFS Storage: 2,4 PB
+    \item Linpack Performance: Rmax: 800 TFlop/sRpeak: 1,277 TFlop/s
+    \item OS: Rocky Linux 9 
+\end{itemize}
 
 \subsection{Challenges Preprocessing}
 \subsubsection{VEDAI Dataset Challenges}
@@ -53,18 +62,29 @@ Die Datenaufbereitung umfasst Schritte wie das Unterteilen der Bilder in Trainin
 \section{Workflow}
 \subsection{Axis Aligned vs. Oriented Bounding Boxes}
 \begin{itemize}
+    \item Vergleich zwischen Axis Aligned udn Oriented Bounding Boxen
+    \item YOLOv9 arbeitet ursprünglich nur mit aab Boxen
+    \item YOLOv9u kann mit obb arbeiten, da Codebasis von YOLOv8 von Ultralytics, was obb unterstützt
+    \item 
+\end{itemize}
+\begin{itemize}
     \item \todo{Vergleichsbilder (Schiff und Auto Vergleich) einfügen}
     \item mehr Blankspace bei axis aligned Bbs
     \item Concentration of the box on the actual object, significantly less surrounding area outlined. No overlap between bounding boxes (Bei Ship bb)
     \item 
 \end{itemize}
 \subsection{Channel Permutation}
+\begin{itemize}
+    \item Folgende Permutation werden im Rahmen der Arbeit evaluiert: RGBIR, IRGB, RIRB; RGB, RGIR, RGBNDVI, GBNDBVI
+\end{itemize}
 \subsection{DOTA Training}
 \begin{itemize}
     \item DOTA als Pretrained Modell für Channel Permutation, map50-95 around 0.4 and training over around 800 epcohs 
     \item \todo{Result.png einfügen? oder doch sein lassen?}
 \end{itemize}
-\else
-\blindtext
-\fi
+\subsection{Ablation Studie}
+\begin{itemize}
+    \item Ablation Study für R, G, B, IR, NDVI durchgeführt
+\end{itemize}
+
 

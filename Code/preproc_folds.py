@@ -410,7 +410,7 @@ def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
     try:
         with open(file_path, 'w') as file:
             for label in labels:
-                transf_label = calc_pixel_like_authors(img, label, oriented, True) 
+                transf_label = get_bounding_box_in_px(img, label, oriented, True) 
                 px_corner = [transf_label[1][1],transf_label[1][0],transf_label[2][1],transf_label[2][0],transf_label[3][1],transf_label[3][0],transf_label[4][1],transf_label[4][0]]
 
                 if oriented == True:
@@ -713,9 +713,9 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
 
         for i in filtered_labels:
             
-            img_rgb = calc_pixel_like_authors(img_rgb,i, oriented, ret_pts)
-            img_ir = calc_pixel_like_authors(img_ir,i, oriented, ret_pts)
-            img_merged = calc_pixel_like_authors(img_merged,i,oriented, ret_pts)
+            img_rgb = get_bounding_box_in_px(img_rgb,i, oriented, ret_pts)
+            img_ir = get_bounding_box_in_px(img_ir,i, oriented, ret_pts)
+            img_merged = get_bounding_box_in_px(img_merged,i,oriented, ret_pts)
            
             #pts = calc_pixel_like_authors(i)
             
@@ -921,7 +921,7 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
     return image
 
 
-def calc_pixel_like_authors(img, label, oriented, ret_pts):
+def get_bounding_box_in_px(img, label, oriented, ret_pts):
     indice_vehicle = label.split()
     Xvehicle = np.float64(indice_vehicle[1])
     Yvehicle = np.float64(indice_vehicle[2])

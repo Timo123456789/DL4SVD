@@ -1,7 +1,193 @@
 %!TEX root = ../thesis.tex
 \chapter{Implementation}
 \label{ch:implementation}
-Die genutzte Programmiersprache ist Python. DIe Scripte für PALMA wurden in Bash geschrieben.
+Die genutzte Programmiersprache ist Python. Die Scripte für PALMA wurden in Bash geschrieben.
+\section{Preprocessing}
+\subsection{DOTA Dataset}
+Im Rahmen der Datenvorverarbeitung wurden ausschließlich die originalen Rohbilder des DOTA-Datensatzes verwendet, ohne dass ein Zuschnitt oder eine anderweitige Modifikation der Bildinhalte vorgenommen wurde. Der Fokus der Verarbeitung lag auf der Umwandlung der vorhandenen Labeldaten in das \texttt{YOLOv9-OBB}-Format, welches polygonale Objektumrandungen in Form einer Punktsequenz \((x_1, y_1, x_2, y_2, \ldots)\) beschreibt (vgl. \todo{text\texttt{\textbackslash todo\{Ref zur Formatbeschreibung einfügen\}}}).
+
+Für jedes Bild stellt DOTA eine separate Textdatei bereit, die alle zugehörigen Annotationen enthält. Zu Beginn wurde eine standardisierte Ordnerstruktur nach dem YOLO-Schema erstellt, bestehend aus den Unterverzeichnissen \texttt{train/images}, \texttt{train/labels}, \texttt{val/images} und \texttt{val/labels}. Die Annotationsdateien wurden daraufhin zeilenweise eingelesen und verarbeitet.
+
+Jede Zeile, die ein einzelnes Objekt beschreibt, wurde zunächst an die jeweilige Bildgröße angepasst, wobei die absoluten Koordinaten der Objektrahmen in relative Werte normalisiert wurden. Da die Auflösung der Bilder im DOTA-Datensatz stark variiert (zwischen \(800 \times 800\) und \(20{,}000 \times 20{,}000\) Pixeln), war eine dynamische Skalierung erforderlich. Die konvertierten Informationen wurden anschließend in das \texttt{YOLOv9}-Format überführt, wobei die Klassen-ID jeweils am Anfang der Zeile stand. Die so erzeugten Labeldateien wurden unter Beibehaltung des ursprünglichen Dateinamens gespeichert.
+
+Insgesamt wurden sämtliche 16 im DOTA-Datensatz enthaltenen Objektklassen berücksichtigt und entsprechend konvertiert. Die Bilddaten selbst blieben unangetastet und wurden in ihrer Originalform auf den HPC Cluster \texttt{PALMA} übertragen. Aufgrund der hohen Anzahl an verfügbaren Annotationen gestaltete sich der Konvertierungsprozess zeitintensiv.
+
+% \begin{itemize}
+%     \item Bilder nicht zugeschnitten, Rohbilder verwendet, wie vom Dataset bereitgestellt
+%     \item nur labels in yolo v9 obb format (x1,y1,x2,y2... \todo{ref zu erklärung einfügen}) konvertiert
+%     \item DOTA bietet für jedes Bild eine txt mit den dazugehörigen labels an
+%     \item Erst wird die Ordnerstruktur (train/images, train/labels, val/images, val/labels) für die daten erstellt
+%     \item diese txt wird eingelesen und dann Zeile für Zeile durchgegangen 
+%     \item Jede Zeile wird konvertiert (normalisiert auf die Größe des jeweiligen Bildes, Bildgröße ist bei DOTA nicht gleich sondern schwankt von 800*800 bis 20.000 * 20.000) und in das format gebracht (so das klasse vorne steht) und dann wird es in einer neuen txt gespeichert (wie bei der Originaldatei (dateiname ist gleich) nur umgewandelt ins yolo format)
+%     \item alle 16 vorhandenen Klassen werden umgewandelt
+%     \item letztendlich werden nur die labels konvertiert, die Bilder bleiben unangetastet und werden direkt auf PALMA hochgeladen
+%     \item Menge von Labels sehr hoch, konvertierung  dauert lange
+% \end{itemize}
+\subsection{VEDAI Dataset}
+
+
+Die Verarbeitung des VEDAI-Datensatzes erfolgt über eine zentrale Hauptmethode, in der mehrere konfigurierbare Parameter in Form von booleschen Variablen bereitgestellt werden. Besonders wichtig ist hierbei der Parameter \texttt{oriented}, welcher angibt, ob die Bounding Boxes (BBs) als achsenparallele Rechtecke oder als orientierte Rechtecke im \texttt{OBB}-Format generiert werden. Zusätzlich kann über \texttt{bool\_create\_yaml} gesteuert werden, ob für jedes erzeugte Trainingsset eine entsprechende YAML-Datei automatisch mitgeneriert werden soll.
+
+Ein weiterer Parameter, \texttt{merge\_ir\_bool}, ermöglicht es, das Infrarotbild (IR) in die erzeugten Bilddaten zu integrieren. Mithilfe des Parameters \texttt{namestring} lässt sich jedem erzeugten Trainingsset ein individueller Name zuweisen. Entscheidend für die Zusammensetzung der Bildkanäle ist das Dictionary \texttt{perm\_object}, in dem über boolesche Werte festgelegt wird, welche Kanäle (z.\,B. R, G, B, IR, NDVI) in das finale Bild aufgenommen werden sollen.
+
+In der zentralen Hauptfunktion wird anschließend bestimmt, welche Teilmengen des Datensatzes erzeugt werden sollen. Dies betrifft u.\,a. \texttt{ablation}-Sets, \texttt{perm}-Datasets oder \texttt{aab\_vs\_obb}-Konfigurationen. Für beide erstgenannten Varianten folgt der Ablauf einem konsistenten Schema: Die Parameter \texttt{oriented} und \texttt{merge\_ir\_bool} werden aktiviert, ein Speicherpfad für das erzeugte Dataset definiert, und das \texttt{perm\_object} wird entsprechend der gewünschten Kanalzusammenstellung konfiguriert. Beispielweise wird für die Kombination \texttt{rgir} lediglich R, G und IR im \texttt{perm\_object} auf \texttt{true} gesetzt. Im Anschluss wird mittels einer \texttt{for}-Schleife über die Folds 0 bis 5 iteriert und für jeden Fold mit der Methode \texttt{create\_fold\_cross\_validation} das entsprechende Datenset aus Trainings-, Validierungs- und Testdaten generiert (vgl. \todo{Verweis auf entsprechende Funktion}).
+
+\paragraph{Erzeugung von Folds via \texttt{create\_fold\_cross\_validation}}
+
+Diese Methode übernimmt die vollständige Erstellung der Ordnerstruktur im für YOLO erforderlichen Format (\texttt{train/images}, \texttt{train/labels}, \texttt{val/images}, \texttt{val/labels}, \texttt{test/images}, \texttt{test/labels}). Zudem wird eine YAML-Datei erzeugt, die sowohl die Pfade zu den Bilddateien als auch die Anzahl der enthaltenen Kanäle enthält. Ein Trainingsdatensatz setzt sich stets aus drei Komponenten zusammen: 
+\begin{enumerate}
+    \item \textbf{Trainingsdaten:} Bestehen aus den Bildern der übrigen Folds (also alle außer dem aktuellen Fold und Fold 6).
+    \item \textbf{Validierungsdaten:} Entsprechen den Bildern des jeweils aktuellen Folds.
+    \item \textbf{Testdaten:} Bestehen stets aus den Bildern von Fold 6.
+\end{enumerate}
+
+Der aktuell ausgewählte Fold wird aus der Liste mit allen Folds entfernt, um Überschneidungen mit Trainings-, Validierungs- und Testdaten auszuschließen. Anschließend wird die zentrale Datei mit allen Labelinformationen des Datensatzes eingelesen. Über eine \texttt{for}-Schleife werden alle Folds durchlaufen, die nicht dem aktuellen Fold entsprechen. Dabei wird jeweils die Datei mit den Bildnamen eingelesen und für jedes dieser Bilder die Funktion \texttt{create\_image\_and\_label} aufgerufen.
+
+Diese Funktion liest für jede Zeile das zugehörige RGB- und IR-Bild ein und filtert die Labels so, dass nur die zum aktuellen Bild gehörenden Annotationen weiterverarbeitet werden. Das neue Bild wird anschließend in den jeweiligen Zielpfad kopiert, wobei intern die Funktion \texttt{merge\_RGB\_IR\_image} zur Anwendung kommt. Diese Funktion stellt sicher, dass nur die im \texttt{perm\_object} spezifizierten Kanäle in die Zieldatei übernommen werden (vgl. \todo{ref einfügen}Referenz zur Funktion). Im Anschluss wird die Funktion \texttt{create\_label\_file} aufgerufen, um das zugehörige Label-File im gewünschten Format zu erzeugen (vgl. \todo{ref einfügen} Referenz zur Funktion).
+
+Nach dem Abschluss der Verarbeitung aller Trainingsfolds wird abschließend sowohl der Validierungsfold (aktueller Fold) als auch der Testfold (immer Fold 6) mithilfe der Funktion \texttt{create\_image\_and\_label} separat verarbeitet. Nach deren erfolgreichem Durchlauf gilt das Datenset für die jeweilige Kanal-Kombination als vollständig erstellt.
+
+\paragraph{Fusion von RGB- und IR-Bildern (\texttt{merge\_RGB\_IR\_image})}
+
+Diese Methode lädt die entsprechenden RGB- und IR-Bilder und erzeugt basierend auf der Vorgabe im \texttt{perm\_object} eine kombinierte Bilddarstellung. Die Verschmelzung erfolgt mit Hilfe von \texttt{cv2.merge}. Falls gefordert, wird innerhalb dieser Funktion zusätzlich ein NDVI-Bild erzeugt. Zur numerischen Stabilisierung bei der NDVI-Berechnung wird der Nenner (IR + R) auf mindestens 0{,}01 gesetzt, um Division durch Null zu vermeiden. Die NDVI-Werte werden anschließend skaliert und als 8-Bit-Bild zurückgegeben. Vor dem Zusammenführen werden die RGB-Kanäle immer einzeln extrahiert. Die Funktion \texttt{copy\_image} übernimmt dann das Schreiben der erzeugten Bilder an den vorgesehenen Zielpfad.
+
+\paragraph{Erzeugung von Label-Dateien (\texttt{create\_label\_file})}
+
+Zur Erstellung der Label-Datei wird zunächst der Pfad zur Ausgabedatei bestimmt und das zugehörige Bild eingelesen, um die Bilddimensionen für die spätere Normalisierung zu ermitteln. Anschließend werden alle übergebenen Label-Informationen durchlaufen. Für jedes Label wird mithilfe der Funktion \texttt{get\_bounding\_box\_in\_px} die Bounding Box in Pixelkoordinaten berechnet.
+
+Im nächsten Schritt wird die Zielzeile im YOLO-Format erstellt: Die Klasse wird dabei in eine numerische ID zwischen 0 und 8 überführt (mittels einer internen Mapping-Funktion), gefolgt von den acht Koordinatenpunkten der Bounding Box, jeweils durch Leerzeichen getrennt.
+
+Im Fall von \texttt{oriented = true} werden die acht Punkte einer rotierbaren Box gespeichert. Ist \texttt{oriented = false}, können die Koordinaten entweder in klassischer YOLO-Darstellung (zentrumsbasiert mit Höhe und Breite) oder als achsenparalleles Rechteck im OBB-Format gespeichert werden. Die Umwandlung erfolgt hier durch unterschiedliche Konvertierungsfunktionen. Abschließend wird die Zeile in die Datei geschrieben und der Prozess für das nächste Label wiederholt.
+
+\paragraph{Berechnung der Bounding Box in Pixeln (\texttt{get\_bounding\_box\_in\_px})}
+
+Diese Funktion dient der Extraktion und Transformation der Labelkoordinaten aus dem ursprünglichen DOTA-Format. Zunächst wird der Label-String anhand von Leerzeichen in seine Bestandteile zerlegt. Die Position (x, y) sowie die Orientierung befinden sich an den Stellen 1 bis 3 des Arrays, während sich die Klassen-ID an Position 12 befindet. Die Eckpunkte der Bounding Boxen (x-Werte: Positionen 4–8, y-Werte: 8–12) werden extrahiert und daraus die Seitenlängen berechnet.
+
+Die längsten Seiten des Objekts werden identifiziert und als Fahrzeuglänge, die kürzeren als Fahrzeugbreite angenommen. Aus den längsten Seiten wird ein Richtungsvektor berechnet, und der Winkel der Fahrzeugausrichtung über den Arctan bestimmt. Die vier Eckpunkte der orientierten Box werden schließlich unter Berücksichtigung von Fahrzeugmitte, Länge, Breite und Rotationswinkel berechnet.
+
+Ist \texttt{oriented = true}, so werden die vier Eckpunkte als ganzzahlige Koordinaten-Tupel zurückgegeben. Ist \texttt{oriented = false}, wird aus den minimalen und maximalen x- und y-Werten der rotierten Box eine achsenparallele Bounding Box erzeugt und zurückgegeben.
+
+% \begin{itemize}
+%     \item Main Methode
+%     \begin{itemize}
+%         \item Verschiedene Bools um Einstellungen vorzunehmen; am wichtigsten ist "oriented", für die Form der Bounding Boxen (BB) ob axis aligned oder obb
+%         \item "bool\_create\_yaml" um einzustellen ob für jedes Trainingsset eine yaml direkt miterzeugt werden soll
+%         \item "merge ir bool" um einzustellen ob das IR Bild mit in die erzeugten Bilder eingefügt werden soll
+%         \item "namestring" um jedem Trainingsset nen individuelen Namne geben zu könne
+%         \item (Wichtig) "perm object" ist ein dictionary wo festgelegt wird welche Kanäle in das Bild kommen (R,G,B,IR,NDVI), hier kann mit True und False einfach die gewünschte kombination eingefügt werden
+%         \item ansonsten wird in der Funktion einfach aufgerufen welche Datensets erzeugt werden sollen (ablation,perm datasets oder aab\_vs\_obb datasets)
+%         \item in diesen beiden Funktionen (perm und ablation) ist der Ablauf immer ähnlich -> oriented und merge ir bool werden auf true gesetzt und der Pfad zum Abspeichern des Datasets festgelegt. Dann wird das perm object je nach Bedarf auf True gesetzt (bspw. für rgir wird nur r, g, ir im Permobject auf true gesetzt) und dann wird mit einer for schleife von 0 bis 5 mit der Funktion "create fold cross validation" der entsprechende fold erzeugt (referenz zu Funktion einfügen?)
+%     \end{itemize}
+%     \item Create Fold Cross Validation
+%     \begin{itemize}
+%         \item Ordnerstruktur wird erstellt (wie von yolo gefordenr train/images, train/label, val/images, val/label, test/images, test/label)
+%         \item yaml datei mit pfaden zu den bildern und der aktuellen anzahl an Channeln in den Bildern wrid erstellt
+%         \item aktueller Fold wird aus den Folds zur Erstellugn der Trainingsdaten genommen, (keien ÜBerschneidung möglich mit Training, Val und Test)
+%         \item das file mit allen labels in dem Dataset wird eingelesen
+%         \item For Schleife die alle Folds, die nciht der aktuelle Fold sind, startet
+%         \item das txt mit den bildernamen des jeweiligen folds wird eingelesen und die funktionsinterne Funktion "create image and label" wird aufgerufen. diese durchläuft alle Zeilen des gerade gelesenen Fold txt. die pfade für das rgb und ir bild werden festgelegt um die bilder einzulesen und danach werden die labels so gefiltert, dass nur die Labels für das aktuelle Bild noch vorhanden sind. Dann wird das neue Bild in den jeweiligen Pfad kopiert (in der "copy image" Funktion wird auch "merge RGB IR image" FUnktion genutzt, um nur die jeweilige kanalkombination an den Zielpfad zu kopieren, Referenz verlinken); dann wird die create label file funktion aufgerufen, die das jeweilige txt zu dem bild erzeugt (Referenz verlinken, wird später noch beschrieben)
+%         \item dann werden die pfade den jeweiligen validierungs (aktueller fold) und den testfold (immer der 5.) festgelegt und die obig beschriebene "create image and label" funktion wird dann nochmal einzeln jeweils für den validierung und testfold aufgerufen. Wenn die beiden durchgelaufen sind ist der Datensatz für die kanalkombination fertig prozessiert
+%     \end{itemize}
+%     \item merge RGB and IR image
+%     \begin{itemize}
+%         \item lädt die entsprechenden rgb und ir bilder und gibt , je nach angabe im perm object mit der cv2 merge die entspechende kombination zruück. hier wird auch das NDVI Bild erzeugt, falls es im Permobject gefordert wird (mit calc ndvi; Nenner wird ir +r, wenn nenner 0 ist wird auf 0.01 gesetzt um numerische stabilität zu gewährliesten und Divison durch 0 zu vermeiden; NDVI = (IR-r)/Nenner; dann auf 0-255 skaliert und zurückgegeben )
+%         \item rgb bild wird in jedem fall in die kanäle gesplittet bevor es gemerged und zurückgegeben wird; copy image schreibt das dann an den gegebenen Pfad, was zurückgegeben wurde
+%     \end{itemize}
+%     \item create Label file
+%     \begin{itemize}
+%         \item file path für die Zieldatei wird erstellt
+%         \item jeweiliges bild wird eingelesen (um die Größe zu bekommen für die normalisierung)
+%         \item alle übergebenen Labels werden mit einer for schleife iteriert, die transf label variable (verweis auf get bounding box in px Funktion) speichert die bb in pixeln für das jeweilige label, dann wird der file string erstellt
+%         \item das erste Element ist die Klasse im YOLO Format umgewandelt (also in Zahlen von 0 bis 8; wird mit einer funktionsintenrnen Funktion gelöst, die jenach class id die jeweilige Ziffer zurückgibt); danach kommt jeweils mit Leerzeichen getrennt die pixelkoordinaten von 0 bis 7
+%         \item das war jetzt der fall für oriented=true, wenn oriented false ist gibt es zwei möglichkeiten, die Labelkoordinatne könnne im klassischen yoloformat von 0 bis 4 koordinaten gespeichert werden oder aber auch im obb format, aber dann trotzdem axis aligned; der unterschied wird hier durch verschiedene konvertierungsmethoden gewährleistet
+%         \item dann wird die zeile geschrieben und die schleife beginnt von vorne
+%     \end{itemize}
+%     \item get bounding box in px (früher calc pixel like authors)
+%     \begin{itemize}
+%         \item hier wird erstmal das label anhand der leerzeichen gesplittet um die einzelnen Elemente zu erahltne
+%         \item x und y koordinate sowie die Orientierung sind die Stellen 1-3 des Arrays
+%         \item veh type (klasse) ist an Stelle 12; eckpuntke sind x sind stelle 4-8 und  y 8-12
+%         \item Seitenlängen des Fahrzeuges werden aus den Eckpunkten berechnet
+%         \item Längste Seiten werden detektiert, 2 längere sind die Fahrzeuglänge,  2 kürzere die Fahrzeugbreite
+%         \item Vektor wird aus den längsten Seiten berechnet, Winkel wird mit Arctan berechnet
+%         \item 4 Eckpunkte der Box werden mit Fahrzeugmitte, LÄnge, BReite und Orientierung berechnet (gedreht um Fahrzeugorientierung)
+%         \item Rückgabe (oriented True): 4 Eckpunkte werden als Integer Tupel zurückgegeben
+%         \item Rückgabe (oriented False): minimale und maximale x/y kooridnate der gedrehten box weren als achsenparallele box zurückgegeben
+%     \end{itemize}
+% \end{itemize}
+\subsection{Fold Creation}
+
+\subsection{Fold-Erstellung über \texttt{create\_own\_folds}}
+
+Die Erstellung der Folds erfolgt über die zentrale Hauptfunktion \texttt{main}, welche auf einer Vorverarbeitungsfunktion (\texttt{preproc}) basiert. Diese Funktion liest Textdateien ein, in denen jeder Bildname zeilenweise enthalten ist. Ziel des gesamten Skripts ist es, solche Textdateien zu generieren, welche später zur Trainings-, Validierungs- und Testdatenerstellung genutzt werden. Zunächst wird eine Liste aller im Quellverzeichnis vorhandenen Bilder erstellt. Für jedes Bild wird dabei zusätzlich die Anzahl der Objekte pro Klasse gespeichert. Anschließend wird die Methode \texttt{create\_own\_folds} aufgerufen, wobei die Anzahl der Folds flexibel gewählt werden kann – standardmäßig werden fünf Folds genutzt.
+
+Die Methode \texttt{create\_own\_folds} erhöht die gewünschte Fold-Anzahl um eins, um einen separaten Testfold zu berücksichtigen. Danach wird ein leeres mehrdimensionales Array erzeugt, das der neuen Anzahl an Folds entspricht. Die übergebene Bildliste wird einmal zufällig durchmischt, bevor den einzelnen Folds initial je ein Bild zugewiesen wird. Im Anschluss wird über eine separate Funktion (\todo{ref einfügen}) ermittelt, wie viele Objekte jeder Klasse in jedem Fold enthalten sind, um eine gleichmäßige Verteilung sicherzustellen.
+
+Die eigentliche Verteilung erfolgt iterativ in einer \texttt{while}-Schleife, die so lange läuft, bis alle Bilder verteilt sind. Innerhalb dieser Schleife wird für jedes Bild analysiert, welche Klasse im Bild am seltensten vorhanden ist(\todo{ref funktion dafür }). Wird genau eine seltene Klasse identifiziert, so wird das Bild jenem Fold zugewiesen, der aktuell die geringste Anzahl von Objekten dieser Klasse enthält. Falls mehrere seltene Klassen vorhanden sind, wird anhand einer vordefinierten Frequenzbewertung entschieden. Jede Klasse wird dabei mit einem Gewicht von 0 (häufig) bis 8 (selten) bewertet. Es wird die Klasse mit dem höchsten Frequenzwert ausgewählt, und entsprechend der geringsten Objektanzahl dieser Klasse wird das Bild einem Fold zugewiesen. Bilder ohne Objekte werden separat in einem Array für leere Bilder gespeichert.
+
+Nachdem alle Bilder mit Objekten verteilt wurden, erfolgt die Zuweisung der leeren Bilder. Dazu wird zunächst eine ganzzahlige Division der Anzahl leerer Bilder durch die Anzahl der Folds durchgeführt, um eine möglichst gleichmäßige Grundverteilung zu ermöglichen. Der verbleibende Rest wird anschließend über eine zusätzliche Schleife auf jene Folds verteilt, die aktuell die geringste Bildanzahl enthalten.
+
+Am Ende der Verteilung erfolgt eine erneute Zählung der Objekte in jedem Fold. Die finalen Fold-Zuweisungen werden anschließend als Textdateien gespeichert – jeweils eine Datei pro Fold (insgesamt sechs Dateien, Fold 0 bis Fold 5), die ausschließlich die entsprechenden Bildnamen enthalten.
+
+\paragraph{Zählung der Objekte in den Folds (\texttt{count\_objects\_in\_fold\_arr})}
+
+Zur Auswertung der Objektverteilung innerhalb der Folds wird die Methode \texttt{count\_objects\_in\_fold\_arr} verwendet. Diese Funktion erzeugt eine Datenstruktur, die für jeden Fold die Anzahl der enthaltenen Objekte pro Klasse speichert. Die Zählung erfolgt durch eine doppelt geschachtelte Schleife, in der alle Bilder jedes Folds durchlaufen und die Objekte gezählt werden. Am Ende liefert die Funktion eine vollständige Übersicht der Objektverteilung als Grundlage für weitere Entscheidungen.
+
+\paragraph{Identifikation der kleinsten Klassenverteilung (\texttt{get\_indices\_of\_folds\_with\_smallest\_object\_count})}
+
+Die Methode \texttt{get\_indices\_of\_folds\_with\_smallest\_object\_count} dient dazu, für eine gegebene Objektklasse den oder die Folds mit der geringsten Anzahl dieser Klasse zu ermitteln. Basierend auf den Zähldaten aus \texttt{count\_objects\_in\_fold\_arr} \todo{ref funktion einfügen} wird über alle Folds iteriert und geprüft, welcher Fold die minimalen Objektzahlen für die entsprechende Klasse enthält. Dabei wird eine Liste mit allen zutreffenden Indizes zurückgegeben, sofern mehrere Folds denselben Minimalwert aufweisen.
+
+\paragraph{Bestimmung der seltensten Klasse im Bild (\texttt{get\_smallest\_class\_in\_image})}
+
+Die Methode \texttt{get\_smallest\_class\_in\_image} analysiert ein gegebenes Bild und gibt jene Objektklasse zurück, die in diesem Bild am wenigsten vertreten ist. Diese Information dient als Ausgangspunkt für die optimale Zuweisung des Bildes zu einem Fold und trägt zur Balance der Objektverteilung bei.
+
+% \begin{itemize}
+%     \item "main" funciton
+%     \begin{itemize}
+%         \item Funktion basiert darauf, dass die preproc funktion txt dateien einliest, die pro Zeile den jeweiligen Bildnamen enthält; also Produziert das gesamte Script nur txt dateien, die die Bildnamen zeilenweise enthalten
+%         \item es wird erst eine Liste von allen vorhandenen Bildern im Quellordner gemacht (es wird zu jedem bild hier die anzahl der objekte jeder klasse in der Liste gespeichert) und dann die "Create own Folds " Methode aufgerufen, hier kann die zahl der Folds flexibel eingestellt werden (genutzt wird 5)
+%     \end{itemize}
+%     \item create own folds
+%     \begin{itemize}
+%         \item anzahl der folds wird um 1 erhöht (damit es den Testfold gibt) 
+%         \item es wird ein mehrdimensionales Array erstellt ([[],[],...]) was mit der Anzahl der folds korrespondiert 
+%         \item die übergebene image list wird einmal zufällig gemischt
+%         \item jeder fold bekommt nun ein element aus der Liste, somit sidn die ersten 6 Bilder vergeben 
+%         \item Es werden die alle in den folds vorhandenn objekte gezählt (ref auf Funktion), sodass man weiß welcher fold welche  Anzahl von Objketein einer Klasse hat (unabhängig von der ANzahl der Bilder, es wird nur die Objektanzahl gezählt)
+%         \item while schleife beginnt, die erste endet wenn ein Counter der Gesamtanzahl der vorhandenen Bilder entspricht
+%         \item in der while schleife ist ein for schleife die mit i die elemente in der Bilderliste iteriert
+%         \item es wird als ersten Schritt die klasse detektiert (get smallest class in image, ref einfügen) die am seltensten im aktuellen bild vorhanden ist
+%         \item wenn das nur eine klasse ist, wird der indice des folds mit der geringsten Anzahl an Objekten dieser Klasse detektiert; diesem Fold wird die image id dann hinzugefügt
+%         \item wenn es mehrere Klassen sind wird nach Häufigkeit der Klasse entschieden. es wird über alle gefundenen klassen iteriert, und einem neuen array (freq val arr) hinzugefügt mit einer Angabe der Häufigkeit (0 sehr häufig, 8 sehr selten) steigt immer um 1 auf von car, pick up, camping car, truck, vehicle, tractor, ship, van, plane; aus freq val arr wird die klasse mit dem höchsten value gesucht und dann wird wie oben verfahren (also fold mit der geringsten anzahl der objekte dieser klasse, und die image id wird dem fold hinzugefügt)
+%         \item wenn kein objekt auf dem bild ist, wird das bild dem array mit den leeren Bildenr (empty images) hinzugefügt
+%         \item zuletzt gibt es in der for schleife noch eine break abfrage, die auslöst wenn der img counter der länge der image list entspricht; dann wird for schleife abgebrohcen und in folge auch die while schleife
+%         \item jetzt müssen noch die leeren bilder gleichmäßig auf alle folds verteilt werden; es wird eine ganzzahlige divison mit rest durchgeführt (von der Anzahl der leeren Bilder durch die Anzahl der Folds); zwei ineinder verscahchtelte for schleifen um jeden fold im fold array durchuzugen und jedem fold ein leeres Bild zuzuteilen, bis nur noch der rest aus übrig ist aus der division; dann wird eine while schleife gestartet; es wrid das fold mit der kleinsten Anzahl von bildern gesucht und dort wird das nächste leere bild hinzugefügt; dann wird wieder das fold mit der kleinstne Anzahl gesucht und es wird wieder das näcshte leere bild hinzugefügt und so weitere
+%         \item dann wird noch ein letztes mal alle objekte in ejdem fold gezählt und jeder fold werden als txt in den angegeben ordner geschrieben (0 bis 5)
+%     \end{itemize}
+%     \item count objects in fold arr
+%     \begin{itemize}
+%         \item es wird ein array erstellt, welches für jeden fold die nummer und die anzahl der objekte der jeweiligne klasse speichert
+%         \item dann wird in einer doppelt verschachtelten for schleife auf den jeweiligen Fold die Anzahl der Objekte auf dem aktuell gelesenen Bild addiert, dies wird solange wiederholt bis alle bilder auf allen folds durchlaufen wurden
+%         \item dann wird ein objekt zurückgeben, was eine Statistik zur Objektverteilung in den folds enthält, also wieviele objekte jeder klasse in den folds sind
+%     \end{itemize}
+%     \item get indices of folds with the smallest object count
+%     \begin{itemize}
+%         \item Findet den/die Index(e) des Folds/der Folds mit der kleinsten Anzahl eines gegebenen Objekts.
+%         \item basiert darauf, dass man weiß wie viele objekte jeder klasse in jedem fold sind (ref zu count objects in fold arr funktion)
+%         \item es wird mit einer for schleife der fold arr counter durchgegangen, falls der gegebene klasseniname in dem data teil des folds ist wird der aktuelle counter auf die anzahl der objekte der gegebenen klasse in diesem fold gestellt (current count) falls der current count kleiner als der  min count ist, wird der min count der neue current count und eine neue Liste wird gestartet, da ein kleinerer Wert gefundne wurde
+%         \item ansonsten wenn also current count = min count ist wird der index einfach dem array hinzugefügt (gibt in dem fall also mehrere folds mit den wenigsten Objektne dieser klasse)
+%         \item am ende wird das array der indices mit den kleinsten folds dieser Objektklassen zurückgeben
+%     \end{itemize}
+%     \item "get smallest class in image"
+%     \begin{itemize}
+%         \item es wird die klasse zurückgeben die bei dem gegebenne image am wenigsten vorhanden ist
+%     \end{itemize}
+ 
+%\end{itemize}
+
+
+
+
 \section{Python Pakete}
 \subsection{Computer Vision 2}
 \subsection{Numpy}
