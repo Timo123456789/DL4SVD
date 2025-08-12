@@ -111,10 +111,58 @@ Maschinelles Lernen beschreibt einen Ansatz in der Informatik, bei dem Algorithm
     \item Feedforward neural Network um INput x Und Output y zu produzieren. x enthält die initiale Informaiton für die Hidden Units in jedem Layer, sodass Final y rauskommen kann (forward propagation)
     \item back propagation ist ein einfaches Verfahren um (Kosten (Berechnungszeit/Methode?)-) zurück durch das Netzwerk fließen zu lassen um einen Gradienten zu berechnen
 \end{itemize}
-\subsection{Vanishing}
+\subsection{Vanishing Gradient Problem}
+\begin{itemize}
+    \item Seite 50 Overview Deep Learning
+    \item Bei Verwendung von Backpropagation und gradientebasierenden Lerntechniken \todo{Auch noch näher Erläutern, gradientenbasierende Lerntechniken?} zusammen mit ANNs tritt in der Trainingsphase das "Vanishing Gradient Problem" auf
+    \item in jeder Trainingsiteration wird jedes Gewicht des Neuronalen Netzes aufgrunldage des aktuellen Gewichtes aktualisiert, ist auch proportional zur partiellen Ableitung der Fehlerfunktion
+    \item Aktualisierung der Gewichte kann in einigen Fällen aufgrund eines verschwindend kleinen Gradienten nicht stattfinden, was im schlimmsten Fall bedeutet, dass kein zusätzliches Training möglich ist und das neuronale Netz aufhört zu Lernen
+    \item Verwendung von vielen Schichten führt dazu, dass der Gradient in der Trainingsphase sehr klein wird, was jedoch dazu bedeutet das das Netz effizient arbeitet
+    \item Bestimmung der Gradienten im neuronalen Netz via Backpropagation
+    \begin{itemize}
+        \item Netzableitungen jeder Schicht in umgekehrter Reihenfolge ermittel, ausgehend von der letzten zur ersten Schicht
+        \item Nächster Schritt: Ableitung jeder Scihct wird ähnlich zum ersten Schritt netzabwärts multipliziert
+        \item Gradient nimmt exponentiell ab, während er sich zurück zur erstne Schicht fortpflanzt
+        \item Umgehen dieses Problems, durch den Einsatz von Aktivierungsfunktionen
+        \item Relu beliebt da keine kleine Ableitung
+        \item Problem tritt auf wenn großer Eingaberaum in kleinen Eingaberraum gequetscht wird, was zum Verschwinden der Ableitung führt
+        \item Batch Normalisierung ist zweite Möglichkeit zur Lösung: Eingabe wird normalisiert, Ausdruck erreicht also einfach nicht die äußeren Grenzen der Sigmafunktion
+        \item Schnellere Hardware ist auch eine Möglichkeit -> Standard Backprogagation für viele tieferen Schichten des Netzes ist dadurch möglich; verglichen mit der Zeit/Aufwand die zur Erkennung des Problems des verschwindenen Gradienten nötig ist
+    \end{itemize}
+\end{itemize}
 \subsection{Exploding Gradients}
-\subsection{Hyperparameter}
+\begin{itemize}
+    \item Gegenteil von vorherigen Problem des verschwindenden Gradienten ist das Problem des explodierenen Gradienten
+    \item passiert oft bei der Backprogagation, da hier große Fehlergradienten akkumuliert werden, was zu extrem hohen Aktualisierungen der Gewichte des Netzes führt
+    \item dadurch kann das Netz unstetig werden und seien Fähigkeit effektiv zu lernen verlieren
+    \item Ganz allgemein gesagt wächst der Gradient, wenn man sich beim Backpropagation-Verfahren schrittweise rückwärts durch das Netzwerk bewegt, exponentiell, weil man ihn wiederholt miteinander multipliziert.
+    \item Gewichte können so groß werden das sie zu einem NAN Wert werden
+    \item Lösungsansätze: Verwendung von Regularisierungstechniken für die Gewichte, Netwerkarchitektur überarbeiten
+\end{itemize}
+\todo{Hyperparameter rausgenommen}
+%\subsection{Hyperparameter}
 \subsection{Overfitting}
+\begin{itemize}
+    \item Seite 49 Deep Learning paper overview
+    \item hohe Wahrscheinlichkeit für Überanpassung der Daten in der Trainingsphase, da große Anzahl von Parameter, die auf komplexe Weise korrelieren
+    \item reduziert die Fähigkeit des Modells gute Leistungen auf Testdaten zu erzielen 
+    \item Overfitting Problem vermindern mit 
+    \begin{itemize}
+        \item Klasse 1
+        \item Gewichtsverfall
+        \item Batch Normalisierung
+        \item Dropout
+        \item Standartechnik: Gewichtsabbau als universeller Regularisierer
+    \end{itemize}
+    \item 2 Klasse
+    \begin{itemize}
+        \item Modelleingaben für Datenverfälschung und data augmentation
+        \item Grund für Overfitting: Mangel an Trainingsdaten, der dazu führt dass die gelernte Verteilung (an Trainingsdaten) nicht der realen Verteilung (bspw. Testdaten, oder echter Einsatzzweck) widerspiegelt
+        \item Dataugementierung erweitert die Trainingsdaten
+        \item Data Corupption baut die Auswirkungen von möglichen Datenkorruptionen direkt in das Trainingsverfahren mit ein (geht einen Schritt weiter)
+    \end{itemize}
+    \item 3 Klasse bestraft übermäßig zuversichtlichen Ausgaben zur Regularisierung des Modells
+\end{itemize}
 
 
 
@@ -143,9 +191,23 @@ Maschinelles Lernen beschreibt einen Ansatz in der Informatik, bei dem Algorithm
 
 \end{itemize}
 
+\subsection{IoU}
+\todo{erklären?}
+
 \subsection{Mean Average Precision}
-\subsubsection{mAP@50}
-\subsubsection{mAP@90-95}
+\begin{itemize}
+    \item Präzision ist der Anteil der vom Modell gemeldeteten Erkennungen, die korrekt waren 
+    \item Recall der Anteil an Erkennungen der tatsächlich aufgetretenen Objekte, die erkannt wurden
+    \item PR (Precision-Recall) Kurve kann gezeichnet werden, wobei Präzision auf Y und Recall auf X Achse dargestellt wird (alles Goodfelloq Quelle)
+    \item Objektdetektor gibt für jede BB eine Konfidenz aus, die angibt, wie sicher sich das Modell hinsichtlich der Vorhersage ist
+    \item Vorhersagen unterhalb einer bestimmten Konfidenzschwelle können entfernt werden
+    \item PR Curve kann man auch bei allen möglichen Konfidenzschwellen  erstellen, dann kann man die durchschnittliche Präzision als Fläche unter der PRC berechnen
+    \item Modellbewertung anhand der mittleren durchschnittlichen Präzision (mAP), die als Mittelwert der Average Precision (APs) in allen verschiedenen Klassen berechnet wird \cite{Rainio2024}
+    \item Verschiedene Genauigkeiten bei der Übereinstimmung möglich, bei IoU Schwellwert von 0.5 oder auch von 0.5-0.95. Letzteres entspricht dem Mittelwert von mAP@0.5, mAP@0.55, .. , mAP@0.95. Das ist eine strengere Metrik, da Sie eine größere Überlappung für potenzielle Übereinstimmungen erfordert und aus diesem Grund ist diese Metrik gut für Situationen geeignet, in denen die vorhergesagten Positionen der BB sehr genau sein müssen
+\end{itemize}
+% \subsubsection{mAP@50}
+% \
+% \subsubsection{mAP@90-95}
 
 
 

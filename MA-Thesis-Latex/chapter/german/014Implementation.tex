@@ -117,7 +117,7 @@ Ist \texttt{oriented = true}, so werden die vier Eckpunkte als ganzzahlige Koord
 % \end{itemize}
 \subsection{Fold Creation}
 
-\subsection{Fold-Erstellung über \texttt{create\_own\_folds}}
+%\subsection{Fold-Erstellung über \texttt{create\_own\_folds}}
 
 Die Erstellung der Folds erfolgt über die zentrale Hauptfunktion \texttt{main}, welche auf einer Vorverarbeitungsfunktion (\texttt{preproc}) basiert. Diese Funktion liest Textdateien ein, in denen jeder Bildname zeilenweise enthalten ist. Ziel des gesamten Skripts ist es, solche Textdateien zu generieren, welche später zur Trainings-, Validierungs- und Testdatenerstellung genutzt werden. Zunächst wird eine Liste aller im Quellverzeichnis vorhandenen Bilder erstellt. Für jedes Bild wird dabei zusätzlich die Anzahl der Objekte pro Klasse gespeichert. Anschließend wird die Methode \texttt{create\_own\_folds} aufgerufen, wobei die Anzahl der Folds flexibel gewählt werden kann – standardmäßig werden fünf Folds genutzt.
 
@@ -186,17 +186,44 @@ Die Methode \texttt{get\_smallest\_class\_in\_image} analysiert ein gegebenes Bi
 %\end{itemize}
 
 
+\section{Bash Scripte}
 
+Für das Training der Modelle wurden mehrere \texttt{Bash}-Skripte entwickelt, die für den Einsatz auf dem Hochleistungsrechner PALMA konzipiert wurden. Die Trainingsläufe wurden primär mittels \texttt{SLURM Job Arrays} durchgeführt, wobei jeder Fold einer Permutation einem eigenen Job zugewiesen wurde. Somit entsprach ein Modell jeweils einem Fold innerhalb einer bestimmten Permutation.
 
-\section{Python Pakete}
+Im Rahmen des Permutationstrainings kamen folgende Hyperparameter zum Einsatz: eine Bildauflösung von \texttt{1024~$\times$~1024} Pixeln, \texttt{500} Trainings-Epochen sowie ein \texttt{patience}-Wert von \texttt{0}, wodurch das frühzeitige Beenden des Trainings deaktiviert wurde. Dies ermöglichte eine konsistente Vergleichbarkeit, da alle Modelle vollständig über 500 Epochen trainiert wurden. Zusätzlich wurde ein vortrainiertes Modell verwendet, welches auf dem DOTA-Datensatz basiert\todo{Referenz zum DOTA-Datensatz einfügen}. Als Modellarchitektur wurde durchgängig \texttt{YOLOv9u} eingesetzt\todo{Referenz zur YOLOv9u-Architektur einfügen}.
+
+Für die Ablationsstudien wurde auf den Einsatz des vortrainierten Modelles verzichtet; alle übrigen Trainingsparameter blieben unverändert.
+
+Nach Abschluss des Trainings wurde jeweils das Modell mit der besten Leistung auf den Validierungsdaten evaluiert. Anschließend erfolgte die Anwendung dieses Modells auf dem entsprechenden Testfold. In beiden Fällen wurde die Evaluation in einem einmaligen Durchlauf durchgeführt, um konsistente und vergleichbare Ergebnisse zu gewährleisten.
+
+% \begin{itemize}
+%     \item Diverse Bash Scripte für PALMA geschriebne um die Modelle zu trainieren. 
+%     \item Hauptsächlich SLURM Job Arrays genutzt um jeweils alle Folds einer Permutation durchlaufen (jeder Fold einer Permutation bekommt einen Job = ein modell)
+%     \item hyperparameter (für permutation training): imagesize:1024; epochs: 500, patience: 0 (ausgestellt um zur besseren Vergleichbarkeit alle Modelle immer exakt 500 epochs durchzutrainieren); pretrained true (dota dataset,  ref zu beschreibung einfügen); als modell immer yolov9u (ref einfügen)
+%     \item für ablation training: kein pretrained model, sonst alles gleich
+%     \item danach immer validierung des besten val modells auf den val daten 
+%     \item dann das beste validierungsmodell auf dem testfold
+%     \item beides mal nur ein durchlauf daten zur evaluation zu erhalten
+% \end{itemize}
+
+\section{Python Packages}
 \subsection{Computer Vision 2}
+Ein Teil der "Open Source Computer Vision" Bibliothek ist Computer Vision 2 (CV2) \cite{opencv_about}. Die aktuelle Version 4.12.0 wurde am 09.07.2025 veröffentlicht \cite{opencv_release}. \\
+Die Bibliothek bietet Algorithmen und Funktionen zur Bild- und Videobearbeitung an, die in dieser Arbeit hauptsächlich dazu genutzt werden, die verschiedenen Kanäle zu neuen Bildern zu kombinieren.
 \subsection{Numpy}
+Ein weiteres Open-Source Projekt ist NumPy, welches 2005 gegründet wurde, um numerische Operationen in Python zu implementieren \cite{numpy_about}. Die aktuelle Version ist 2.3.0 und wurde am 07.06.2025 veröffentlicht \cite{numpy_main_web}. \\
+Mithilfe dieser Bibliothek kann eine zufällige Verteilung der Bilddaten auf die Folds realisiert werden, indem die eingelesene Bildliste einer zufälligen Permutation unterzogen wird. Darüber hinaus stellt die Bibliothek Funktionen zur Verfügung, mit denen sowohl die Berechnung und Reskalierung des NDVI-Kanals als auch die Transformation der Bounding-Box-Koordinaten in das für das YOLO-Framework erforderliche Format durchgeführt werden können. Zusätzlich ermöglicht sie die Umrechnung axis-aligned Bounding Boxes in oriented Bounding Boxes sowie die Flächenberechnung beider Bounding-Box-Typen.
 \subsection{Scipy (nur Convexhull)}
-\subsection{os}
+SciPy ist in der Version 1.16.0 am 22.06.25 veröffentlicht worden \cite{scipy-main}. Diese Bibliothek bietet Algorithmen für wissenschaftliche Berechnungen in Python an \cite{scipy-main}. Die Unterfunktion "ConvexHull" wird zur Flächenberechnung der oriented Bounding Boxen genutzt.
 \todo{ab jetzt nur für analyse}
-\subsection{Matplotbib}
-\subsection{Seaborn}
-\subsection{pandas}
+\subsection{Pakete zur Analyse}
+Zur Analyse der Modelle wurden die folgenden Bibliotheken verwendet.
+\subsection*{Matplotlib}
+Die Bibliothek "Matplotlib" wurde in der Version 3.10.0 am 23.12.2024 veröffentlicht\cite{matplotlib}. Im Rahmen dieser Arbeit werden durch diese Erweiterung die Datenanalysen und die Ausgabe der Plots ermöglicht.
+\subsection*{Seaborn}
+"Searborn" ist in der Version 0.13.2 im Januar 2024 veröffentlicht worden \cite{seaborn}. Die Bibliothek ermöglicht das Erstellen von Grafiken, wie Boxplots, zur vereinfachten Datenanalyse.
+\subsection*{pandas}
+Die Bibliothek "pandas" ist ebenfalls ein Open Source Datenanalyse und -manipulierungstool. Die aktuelle Version 2.3.1 wurde am 07.07.2025 veröffentlicht. Die Bibliothek wird auch zur Datenanalyse in dieser Arbeit verwendet \cite{pandas}.
 
 
 
