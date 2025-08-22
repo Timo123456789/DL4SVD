@@ -28,141 +28,179 @@ Maschinelles Lernen beschreibt einen Ansatz in der Informatik, bei dem Algorithm
 % Das sogenannte Reinforcement Learning stellt einen weiteren Lernansatz dar, bei dem ein Modell durch Interaktion mit seiner Umgebung lernt. Es wird dabei durch ein Belohnungssystem gesteuert: Für erwünschte Handlungen erhält es positive Rückmeldungen, während unerwünschtes Verhalten bestraft wird. So entwickelt das Modell schrittweise eine Strategie zur Optimierung seines Verhaltens \cite{Braga-Neto2020}.
 
 %In den folgenden Abschnitten wird der Fokus auf die Detektion und Klassifikation als Teilgebiet des überwachten Lernens gelegt.
+
+
 \section{Deep Learning}
-\begin{itemize}
-    \item Teilgebiet von Maschine Learning
-    \item Funktionsweise inspiriert von menschlichem Gehirn (neuronalen Prozessen) / simuliert den Prozess, der in den zentralen sensorischen Regionen des menschlichen Gehirns abläuft
-    \item Funktioniert ohne strikte von Menschen entworfene Regeln, sondern nutzt große Datenmengen um Muster zu erkennen um die Eingabe auf bestimmte Eigenschaften zu analysieren
-    \item DL nutzt zahlreiche Algorithmenschichten (artificial neural Networks, ANN), von denen jede die zugelieferte Information (einzigartig) interpretiert
-    \item Herkömmliche ML Techniken benutzen: Pre Processing, Featrue Extraction, Wise Featrue selection, learning and classification
-    \item DL kann das Lernen von Feature Sets für mehrere Aufgaben automatisiert
-    \item DL kann Lernen und Klassifizieren in einem Schritt vornehmen (Single Shot)
-    \item Vorteile Deep Learning
-    \begin{itemize}
-        \item Universeller Lernansatz (viele Anwendungsbereiche)
-        \item Robustheit: keine Präezise entworfenen MEkrmale, stattdessen optimierte Merkamlle in einem automatisierten Prozess ntuzen
-        \item Verallgemeinerung: Verschiedene Datentypen und Anwendungen können dieselbe DL Technik verwenden, (Transferlernen, TL); nützlicher Ansatz für Probleme bei denn die Daten nicht ausreichend sind
-        \item Skalierbarkeit: Einfache Erweiterung, wenn mehr Knoten benötigt werden 
-        \item 
-    \end{itemize}
-    \item DL Techniken haben drei Kategorien: Unsupervised, partially supervised (Semi-supervised), supervised
-    \begin{itemize}
-        \item Deep Supervised Learning
-        \item Der Algorithmus bekommt eine Sammlung von Eingabe- und Ausgabedaten
-        \item Intelligenter Agent schätzt $\hat{y}_t = f(x_t)$, wenn die Eingabe $x_t$ ist und erhält $tz(\hat{y}_t, y_t)$ als Verlustwert
-        \item Netzparameter werden neu berechnet, bis die Schätzung besser zu den bekannten Ausgaben passt
-        \item Agent erhält die Fähigkeit die richitgen Lösung für die Abfragen asu der Umgebung zu erhalten
-        \item Mehrere Möglichkeiten zum überwachten Lernen für DL: rekurrent neuronale Netze (RNNs), konvolutionale neuronale Netze (CNNs) und tiefe neuronale Netze (DNNs)
-    \end{itemize}
-    \begin{itemize}
-        \item Deep Semi supervised learning
-        \item Lernprozess auf halb beschrifteten Datensätzen
-        \item Vorteil: Minimierung der benötigten Menge an gelabelten Daten
-        \item Nachteil: irrelevante Eingangsmerkmale in den Trainingsdaten können zu falschen Entscheidungen führen
-        \item Bsp: Klassifizieren von Textdokumenten
-    \end{itemize}
-    \begin{itemize}
-        \item Deep unsupervised Learning
-        \item Lernprozess ohne gelabelte Daten
-        \item Agent lernt signifkante Merkmale oder die innere Repräsentation um nicht identifizierte Strukturen oder Beziehungen in den Eingabedaten zu entdecken
-        \item Hauptnachteil: keine genauen Informationen über die Datensortierung vom Algorithmus lieferbar und rechenintensiv 
-        \item Bsp: Clustering
-    \end{itemize}
-    
-    \item Arten von DL Netzwerken: RbNNs, RNNs und CNNs; Konzentration auf CNNs im folgenden Abschnitt da hohe Bedeutung
-    \begin{itemize}
-        \item CNN ist bekanntester und am häufigsten Verwendeter Algorithmus bei DL.
-        \item Struktur von CNNs wurde von Neuronen in menschlichen und tierischen Gehirn inspiriert
-        \item \cite{Goodfellow-et-al-2016} hat 3 Vorteile des CNNs identifziert: gleichwertige Darstellungen, spärliche Interaktion und gemeinsame Nutzung von Parametern
-        \item drei Dimensionen einer Eingabe $x$ jeder Schicht in einem CNN : Höhe, Breite, Tiefe; wobei Höhe gleich der Breite ist; Tiefe wird auch als die Anzahl der (Bild-) Kanäle bezeichnet
-        \item Merhere Kentel (Filter), die in jeder Faltungsschicht integriert sind, werde mit $k$ bezeichnet und haben ebenfalls drei Dimensionen ($n\times n  \times q$); Ähnlich zum Inputbild
-        \item es gilt jedoch $n \ll m \land q \le r$; Kernel bilden Grundlage für lokale Verbindugnen, die ähnliche Parameter (Bias$b\hat{k}$ und Gewicht $W\hat{k}$) zur Erzeugung von $k$ Feature Maps$h\hat{k}$ mit einer jeweiligen Groeße von $(m-n-1)$. Diese werden im Input Layer verwendet. 
-        \item Faltungsschicht berechnet Punktprodukt zwischen Eingabe und den Gewichten wie in \ref{eq:F1}
-        \begin{equation}
-        \label{eq:F1}
-        h^k = f(W^k \ast x + b^k)
-        \end{equation}
-        \item Nächster Schritt ist Down Sampling jeder Feature Map in den Sup Sampling Schichten, um die Netzparameter zu verringern, was den Trainingsprozess beschleunigt. Außerdem wird das Lösen Problem der Überanpassung dadurch ermöglicht.
-        \item Alle Feature Maps werden durch eine Pooling Funktion (max oder average) auf einen angrenzenden Berech der Größe $p \times p $ angewendet, wobei $p$ die Kernelgröße ist. Letztendlich erhalten die FC Schichten die Merkmale der mittleren und unteren Ebene und erstellen die Abstraktion der oberen Ebene, welches die letzte Schicht dastellt
-        \item  Die Klassifizierung wird mit der abschließenden Schicht, wie einer Support Vector Machine (SVM) erzeugt, um für die gegebene Instanz die Wahrscheinlichkeit einer bestimmten Klasse in einem Score darzustellen
-        \item Vorteile CNN Einsatz:
-        \begin{itemize}
-            \item Bessere Generalisierung des Netzwerkes und Verhinderung der Überanpassung durch Weight Sharing Featrue
-            \item Ausgabe des Models ist flexibel organiisert als auch flexibel von den extrahierten Merkmalen abhängig durch das Lernen von zwei Merkmalsextraktionsschichten und einer Klassifizierungsschicht
-            \item CNNs in großem Maßstab können sehr einfach entwickelt werden
-        \end{itemize}
-        \begin{itemize}
-            \item CNN Architecture
-            \item \textbf{Convolutional Layer}: Collektion von Convolutional Filtern (sog. Kernels); Eingabebild wird durch diesen Filter zur Output Feature Map Generierung genutzt
-            \item \textbf{Kernel definition}: Grid of discrete numbers, which each value is called kernel weight. Werte werden zufällig initialisiert zum Beginn des CNN Trainingsprozesses; Gewichte werden in jeder Trainingsepoche optimiert, sodass der Kernel lernt relevante Features zu extrahieren
-            \item Convolutional Operation: Übersprungen
-            \item \textbf{Pooling Layer}: Hauptaufgabe: Sub Sampling der Feature Maps, oder verkleinern der großen Feature Maps um kleiner Feature Maps zu erzeugen; meistgenutzt max, min und GAP Pooling als Methode dafür
-            \item \textbf{Activation Function (non linearity)}: Mapping the input to the output is core; input Value is the weight summation of the neuron input along with its bias (if present); Activation Function entscheidet ob eine Neuron aktiviert wird (feuert) oder nicht, mit Referenz zu einem Teil des Inputs  durch das Erstellen des dazugehörigen Outputs (d. Klasse?); (nicht lineare) Aktivierungsfunktion muss differenzierbar sein, um Backpropagation zu ermöglichne
-            \item ReLu: Meist eingesetzt Aktivierungsfunktion; konvertiert alle Ergebnisse in Positive Zahlen; (NACHTEILE NICHT ERWÄHNEN? DYING RELU?)
-            \item \textbf{Fully Connected Layer}: Am Ende jeder CNN Architecture; jedes Neuron ist mit allen Neuronen des letzten Layers verbunden, deshalb fully connected (FC) LAyer
-            \item \textbf{Loss Function}:loss funktion berechnet den predicted error über die Training samples; error ist die difference zwischen dem Aktuellen Output und dem vorhergesagten; dieser wird optimiert -> first parameter: estimated Output (Prediction); second parameter: actual output (label); Euclidean Loss Function bei Regressionsproeblemen (meist auch mean square error genannt) 
-        \end{itemize}
-    \end{itemize}
-    
-\end{itemize}
+
+Deep Learning (DL) ist ein Teilgebiet des maschinellen Lernens, dessen Funktionsweise von den neuronalen Prozessen im menschlichen Gehirn inspiriert ist. Es simuliert den Informationsverarbeitungsprozess, wie er in zentralen sensorischen Regionen des Gehirns abläuft. Im Gegensatz zu klassischen regelbasierten Verfahren arbeitet DL nicht mit strikt von Menschen entworfenen Regeln, sondern nutzt große Datenmengen, um Muster zu erkennen und Eingaben auf spezifische Eigenschaften hin zu analysieren. Charakteristisch ist dabei die Verwendung zahlreicher Schichten künstlicher neuronaler Netze (Artificial Neural Networks, ANN), in denen jede Schicht die zugelieferten Informationen in einer einzigartigen Form interpretiert. Während herkömmliche Techniken des maschinellen Lernens meist auf eine Trennung von Pre-Processing, Feature Extraction, Feature Selection, Learning und Classification angewiesen sind, kann Deep Learning diese Schritte teilweise automatisieren und in einem einzigen End-to-End-Prozess zusammenführen. Dadurch werden sowohl das Lernen von Feature Sets für mehrere Aufgaben als auch Klassifikation in einem Schritt ermöglicht \cite{Alzubaidi2021}. 
+
+Zu den zentralen Vorteilen von Deep Learning zählen seine universelle Anwendbarkeit in verschiedensten Bereichen, die Robustheit durch die automatisierte Extraktion optimierter Merkmale anstelle handgefertigter Features, die Fähigkeit zur Verallgemeinerung über verschiedene Datentypen hinweg – beispielsweise durch Transferlernen, was besonders in Szenarien mit geringen Datenmengen relevant ist – sowie eine hohe Skalierbarkeit, da Netzwerke unkompliziert durch zusätzliche Knoten erweitert werden können. Grundsätzlich lassen sich DL-Ansätze in drei Kategorien unterteilen: überwachtes, semi-überwachtes und unüberwachtes Lernen\cite{Alzubaidi2021}.  
+
+Beim überwachten Lernen (Supervised Learning) erhält ein Algorithmus eine Sammlung von Eingaben und den zugehörigen Ausgaben. Ein intelligenter Agent schätzt eine Ausgabe $\hat{y}_t = f(x_t)$ für eine Eingabe $x_t$ und berechnet den Verlust $tz(\hat{y}_t, y_t)$ als Abweichung zur bekannten Zielausgabe $y_t$. Durch wiederholte Anpassung der Netzwerkparameter wird das Modell sukzessive optimiert, bis die Schätzungen mit den tatsächlichen Ausgaben übereinstimmen. Typische Architekturen in diesem Bereich sind rekurrente neuronale Netze (RNNs), konvolutionale neuronale Netze (CNNs) und tiefe neuronale Netze (DNNs). Im semi-überwachten Lernen werden Datensätze verwendet, die nur teilweise gelabelt sind. Dies reduziert die benötigte Menge an Trainingsdaten mit Annotationen, birgt jedoch die Gefahr, dass irrelevante Eingangsmerkmale zu falschen Klassifikationen führen können. Ein klassisches Anwendungsbeispiel ist die Textklassifikation. Im unüberwachten Lernen schließlich werden gänzlich ungelabelte Daten genutzt, um signifikante Merkmale oder innere Strukturen in den Daten zu identifizieren. Hierbei kann das Modell Cluster oder Zusammenhänge entdecken, jedoch liefert dieser Ansatz keine präzisen Informationen über die Sortierung der Daten und ist zudem rechenintensiv \cite{Alzubaidi2021}.  
+
+Innerhalb der Vielzahl an Netzarchitekturen haben sich konvolutionale neuronale Netze (CNNs) als die wohl bekannteste und am häufigsten genutzte Variante etabliert. Inspiriert von biologischen Neuronenstrukturen identifizierte \cite{Goodfellow-et-al-2016} drei zentrale Vorteile von CNNs: gleichwertige Darstellungen, spärliche Interaktionen sowie eine effiziente Parameternutzung durch Weight Sharing. Eine Eingabe $x$ wird in den Schichten eines CNN durch drei Dimensionen repräsentiert: Höhe, Breite und Tiefe, wobei die Tiefe der Anzahl der Bildkanäle entspricht. In den Faltungsschichten (Convolutional Layers) werden Filter bzw. Kernel $k$ mit Dimensionen $n \times n \times q$ angewandt, die lokale Verbindungen und Feature Maps $h^k$ erzeugen \cite{Alzubaidi2021}. Die Berechnung erfolgt dabei über das Punktprodukt zwischen Eingabe und Gewichtsmatrix:  
+\begin{equation}
+h^k = f(W^k \ast x + b^k).
+\end{equation}
+Darauf folgt ein Downsampling der Feature Maps in sogenannten Pooling-Schichten, das die Anzahl der Netzparameter reduziert, den Trainingsprozess beschleunigt und Überanpassung (Overfitting) entgegenwirkt. Pooling-Operationen wie Max- oder Average-Pooling aggregieren lokale Regionen einer Feature Map, bevor die abstrahierten Merkmale in vollverbundenen Schichten (Fully Connected Layers) zusammengeführt werden. Die finale Klassifikation wird in der Ausgabeschicht häufig mit einem Klassifikator wie der Support Vector Machine (SVM) realisiert. CNNs zeichnen sich durch bessere Generalisierung, Verhinderung von Overfitting durch Weight Sharing, flexible Nutzung extrahierter Merkmale und einfache Skalierbarkeit aus. Zu den zentralen Komponenten einer CNN-Architektur gehören Convolutional Layers mit trainierbaren Filtern, Pooling Layers zur Dimensionsreduktion, Aktivierungsfunktionen wie ReLU zur Einführung von Nichtlinearität, Fully Connected Layers für die Merkmalsaggregation sowie Loss-Funktionen, die den Unterschied zwischen vorhergesagten und tatsächlichen Werten messen und für die Parameteroptimierung genutzt werden \cite{Alzubaidi2021}. \todo{Detaillierte Convolutional Operation noch einfügen}
+
 \subsection{Backpropagation}
-\begin{itemize}
-    \item \cite{Goodfellow-et-al-2016}
-    \item Feedforward neural Network um INput x Und Output y zu produzieren. x enthält die initiale Informaiton für die Hidden Units in jedem Layer, sodass Final y rauskommen kann (forward propagation)
-    \item back propagation ist ein einfaches Verfahren um (Kosten (Berechnungszeit/Methode?)-) zurück durch das Netzwerk fließen zu lassen um einen Gradienten zu berechnen
-\end{itemize}
-\subsection{Vanishing Gradient Problem}
-\begin{itemize}
-    \item Seite 50 Overview Deep Learning
-    \item Bei Verwendung von Backpropagation und gradientebasierenden Lerntechniken \todo{Auch noch näher Erläutern, gradientenbasierende Lerntechniken?} zusammen mit ANNs tritt in der Trainingsphase das "Vanishing Gradient Problem" auf
-    \item in jeder Trainingsiteration wird jedes Gewicht des Neuronalen Netzes aufgrunldage des aktuellen Gewichtes aktualisiert, ist auch proportional zur partiellen Ableitung der Fehlerfunktion
-    \item Aktualisierung der Gewichte kann in einigen Fällen aufgrund eines verschwindend kleinen Gradienten nicht stattfinden, was im schlimmsten Fall bedeutet, dass kein zusätzliches Training möglich ist und das neuronale Netz aufhört zu Lernen
-    \item Verwendung von vielen Schichten führt dazu, dass der Gradient in der Trainingsphase sehr klein wird, was jedoch dazu bedeutet das das Netz effizient arbeitet
-    \item Bestimmung der Gradienten im neuronalen Netz via Backpropagation
-    \begin{itemize}
-        \item Netzableitungen jeder Schicht in umgekehrter Reihenfolge ermittel, ausgehend von der letzten zur ersten Schicht
-        \item Nächster Schritt: Ableitung jeder Scihct wird ähnlich zum ersten Schritt netzabwärts multipliziert
-        \item Gradient nimmt exponentiell ab, während er sich zurück zur erstne Schicht fortpflanzt
-        \item Umgehen dieses Problems, durch den Einsatz von Aktivierungsfunktionen
-        \item Relu beliebt da keine kleine Ableitung
-        \item Problem tritt auf wenn großer Eingaberaum in kleinen Eingaberraum gequetscht wird, was zum Verschwinden der Ableitung führt
-        \item Batch Normalisierung ist zweite Möglichkeit zur Lösung: Eingabe wird normalisiert, Ausdruck erreicht also einfach nicht die äußeren Grenzen der Sigmafunktion
-        \item Schnellere Hardware ist auch eine Möglichkeit -> Standard Backprogagation für viele tieferen Schichten des Netzes ist dadurch möglich; verglichen mit der Zeit/Aufwand die zur Erkennung des Problems des verschwindenen Gradienten nötig ist
-    \end{itemize}
-\end{itemize}
-\subsection{Exploding Gradients}
-\begin{itemize}
-    \item Gegenteil von vorherigen Problem des verschwindenden Gradienten ist das Problem des explodierenen Gradienten
-    \item passiert oft bei der Backprogagation, da hier große Fehlergradienten akkumuliert werden, was zu extrem hohen Aktualisierungen der Gewichte des Netzes führt
-    \item dadurch kann das Netz unstetig werden und seien Fähigkeit effektiv zu lernen verlieren
-    \item Ganz allgemein gesagt wächst der Gradient, wenn man sich beim Backpropagation-Verfahren schrittweise rückwärts durch das Netzwerk bewegt, exponentiell, weil man ihn wiederholt miteinander multipliziert.
-    \item Gewichte können so groß werden das sie zu einem NAN Wert werden
-    \item Lösungsansätze: Verwendung von Regularisierungstechniken für die Gewichte, Netwerkarchitektur überarbeiten
-\end{itemize}
-\todo{Hyperparameter rausgenommen}
-%\subsection{Hyperparameter}
+
+Der Lernprozess in Deep-Learning-Netzen basiert auf dem Prinzip der Backpropagation \cite{Goodfellow-et-al-2016}. Dabei wird zunächst in einer Vorwärtsphase (Forward Propagation) die Eingabe $x$ durch das Netzwerk propagiert, sodass am Ende die Ausgabe $y$ resultiert. Anschließend werden die Fehler durch Rückwärtspropagation (Backpropagation) schrittweise durch das Netz zurückgeführt, um Gradienten zu berechnen, die zur Aktualisierung der Gewichte genutzt werden. Dieses Verfahren ermöglicht eine effiziente Optimierung tiefer Netzwerke, stößt jedoch bei sehr tiefen Architekturen auf zwei zentrale Probleme: das Vanishing-Gradient-Problem und das Exploding-Gradient-Problem \cite{Alzubaidi2021}.  
+
+\subsection{Vanishing-Gradient-Problem}
+
+Das Vanishing-Gradient-Problem tritt auf, wenn die Gradienten in tiefen Netzen während der Backpropagation exponentiell kleiner werden und somit keine signifikanten Gewichtsaktualisierungen mehr möglich sind. Dies kann im Extremfall dazu führen, dass ein Netz das Lernen vollständig einstellt. Typische Ursachen sind die Verwendung von Aktivierungsfunktionen mit kleinen Ableitungen (wie Sigmoid oder Tanh) oder sehr tiefe Netze mit vielen Schichten. Mögliche Gegenmaßnahmen sind die Verwendung von Aktivierungsfunktionen wie ReLU, Batch-Normalisierung zur Stabilisierung der Eingaben oder schnellere Hardware, die ein Training mit komplexeren Architekturen ermöglicht \cite{Alzubaidi2021}.  
+
+\subsection{Exploding-Gradient-Problem}
+
+Das Exploding-Gradient-Problem stellt den gegenteiligen Fall dar: hier wachsen die Gradienten während der Rückpropagation exponentiell an, was zu extrem hohen Gewichtsaktualisierungen, Instabilität und im schlimmsten Fall zu NaN-Werten führt. Gelöst werden kann dies etwa durch Regularisierungstechniken, angepasste Netzwerkarchitekturen oder Gradient Clipping \cite{Alzubaidi2021}.  
+
 \subsection{Overfitting}
-\begin{itemize}
-    \item Seite 49 Deep Learning paper overview
-    \item hohe Wahrscheinlichkeit für Überanpassung der Daten in der Trainingsphase, da große Anzahl von Parameter, die auf komplexe Weise korrelieren
-    \item reduziert die Fähigkeit des Modells gute Leistungen auf Testdaten zu erzielen 
-    \item Overfitting Problem vermindern mit 
-    \begin{itemize}
-        \item Klasse 1
-        \item Gewichtsverfall
-        \item Batch Normalisierung
-        \item Dropout
-        \item Standartechnik: Gewichtsabbau als universeller Regularisierer
-    \end{itemize}
-    \item 2 Klasse
-    \begin{itemize}
-        \item Modelleingaben für Datenverfälschung und data augmentation
-        \item Grund für Overfitting: Mangel an Trainingsdaten, der dazu führt dass die gelernte Verteilung (an Trainingsdaten) nicht der realen Verteilung (bspw. Testdaten, oder echter Einsatzzweck) widerspiegelt
-        \item Dataugementierung erweitert die Trainingsdaten
-        \item Data Corupption baut die Auswirkungen von möglichen Datenkorruptionen direkt in das Trainingsverfahren mit ein (geht einen Schritt weiter)
-    \end{itemize}
-    \item 3 Klasse bestraft übermäßig zuversichtlichen Ausgaben zur Regularisierung des Modells
-\end{itemize}
+
+Ein weiteres zentrales Problem ist das Overfitting. Aufgrund der großen Anzahl an Parametern in tiefen Netzen besteht eine hohe Wahrscheinlichkeit, dass das Modell die Trainingsdaten zu stark „auswendig lernt“ und dadurch nicht mehr in der Lage ist, auf unbekannten Testdaten gute Ergebnisse zu erzielen. Overfitting kann durch verschiedene Regularisierungstechniken reduziert werden, darunter Gewichtsverfall (Weight Decay), Batch Normalisierung und Dropout. Eine weitere Strategie ist die Datenaugmentation, die den Trainingsdatensatz künstlich vergrößert und so die Generalisierungsfähigkeit verbessert. Ebenso kann Data Corruption – die gezielte Einbeziehung von verrauschten oder manipulierten Daten – helfen, das Modell robuster zu machen. Schließlich können Methoden, die übermäßig zuversichtliche Vorhersagen bestrafen, ebenfalls als Regularisierung wirken \cite{Alzubaidi2021}.  
+
+Zusammenfassend bietet Deep Learning einen leistungsstarken Ansatz zur automatisierten Merkmalsextraktion und Klassifikation, der sich durch Flexibilität, Robustheit und hohe Skalierbarkeit auszeichnet. Gleichzeitig stellen Herausforderungen wie das Vanishing-Gradient-Problem, Exploding Gradients und Overfitting zentrale Forschungsfelder dar, für die kontinuierlich neue Lösungen entwickelt werden \cite{Alzubaidi2021}. \todo{Hyperparameter-Abschnitt wieder einfügen falls gewünscht}
+
+
+
+% \section{Deep Learning}
+
+
+% \begin{itemize}
+%     \item Teilgebiet von Maschine Learning
+%     \item Funktionsweise inspiriert von menschlichem Gehirn (neuronalen Prozessen) / simuliert den Prozess, der in den zentralen sensorischen Regionen des menschlichen Gehirns abläuft
+%     \item Funktioniert ohne strikte von Menschen entworfene Regeln, sondern nutzt große Datenmengen um Muster zu erkennen um die Eingabe auf bestimmte Eigenschaften zu analysieren
+%     \item DL nutzt zahlreiche Algorithmenschichten (artificial neural Networks, ANN), von denen jede die zugelieferte Information (einzigartig) interpretiert
+%     \item Herkömmliche ML Techniken benutzen: Pre Processing, Featrue Extraction, Wise Featrue selection, learning and classification
+%     \item DL kann das Lernen von Feature Sets für mehrere Aufgaben automatisiert
+%     \item DL kann Lernen und Klassifizieren in einem Schritt vornehmen (Single Shot)
+%     \item Vorteile Deep Learning
+%     \begin{itemize}
+%         \item Universeller Lernansatz (viele Anwendungsbereiche)
+%         \item Robustheit: keine Präezise entworfenen MEkrmale, stattdessen optimierte Merkamlle in einem automatisierten Prozess ntuzen
+%         \item Verallgemeinerung: Verschiedene Datentypen und Anwendungen können dieselbe DL Technik verwenden, (Transferlernen, TL); nützlicher Ansatz für Probleme bei denn die Daten nicht ausreichend sind
+%         \item Skalierbarkeit: Einfache Erweiterung, wenn mehr Knoten benötigt werden 
+%         \item 
+%     \end{itemize}
+%     \item DL Techniken haben drei Kategorien: Unsupervised, partially supervised (Semi-supervised), supervised
+%     \begin{itemize}
+%         \item Deep Supervised Learning
+%         \item Der Algorithmus bekommt eine Sammlung von Eingabe- und Ausgabedaten
+%         \item Intelligenter Agent schätzt $\hat{y}_t = f(x_t)$, wenn die Eingabe $x_t$ ist und erhält $tz(\hat{y}_t, y_t)$ als Verlustwert
+%         \item Netzparameter werden neu berechnet, bis die Schätzung besser zu den bekannten Ausgaben passt
+%         \item Agent erhält die Fähigkeit die richitgen Lösung für die Abfragen asu der Umgebung zu erhalten
+%         \item Mehrere Möglichkeiten zum überwachten Lernen für DL: rekurrent neuronale Netze (RNNs), konvolutionale neuronale Netze (CNNs) und tiefe neuronale Netze (DNNs)
+%     \end{itemize}
+%     \begin{itemize}
+%         \item Deep Semi supervised learning
+%         \item Lernprozess auf halb beschrifteten Datensätzen
+%         \item Vorteil: Minimierung der benötigten Menge an gelabelten Daten
+%         \item Nachteil: irrelevante Eingangsmerkmale in den Trainingsdaten können zu falschen Entscheidungen führen
+%         \item Bsp: Klassifizieren von Textdokumenten
+%     \end{itemize}
+%     \begin{itemize}
+%         \item Deep unsupervised Learning
+%         \item Lernprozess ohne gelabelte Daten
+%         \item Agent lernt signifkante Merkmale oder die innere Repräsentation um nicht identifizierte Strukturen oder Beziehungen in den Eingabedaten zu entdecken
+%         \item Hauptnachteil: keine genauen Informationen über die Datensortierung vom Algorithmus lieferbar und rechenintensiv 
+%         \item Bsp: Clustering
+%     \end{itemize}
+    
+%     \item Arten von DL Netzwerken: RbNNs, RNNs und CNNs; Konzentration auf CNNs im folgenden Abschnitt da hohe Bedeutung
+%     \begin{itemize}
+%         \item CNN ist bekanntester und am häufigsten Verwendeter Algorithmus bei DL.
+%         \item Struktur von CNNs wurde von Neuronen in menschlichen und tierischen Gehirn inspiriert
+%         \item \cite{Goodfellow-et-al-2016} hat 3 Vorteile des CNNs identifziert: gleichwertige Darstellungen, spärliche Interaktion und gemeinsame Nutzung von Parametern
+%         \item drei Dimensionen einer Eingabe $x$ jeder Schicht in einem CNN : Höhe, Breite, Tiefe; wobei Höhe gleich der Breite ist; Tiefe wird auch als die Anzahl der (Bild-) Kanäle bezeichnet
+%         \item Merhere Kentel (Filter), die in jeder Faltungsschicht integriert sind, werde mit $k$ bezeichnet und haben ebenfalls drei Dimensionen ($n\times n  \times q$); Ähnlich zum Inputbild
+%         \item es gilt jedoch $n \ll m \land q \le r$; Kernel bilden Grundlage für lokale Verbindugnen, die ähnliche Parameter (Bias$b\hat{k}$ und Gewicht $W\hat{k}$) zur Erzeugung von $k$ Feature Maps$h\hat{k}$ mit einer jeweiligen Groeße von $(m-n-1)$. Diese werden im Input Layer verwendet. 
+%         \item Faltungsschicht berechnet Punktprodukt zwischen Eingabe und den Gewichten wie in \ref{eq:F1}
+%         \begin{equation}
+%         \label{eq:F1}
+%         h^k = f(W^k \ast x + b^k)
+%         \end{equation}
+%         \item Nächster Schritt ist Down Sampling jeder Feature Map in den Sup Sampling Schichten, um die Netzparameter zu verringern, was den Trainingsprozess beschleunigt. Außerdem wird das Lösen Problem der Überanpassung dadurch ermöglicht.
+%         \item Alle Feature Maps werden durch eine Pooling Funktion (max oder average) auf einen angrenzenden Berech der Größe $p \times p $ angewendet, wobei $p$ die Kernelgröße ist. Letztendlich erhalten die FC Schichten die Merkmale der mittleren und unteren Ebene und erstellen die Abstraktion der oberen Ebene, welches die letzte Schicht dastellt
+%         \item  Die Klassifizierung wird mit der abschließenden Schicht, wie einer Support Vector Machine (SVM) erzeugt, um für die gegebene Instanz die Wahrscheinlichkeit einer bestimmten Klasse in einem Score darzustellen
+%         \item Vorteile CNN Einsatz:
+%         \begin{itemize}
+%             \item Bessere Generalisierung des Netzwerkes und Verhinderung der Überanpassung durch Weight Sharing Featrue
+%             \item Ausgabe des Models ist flexibel organiisert als auch flexibel von den extrahierten Merkmalen abhängig durch das Lernen von zwei Merkmalsextraktionsschichten und einer Klassifizierungsschicht
+%             \item CNNs in großem Maßstab können sehr einfach entwickelt werden
+%         \end{itemize}
+%         \begin{itemize}
+%             \item CNN Architecture
+%             \item \textbf{Convolutional Layer}: Collektion von Convolutional Filtern (sog. Kernels); Eingabebild wird durch diesen Filter zur Output Feature Map Generierung genutzt
+%             \item \textbf{Kernel definition}: Grid of discrete numbers, which each value is called kernel weight. Werte werden zufällig initialisiert zum Beginn des CNN Trainingsprozesses; Gewichte werden in jeder Trainingsepoche optimiert, sodass der Kernel lernt relevante Features zu extrahieren
+%             \item Convolutional Operation: Übersprungen
+%             \item \textbf{Pooling Layer}: Hauptaufgabe: Sub Sampling der Feature Maps, oder verkleinern der großen Feature Maps um kleiner Feature Maps zu erzeugen; meistgenutzt max, min und GAP Pooling als Methode dafür
+%             \item \textbf{Activation Function (non linearity)}: Mapping the input to the output is core; input Value is the weight summation of the neuron input along with its bias (if present); Activation Function entscheidet ob eine Neuron aktiviert wird (feuert) oder nicht, mit Referenz zu einem Teil des Inputs  durch das Erstellen des dazugehörigen Outputs (d. Klasse?); (nicht lineare) Aktivierungsfunktion muss differenzierbar sein, um Backpropagation zu ermöglichne
+%             \item ReLu: Meist eingesetzt Aktivierungsfunktion; konvertiert alle Ergebnisse in Positive Zahlen; (NACHTEILE NICHT ERWÄHNEN? DYING RELU?)
+%             \item \textbf{Fully Connected Layer}: Am Ende jeder CNN Architecture; jedes Neuron ist mit allen Neuronen des letzten Layers verbunden, deshalb fully connected (FC) LAyer
+%             \item \textbf{Loss Function}:loss funktion berechnet den predicted error über die Training samples; error ist die difference zwischen dem Aktuellen Output und dem vorhergesagten; dieser wird optimiert -> first parameter: estimated Output (Prediction); second parameter: actual output (label); Euclidean Loss Function bei Regressionsproeblemen (meist auch mean square error genannt) 
+%         \end{itemize}
+%     \end{itemize}
+    
+% \end{itemize}
+% \subsection{Backpropagation}
+% \begin{itemize}
+%     \item \cite{Goodfellow-et-al-2016}
+%     \item Feedforward neural Network um INput x Und Output y zu produzieren. x enthält die initiale Informaiton für die Hidden Units in jedem Layer, sodass Final y rauskommen kann (forward propagation)
+%     \item back propagation ist ein einfaches Verfahren um (Kosten (Berechnungszeit/Methode?)-) zurück durch das Netzwerk fließen zu lassen um einen Gradienten zu berechnen
+% \end{itemize}
+% \subsection{Vanishing Gradient Problem}
+% \begin{itemize}
+%     \item Seite 50 Overview Deep Learning
+%     \item Bei Verwendung von Backpropagation und gradientebasierenden Lerntechniken \todo{Auch noch näher Erläutern, gradientenbasierende Lerntechniken?} zusammen mit ANNs tritt in der Trainingsphase das "Vanishing Gradient Problem" auf
+%     \item in jeder Trainingsiteration wird jedes Gewicht des Neuronalen Netzes aufgrunldage des aktuellen Gewichtes aktualisiert, ist auch proportional zur partiellen Ableitung der Fehlerfunktion
+%     \item Aktualisierung der Gewichte kann in einigen Fällen aufgrund eines verschwindend kleinen Gradienten nicht stattfinden, was im schlimmsten Fall bedeutet, dass kein zusätzliches Training möglich ist und das neuronale Netz aufhört zu Lernen
+%     \item Verwendung von vielen Schichten führt dazu, dass der Gradient in der Trainingsphase sehr klein wird, was jedoch dazu bedeutet das das Netz effizient arbeitet
+%     \item Bestimmung der Gradienten im neuronalen Netz via Backpropagation
+%     \begin{itemize}
+%         \item Netzableitungen jeder Schicht in umgekehrter Reihenfolge ermittel, ausgehend von der letzten zur ersten Schicht
+%         \item Nächster Schritt: Ableitung jeder Scihct wird ähnlich zum ersten Schritt netzabwärts multipliziert
+%         \item Gradient nimmt exponentiell ab, während er sich zurück zur erstne Schicht fortpflanzt
+%         \item Umgehen dieses Problems, durch den Einsatz von Aktivierungsfunktionen
+%         \item Relu beliebt da keine kleine Ableitung
+%         \item Problem tritt auf wenn großer Eingaberaum in kleinen Eingaberraum gequetscht wird, was zum Verschwinden der Ableitung führt
+%         \item Batch Normalisierung ist zweite Möglichkeit zur Lösung: Eingabe wird normalisiert, Ausdruck erreicht also einfach nicht die äußeren Grenzen der Sigmafunktion
+%         \item Schnellere Hardware ist auch eine Möglichkeit -> Standard Backprogagation für viele tieferen Schichten des Netzes ist dadurch möglich; verglichen mit der Zeit/Aufwand die zur Erkennung des Problems des verschwindenen Gradienten nötig ist
+%     \end{itemize}
+% \end{itemize}
+% \subsection{Exploding Gradients}
+% \begin{itemize}
+%     \item Gegenteil von vorherigen Problem des verschwindenden Gradienten ist das Problem des explodierenen Gradienten
+%     \item passiert oft bei der Backprogagation, da hier große Fehlergradienten akkumuliert werden, was zu extrem hohen Aktualisierungen der Gewichte des Netzes führt
+%     \item dadurch kann das Netz unstetig werden und seien Fähigkeit effektiv zu lernen verlieren
+%     \item Ganz allgemein gesagt wächst der Gradient, wenn man sich beim Backpropagation-Verfahren schrittweise rückwärts durch das Netzwerk bewegt, exponentiell, weil man ihn wiederholt miteinander multipliziert.
+%     \item Gewichte können so groß werden das sie zu einem NAN Wert werden
+%     \item Lösungsansätze: Verwendung von Regularisierungstechniken für die Gewichte, Netwerkarchitektur überarbeiten
+% \end{itemize}
+% \todo{Hyperparameter rausgenommen}
+% %\subsection{Hyperparameter}
+% \subsection{Overfitting}
+% \begin{itemize}
+%     \item Seite 49 Deep Learning paper overview
+%     \item hohe Wahrscheinlichkeit für Überanpassung der Daten in der Trainingsphase, da große Anzahl von Parameter, die auf komplexe Weise korrelieren
+%     \item reduziert die Fähigkeit des Modells gute Leistungen auf Testdaten zu erzielen 
+%     \item Overfitting Problem vermindern mit 
+%     \begin{itemize}
+%         \item Klasse 1
+%         \item Gewichtsverfall
+%         \item Batch Normalisierung
+%         \item Dropout
+%         \item Standartechnik: Gewichtsabbau als universeller Regularisierer
+%     \end{itemize}
+%     \item 2 Klasse
+%     \begin{itemize}
+%         \item Modelleingaben für Datenverfälschung und data augmentation
+%         \item Grund für Overfitting: Mangel an Trainingsdaten, der dazu führt dass die gelernte Verteilung (an Trainingsdaten) nicht der realen Verteilung (bspw. Testdaten, oder echter Einsatzzweck) widerspiegelt
+%         \item Dataugementierung erweitert die Trainingsdaten
+%         \item Data Corupption baut die Auswirkungen von möglichen Datenkorruptionen direkt in das Trainingsverfahren mit ein (geht einen Schritt weiter)
+%     \end{itemize}
+%     \item 3 Klasse bestraft übermäßig zuversichtlichen Ausgaben zur Regularisierung des Modells
+% \end{itemize}
 
 
 
