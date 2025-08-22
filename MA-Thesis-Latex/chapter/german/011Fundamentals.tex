@@ -194,11 +194,14 @@ Maschinelles Lernen beschreibt einen Ansatz in der Informatik, bei dem Algorithm
 \subsection{IoU}
 \todo{erklären?}
 
+\subsection{Ab wann ein Objekt klein ist definieren und erklären?}
+
+
 \subsection{Mean Average Precision}
 \begin{itemize}
     \item Präzision ist der Anteil der vom Modell gemeldeteten Erkennungen, die korrekt waren 
     \item Recall der Anteil an Erkennungen der tatsächlich aufgetretenen Objekte, die erkannt wurden
-    \item PR (Precision-Recall) Kurve kann gezeichnet werden, wobei Präzision auf Y und Recall auf X Achse dargestellt wird (alles Goodfelloq Quelle)
+    \item PR (Precision-Recall) Kurve (PRC)kann gezeichnet werden, wobei Präzision auf Y und Recall auf X Achse dargestellt wird (alles Goodfelloq Quelle)
     \item Objektdetektor gibt für jede BB eine Konfidenz aus, die angibt, wie sicher sich das Modell hinsichtlich der Vorhersage ist
     \item Vorhersagen unterhalb einer bestimmten Konfidenzschwelle können entfernt werden
     \item PR Curve kann man auch bei allen möglichen Konfidenzschwellen  erstellen, dann kann man die durchschnittliche Präzision als Fläche unter der PRC berechnen

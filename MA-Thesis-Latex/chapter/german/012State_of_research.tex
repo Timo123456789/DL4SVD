@@ -2,24 +2,160 @@
 \chapter{State of research}
 \label{ch:state_of_research}
 
-Mit Luftbildern oder Satellitenbildern können bereits Massengräber detektiert werden \cite{Kalacska2006}. 
-Dieser Ansatz kann in nahezu Echtzeit oder in der Vergangenheit angewendet werden \cite{Kalacska2006}. 
-Er basiert auf Satellitenbildern, die aus verschiedenen Bändern bestehen. 
-Man kann ihn auch zur Detektion von geheimen Massengräbern nutzen \cite{Kalacska2006}. 
-Möglicherweise ist ein Umbau zur Detektierung von Massengräbern in der Ukraine möglich \cite{Kalacska2006}.
+% Mit Luftbildern oder Satellitenbildern können bereits Massengräber detektiert werden \cite{Kalacska2006}. 
+% Dieser Ansatz kann in nahezu Echtzeit oder in der Vergangenheit angewendet werden \cite{Kalacska2006}. 
+% Er basiert auf Satellitenbildern, die aus verschiedenen Bändern bestehen. 
+% Man kann ihn auch zur Detektion von geheimen Massengräbern nutzen \cite{Kalacska2006}. 
+% Möglicherweise ist ein Umbau zur Detektierung von Massengräbern in der Ukraine möglich \cite{Kalacska2006}.
 
-Weitere Ansätze umfassen die Erkennung von Einzelgräbern mithilfe von Air Borne Imagery \cite{Leblanc2014}.
+% Weitere Ansätze umfassen die Erkennung von Einzelgräbern mithilfe von Air Borne Imagery \cite{Leblanc2014}.
 
-Außerdem wurden Satellitenbilder von chinesischen Krematorien genutzt, um die offiziellen Daten zur Covid Mortalität der Regierung zu überprüfen. 
-Dies konnte in Kombination mit Augenzeugenbefragungen dafür genutzt werden, die offiziellen Zahlen zur Sterblichkeit anzuzweifeln \cite{Spiegel_article}.
+% Außerdem wurden Satellitenbilder von chinesischen Krematorien genutzt, um die offiziellen Daten zur Covid Mortalität der Regierung zu überprüfen. 
+% Dies konnte in Kombination mit Augenzeugenbefragungen dafür genutzt werden, die offiziellen Zahlen zur Sterblichkeit anzuzweifeln \cite{Spiegel_article}.
 
-Mit Satellitenbildern konnten bereits Zerstörungen von Hüttenstrukturen in Darfur detektiert werden \cite{Knoth2017}. 
-
-
+% Mit Satellitenbildern konnten bereits Zerstörungen von Hüttenstrukturen in Darfur detektiert werden \cite{Knoth2017}. 
 
 
-RGB Bilder von Drohnen können in den meisten Szenarien gut für Objekterkennung eingesetzt werden. 
-Wärme (IR) kann die Möglichkeiten zur Objekterkennung in der Nacht oder bei verdeckten Objekten erweitern. 
-Ein Problem ist der Mangel an verfügbaren Trainingsdaten für IR Bilder von Drohnen. 
 
+
+% RGB Bilder von Drohnen können in den meisten Szenarien gut für Objekterkennung eingesetzt werden. 
+% Wärme (IR) kann die Möglichkeiten zur Objekterkennung in der Nacht oder bei verdeckten Objekten erweitern. 
+% Ein Problem ist der Mangel an verfügbaren Trainingsdaten für IR Bilder von Drohnen. 
+
+
+
+
+Deep Learning kann zusammen mit Fernerkundungsdaten für eine Vielzahl von Anwendungszwecken eingesetzt werden, beispielsweise für Landnutzungs- und Landbedeckungsklassifikation, Szenenklassifikation oder Objekterkennung \cite{Zhu2017}. Darüber hinaus finden sich Einsatzgebiete in der Hyperspektralanalyse, in der Interpretation von SAR-Bildern, in der Interpretation hochaufgelöster Satellitenbilder, in der multimodalen Datenfusion sowie in der 3D-Rekonstruktion. Besonders hervorzuheben sind hierbei die Hyperspektralanalyse und die Interpretation hochaufgelöster Satellitenbilder. In der Hyperspektralanalyse wurde beispielsweise ein Stacked Autoencoder (SAE) genutzt, um hierarchische Merkmale in der spektralen Domäne zu extrahieren \cite{Chen2014}. Ebenso konnten überwachte Convolutional Neural Networks (CNNs) erfolgreich für die Klassifizierung von Anbauarten eingesetzt werden \cite{Kussul2017}.
+
+Bevor auf die methodischen Entwicklungen eingegangen wird, seien die für diese Arbeit relevanten Begriffe kurz definiert. Zu \emph{High Resolution} ist zu bemerken, dass bestimmte multispektrale Satellitensysteme wie Sentinel-1, Sentinel-2 oder Landsat vergleichsweise geringe räumliche Auflösungen (typischerweise im Bereich von 10–30 m) aufweisen \cite{Wieland2023}. Demgegenüber besitzen luftgestützte Aufnahmen — wie sie etwa im VEDAI-Datensatz bereitgestellt werden — eine sehr viel höhere Auflösung; dort entsprechen die Pixel beispielsweise einer Fläche von 12.5\(\times\)12.5 cm und sind somit deutlich besser zur Erkennung kleiner Objekte geeignet \cite{Razakarivony2015}. Unter \emph{Multispectral Imagery} wird die spektrale Auflösung eines Sensors verstanden, also die Anzahl der spektralen Bänder und der Bereich des elektromagnetischen Spektrums, den ein Sensor erfasst \cite{Khan2018}. Sensoren können mehrere Bänder simultan aufzeichnen; ein Echtfarbbild besteht typischerweise aus den Bändern R (Rot), G (Grün) und B (Blau), die durch weitere Bänder wie Near-Infrared (NIR) oder andere Infrarotbänder erweitert werden können. Aus solchen Kanälen lassen sich zusätzlich Indizes (z.\,B. NDVI) für die Analyse ableiten \cite{Wiley2018}. Eine eindeutige, universelle Definition für \emph{Small Object Detection} existiert nicht, da die Klassifikation von „klein“ von der Auflösung des Bildes abhängt; gängige Operationalisierungen messen die relative Größe eines Objekts bezogen auf das Bild und beschreiben kleine Objekte beispielsweise durch mittlere relative Überlappungswerte (Intersection over Image Area) im Bereich von etwa 0.08\% bis 0.58\% \cite{Chen2017}.
+
+Für die Interpretation hochaufgelöster Satellitenbilder spielt Deep Learning eine zentrale Rolle. Ein wichtiges Beispiel ist die Szenenklassifikation, bei der jedem Bild automatisch ein semantisches Label zugeordnet wird. Weit verbreitete Anwendungsbereiche sind Objekterkennung \cite{Bhagavathy2006,Cheng2016}, Change Detection \cite{Chen2006}, Urban Planning und Land Resource Management. Typischerweise lassen sich diese Aufgaben in die Schritte Feature Extraction und Classification unterteilen. Da Deep Learning mit zunehmender Tiefe abstraktere und unterscheidungskräftigere semantische Merkmale erlernen kann, wird im Vergleich zu klassischen Ansätzen eine deutlich bessere Klassifizierungsleistung erzielt; aus diesem Grund gilt Deep Learning als Stand der Technik für Szenenklassifikationsprobleme bei hochaufgelösten Satellitenbildern \cite{Zhu2017}.
+
+Die Objekterkennung stellt in diesem Kontext eine besondere Herausforderung dar, da ein oder mehrere spezifizierte Ground-Objekte wie Gebäude, Fahrzeuge oder Flugzeuge nicht nur lokalisiert, sondern auch einer Kategorie zugeordnet werden müssen. Tiefe CNNs werden hierfür bevorzugt, da sie in der Lage sind, hochgradig abstrakte und semantisch aussagekräftige Merkmalsrepräsentationen zu lernen \cite{Zhu2017}. Ein besonders relevantes Anwendungsfeld ist die Verkehrsplanung: Satellitenbilder können genutzt werden, um Informationen zur Fahrzeugverteilung in einer gesamten Region zu einem bestimmten Zeitpunkt zu gewinnen. Momentaufnahmen des gesamten Straßennetzes liefern dabei wertvolle Einblicke in die Verteilung der Fahrzeuge und bieten Informationen für Bereiche, die von herkömmlichen Zählsystemen — meist induktive Schleifendetektoren, die in die Fahrbahn eingebettet sind — nicht erfasst werden. Seit der Einführung ziviler optischer Hochauflösungssatelliten wie Quickbird und Ikonos sind Bilder mit einer Auflösung von etwa einem Meter verfügbar. Damit ist es möglich geworden, relativ kleine Objekte wie Fahrzeuge auf hochaufgelösten Satellitenbildern sicher zu detektieren und korrekt zu klassifizieren \cite{Eikvil2009}. Moderne Satellitenmissionen wie die von Planet (50 cm) \cite{planet_labs} oder die Airbus Pléiades Neo Satelliten (30 cm) \cite{airbus_neo} bieten mittlerweile noch höhere Auflösungen, was die Möglichkeiten für die präzise Erkennung kleiner Fahrzeuge erheblich erweitert.
+
+Vor dem Durchbruch tiefer neuronaler Netze dominierten klassische Verfahren wie Support Vector Machines (SVMs) oder Stacked Autoencoder (SAE). Bei hyperspektralen Fernerkundungsbildern zeigte sich jedoch, dass SAE gegenüber SVM keine offensichtliche Leistungssteigerung erzielte; dies wird häufig damit erklärt, dass SAE durch die große Anzahl an Parametern deutlich mehr Trainingsdaten benötigt und der zu erwartende Vorteil durch den Aufwand der Datensammlung relativiert wird \cite{Liu2017}.
+
+Mit dem Aufkommen von Deep Learning etablierten sich CNNs sowohl für spezifische als auch für generische Objekterkennungsaufgaben. Zur Verbesserung der Trainingsverfahren wurde ein weakly supervised learning Framework vorgeschlagen, das ein vortrainiertes CNN und ein negatives Bootstrap-Schema nutzt, um eine schnelle Konvergenz des Detektors zu erreichen \cite{Zhou2016}. Weitere Arbeiten kombinierten tiefe, aus vortrainierten CNNs extrahierte Umgebungsmerkmale mit klassischen lokalen Merkmalen wie Histogrammen orientierter Gradienten \cite{Dalal2005} zur zuverlässigen Detektion von Öltanks \cite{Zhang2015}. Zwei-Stufen-Ansätze wurden ebenfalls erfolgreich angewendet: So wurde GoogLeNet mit unterschiedlichen Fine-Tuning-Parametern trainiert und anschließend im Sliding-Window-Verfahren zur Objekterkennung eingesetzt \cite{Sevo2016}. Das Problem variierender Objektorientierungen wurde durch die Nutzung kombinierter CNN-Layer-Merkmale adressiert, die orientierungsrobuste Erkennungen in einem groben Lokalisierungsrahmen ermöglichen \cite{Zhu2015}.
+
+Parallel dazu gewann die Nutzung multispektraler und hyperspektraler Daten an Bedeutung. Multispektrale Kanäle wie RGB, NIR, MIR oder FIR werden beispielsweise im Kontext des autonomen Fahrens genutzt, da insbesondere Infrarotkanäle auch bei schlechten Witterungsbedingungen zuverlässig Detektionen erlauben \cite{Takumi2017}. Im Bereich der Fahrzeugdetektion wird das panchromatische Band für die Fahrzeugklassifikation eingesetzt, während multispektrale Informationen zur Maskierung von Vegetation und Schatten genutzt werden \cite{Eikvil2009}.
+
+Für die Detektion von Fahrzeugen in hochaufgelösten Satellitenbildern wurden hybride CNN-Modelle entwickelt, welche Feature-Maps aus Convolutional- und Pooling-Layern in Blöcke variabler Größe unterteilen, um mehrskalige Merkmale zu extrahieren \cite{XueyunChen2014}. Ein alternativer Ansatz nutzt graphbasierte Superpixel-Segmentierung, um Bildausschnitte zu extrahieren, die anschließend von einem CNN daraufhin klassifiziert werden, ob ein Fahrzeug vorhanden ist \cite{Jiang2015}.
+
+Trotz dieser Fortschritte bleiben Forschungsfragen offen. Insbesondere ist zu klären, inwieweit moderne One-Stage-Detektoren wie YOLO durch die Eingabe zusätzlicher spektraler Kanäle (z.\,B. IR, NDVI) gegenüber reinen RGB-Eingaben profitieren. Theoretisch sollte sich die Leistung durch zusätzliche Kanäle verbessern, da Vegetation besser separierbar ist und IR zusätzliche informationsreiche Signale liefern kann. Ebenfalls zu untersuchen sind der Einfluss von axis-aligned versus oriented bounding boxes (abb vs. obb) auf die Erkennungsleistung sowie die Frage, welche einzelnen Kanäle die Leistung verbessern oder verschlechtern. Diese Fragestellungen bilden die Grundlage und Motivation der vorliegenden Arbeit.
+
+
+%Version ohne Begriffsdefinition aber mit pleiades und planet
+% Deep Learning kann zusammen mit Fernerkundungsdaten für eine Vielzahl von Anwendungszwecken eingesetzt werden, beispielsweise für Landnutzungs- und Landbedeckungsklassifikation, Szenenklassifikation oder Objekterkennung \cite{Zhu2017}. Darüber hinaus finden sich Einsatzgebiete in der Hyperspektralanalyse, in der Interpretation von SAR-Bildern, in der Interpretation hochaufgelöster Satellitenbilder, in der multimodalen Datenfusion sowie in der 3D-Rekonstruktion. Besonders hervorzuheben sind hierbei die Hyperspektralanalyse und die Interpretation hochaufgelöster Satellitenbilder. In der Hyperspektralanalyse wurde beispielsweise ein Stacked Autoencoder (SAE) genutzt, um hierarchische Merkmale in der spektralen Domäne zu extrahieren \cite{Chen2014}. Ebenso konnten überwachte Convolutional Neural Networks (CNNs) erfolgreich für die Klassifizierung von Pflanzenarten eingesetzt werden \cite{Kussul2017}.
+
+% Auch für die Interpretation hochaufgelöster Satellitenbilder spielt Deep Learning eine zentrale Rolle. Ein wichtiges Beispiel ist die Szenenklassifikation, bei der jedem Bild automatisch ein semantisches Label zugeordnet wird. Hierbei ergeben sich weit verbreitete Anwendungsbereiche wie Objekterkennung \cite{Bhagavathy2006,Cheng2016}, Change Detection \cite{Chen2006}, Urban Planning und Land Resource Management. Typischerweise lassen sich diese Aufgaben in die Schritte Feature Extraction und Classification unterteilen. Da Deep Learning mit zunehmender Tiefe abstraktere und unterscheidungskräftigere semantische Merkmale erlernen kann, wird im Vergleich zu klassischen Ansätzen eine deutlich bessere Klassifizierungsleistung erzielt. Aus diesem Grund gilt es als Stand der Technik für Szenenklassifikationsprobleme bei hochaufgelösten Satellitenbildern.
+
+% Die Objekterkennung und -klassifizierung stellt in diesem Zusammenhang eine besondere Herausforderung dar, da ein oder mehrere spezifizierte Ground-Objekte wie Gebäude, Fahrzeuge oder Flugzeuge nicht nur lokalisiert, sondern auch einer Kategorie zugeordnet werden müssen. Hierfür werden tiefe CNNs bevorzugt, da sie in der Lage sind, hochgradig abstrakte und semantisch aussagekräftige Merkmalsrepräsentationen zu lernen \cite{Zhu2017}. Ein praktisches Anwendungsbeispiel ist die Verkehrsplanung, bei der Satellitenbilder Momentaufnahmen des Straßennetzes ermöglichen und Informationen zur Fahrzeugverteilung liefern können. Damit lassen sich Lücken herkömmlicher Zählsysteme, meist auf Induktionsschleifen in Straßen basieren, schließen. Mit dem Aufkommen ziviler hochauflösender optischer Satelliten wie Quickbird oder Ikonos stehen seit den 2000er Jahren Bilder mit einer Auflösung von etwa einem Meter zur Verfügung, sodass relativ kleine Objekte wie Fahrzeuge zuverlässig detektiert und klassifiziert werden können \cite{Eikvil2009}. Moderne Satellitenmissionen wie die von Planet (50 cm) \cite{planet_labs} oder die Airbus Pléiades Neo Satelliten (30 cm) \cite{airbus_neo} bieten mittlerweile noch höhere Auflösungen, was die Möglichkeiten für die präzise Erkennung kleiner Fahrzeuge erheblich erweitert.
+
+% Vor dem Durchbruch tiefer neuronaler Netze dominierten klassische maschinelle Lernverfahren wie Support Vector Machines (SVMs) oder Stacked Autoencoder (SAE) den Bereich. Bei hyperspektralen Fernerkundungsbildern zeigte sich jedoch, dass SAE im Vergleich zu SVM keine signifikanten Leistungsverbesserungen erzielte. Dies wird darauf zurückgeführt, dass SAE aufgrund der hohen Anzahl an Parametern deutlich größere Mengen an Trainingsdaten benötigt. Der Vorteil des Einsatzes von SAE wird daher durch den hohen Aufwand zur Trainingsdatenbeschaffung relativiert \cite{Liu2017}.
+
+% Mit dem Aufkommen von Deep Learning etablierte sich die Nutzung von CNNs für spezifische und generische Objekterkennungsaufgaben. Ein Ansatz zur Verbesserung der Trainingsverfahren ist ein \textit{weakly supervised learning} Framework, bei dem ein vortrainiertes CNN und ein negatives Bootstrap-Schema genutzt werden, um eine schnelle Konvergenz des Detektors zu erreichen \cite{Zhou2016}. Ein weiterer Ansatz kombiniert tiefe, aus vortrainierten CNNs extrahierte Umgebungsmerkmale mit klassischen lokalen Merkmalen, etwa Histogrammen orientierter Gradienten \cite{Dalal2005}, um Öltanks zuverlässig zu erkennen \cite{Zhang2015}. Auch Zwei-Stufen-Ansätze fanden Anwendung: So trainierten \cite{Sevo2016} ein GoogLeNet zweimal mit unterschiedlichen Fine-Tuning-Parametern und nutzten das Modell anschließend mit einem Sliding-Window-Verfahren zur Objekterkennung. Das Problem unterschiedlicher Objektorientierungen wurde zudem durch den Einsatz von aus kombinierten CNN-Layern extrahierten Merkmalen adressiert, die eine orientierungsrobuste Erkennung in einem groben Lokalisierungsrahmen ermöglichen \cite{Zhu2015}.
+
+% Parallel dazu gewann die Nutzung multispektraler und hyperspektraler Daten zunehmend an Bedeutung. Multispektrale Informationen, bestehend aus Kanälen wie RGB, Near-Infrared (NIR), Mid-Infrared (MIR) oder Far-Infrared (FIR), werden beispielsweise im Kontext des autonomen Fahrens eingesetzt, da insbesondere infrarote Kanäle auch bei schlechten Witterungsbedingungen zuverlässige Detektionen ermöglichen \cite{Takumi2017}. Im Bereich der Fahrzeugdetektion zeigen \citeauthor{Eikvil2009}, dass das panchromatische Band für die Klassifikation von Fahrzeugen genutzt wird, während multispektrale Informationen insbesondere zur Maskierung von Vegetation und Schatten eingesetzt werden \cite{Eikvil2009}.
+
+% Für die Detektion von Fahrzeugen in hochaufgelösten Satellitenbildern wurden zudem hybride CNN-Modelle entwickelt, die Feature Maps aus Convolutional- und Pooling-Layern in Blöcke variabler Größe unterteilen, um mehrskalige Merkmale zu extrahieren \cite{XueyunChen2014}. Ein weiterer Ansatz basiert auf graphbasierter Superpixel-Segmentierung. Hierbei werden Bildausschnitte extrahiert und anschließend mit einem CNN klassifiziert, das vorhersagt, ob in dem Ausschnitt ein Fahrzeug vorhanden ist \cite{Jiang2015}.
+
+% Trotz dieser Fortschritte bleiben Forschungslücken bestehen. Insbesondere stellt sich die Frage, inwieweit die Erkennung von Fahrzeugen durch moderne One-Stage-Detektoren wie YOLO verbessert werden kann, wenn anstelle reiner RGB-Kanäle zusätzliche spektrale Informationen wie Infrarot oder NDVI einbezogen werden. Theoretisch sollte sich die Leistung durch die zusätzlichen Kanäle erhöhen, da Vegetation und Nicht-Vegetation besser unterschieden werden können. Zudem liefern Infrarotbänder zusätzliche Informationen, die die Erkennung unterstützen könnten. Offen bleibt auch, welchen Einfluss axis-aligned bounding boxes und oriented bounding boxes auf die Erkennungsleistung haben und welche spektralen Kanäle die Leistung verbessern oder verschlechtern. Diese Fragestellungen bilden die Grundlage für die Motivation der vorliegenden Arbeit.
+
+
+% \subsection{Einleitung zum Forschungsfeld}
+
+% Deep Learning kann zusammen mit Fernerkundungsdaten für eine Vielzahl von Anwendungszwecken eingesetzt werden, beispielsweise für Landnutzungs- und Landbedeckungsklassifikation, Szenenklassifikation oder Objekterkennung \cite{Zhu2017}. Darüber hinaus finden sich Einsatzgebiete in der Hyperspektralanalyse, in der Interpretation von SAR-Bildern, der Interpretation hochaufgelöster Satellitenbilder, in der multimodalen Datenfusion sowie in der 3D-Rekonstruktion. Im Folgenden werden insbesondere die Bereiche \textit{Hyperspectral Image Analysis} und die \textit{Interpretation von High Resolution Satellite Imagery} näher betrachtet.
+
+% Im Bereich der Hyperspektralanalyse wird beispielsweise ein Stacked Autoencoder (SAE) genutzt, um hierarchische Merkmale in der spektralen Domäne zu extrahieren \cite{Chen2014}. Ebenso wurden überwachtes Lernen mit Convolutional Neural Networks (CNNs) für die Klassifizierung von Anbauarten erfolgreich eingesetzt \cite{Kussul2017}.
+
+% Für die Interpretation hochaufgelöster Satellitenbilder spielt die Szenenklassifikation eine zentrale Rolle. Dabei wird jedem Bild automatisch ein semantisches Label zugeordnet. Schlüsselprobleme bestehen in weit verbreiteten Anwendungsbereichen wie Objekterkennung \cite{Bhagavathy2006,Cheng2016}, Change Detection \cite{Chen2006}, Urban Planning und Land Resource Management. Typischerweise lassen sich diese Aufgaben in die Schritte \textit{Feature Extraction} und \textit{Classification} unterteilen. Da Deep Learning mit zunehmender Tiefe abstraktere und unterscheidungskräftigere semantische Merkmale erlernen kann, wird im Vergleich zu klassischen Ansätzen eine deutlich bessere Klassifizierungsleistung erzielt. Aus diesem Grund gilt Deep Learning als \textit{state of the art} für das Szenenklassifikationsproblem bei hochaufgelösten Satellitenbildern.
+
+% Die Objekterkennung stellt die Herausforderung dar, ein oder mehrere spezifizierte Ground-Objekte (wie Gebäude, Fahrzeuge oder Flugzeuge) auf Satellitenbildern zu lokalisieren und einer Kategorie zuzuordnen. Hierfür werden tiefe CNNs bevorzugt, da sie in der Lage sind, hochgradig abstrakte und semantisch aussagekräftige Merkmalsrepräsentationen zu lernen \cite{Zhu2017}. Ein Beispiel ist die Nutzung von Satellitenbildern für Verkehrsplanung: Momentaufnahmen des Straßennetzes können Informationen zur Fahrzeugverteilung liefern und so Lücken herkömmlicher Zählsysteme schließen. Mit dem Aufkommen ziviler hochauflösender optischer Satelliten wie Quickbird oder Ikonos stehen seit den 2000er Jahren Bilder mit einer Auflösung von etwa einem Meter zur Verfügung. Damit ist es möglich geworden, relativ kleine Objekte wie Fahrzeuge sicher zu detektieren und zu klassifizieren \cite{Eikvil2009}.
+
+% \subsection{Stand der Technik im Fernerkundungsbereich}
+
+% Vor dem Durchbruch tiefer neuronaler Netze dominierten klassische maschinelle Lernverfahren wie Support Vector Machines (SVMs) oder Stacked Autoencoder (SAE) den Bereich. Bei hyperspektralen Fernerkundungsbildern zeigte sich jedoch, dass SAE im Vergleich zu SVM keine signifikanten Leistungsverbesserungen erzielte. Dies wird darauf zurückgeführt, dass SAE durch die hohe Anzahl an Parametern deutlich größere Mengen an Trainingsdaten benötigt. Der Vorteil des Einsatzes von SAE wird daher durch den hohen Aufwand zur Trainingsdatenbeschaffung relativiert \cite{Liu2017}.
+
+% \subsection{Forschung zu Small Object Detection}
+
+% CNNs haben sich sowohl für die spezifische als auch für die generische Objekterkennung etabliert. Ein Ansatz zur Verbesserung der Trainingsverfahren ist ein \textit{weakly supervised learning} Framework, bei dem ein vortrainiertes CNN und ein negatives Bootstrap-Schema genutzt werden, um eine schnelle Konvergenz des Detektors zu erreichen \cite{Zhou2016}. 
+
+% Ein weiterer Ansatz kombiniert tiefe, aus vortrainierten CNNs extrahierte Umgebungsmerkmale mit klassischen lokalen Merkmalen, etwa Histogrammen orientierter Gradienten \cite{Dalal2005}, um Öltanks zuverlässig zu erkennen \cite{Zhang2015}.  
+
+% Auch Zwei-Stufen-Ansätze wurden erfolgreich angewandt: So trainierten \cite{Sevo2016} ein GoogLeNet zweimal mit unterschiedlichen Fine-Tuning-Parametern und nutzten das Modell anschließend mit einem Sliding-Window-Verfahren zur Objekterkennung. 
+
+% Das Problem unterschiedlicher Objektorientierungen wurde durch den Einsatz von aus kombinierten CNN-Layern extrahierten Merkmalen adressiert, die eine orientierungsrobuste Erkennung in einem groben Lokalisierungsrahmen ermöglichen \cite{Zhu2015}.
+
+% \subsection{Forschung zu Multispectral und Hyperspectral Imagery}
+
+% Multispektrale Daten, bestehend aus Kanälen wie RGB, Near-Infrared (NIR), Mid-Infrared (MIR) oder Far-Infrared (FIR), finden Anwendung in sicherheitskritischen Szenarien wie dem autonomen Fahren. Dort ermöglichen insbesondere infrarote Kanäle eine zuverlässige Detektion auch bei schlechten Witterungsbedingungen \cite{Takumi2017}.  
+
+% Im Kontext der Fahrzeugdetektion auf Satellitenbildern zeigen \citeauthor{Eikvil2009}, dass das panchromatische Band für die Klassifikation von Fahrzeugen genutzt wird, während multispektrale Informationen insbesondere zur Maskierung von Vegetation und Schatten eingesetzt werden \cite{Eikvil2009}.
+
+% \subsection{Fahrzeugdetektion im Remote-Sensing-Kontext}
+
+% Für die Fahrzeugdetektion in hochaufgelösten Satellitenbildern wurden hybride CNN-Modelle entwickelt, die Feature Maps aus Convolutional- und Pooling-Layern in Blöcke variabler Größe unterteilen, um mehrskalige Merkmale zu extrahieren \cite{XueyunChen2014}.  
+
+% Ein anderer Ansatz basiert auf graphbasierter Superpixel-Segmentierung. Dabei werden Bildausschnitte extrahiert und anschließend mit einem CNN klassifiziert, das vorhersagt, ob in dem Ausschnitt ein Fahrzeug vorhanden ist \cite{Jiang2015}.
+
+% \subsection{Forschungslücken und Motivation}
+
+% Trotz der Vielzahl bestehender Ansätze stellt sich die Frage, inwieweit die Erkennung von Fahrzeugen durch moderne One-Stage-Detektoren wie YOLO verbessert werden kann, wenn statt reiner RGB-Kanäle auch zusätzliche spektrale Informationen wie IR oder NDVI einbezogen werden. Theoretisch sollte die Leistung durch den zusätzlichen Kanal steigen, da Vegetation und Nicht-Vegetation besser unterschieden werden können. IR enthält zudem zusätzliche Informationen, die die Erkennung unterstützen könnten. 
+
+% Offen bleibt außerdem, welchen Einfluss axis-aligned bounding boxes (abb) und oriented bounding boxes (obb) auf die Erkennungsleistung haben, und welche Kanäle die Leistung verbessern oder verschlechtern. Diese Aspekte bilden die Grundlage für die Motivation der vorliegenden Arbeit.
+
+
+
+% \begin{itemize}
+%     \item Einleitung zum Forschungsfeld
+%     \begin{itemize}
+%         \item (Quelle \cite{Zhu2017})
+%         \item Deep Learning kann zusammen mit Remote Sensing Data für verschiedene Zwecke eingesetzt werden, wie zum beispiel land-used land cover classicification, scene classification oder object detection
+%         \item Hyperspectral image analysis, interpretation of SAR images, interpretation of high-resolution satellite images, multimodal data fusion, 3d reconstruction (Beschränkung auf Hyperspectral image analysis und ausführlicher interpretation of high resolution satellite images)
+%         \item hyperspectral image analysis: Nutzen eines Stacked Autoencoder (SAE) um hierarchical featrues in der spectralen domain zu filtern \cite{Chen2014}, supervised cnns zur Classifizierung von Crop Types \cite{Kussul2017}
+%         \item Interpretation of High Resolution satellite imagery: scene classification, automatisch wird ein semantisches Label zu jedem Sezenenbild zugeordnet; Schlüsselproblembei interpretation: weitverbreitete Anwendungsbereiche, wie Objectdetection \cite{Bhagavathy2006,Cheng2016} , change detection\cite{Chen2006}, urban planning und land resource managment; Unterteilung in die Schritte "Feature Extraction" und "Classification"
+%         \item Da Deep Learning eine mehrschichtige Architektur zum Erlernen von Merkmalen ist, kann es mit zunehmender Tiefe abstraktere und unterscheidungsfähigere semantische Merkmale lernen und im Vergleich zu Ansätzen auf mittlerer Ebene eine weitaus bessere Klassifizierungsleistung erzielen. aus dem grund state of the art für das scene classification problem bei High Resolution Satellite imagery
+%         \item object detection: Herausforderung ein oder mehrere spezifizierte Ground Objekte (wie Gebäude, Fahrzeuge, Flugzeuge) auf dem Satellitenbild zu verorten und eine dazugehörige Kategorie vorherzusagen; Deep CNNs werden afugrund ihrer Fähigkeit hochgradige (abstract and semantically meaningful) Featrue representations zu ermöglichen bevorzugt
+%         \begin{itemize}
+%             \item Relevanz: Warum ist die Erkennung und Klassifizierung von kleinen Fahrzeugen in hochaufgelösten multispektralen Bildern wichtig? (z. B. Verkehrsüberwachung, Katastrophenmanagement, militärische Anwendungen)?
+%             \item  Verkehrsplanung: Satellitenbilder können genutzt werden um Informationen zur Fahrzeugverteilung aus einer ganzen Region zu einem bestimmten Zeitpunkt zu gewinnen. Momentaufnahmen des gesamten Netzes können einen besseren Einblick in die VErteilung der Fahrzeuge in einer Region geben und wertvolle Informationen für Bereiche liefern, die von herkömmlichen Zählgeräten (meist induktive Schleifendetektoren, die in die Fahrbahn eingebettet sind) nicht erfasst werden; seit Einführung ziviler optischer Hochauflösungssatelliten (wie Quickbird und Ikonos) sind Bilder mit einer Auflösung von etwa einem Meter verfügbar. Hierfür ist es wichtig relativ kleine Objekte (wie Fahrzeuge) auf hochauflösenden Satellitenbildern sicher zu detektieren und richtig zu klassifizieren \cite{Eikvil2009}
+%             \item 
+%         \end{itemize}
+%         \begin{itemize}
+%             \item Begriffsdefinition: High Resolution; Multispectral Imagery, Small object detection
+%             \item High Resolution: Multispektrale Satelliten, wie Sentinel-1, Sentintel-2, Landsat haben eine recht geringe räumliche Auflösung (10-30m) \cite{Wieland2023}. Luftbilder, wie im VEDAI Dataset bereitgestellt haben pro Pixel eine Auflösung von 12.5 \texttimes 12.5 cm und sind damit deutlich höher aufgelöst, was dafür sorgt das Sie ideal zur Erkennung kleiner Objekte geeignet sind \cite{Razakarivony2015}
+%             \item Multispectral Imagery:Spektrale Auflösung kann als anzal der spektralen Bänder und des Umfangs des Elektromagnetischen Spektrums, den ein Sensor aufzeichnen kann definiert werden \cite{Khan2018}. Sensoren zur Bildaufzeichnung können mehrere Bänder gleichzeitg aufzeichnen. Ein Echtfarbbild besteht aus mehreren Bändern, wie R (Rot), G (Grün), B (Blau). Diese 3 Bänder können durch weitere Bänder wie Near Infrared (NIR) oder Infrared (IR) erweitert werden, da die Sensoren in den Satelliten diese mitaufzeichnen. \cite{Wiley2018} Daraus lassen sich dann noch weitere Indizes (wie NDVI) zur weiteren Analyse und Datenauswertung berechnen
+%             \item Small Object Definition: Keine klare Defintion ab wann ein Objekt klein auf einem Bild ist, da man Objekte auf Bildern mit hoher und niedriger Auflösung betrachten kann. Meist gelten Objekte als klein, wenn diese eine mittlere relative Überlappung (overlap between  bounding box area and the image) von 0.08\% bis 0.58\% aufweisen \cite{Chen2017}
+%         \end{itemize}
+%     \end{itemize}
+%     \item Stand der Technik im Fernerkundungsbereich
+%     \begin{itemize}
+%         \item viel klassisches Machine Learning mit Support Vector Machines (SVMs) und Stacked Autoencoder (SAE); SAE zeigt bei der Klassifizierunb von Hyperspektralen Fernerkundungsbildern keine offensichtliche Leistungsverbesserung im Vergleich zu SVM. (Bei Ergebnissen in bestehender Literatur zur Gesichtserkennung war SAE besser als SVM). Liegt mölgicherweise daran das SAE mehr Trainingsbeispiele benötigt, da eine große Anzahl von Parametern benötigt wird. Daher könnten die Vorteile des Einsatzes von SAE durch den damit verbundenen Aufwand der Trainingsdatenbeschaffung aufgewogen werden \cite{Liu2017}
+%     \end{itemize}
+%     \item Forschung zu Small OBject Detection
+%     \begin{itemize}
+%         \item CNNs für spezifische und generische  Object Detection
+%         \item weakly supervised learning framework für das Training eines Objektdetektors, Nutzung eines vortrainierten CNNs und eines negative bootstrap ping scheme im Detektortraining um eine schnelle Konvergenz des Detektors zu erreichen \cite{Zhou2016}
+%         \item Entwicklung eines Öltankdetektors, der aus dem vortrainierten CNN Modell extrahierte tiefe Umgebungsmerkmale mit lokalen Merkmalen (Histogrammen orientierter Gradienten \cite{Dalal2005}) kombiniert \cite{Zhang2015} 
+%         \item Two Stage Ansatz für das CNN Training und damit einhergehend die Entwicklung eine automatische Objekterkennungsmethode auf Grundlage eines vortrainierten CNNs genutzt wird. HIer wird das GoogLeNet zweimal mit verschiedenen Fine Tuning Parametern auf einem Datensatz abgestimmt und dieses Modell dann für die Objekterkennung mit Sliding Windows verwendet \cite{Sevo2016}
+%         \item Problem der verschieden Orientierungen der Objekte wurde versucht mit vortrainierten CNN Merkmalen zu lösen, die von combined layers extrahiert wurden und eine orientierungsrobuste Objketerkennung in einem groben Lokaliserungsrahmen zu ermöglichen \cite{Zhu2015}
+%     \end{itemize}
+%     \item Forschung zu Multispectral and Hyperspectral Imagery
+%     \begin{itemize}
+%         \item multispectrale Informationen (RGB, Near-Infrared (NIR), Mid-Infrared (MIR) Far-Infrared (FIR))wird oft im kontext von autonomen Fahren (Fussgänge- Fahrrad-, Autodetektion) verwendet, da IR auch bei schlechten Witterungsbedingungen Daten liefert \cite{Takumi2017}
+%         \item bei vehicle detection wird von \citeauthor{Eikvil2009} das panchromatic band für die cehicle classicification und die multispectrale information für die maskierung der vegetation und schatten verwendet \cite{Eikvil2009}
+%     \end{itemize}
+%     \item Fahrzeugdetektion im Remote Sensing Kontext
+%     \begin{itemize}
+%         \item Hybrides Deep CNN Modell für die Fahrzeugerkennung in Satelliitenbildern; Modell unterteilt alle featrue maps des letzten convolutional und max pooling layer des cnns in mehrere Blöcke variabler Größe um mehrskalige Merkmale zu extrahieren \cite{XueyunChen2014}
+%         \item Des weiteren Ansatz für Graphbasierte Superpixel Segmentierung zur Extraktion von Bildaussschnitten mit dem Training eines CNNs, welches vorhersagt ob ein Fahrzeug in dem Ausschnitt vorhanden ist \cite{Jiang2015}
+%     \end{itemize}
+%     \item Forschungslücken und Motivation für Arbeit
+%     \begin{itemize}
+%         \item inwieweit kann die Erkennung von Fahrzeugen durch einen modernen ONe Stage Detector \todo{Unterschied One Stage und Two Stage Detektor in Fundamentals erklären?}, wie You Only Look Once (YOLO), durch die Eingabe von mehr als 3 Kanälen (R,G,B,IR,NDVI) verbessert werden? 
+%         \item Theoretisch müsste sich die Leistung durch den zusätzlichen kanal verbessern; bzw. mit dem Einsatz von NDVI weiter verbessern lassen (Da das Modell dann besser Vegetation von nicht-Vegetation unterscheiden kann); IR enthält weitere Informationen und kann dadurch möglicherweise die Leistung verbessern
+%         \item Welchen Einfluss haben abb und obb auf die Erkennungleistung?
+%         \item Welcher Kanal verbessert oder verschlechtert die Erkennungsleistung?
+%     \end{itemize}
+% \end{itemize}
 

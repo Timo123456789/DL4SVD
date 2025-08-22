@@ -17,6 +17,7 @@
     \item This is probably due to the fact that small changes in the orientation of the bounding boxes lead to a greater deviation of the mean average precision 
     \item Oriented Bounding boxes are smaller than the axis aligned bounding boxes -> higher inaccuracy of mAP50-95 (see next slide)
     \item Red box at the right picture has a small deviation from the correct (blue) label
+    \item BB entsprechen der Definition von klein nach \cite{Chen2017}; nehmen als obb (725 px pro Box) ca, 0.069\% der Gesamtfläche des Bildes ein; und als abb 0.095\%; obb liegt damit knapp unterhalb der Untergrenze (very small object) und abb oberhalb der untergrenze (small object)
 \end{itemize}
 \begin{itemize}
     \item \todo{Bild für Vergleich der BB Area einfügen (zw. obb, aab aab old)}
