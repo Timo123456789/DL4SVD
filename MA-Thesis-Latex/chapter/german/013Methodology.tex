@@ -8,15 +8,31 @@
     \caption{Flowchart for workflow. Source: own representation}
     \label{fig:Flowchart}
 \end{figure}
-Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart dargestellt\todo{Referenz zum Flowchart einfügen}. Als Datengrundlage dient das VEDAI-Datenset, auf dessen Basis zunächst eine Entscheidung zwischen axis-aligned und oriented Bounding Boxes getroffen wird. Da aktuelle Versionen des YOLO-Frameworks grundsätzlich mit beiden Formaten umgehen können, erfolgt die Auswahl anhand ihrer jeweiligen Eignung für die Aufgaben der Objekterkennung und -lokalisierung.
+Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart dargestellt\todo{Referenz zum Flowchart einfügen}. Als Datengrundlage dient das \acrshort{VEDAI}-Datenset, auf dessen Basis zunächst eine Entscheidung zwischen axis-aligned und oriented Bounding Boxes getroffen wird. Da aktuelle Versionen des \acrshort{YOLO}-Frameworks grundsätzlich mit beiden Formaten umgehen können, erfolgt die Auswahl anhand ihrer jeweiligen Eignung für die Aufgaben der Objekterkennung und -lokalisierung.
 
-Im Anschluss wird der DOTA-Datensatz genutzt, um ein vortrainiertes Modell zu erzeugen, das als Ausgangspunkt für das Training mit Kanalpermutationen dient. Abhängig von der zuvor gewählten Bounding-Box-Variante wird auch die Channel Permutation mit diesem Format durchgeführt.
+Im Anschluss wird der \Acrfull{DOTA} genutzt, um ein vortrainiertes Modell zu erzeugen, das als Ausgangspunkt für das Training mit Kanalpermutationen dient. Abhängig von der zuvor gewählten Bounding-Box-Variante wird auch die Channel Permutation mit diesem Format durchgeführt.
 
-Im Rahmen der Experimente werden verschiedene Kanalpermutationen getestet, darunter: \texttt{RGBIR}, \texttt{IRGB}, \texttt{RIRB}, \texttt{RGB}, \texttt{RGIR} sowie optional erweiterte Varianten wie \texttt{RGBNDVI} und \texttt{GBNDVI}.
+Im Rahmen der Experimente werden verschiedene Kanalpermutationen (s. Tab. \ref{tab:perm}) getestet.
 
-Die Evaluation der Ergebnisse erfolgt auf Basis der mAP$_{50\text{-}95}$-Werte, welche eine standardisierte Bewertung der Modellleistung über verschiedene IoU-Schwellen hinweg ermöglichen. 
+\begin{table}[h!]
+\centering
+\begin{tabular}{l|c|c|c|c|c}
+Permutation & Red (R) & Green (G) & Blue (B) & Infrared (IR) & NDVI \\
+\hline
+\acrshort{RGBIR}    & x & x & x & x &   \\
+\acrshort{IRGB}     &   & x & x & x &   \\
+\acrshort{RIRB}     & x &   & x & x &   \\
+\acrshort{RGB}      & x & x & x &   &   \\
+\acrshort{RGIR}     & x & x &   & x &   \\
+\acrshort{RGBNDVI}  & x & x & x &   & x \\
+\acrshort{GBNDVI}   &   & x & x &   & x \\
+\end{tabular}
+\caption{Channel permutations represented by included channels (x = channel present).}
+\label{tab:perm}
+\end{table}
+Die Evaluation der Ergebnisse erfolgt auf Basis der \acrshort{mAP}$_{50\text{-}95}$-Werte, welche eine standardisierte Bewertung der Modellleistung über verschiedene \Acrshort{IoU}-Schwellen hinweg ermöglichen. 
 
-Zuletzt wurde eine Ablationsstudie unter Verwendung der Kanäle R, G, B, IR und NDVI durchgeführt.
+Zuletzt wurde eine Ablationsstudie unter Verwendung der Kanäle \Acrfull{R}, \Acrfull{G}, \Acrfull{B}, \acrshort{IR} und \acrshort{NDVI} durchgeführt.
 
 % \begin{itemize}
 %     \item Im Flowchart (\todo{Ref einfügen}) ist die Methodik dieser Thesis zu erkennen
@@ -35,17 +51,17 @@ Dabei zeigte sich, dass ein kleiner Teil der Daten (7 von 3\,757 Instanzen) Koor
 Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundung der Werte auf den gültigen Wertebereich behoben. \todo{Beispielbilder für Randlage einfügen}
 
 \section{YOLOv9}
-Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der 'You Only Look Once' (YOLO) Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde, ermöglicht eine schnelle und präzise Objekterkennung. YOLO basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
+Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der \Acrfull{YOLO} Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde, ermöglicht eine schnelle und präzise Objekterkennung. \acrshort{YOLO} basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
 
-Die Hauptvorteile von YOLO sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird YOLO verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie NIR oder IR integriert werden, um einen Vergleich zu dem reinen 3 Kanal RGB Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
+Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird \acrshort{YOLO} verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie \acrshort{NIR} oder \acrshort{IR} integriert werden, um einen Vergleich zu dem reinen 3 Kanal \acrshort{RGB} Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
 
 \subsection{YOLOv9u}
 
-Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der YOLO-Architektur dar. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024yolov9}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren YOLO-Versionen und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks.
+Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der \acrshort{YOLO}-Architektur dar. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren \acrshort{YOLO}-Versionen und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks.
 
 \subsection{YOLOv9e}
 
-Die \texttt{YOLOv9}-Modellreihe umfasst verschiedene Varianten, die sich hinsichtlich ihrer Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Die Bandbreite reicht dabei von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 GFLOPs bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 GFLOPs (siehe Tabelle~\ref{tab:yolov9-models}).
+Die \texttt{YOLOv9}-Modellreihe umfasst verschiedene Varianten, die sich hinsichtlich ihrer Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Die Bandbreite reicht dabei von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \Acrfullpl{GFLOP} bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}).
 \begin{table}[h]
 \centering
 \caption{Comparison of YOLOv9 model variants in terms of accuracy and computational complexity at an input resolution of 640$\times$640 pixels.}
@@ -67,7 +83,7 @@ YOLOv9e & 640 & 55.6 & 72.8 & 58.1 & 192.5 \\
 
 
 
-Aufgrund der höchsten erzielten Genauigkeit (mAP$_{\text{val}}^{50\text{-}95} = 55.6$) sowie der höchsten Rechenkapazität wurde das \texttt{YOLOv9e}-Modell für alle Experimente mit axis-aligned Bounding Boxes verwendet. Die Wahl dieses Modells erfolgte mit dem Ziel, die bestmögliche Detektionsleistung im Rahmen der Evaluierung zu gewährleisten.
+Aufgrund der höchsten erzielten Genauigkeit (\acrshort{mAP}$_{\text{val}}^{50\text{-}95} = 55.6$) sowie der höchsten Rechenkapazität wurde das \texttt{YOLOv9e}-Modell für alle Experimente mit axis-aligned Bounding Boxes verwendet. Die Wahl dieses Modells erfolgte mit dem Ziel, die bestmögliche Detektionsleistung im Rahmen der Evaluierung zu gewährleisten.
 
 
 
@@ -88,7 +104,7 @@ Aufgrund der höchsten erzielten Genauigkeit (mAP$_{\text{val}}^{50\text{-}95} =
 \section{Database}
 \subsection{Vehicle Detection on Aerial Images (VEDAI) Dataset}
 
-Das 'Vehicle Detection in Aerial Images' (VEDAI) Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl RGB-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie NIR oder IR auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in ungefähr 1200 Bildern annotiert. Diese Objekte sind in 9 Klassen (Boat, Camping Car, Car, Pickup, Plane, Tractor, Truck, Van und Others) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht. \\
+Das \Acrshort{VEDAI} Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl \acrshort{RGB}-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie \acrshort{NIR} oder \acrshort{IR} auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in ungefähr 1200 Bildern annotiert. Diese Objekte sind in 9 Klassen (Boat, Camping Car, Car, Pickup, Plane, Tractor, Truck, Van und Others) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht. \\
 Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was ausreichend ist um einzelne Fahrzeuge zu erkennen. Die Bilder mit einer Größe von 1024 \texttimes 1024 Pixeln sind bei einer Befliegung im Jahr 2012 in US Amerikanischen Bundesstaat Utah aufgenommen worden. 
 \todo{Bsp. Bild für jede Klasse zeigen (aus Paper nehmen!; Quellenverlinkung für text und bild nicht vergessen)}
 
@@ -96,9 +112,9 @@ Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was au
 
 \subsection{Dataset for Objectdetection in Aerial Images (DOTA) 1.5}
 
-Der DOTA-Datensatz (Dataset for Object Detection in Aerial Images) eignet sich aufgrund seiner Vielfalt an Klassen und seiner domänenspezifischen Ausrichtung besonders gut als Grundlage für das Pretraining in den Permutationsexperimenten. Er enthält eine große Anzahl annotierter Objekte aus verschiedenen Kategorien, die in hochauflösenden Satellitenbildern enthalten sind.
+Das \Acrfull{DOTA} eignet sich aufgrund seiner Vielfalt an Klassen und seiner domänenspezifischen Ausrichtung besonders gut als Grundlage für das Pretraining in den Permutationsexperimenten. Er enthält eine große Anzahl annotierter Objekte aus verschiedenen Kategorien, die in hochauflösenden Satellitenbildern enthalten sind.
 
-Die Bildauflösungen im DOTA-Datensatz variieren stark und reichen von 800~$\times$~800 bis hin zu 20\,000~$\times$~20\,000 Pixeln. Die Datensätze umfassen sowohl RGB-Bilder (drei Kanäle: Rot, Grün, Blau) als auch Graustufenbilder, die den panchromatischen Kanal der GF2- und JL1-Satelliten darstellen. Die Bilder stammen aus verschiedenen Quellen, unter anderem von Google Earth und weiteren kommerziellen oder institutionellen Anbietern.
+Die Bildauflösungen im \acrshort{DOTA}-Datensatz variieren stark und reichen von 800~$\times$~800 bis hin zu 20\,000~$\times$~20\,000 Pixeln. Die Datensätze umfassen sowohl \acrshort{RGB}-Bilder als auch Graustufenbilder, die den panchromatischen Kanal der GF2- und JL1-Satelliten darstellen. Die Bilder stammen aus verschiedenen Quellen, unter anderem von Google Earth und weiteren kommerziellen oder institutionellen Anbietern.
 
 Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-Datensatzes berücksichtigt. Von besonderem Interesse für die anschließenden Experimente sind jedoch die Klassen \textit{Large Vehicle}, \textit{Small Vehicle}, \textit{Plane} und \textit{Ship}, da sie eine hohe Relevanz für die Objekterkennung im urbanen bzw. infrastrukturellen Kontext besitzen.
 
@@ -116,18 +132,18 @@ Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-
 \section{Umsetzung}
 \subsection{PALMA}
 
-Für das Training der Modelle wurde das Hochleistungsrechenzentrum \textbf{PALMA} der Universität Münster genutzt. Als Arbeitsumgebung kam dabei eine isolierte \texttt{Python}-Umgebung (UV) zum Einsatz. Die Ausführung der Trainingsprozesse erfolgte über selbst entwickelte \texttt{Bash}-Skripte, die auf unterschiedlichen GPU-Knoten des Clusters (u.\,a. HGX-Knoten) verteilt wurden, um eine effiziente Parallelisierung der Trainings zu ermöglichen.
+Für das Training der Modelle wurde das Hochleistungsrechenzentrum \Acrshort{PALMA} der Universität Münster genutzt. Als Arbeitsumgebung kam dabei eine isolierte \texttt{Python}-Umgebung (UV) zum Einsatz. Die Ausführung der Trainingsprozesse erfolgte über selbst entwickelte \texttt{Bash}-Skripte, die auf unterschiedlichen \acrshort{GPU}-Knoten des Clusters (u.\,a. HGX-Knoten) verteilt wurden, um eine effiziente Parallelisierung der Trainings zu ermöglichen.
 
-PALMA wird von dem "Center for Information Technology" (CIT) der Universität Münster, basierend auf Hardware der Firma MEGWARE, bereitgestellt\cite{palma_spec} und verfügt über folgende technische Spezifikationen:
+PALMA wird von dem \Acrfull{CIT} der Universität Münster, basierend auf Hardware der Firma MEGWARE, bereitgestellt\cite{palma_spec} und verfügt über folgende technische Spezifikationen:
 
 \begin{itemize}
-    \item \textbf{Gesamtzahl der CPU-Kerne:} 16\,272
-    \item \textbf{Arbeitsspeicher:} 77\,568\,GB
+    \item \textbf{Gesamtzahl der \acrshort{CPU}-Kerne:} 16\,272
+    \item \textbf{Arbeitsspeicher:} 77\,568\,\acrshort{GB}
     \item \textbf{Anzahl der Rechenknoten:} 444
-    \item \textbf{Prozessor:} Intel Xeon Gold 6140 (18~Kerne, 2{,}30\,GHz, Skylake-Architektur)
-    \item \textbf{Netzwerkinterconnect:} 100\,Gbit/s Intel Omni-Path
-    \item \textbf{Speichersystem:} GPFS mit einer Gesamtkapazität von 2{,}4\,PB
-    \item \textbf{Linpack-Leistung:} \textit{R\textsubscript{max}} = 800\,TFLOP/s; \textit{R\textsubscript{peak}} = 1{,}277\,TFLOP/s
+    \item \textbf{Prozessor:} Intel Xeon Gold 6140 (18~Kerne, 2{,}30\,\acrshort{GHz}, Skylake-Architektur)
+    \item \textbf{Netzwerkinterconnect:} 100\,\acrshort{GHz}/s Intel Omni-Path
+    \item \textbf{Speichersystem:} \acrshort{GPFS} mit einer Gesamtkapazität von 2{,}4\,\acrshort{PB}
+    \item \textbf{Linpack-Leistung:} \textit{R\textsubscript{max}} = 800\,\acrshort{TFLOP}/s; \textit{R\textsubscript{peak}} = 1{,}277\,\acrshort{TFLOP}/s
     \item \textbf{Betriebssystem:} Rocky Linux 9
 \end{itemize}
 
