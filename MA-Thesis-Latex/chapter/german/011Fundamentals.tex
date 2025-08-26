@@ -267,42 +267,66 @@ Schließlich nutzt YOLOv12 einen aufmerksamkeitszentrierten Ansatz und implement
 % \end{itemize}
 
 \section{Evaluation Metrics}
-\subsection{N Fold Cross Validation}
-\begin{itemize}
-    \item Cross validation to ensure robustness and better comparison of different models
-    \item create own folds, as the ones provided by the paper had the same images in training and validation data
-    \item  6 Folds
-    \item 5 for Training and Validation, 1 for Test (Fold 5)
-    \item Good object distribution between the folds
-    \item 207-221 Images per Fold, where 3 or 7 Images are only background
-    
-    \item Sorting method similar to bucketsort
-    \item Each fold gets an image at the beginning and the class that is least common in each fold is identified
-    \item then the next image is taken and the objects of the classes are counted (how often each class appears in the image). The image is placed in the fold with the fewest objects of that class
-    \item If there are the same number, priority is given to rarity
-    \item \todo{Tabelle mit Verteilung einfügen}
+\subsection{K Fold Cross Validation}
+
+Die \acrfull{KFC} ist eine der am häufigsten verwendeten Methoden zur Modellauswahl und zur Fehlerabschätzung bei Klassifikationsaufgaben. Bei dieser Technik wird der Datensatz in $k$ gleich große Teilmengen aufgeteilt. Iterativ werden $k-1$ dieser Teilmengen zum Trainieren des Modells verwendet, während die verbleibenden Daten zur Bewertung der Modellleistung dienen \cite{Anguita2012}. In der Praxis wird $k$ häufig auf 5 oder 10 gesetzt, da Schätzungen bei diesen Werten weder durch eine hohe Verzerrung noch durch eine sehr hohe Varianz gekennzeichnet sind \cite{Nti2021}. 
+
+Darüber hinaus ermöglicht die K-Fold Cross Validation eine strukturierte Aufteilung des Datensatzes in Trainings-, Validierungs- und Testmengen. Dabei ist sicherzustellen, dass die Verteilung der Klassenobjekte sowie die Anzahl der Bilder in den einzelnen Folds weitgehend homogen ist. Überschneidungen von Bildern zwischen verschiedenen Folds müssen vermieden werden, da das Modell sonst Gefahr läuft, zu overfitten, wenn identische Bilder sowohl im Trainings-, Validierungs- als auch im Testdatensatz enthalten sind.
+% \begin{itemize}
+%     \item \Acrfull{KFC} ist eine der am häufigsten Verwendeten MEthoden zur Modellauswahl udn zur Fehlerabschätzung bei Klassifikationen
+%     \item Datensatz wird in k Teilmengen aufgeteilt
+%     \item einiger werden iterativ zum Trainieren des Modells verwendet, während andere zur Bewertung der Leistung genutzt werden \cite{Anguita2012}
+%     \item meist wird K auf 5 oder 10 gesettz, da Verteilungen mit diesem Wert weder unter einer hohen Verzerrung noch unter einer sehr hohen Varianz liegenden \cite{Nti2021}
+%     \item Datensätze können durch Cross Validation in Trainings-, Validierung- und Testdatensatz aufgesplittet werden. Wichtig ist, dass die Verteilung der Objekte der Klassen, sowie die Bildmenge relativ homogen zwischen den Folds ist. Es darf keine Überschneidungen zwischen Bildern verschiedener Folds geben, da das Modell sonst overfittet, weil es bspw. das gleiche Bild im Trainings-, Validierungs- und Testdatensatz hat.
+% \end{itemize}
+
+\subsection{Intersection over Union (IoU)}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/Fundamentals/IoU.png}
+    \caption{Graphical Visualiziation for IoU. \cite{iou_pic}}
+    \label{fig:IoU}
+\end{figure}
+
+Die \acrfull{IoU}, auch als Jaccard-Index bekannt, ist die am häufigsten verwendete Metrik zum Vergleich der Ähnlichkeit zweier beliebiger Formen. Sie kodiert die Formmerkmale der zu vergleichenden Objekte, beispielsweise Höhe, Breite und Position zweier \acrshort{BB}, in eine Bereichseigenschaft und berechnet daraus ein normalisiertes Maß, das sich auf die verglichenen Flächen oder Volumina bezieht (siehe Abb. \ref{fig:IoU}). Diese Eigenschaft macht die \acrshort{IoU} unabhängig von der Größe des betrachteten Objekts \cite{Rezatofighi2019}.
+
+Aufgrund dieser Unabhängigkeit basiert eine Vielzahl von Leistungsmaßen in den Bereichen Segmentierung \cite{Ramirez2019,cordts2016,Zhou2017,lin2015}, Objekterkennung \cite{lin2015,Everingham2010} und Objektverfolgung \cite{Kristan2016,lealtaixé2015} auf der \acrshort{IoU}. Dabei entspricht eine der beiden \acrshort{BB} der Ground Truth, also dem korrekt gelabelten und lokalisierten Objekt, während die zweite \acrshort{BB} die vom Modell vorhergesagte Lokalisierung des Objektes darstellt. Die auf dieser Grundlage berechnete Übereinstimmung (\acrshort{IoU}) ermöglicht eine präzise Bewertung der Genauigkeit von Deep-Learning-Modellen.
+
+% \begin{itemize}
+%     \item \Acrfull{IoU}, oder auch Jaccard-Index, ist die am häufigsten verwendete Metrik zum Vergleich der Ähnlichkeit zweier beliebiger Formen
+%     \item kodiert die Formmerkmale der vergleichenenden Objekte (z. B. Höhe, Breite und Positionen zweier \acrshort{BB}) in die Bereichseigenschaft und berechnet ein normalisiertes Maß, dass sich auf die verglichenen Flächen (oder Volumina) bezieht (s. Fig \ref{fig:IoU}); diese Eigenschaft macht \Acrshort{IoU} unabhängig von der Größe des betrachten Objekts \cite{Rezatofighi2019}
+%     \item aufgrund dieser Eigenschaft basieren alle Leistungsmaße zur Bewertung von Segmentierung \cite{Ramirez2019,cordts2016,Zhou2017,lin2015}, Objekterkennung \cite{lin2015,Everingham2010} und -Verfolgung \cite{Kristan2016,lealtaixé2015} auf dieser Metrik
+%     \item Dabei entspricht eine \Acrshort{BB} der Ground Truth, also dem gelabelten richtig verortetem Objekt, und die zweite \Acrshort{BB} der vom Modell vorhergesagten Lokalisierung des Objektes. Mit der daraus berechneten Übereinstimmung (\acrshort{IoU}) kann sich die Genauigkeit eines \Acrshort{DL} Modells bewerten.
+% \end{itemize}
 
 
-\end{itemize}
-
-\subsection{IoU}
-\todo{erklären?}
-\todo{NDVI erklären?}
-
-\subsection{Ab wann ein Objekt klein ist definieren und erklären?}
 
 
-\subsection{Mean Average Precision}
-\begin{itemize}
-    \item Präzision ist der Anteil der vom Modell gemeldeteten Erkennungen, die korrekt waren 
-    \item Recall der Anteil an Erkennungen der tatsächlich aufgetretenen Objekte, die erkannt wurden
-    \item PR (Precision-Recall) Kurve (PRC)kann gezeichnet werden, wobei Präzision auf Y und Recall auf X Achse dargestellt wird (alles Goodfelloq Quelle)
-    \item Objektdetektor gibt für jede BB eine Konfidenz aus, die angibt, wie sicher sich das Modell hinsichtlich der Vorhersage ist
-    \item Vorhersagen unterhalb einer bestimmten Konfidenzschwelle können entfernt werden
-    \item PR Curve kann man auch bei allen möglichen Konfidenzschwellen  erstellen, dann kann man die durchschnittliche Präzision als Fläche unter der PRC berechnen
-    \item Modellbewertung anhand der mittleren durchschnittlichen Präzision (mAP), die als Mittelwert der Average Precision (APs) in allen verschiedenen Klassen berechnet wird \cite{Rainio2024}
-    \item Verschiedene Genauigkeiten bei der Übereinstimmung möglich, bei IoU Schwellwert von 0.5 oder auch von 0.5-0.95. Letzteres entspricht dem Mittelwert von mAP@0.5, mAP@0.55, .. , mAP@0.95. Das ist eine strengere Metrik, da Sie eine größere Überlappung für potenzielle Übereinstimmungen erfordert und aus diesem Grund ist diese Metrik gut für Situationen geeignet, in denen die vorhergesagten Positionen der BB sehr genau sein müssen
-\end{itemize}
+
+
+\subsection{Mean Average Precision (mAP)}
+
+Die \acrlong{IoU} steht in engem Zusammenhang mit der \acrfull{mAP}, ist jedoch nicht identisch. Während die \acrshort{IoU} die Genauigkeit eines einzelnen vorhergesagten \acrshort{BB} misst, stellt die \acrshort{mAP} eine umfassendere Metrik dar, die die Leistung eines Modells über alle Objekte und Klassen eines Datensatzes bewertet \cite{ultralyics_iou}.
+
+Zur Berechnung der \acrshort{mAP} werden die Konzepte Precision und Recall herangezogen. Precision beschreibt den Anteil der vom Modell als positiv klassifizierten Erkennungen, die tatsächlich korrekt sind, während Recall den Anteil der tatsächlich vorhandenen Objekte angibt, die korrekt erkannt wurden. Auf Basis dieser Werte kann eine \acrfull{PRC} erstellt werden, wobei Precision auf der Y-Achse und Recall auf der X-Achse abgetragen wird \cite{Goodfellow-et-al-2016}. Objektdetektoren geben für jede Bounding Box eine Konfidenz an, die die Sicherheit des Modells hinsichtlich der Vorhersage widerspiegelt. Vorhersagen, deren Konfidenz unter einer festgelegten Schwelle liegen, können verworfen werden. 
+
+Die \acrshort{PRC} kann für alle möglichen Konfidenzschwellen erstellt werden, wodurch sich die durchschnittliche Präzision als Fläche unter der Kurve berechnen lässt. Die Modellbewertung erfolgt anschließend anhand der \acrfull{mAP}, die als Mittelwert der \acrfull{AP} über alle Klassen ermittelt wird \cite{Rainio2024}. Dabei können unterschiedliche Genauigkeitsanforderungen an die Übereinstimmung der Bounding Boxes gestellt werden, beispielsweise durch IoU-Schwellenwerte von 0,5 oder einem Bereich von 0,5 bis 0,95. Letzteres entspricht dem Mittelwert von \acrshort{mAP}@0.5, \acrshort{mAP}@0.55 bis \acrshort{mAP}@0.95. Diese strengere Metrik erfordert eine größere Überlappung zwischen Ground Truth und Vorhersage und ist besonders geeignet, wenn die vorhergesagten Positionen der Bounding Boxes sehr präzise sein müssen \cite{Rainio2024}.
+
+% \begin{itemize}
+%     \item \Acrfull{IoU} ist mit \acrfull{mAP} verwandt aber nicht identisch
+%     \item \acrshort{IoU} misst die Genauigkeit eines einzelnen vorhergesagten \acrshort{BB}, während \acrshort{mAP} eine umfassende Metrik ist, die die Leistung eines Modells über alle Objekte udn Klassen in einem Datensatz berechnet \cite{ultralyics_iou}
+% \end{itemize}
+% \begin{itemize}
+%     \item Precision ist der Anteil der vom Modell gemeldeteten Erkennungen, die korrekt waren 
+%     \item Recall der Anteil an Erkennungen der tatsächlich aufgetretenen Objekte, die erkannt wurden
+%     \item \Acrfull{PRC} kann gezeichnet werden, wobei Precision auf Y und Recall auf X Achse dargestellt wird \cite{Goodfellow-et-al-2016}
+%     \item Objektdetektor gibt für jede BB eine Konfidenz aus, die angibt, wie sicher sich das Modell hinsichtlich der Vorhersage ist
+%     \item Vorhersagen unterhalb einer bestimmten Konfidenzschwelle können entfernt werden
+%     \item \acrshort{PRC} kann man auch bei allen möglichen Konfidenzschwellen  erstellen, dann kann man die durchschnittliche Präzision als Fläche unter der \acrshort{PRC} berechnen
+%     \item Modellbewertung anhand der \Acrfull{mAP}, die als Mittelwert der \Acrfull{AP} in allen verschiedenen Klassen berechnet wird \cite{Rainio2024}
+%     \item Verschiedene Genauigkeiten bei der Übereinstimmung möglich, bei IoU Schwellwert von 0.5 oder auch von 0.5-0.95. Letzteres entspricht dem Mittelwert von \Acrshort{mAP}@0.5, \acrshort{mAP}@0.55, .. , \Acrshort{mAP}@0.95. Das ist eine strengere Metrik, da Sie eine größere Überlappung für potenzielle Übereinstimmungen erfordert und aus diesem Grund ist diese Metrik gut für Situationen geeignet, in denen die vorhergesagten Positionen der BB sehr genau sein müssen \cite{Rainio2024}
+% \end{itemize}
 
 
 

@@ -191,11 +191,42 @@ Die Methode \texttt{get\_smallest\_class\_in\_image} analysiert ein gegebenes Bi
 
 Für das Training der Modelle wurden mehrere \texttt{Bash}-Skripte entwickelt, die für den Einsatz auf dem Hochleistungsrechner \acrshort{PALMA} konzipiert wurden. Die Trainingsläufe wurden primär mittels \texttt{\acrshort{SLURM} Job Arrays} durchgeführt, wobei jeder Fold einer Permutation einem eigenen Job zugewiesen wurde. Somit entsprach ein Modell jeweils einem Fold innerhalb einer bestimmten Permutation.
 
-Im Rahmen des Permutationstrainings kamen folgende Hyperparameter zum Einsatz: eine Bildauflösung von \texttt{1024~$\times$~1024} Pixeln, \texttt{500} Trainings-Epochen sowie ein \texttt{patience}-Wert von \texttt{0}, wodurch das frühzeitige Beenden des Trainings deaktiviert wurde. Dies ermöglichte eine konsistente Vergleichbarkeit, da alle Modelle vollständig über 500 Epochen trainiert wurden. Zusätzlich wurde ein vortrainiertes Modell verwendet, welches auf dem \acrshort{DOTA}-Datensatz basiert\todo{Referenz zum \acrshort{DOTA}-Datensatz einfügen}. Als Modellarchitektur wurde durchgängig \texttt{YOLOv9u} eingesetzt\todo{Referenz zur YOLOv9u-Architektur einfügen}.
+Im Rahmen des Permutationstrainings kamen für sämtliche Permutationen einheitlich die in Tabelle \ref{tab:hyperparameters} aufgeführten Hyperparameter zum Einsatz. 
+Die Bildauflösung betrug 1024~$\times$~1024 Pixel, die Trainingsdauer umfasste 500 Epochen, und das frühzeitige Beenden des Trainings war durch einen \texttt{patience}-Wert von 0 deaktiviert, um eine konsistente Vergleichbarkeit zu gewährleisten. 
+Verwendet wurde ein vortrainiertes Modell auf dem \acrshort{DOTA}-Datensatz\todo{Referenz zum \acrshort{DOTA}-Datensatz einfügen}, wobei die Modellarchitektur \texttt{YOLOv9u}\todo{Referenz zur YOLOv9u-Architektur einfügen} durchgängig zum Einsatz kam.
 
 Für die Ablationsstudien wurde auf den Einsatz des vortrainierten Modelles verzichtet; alle übrigen Trainingsparameter blieben unverändert.
 
 Nach Abschluss des Trainings wurde jeweils das Modell mit der besten Leistung auf den Validierungsdaten evaluiert. Anschließend erfolgte die Anwendung dieses Modells auf dem entsprechenden Testfold. In beiden Fällen wurde die Evaluation in einem einmaligen Durchlauf durchgeführt, um konsistente und vergleichbare Ergebnisse zu gewährleisten.
+
+\begin{table}[htbp]
+\centering
+\caption{Key training hyperparameters at the \acrshort{RGB} Permutation (Fold 4)}
+\label{tab:hyperparameters}
+\begin{tabular}{ll}
+\hline
+\textbf{Hyperparameter} & \textbf{Value / Description} \\
+\hline
+Task & Oriented Bounding Box (OBB) \\
+Mode & Training \\
+Model & YOLOv9u, pretrained on DOTA \\
+Dataset & DOTA  \\
+Epochs & 500 \\
+Batch size & 4 \\
+Image size & 1024 × 1024 px \\
+Early stopping (patience) & 0 (disabled) \\
+Optimizer & Auto \\
+Initial learning rate ($lr_0$) & 0.01 \\
+Momentum & 0.937 \\
+Weight decay & 0.0005 \\
+Warmup epochs & 3 \\
+Data augmentation & FlipLR 0.5, Mosaic 1.0, Erasing 0.4, AutoAugment randaugment \\
+Device & GPUs: 0,1,2,3 \\
+Workers & 8 \\
+Save directory & \texttt{/scratch/tmp/t\_liet02/cross\_validation/rgb/fold4} \\
+\hline
+\end{tabular}
+\end{table}
 
 % \begin{itemize}
 %     \item Diverse Bash Scripte für PALMA geschriebne um die Modelle zu trainieren. 
