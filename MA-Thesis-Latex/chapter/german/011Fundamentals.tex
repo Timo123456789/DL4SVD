@@ -68,7 +68,16 @@ Das Exploding-Gradient-Problem stellt den gegenteiligen Fall dar: hier wachsen d
 
 \subsection{Overfitting}
 
-Ein weiteres zentrales Problem ist das Overfitting. Aufgrund der großen Anzahl an Parametern in tiefen Netzen besteht eine hohe Wahrscheinlichkeit, dass das Modell die Trainingsdaten zu stark „auswendig lernt“ und dadurch nicht mehr in der Lage ist, auf unbekannten Testdaten gute Ergebnisse zu erzielen. Overfitting kann durch verschiedene Regularisierungstechniken reduziert werden, darunter Gewichtsverfall (Weight Decay), Batch Normalisierung und Dropout. Eine weitere Strategie ist die Datenaugmentation, die den Trainingsdatensatz künstlich vergrößert und so die Generalisierungsfähigkeit verbessert. Ebenso kann Data Corruption – die gezielte Einbeziehung von verrauschten oder manipulierten Daten – helfen, das Modell robuster zu machen. Schließlich können Methoden, die übermäßig zuversichtliche Vorhersagen bestrafen, ebenfalls als Regularisierung wirken \cite{Alzubaidi2021}.  
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/011Fundamentals/overfitting.jpg}
+    \caption{Underfitting, Overfitting and Optimal at Deep Learning Trainings. \cite{overfitting_pic} }
+    \label{fig:overfitting}
+\end{figure}
+
+
+Ein zentrales Problem beim Training tiefer neuronaler Netze stellt das Overfitting dar (vgl. Abb. \ref{fig:overfitting}). In diesem Fall passt sich das Modell zu stark an die Trainingsdaten an: Es erzielt dort eine hohe Genauigkeit, während die Leistung auf unabhängigen Testdaten deutlich abnimmt. Das Gegenphänomen ist das Underfitting, bei dem die zugrunde liegende Datenstruktur nicht hinreichend erfasst wird und das Modell folglich sowohl im Trainings- als auch im Testdatensatz unzureichende Ergebnisse liefert. Ziel ist daher die Entwicklung eines Modells, das die relevanten Muster der Trainingsdaten adäquat erlernt und gleichzeitig eine hohe Generalisierungsfähigkeit gegenüber unbekannten Daten aufweist \cite{overfitting_pic}.\\
+Die hohe Anzahl an Parametern in tiefen Netzen erhöht die Wahrscheinlichkeit, dass ein Modell die Trainingsdaten übermäßig stark „auswendig lernt“ und dadurch seine Fähigkeit verliert, auf neuen Testdaten verlässliche Vorhersagen zu treffen. Overfitting kann durch verschiedene Regularisierungstechniken verringert werden, darunter Gewichtsverfall (Weight Decay), Batch-Normalisierung und Dropout. Eine weitere Möglichkeit stellt die Datenaugmentation dar, bei der der Trainingsdatensatz künstlich vergrößert wird, um die Generalisierungsfähigkeit zu verbessern. Ebenso kann Data Corruption – die gezielte Einbeziehung verrauschter oder manipulierter Daten – die Robustheit des Modells erhöhen. Schließlich existieren Verfahren, die übermäßig zuversichtliche Vorhersagen gezielt bestrafen und so ebenfalls als Regularisierung wirken \cite{Alzubaidi2021}.
 
 Zusammenfassend bietet Deep Learning einen leistungsstarken Ansatz zur automatisierten Merkmalsextraktion und Klassifikation, der sich durch Flexibilität, Robustheit und hohe Skalierbarkeit auszeichnet. Gleichzeitig stellen Herausforderungen wie das Vanishing-Gradient-Problem, Exploding Gradients und Overfitting zentrale Forschungsfelder dar, für die kontinuierlich neue Lösungen entwickelt werden \cite{Alzubaidi2021}. 
 
@@ -232,7 +241,7 @@ Im Gegensatz dazu behandeln One-Stage-Detektoren, wie \Acrfull{YOLO} \cite{redmo
 %     \item One Stage hat zwar geringere Genauigkeitsraten ist aber viel schneller als TWo Stage Detektoren
 % \end{itemize}
 
-\section{"You Only Look Once" (YOLO)}
+\section{Historical Development of YOLO Architectures}
 
 \acrfull{YOLO} ist ein One-Stage-Detektor, der erstmals in der Version YOLOv1 von Redmon et al. (2016) veröffentlicht wurde \cite{redmon2016}. Dieser Ansatz stellte einen neuartigen Weg zur Objekterkennung dar, da er Genauigkeit und Geschwindigkeit durch die Verarbeitung von Bildern in einer einstufigen Netzwerkarchitektur kombinierte. YOLOv1 bildete somit den Grundstein für Echtzeitanwendungen in der Bildverarbeitung und wurde zum Standard für nachfolgende Entwicklungen \cite{Sapkota2025}.
 
@@ -246,7 +255,7 @@ YOLOv6, vorgestellt 2022 von einem Team eines chinesischen E-Commerce-Plattformb
 
 YOLOv8, veröffentlicht 2023 von Ultralytics \cite{ultralyics_2023}, zeichnete sich durch eine effizientere Architektur, verbesserte Trainingstechniken und erweiterte Unterstützung für große Datensätze aus \cite{Sapkota2025,ultralyics_2023}. YOLOv9 \cite{wang2024_sapkota} integrierte \acrfull{PGI} für eine leistungsfähigere Nutzung tieferer Netzwerke und führte die leichtgewichtige Netzwerkarchitektur \acrfull{GELAN} ein, die auf Gradientenpfadplanung basiert und in Kombination mit \acrshort{PGI} besonders gute Ergebnisse auf ressourcenschonenden Modellen erzielt \cite{Sapkota2025,wang2024_sapkota}.
 
-YOLOv10, entwickelt 2023 von chinesischen Wissenschaftlern \cite{wang2024}, präsentierte einen neuartigen Ansatz für die Echtzeit-Objekterkennung. Durch den Verzicht auf \acrfull{NMS} und die Optimierung zentraler Modellkomponenten wurden die Einschränkungen früherer YOLO-Versionen überwunden, was zu erheblichen Effizienz- und Leistungssteigerungen führte \cite{wang2024}. YOLOv11 verbesserte die Backbone- und Neck-Architektur weiter, wodurch die Merkmalsextraktion optimiert und ein ausgewogenes Verhältnis zwischen Präzision und Recheneffizienz erreicht wurde \cite{Sapkota2025,ultralyics_yolov11}.
+YOLOv10, entwickelt 2023 von chinesischen Wissenschaftlern \cite{wang2024}, präsentierte einen neuartigen Ansatz für die Echtzeit-Objekterkennung. Durch den Verzicht auf \acrfull{NMS} und die Optimierung zentraler Modellkomponenten wurden Einschränkungen früherer YOLO-Versionen überwunden, was zu erheblichen Effizienz- und Leistungssteigerungen führte \cite{wang2024}. YOLOv11 verbesserte die Backbone- und Neck-Architektur weiter, wodurch die Merkmalsextraktion optimiert und ein ausgewogenes Verhältnis zwischen Präzision und Recheneffizienz erreicht wurde \cite{Sapkota2025,ultralyics_yolov11}.
 
 Schließlich nutzt YOLOv12 einen aufmerksamkeitszentrierten Ansatz und implementiert \acrfull{AA2} sowie \acrfull{R-ELAN}, um die Merkmalsverarbeitung weiter zu verbessern \cite{tian2025,Sapkota2025}.
 
@@ -269,7 +278,7 @@ Schließlich nutzt YOLOv12 einen aufmerksamkeitszentrierten Ansatz und implement
 \section{Evaluation Metrics}
 \subsection{K Fold Cross Validation}
 
-Die \acrfull{KFC} ist eine der am häufigsten verwendeten Methoden zur Modellauswahl und zur Fehlerabschätzung bei Klassifikationsaufgaben. Bei dieser Technik wird der Datensatz in $k$ gleich große Teilmengen aufgeteilt. Iterativ werden $k-1$ dieser Teilmengen zum Trainieren des Modells verwendet, während die verbleibenden Daten zur Bewertung der Modellleistung dienen \cite{Anguita2012}. In der Praxis wird $k$ häufig auf 5 oder 10 gesetzt, da Schätzungen bei diesen Werten weder durch eine hohe Verzerrung noch durch eine sehr hohe Varianz gekennzeichnet sind \cite{Nti2021}. 
+Die \acrfull{KFC} ist eine der am häufigsten verwendeten Methoden zur Modellauswahl und zur Fehlerabschätzung bei Klassifikationsaufgaben. Bei dieser Technik wird der Datensatz in $k$ gleich große Teilmengen aufgeteilt. Iterativ werden $k-1$ dieser Teilmengen zum Trainieren des Modells verwendet, während die verbleibende Teilmenge zur Bewertung der Modellleistung dienen \cite{Anguita2012}. In der Praxis wird $k$ häufig auf 5 oder 10 gesetzt, da Schätzungen bei diesen Werten weder durch eine hohe Verzerrung noch durch eine sehr hohe Varianz gekennzeichnet sind \cite{Nti2021}. 
 
 Darüber hinaus ermöglicht die K-Fold Cross Validation eine strukturierte Aufteilung des Datensatzes in Trainings-, Validierungs- und Testmengen. Dabei ist sicherzustellen, dass die Verteilung der Klassenobjekte sowie die Anzahl der Bilder in den einzelnen Folds weitgehend homogen ist. Überschneidungen von Bildern zwischen verschiedenen Folds müssen vermieden werden, da das Modell sonst Gefahr läuft, zu overfitten, wenn identische Bilder sowohl im Trainings-, Validierungs- als auch im Testdatensatz enthalten sind.
 % \begin{itemize}
@@ -284,14 +293,28 @@ Darüber hinaus ermöglicht die K-Fold Cross Validation eine strukturierte Aufte
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\textwidth]{images/Fundamentals/IoU.png}
+    \includegraphics[width=0.4\textwidth]{images/011Fundamentals/IoU.png}
     \caption{Graphical Visualiziation for IoU. \cite{iou_pic}}
     \label{fig:IoU}
 \end{figure}
 
 Die \acrfull{IoU}, auch als Jaccard-Index bekannt, ist die am häufigsten verwendete Metrik zum Vergleich der Ähnlichkeit zweier beliebiger Formen. Sie kodiert die Formmerkmale der zu vergleichenden Objekte, beispielsweise Höhe, Breite und Position zweier \acrshort{BB}, in eine Bereichseigenschaft und berechnet daraus ein normalisiertes Maß, das sich auf die verglichenen Flächen oder Volumina bezieht (siehe Abb. \ref{fig:IoU}). Diese Eigenschaft macht die \acrshort{IoU} unabhängig von der Größe des betrachteten Objekts \cite{Rezatofighi2019}.
 
-Aufgrund dieser Unabhängigkeit basiert eine Vielzahl von Leistungsmaßen in den Bereichen Segmentierung \cite{Ramirez2019,cordts2016,Zhou2017,lin2015}, Objekterkennung \cite{lin2015,Everingham2010} und Objektverfolgung \cite{Kristan2016,lealtaixé2015} auf der \acrshort{IoU}. Dabei entspricht eine der beiden \acrshort{BB} der Ground Truth, also dem korrekt gelabelten und lokalisierten Objekt, während die zweite \acrshort{BB} die vom Modell vorhergesagte Lokalisierung des Objektes darstellt. Die auf dieser Grundlage berechnete Übereinstimmung (\acrshort{IoU}) ermöglicht eine präzise Bewertung der Genauigkeit von Deep-Learning-Modellen.
+Aufgrund dieser Unabhängigkeit basiert eine Vielzahl von Leistungsmaßen in den Bereichen Segmentierung \cite{Ramirez2019,cordts2016,Zhou2017,lin2015}, Objekterkennung \cite{lin2015,Everingham2010} und Objektverfolgung \cite{Kristan2016,lealtaixé2015} auf der \acrshort{IoU}. Dabei entspricht eine der beiden \acrshort{BB} der Ground Truth, also dem korrekt gelabelten und lokalisierten Objekt, während die zweite \acrshort{BB} die vom Modell vorhergesagte Lokalisierung des Objektes darstellt. Die auf dieser Grundlage berechnete Übereinstimmung (\acrshort{IoU}), bei der die Überlappungsfläche der beiden Bounding Boxen durch die Gesamtfläche, die beide abdecken, geteilt wird, ermöglicht eine präzise Bewertung der Genauigkeit von Deep-Learning-Modellen.
+\begin{definition}[Intersection over Union]
+    Let $B_t$ be the set of image pixels covered by a Ground Truth Bounding Box for a class $k$, 
+    and $B_p$ be the set of image pixels covered by a predicted Bounding Box for the same class. 
+    Then the IoU is calculated as follows:
+
+    \begin{equation}
+    \text{IoU}_k =
+    \begin{cases}
+        \dfrac{|B_t \cap B_p|}{|B_t \cup B_p|}, & \text{if } |B_t \cup B_p| > 0, \\[6pt]
+        0, & \text{otherwise.}
+    \end{cases}
+    \end{equation}
+
+\end{definition}
 
 % \begin{itemize}
 %     \item \Acrfull{IoU}, oder auch Jaccard-Index, ist die am häufigsten verwendete Metrik zum Vergleich der Ähnlichkeit zweier beliebiger Formen
@@ -307,11 +330,41 @@ Aufgrund dieser Unabhängigkeit basiert eine Vielzahl von Leistungsmaßen in den
 
 \subsection{Mean Average Precision (mAP)}
 
+\todo{mathematische definition einfügen?}
+
 Die \acrlong{IoU} steht in engem Zusammenhang mit der \acrfull{mAP}, ist jedoch nicht identisch. Während die \acrshort{IoU} die Genauigkeit eines einzelnen vorhergesagten \acrshort{BB} misst, stellt die \acrshort{mAP} eine umfassendere Metrik dar, die die Leistung eines Modells über alle Objekte und Klassen eines Datensatzes bewertet \cite{ultralyics_iou}.
 
-Zur Berechnung der \acrshort{mAP} werden die Konzepte Precision und Recall herangezogen. Precision beschreibt den Anteil der vom Modell als positiv klassifizierten Erkennungen, die tatsächlich korrekt sind, während Recall den Anteil der tatsächlich vorhandenen Objekte angibt, die korrekt erkannt wurden. Auf Basis dieser Werte kann eine \acrfull{PRC} erstellt werden, wobei Precision auf der Y-Achse und Recall auf der X-Achse abgetragen wird \cite{Goodfellow-et-al-2016}. Objektdetektoren geben für jede Bounding Box eine Konfidenz an, die die Sicherheit des Modells hinsichtlich der Vorhersage widerspiegelt. Vorhersagen, deren Konfidenz unter einer festgelegten Schwelle liegen, können verworfen werden. 
+Zur Berechnung der \acrshort{mAP} werden die Konzepte Precision und Recall herangezogen. Precision beschreibt den Anteil der vom Modell als positiv klassifizierten Erkennungen, die tatsächlich korrekt sind, während Recall den Anteil der tatsächlich vorhandenen Objekte angibt, die korrekt erkannt wurden. Auf Basis dieser Werte kann eine \acrfull{PRC} (s. Def. \ref{Def:IPRC}) erstellt werden, wobei Precision auf der Y-Achse und Recall auf der X-Achse abgetragen wird \cite{Goodfellow-et-al-2016}. Objektdetektoren geben für jede Bounding Box eine Konfidenz an, die die Sicherheit des Modells hinsichtlich der Vorhersage widerspiegelt. Vorhersagen, deren Konfidenz unter einer festgelegten Schwelle liegen, können verworfen werden. 
 
-Die \acrshort{PRC} kann für alle möglichen Konfidenzschwellen erstellt werden, wodurch sich die durchschnittliche Präzision als Fläche unter der Kurve berechnen lässt. Die Modellbewertung erfolgt anschließend anhand der \acrfull{mAP}, die als Mittelwert der \acrfull{AP} über alle Klassen ermittelt wird \cite{Rainio2024}. Dabei können unterschiedliche Genauigkeitsanforderungen an die Übereinstimmung der Bounding Boxes gestellt werden, beispielsweise durch IoU-Schwellenwerte von 0,5 oder einem Bereich von 0,5 bis 0,95. Letzteres entspricht dem Mittelwert von \acrshort{mAP}@0.5, \acrshort{mAP}@0.55 bis \acrshort{mAP}@0.95. Diese strengere Metrik erfordert eine größere Überlappung zwischen Ground Truth und Vorhersage und ist besonders geeignet, wenn die vorhergesagten Positionen der Bounding Boxes sehr präzise sein müssen \cite{Rainio2024}.
+\begin{definition}[Interpolated Precision-Recall Curve]
+\label{Def:IPRC}
+Let $P(r)$ be the value of precision at recall value $r$. 
+The interpolation of the precision-recall curve is then given by $P_{int}$.
+
+\begin{equation}
+P_{int}(r) = \max_{r \leq y} P(y)
+\end{equation}
+\end{definition}
+
+
+Die \acrshort{PRC} kann für alle möglichen Konfidenzschwellen erstellt werden, wodurch sich die durchschnittliche Präzision als Fläche unter der Kurve berechnen lässt. Die Modellbewertung erfolgt anschließend anhand der \acrfull{mAP} (s. Form. \ref{form:mAP}), die als Mittelwert der \acrfull{AP} (s. Form. \ref{form:AP}) über alle Klassen ermittelt wird (s. Def. \ref{Def:mAP})\cite{Rainio2024}. Dabei können unterschiedliche Genauigkeitsanforderungen an die Übereinstimmung der Bounding Boxes gestellt werden, beispielsweise durch IoU-Schwellenwerte von 0,5 oder einem Bereich von 0,5 bis 0,95. Letzteres entspricht dem Mittelwert von \acrshort{mAP}@0.5, \acrshort{mAP}@0.55 bis \acrshort{mAP}@0.95. Diese strengere Metrik erfordert eine größere Überlappung zwischen Ground Truth und Vorhersage und ist besonders geeignet, wenn die vorhergesagten Positionen der Bounding Boxes sehr präzise sein müssen \cite{Rainio2024}.
+
+
+\begin{definition}[Mean Average Precision]
+\label{Def:mAP}
+Let $C$ be the set of classes with $c \in C$, and $P_{int}(r)$ be the interpolated precision-recall curve. 
+The Average Precision (AP) and the mean Average Precision (mAP) are then defined as follows:
+
+\begin{equation}
+\label{form:AP}
+AP_c = \int_0^1 P_{int}(r)\,dr
+\end{equation}
+
+\begin{equation}
+\label{form:mAP}
+mAP = \frac{1}{|C|} \sum_c AP_c
+\end{equation}
+\end{definition}
 
 % \begin{itemize}
 %     \item \Acrfull{IoU} ist mit \acrfull{mAP} verwandt aber nicht identisch

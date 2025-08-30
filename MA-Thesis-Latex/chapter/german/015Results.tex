@@ -2,24 +2,10 @@
 \chapter{Results}
 \label{ch:results}
 
+
 \begin{itemize}
     \item Konsistenz aller Modelle über die 5 Folds der Kreuzvalidierung ist gut, was eine robuste Trainierbarkeit bedeutet
     \item \todo{tabelle mit folds einfügen; Verteilung beschreiben; dann übergang zu weiteren punkten}
-    \begin{itemize}
-        \item Cross validation to ensure robustness and better comparison of different models
-        \item create own folds, as the ones provided by the paper had the same images in training and validation data
-        \item  6 Folds
-        \item 5 for Training and Validation, 1 for Test (Fold 5)
-        \item Good object distribution between the folds
-        \item 207-221 Images per Fold, where 3 or 7 Images are only background
-        
-        \item Sorting method similar to bucketsort
-        \item Each fold gets an image at the beginning and the class that is least common in each fold is identified
-        \item then the next image is taken and the objects of the classes are counted (how often each class appears in the image). The image is placed in the fold with the fewest objects of that class
-        \item If there are the same number, priority is given to rarity
-        \item \todo{Tabelle mit Verteilung einfügen}
-        \item Sagen das die ursprünglichen Fodls des VEDAI Datasets nicht disjunkt sind -> Trainingsergebnisse verfälscht, deshalb eigene Folds erstellt
-    \end{itemize}
 \end{itemize}
 \section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
 \begin{itemize}
@@ -46,9 +32,9 @@
 \end{itemize}
 
 \section{Comparision at Mean Average Precision 50-95}
-
 \begin{itemize}
     \item \todo{Bild einfügen best val dataset on val data}
+    \item \todo{Tabelle einfügen  Comparison of best performed Fold by mAP50-95 (s. Defence)}
     \item See the performance of the best validation model on the validation data (per fold and model)
     \item RGBIR has the best performance followed by irgb 
     \item 3. place are rgb and rirb
@@ -127,6 +113,9 @@
 \end{itemize}
 
 \section{Ablation Studies}
+\begin{itemize}
+    \item \todo{Tabelle mit Best Folds Ablation Studies einfügen}
+\end{itemize}
 % \begin{figure}[h] 
 %     \centering
 %     % Erste Subfigur
