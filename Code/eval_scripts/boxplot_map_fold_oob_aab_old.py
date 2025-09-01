@@ -14,10 +14,10 @@ def main():
         "train/box_loss": False,
         "train/cls_loss": False,
         "train/dfl_loss": False,
-        "precision": True,
+        "precision": False,
         "recall": False,
         "mAP@50": False,
-        "mAP@50-95": False,
+        "mAP@50-95": True,
         "val_box_loss": False,
         "val/cls_ls": False,
         "val/dfl_loss": False,
@@ -146,19 +146,22 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
         return
 
     df = pd.DataFrame(all_data)
-    df['Modell'] = df['Modell'].replace({'aab_old': 'AAB in OBB Model'})  # Hier ist die Änderung
+    df['Modell'] = df['Modell'].replace({'aab_old': 'abb in obb'})  
+    df['Modell'] = df['Modell'].replace({'aab': 'abb'})
     
     # Plot erstellen
     plt.figure(figsize=(10, 6))
-    sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette='Set2')
+    sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette={"obb": "orange", "abb": "steelblue", "abb in obb": "green"})
     sns.stripplot(data=df, x='Modell', y='mAP@50-95', color='black', alpha=0.5, jitter=False, dodge=True)
 
-    plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
-    plt.ylabel("mAP@50-95")
-    plt.xlabel("Model")
-    plt.xticks(rotation=0)
+    #plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
+    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.xlabel("Model", fontsize=14)
+    plt.xticks(rotation=0, fontsize=12)  # Ticklabels an der X-Achse
+    plt.yticks(fontsize=12)              # Ticklabels an der Y-Achse
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
     allsets_string = "_".join(set_paths_dict.keys())
+    allsets_string = "abb_obb"
     plt.savefig(allsets_string +"_best_val_on_val.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()
@@ -182,26 +185,37 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
         return
 
     df = pd.DataFrame(all_data)
-    df['Modell'] = df['Modell'].replace({'aab_old': 'aab in obb model'})  # Hier ist die Änderung
 
     plt.figure(figsize=(10, 6))
-    sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette='Set2')
+    ax = sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette={"obb": "orange", "aab": "steelblue", "aab_old": "green"})
     sns.stripplot(data=df, x='Modell', y='mAP@50-95', color='black', alpha=0.5, jitter=False, dodge=True)
 
     # Rote Punkte für beste Folds markieren
     if best_fold_indices is not None:
         modell_order = df['Modell'].unique()
         for modell, best_fold in best_fold_indices.items():
-            # Filtere den mAP Wert für das Modell und den besten Fold
             val = df[(df['Modell'] == modell) & (df['Fold'] == best_fold)]['mAP@50-95']
             if not val.empty:
                 x_pos = list(modell_order).index(modell)
                 y_val = val.values[0]
-                plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10, label='Best Validation Fold' if modell == list(best_fold_indices.keys())[0] else "")
+                plt.scatter(
+                    x_pos, y_val, color='red', s=15, edgecolor='red',
+                    zorder=10, label='Best Validation Fold' if modell == list(best_fold_indices.keys())[0] else ""
+                )
 
-    plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
+    # NACH dem Zeichnen Labels ändern
+    new_labels = [
+    lbl.get_text().replace("aab_old", "abb in obb").replace("aab", "abb")
+    for lbl in ax.get_xticklabels()
+    ]
+    ax.set_xticklabels(new_labels)
+
+    ax.set_xlabel("Model", fontsize=14)
+    ax.set_ylabel("mAP@50-95", fontsize=14)
+    ax.set_xticklabels(new_labels, fontsize=12)
+
     plt.ylabel("mAP@50-95")
-    plt.xlabel("Model")
+    plt.xlabel("Bounding Box Type")
     plt.xticks(rotation=0)
 
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
@@ -213,12 +227,15 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
     #        fontsize=5, color='red', alpha=0.7)
 
     # Legende: 'Best Validation Fold' nur einmal anzeigen
-    if best_fold_indices:
-        handles, labels = plt.gca().get_legend_handles_labels()
-        if 'Best Validation Fold' in labels:
-            plt.legend(handles=[handles[labels.index('Best Validation Fold')]], labels=['Best Validation Fold'])
+    # if best_fold_indices:
+    #     handles, labels = plt.gca().get_legend_handles_labels()
+    #     if 'Best Validation Fold' in labels:
+    #         plt.legend(handles=[handles[labels.index('Best Validation Fold')]], labels=['Best Validation Fold'])
+    print("best_fold_indices")
+    print(best_fold_indices)
 
     allsets_string = "_".join(set_paths_dict.keys()) 
+    allsets_string = "aab_obb"
     plt.savefig(allsets_string + "_best_val_on_test.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()

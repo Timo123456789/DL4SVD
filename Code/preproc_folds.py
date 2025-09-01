@@ -28,13 +28,13 @@ def main():
         path_all_images = r'Code\data\all_vedai_images'
         path_labels = r'Code\data\annotation.txt'
         
-    #show_every_picture_with_oriented_bounding_box(path_all_images, r'Code\data\folds\tempfold\fold0.txt', path_labels, True, False, False, perm_object)
+    show_every_picture_with_oriented_bounding_box(path_all_images, r'Code\data\folds\tempfold\fold0.txt', path_labels, True, False, False, perm_object)
     #create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
 
     #create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object)
 
 
-    create_ablation_datasets(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
+    #create_ablation_datasets(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
     merge_ir_bool=True
     oriented = True
     path_fold_dest_string = r'data/cross_validation/rgbndvi'
@@ -744,23 +744,23 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
     # Kanäle extrahieren
             b, g, r = cv2.split(img_rgb)
             # Speichern als Graustufenbilder
-            cv2.imwrite(r"Code\data\folds\tempfold\output_image_blue.png", b)
-            cv2.imwrite(r"Code\data\folds\tempfold\output_image_green.png", g)
-            cv2.imwrite(r"Code\data\folds\tempfold\output_image_red.png", r)
+            #cv2.imwrite(r"Code\data\folds\tempfold\output_image_blue.png", b)
+            #cv2.imwrite(r"Code\data\folds\tempfold\output_image_green.png", g)
+            #cv2.imwrite(r"Code\data\folds\tempfold\output_image_red.png", r)
             #cv2.imwrite(r"Code\data\folds\tempfold\output_image_schrott_ir.png", img_ir)
         if img_rgb is not None and img_ir is not None:
             cv2.imshow(window_name_rgb, img_rgb)  # Bild anzeigen
          
             #cv2.resizeWindow(window_name_rgb, 1024, 1024)
-            cv2.imshow(window_name_ir, img_ir)  # Bild anzeigen
+            #cv2.imshow(window_name_ir, img_ir)  # Bild anzeigen
             #cv2.resizeWindow(window_name_ir, 1024, 1024)
-            cv2.imshow(window_name_merged, img_merged)  # Bild anzeigen
+            #cv2.imshow(window_name_merged, img_merged)  # Bild anzeigen
             #cv2.resizeWindow(window_name_merged, 1024, 1024)
             cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
             cv2.destroyAllWindows()  # Fenster schlieÃŸen
       
 
-def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=1):
+def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=2):
     """
     Zeichnet die achsenparallele Bounding Box eines Fahrzeugs auf ein OpenCV-Bild.
 
@@ -910,13 +910,13 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
         padding = 2
 
         # Zeichne den Hintergrund des Textes
-        cv2.rectangle(image,
-                      (text_x - padding, text_y - text_size[1] - padding),
-                      (text_x + text_size[0] + padding, text_y + padding),
-                      text_bg_color, cv2.FILLED)
+        # cv2.rectangle(image,
+        #               (text_x - padding, text_y - text_size[1] - padding),
+        #               (text_x + text_size[0] + padding, text_y + padding),
+        #               text_bg_color, cv2.FILLED)
 
         # Zeichne den Text
-        cv2.putText(image, label, (text_x, text_y), font, font_scale, text_color, font_thickness, cv2.LINE_AA)
+        #cv2.putText(image, label, (text_x, text_y), font, font_scale, text_color, font_thickness, cv2.LINE_AA)
 
     return image
 

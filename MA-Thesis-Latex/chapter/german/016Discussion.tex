@@ -1,4 +1,17 @@
 %!TEX root = ../thesis.tex
 \chapter{Discussion}
 \label{ch:discussion}
+\begin{itemize}
+    \item unterteilung analog zu  und Fig. \ref{fig:Flowchart} und Chap. \ref{ch:results}
+\end{itemize}
 
+\section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
+\begin{itemize}
+    \item in \ref{fig:comparison_bb_format} ist deutlich zu sehen, dass \acrshort{obb} deutlich exakter entlang der Objektgrenzen verlaufen und weniger umgebenes Areal umfassen; keine Überlappung ist wichtig, sorgt möglicherweise für eine bessere Erkennungsleistung bei nahe aneinander liegenden Objekten
+    \item exaktere Objektgrenzen sieht man auch an geringeren Flächeninhalten über alle Objekte hinweg (s.\ref{fig:bbox_area})
+    \item bessere Performance von \acrshort{abb} auf dem \acrshort{obb} Modell Wahrscheinlich dadurch, dass kleine Abweichunge/Änderungen in der Orientierung große Auswirkungen auf die \acrshort{mAP} haben
+    \item \acrshortpl{obb} sind schmaler als \acrshort{abb} sodass dort eine höhere ungeauigekt beim \acrshort{mAP} herrscht
+    \item \todo{Schreiben warum der eine Fold meistesn besser war als der andere? keine idee warum.. \ref{tab:best_folds_area}}
+\end{itemize}
+\section{Permutation Experiments}
+\section{Ablation Studies}

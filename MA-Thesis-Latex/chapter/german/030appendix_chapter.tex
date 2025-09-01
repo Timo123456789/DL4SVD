@@ -1,5 +1,20 @@
 %!TEX root = ../thesis.tex
 \chapter{Appendix}
 
-\blindtext
+\section{Results}
+\subsection{Calculation Bounding Box Area in Percent}
+\label{ap:calc_bb_area_percent}
 
+The total area of the image ($A_{\text{total}}$) is $1024 \times 1024 = 1,048,576 \text{ pixels}^2$.
+
+\subsubsection*{Calculation of Bounding Box Area in Percent}
+The percentage area ($F_{\%}$) is calculated using the following formula:
+$$F_{\%} = \frac{A_{\text{Box}}}{A_{\text{total}}} \times 100\%$$
+
+\subsubsection*{OBB (Oriented Bounding Box)}
+The median area is $\approx 700$ pixels.
+$$F_{\%,\text{obb}} = \frac{700}{1,048,576} \times 100\% \approx 0.06675\%$$
+
+\subsubsection*{ABB (Axis-aligned Bounding Box)}
+The median area is $\approx 1000$ pixels.
+$$F_{\%,\text{abb}} = \frac{1000}{1,048,576} \times 100\% \approx 0.09536\%$$

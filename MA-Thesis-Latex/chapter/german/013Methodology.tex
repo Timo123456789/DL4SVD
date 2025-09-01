@@ -1,6 +1,5 @@
 %!TEX root = ../thesis.tex
 \chapter{Methodology}
-\todo{Ablaufdiagramm einfügen}
 \label{ch:methodology}
 \begin{figure}[htbp]
     \centering
@@ -10,6 +9,7 @@
 \end{figure}
 
 \todo{Verweis auf Github Repo noch erwähnen?}
+\todo{muss noch irgendwo das Ergebnis des DOTA Trainings erwähnt werden?}
 % \begin{itemize}
 %     \item Methods und Implementierung zusammenlegen
 %     \item Mein Vorschlag neuer Reihenfolge
@@ -105,7 +105,7 @@ Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit
 \subsection{YOLOv9u by Wong Kin Yiu}
 \label{subsec:yolov9u}
 
-Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der \acrshort{YOLO}-Architektur durch den Einsatz von \acrshort{PGI} und \acrshort{GELAN} dar. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren \acrshort{YOLO}-Versionen und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks. Diese Version wird gentzt, da sie \acrlong{obb} unterstützt.
+Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der \acrshort{YOLO}-Architektur durch den Einsatz von \acrshort{PGI} und \acrshort{GELAN} dar. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren \acrshort{YOLO}-Versionen, sowie der originalen \acrshort{YOLO}v9-Version, und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks. Diese Version wird genutzt, da sie \acrlong{obb} unterstützt.
 
 \subsection{YOLOv9e by Ultralytics}
 \label{subsec:yolov9e}
@@ -154,6 +154,7 @@ Die Bibliothek "Matplotlib" wurde in der Version 3.10.0 am 23.12.2024 veröffent
 Die Bibliothek "pandas" ist ebenfalls ein Open Source Datenanalyse und -manipulierungstool. Die aktuelle Version 2.3.1 wurde am 07.07.2025 veröffentlicht. Die Bibliothek wird auch zur Datenanalyse in dieser Arbeit verwendet \cite{pandas}.
 
 \section{Implementation Preprocessing}
+\todo{weniger Funktionsnamen}
 Damit die Trainingsdaten vom Deep-Learning-Modell YOLOv9 verarbeitet werden können, ist eine Vorverarbeitung notwendig, die deren Format und Struktur an die Anforderungen des Modells anpasst. Der genaue Ablauf dieser Vorverarbeitung wird im Folgenden beschrieben.
 \subsection{DOTA Dataset}
 Im Rahmen der Datenvorverarbeitung wurden ausschließlich die originalen Rohbilder des \acrshort{DOTA}-Datensatzes verwendet, ohne dass ein Zuschnitt oder eine anderweitige Modifikation der Bildinhalte vorgenommen wurde. Der Fokus der Verarbeitung lag auf der Umwandlung der vorhandenen Labeldaten in das \texttt{YOLOv9-OBB}-Format, welches polygonale Objektumrandungen in Form einer Punktsequenz \((x_1, y_1, x_2, y_2, \ldots)\) beschreibt (vgl. \todo{text\texttt{\textbackslash todo\{Ref zur Formatbeschreibung einfügen\}}}).
@@ -342,10 +343,31 @@ Die Methode \texttt{get\_smallest\_class\_in\_image} analysiert ein gegebenes Bi
 \section{Challenges Preprocessing}
 Bei der Verarbeitung des VEDAI-Datensatzes traten mehrere technische Herausforderungen auf. 
 Zunächst mussten die vorhandenen Label in das \textit{YOLOv9}-OBB-Format konvertiert werden, um mit dem gewählten Modell kompatibel zu sein. 
-Dabei zeigte sich, dass ein kleiner Teil der Daten (7 von 3\,757 Instanzen) Koordinatenwerte aufwies, die außerhalb des zulässigen Bereichs lagen (d.\,h. kleiner als 0 oder größer als 1). 
-Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundung der Werte auf den gültigen Wertebereich behoben. \todo{Beispielbilder für Randlage einfügen}
+Dabei zeigte sich, dass ein kleiner Teil der Daten (7 von 3\,757 Instanzen) Koordinatenwerte aufwies, die außerhalb des zulässigen Bereichs lagen (d.\,h. kleiner als 0 (s. Fig. \ref{fig:smaller0}) oder größer als 1 (s. Fig. \ref{fig:higher1})) . 
+Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundung der Werte auf den gültigen Wertebereich behoben. 
 
-\todo{Fold Probleme bei VEDAI erwähnen?}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[trim={600pt 1000pt 350pt 0pt},clip,width=\textwidth]{images/bb_smaller0.png}
+        \caption{Two Coordinate out of range and smaller 0}
+        \label{fig:smaller0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[trim={180pt 0pt 750pt 993pt},clip,width=\textwidth]{images/bb_higher1.png}
+        \caption{Two Coordinates out ouf range and higher 1}
+        \label{fig:higher1}
+    \end{subfigure}
+    \caption{Example for label coordinates outside of the image}
+    \label{fig:example_coords_ooR}
+\end{figure}
+
+Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Folds nicht disjunkt waren, erhöhte sich das Risiko von Overfitting (s. Kap. \ref{subsec:overfitting}), sodass eigene Folds erstellt werden mussten, deren Erstellung im folgenden Kapitel beschrieben wird.
+
+
 
 
 
@@ -355,7 +377,7 @@ Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundun
 
 Um die Robustheit der Ergebnisse sicherzustellen und eine fundierte Vergleichbarkeit verschiedener Modelle zu ermöglichen, wurde in dieser Arbeit eine 5-Fold-Cross-Validation angewendet. Insbesondere wurde Wert darauf gelegt, die Evaluation nicht nur auf einem Teildatensatz durchzuführen, sondern eine Mehrfachteilung der Daten vorzunehmen, sodass Schwankungen durch unterschiedliche Trainings- und Validierungsaufteilungen minimiert werden.
 
-Im Gegensatz zu den von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} bereitgestellten Folds, deren Zusammenstellung identische Bilder gleichzeitig im Trainings- und Validierungssatz aufweist, wurden für diese Arbeit eigene, disjunkte Folds generiert. Letztere gewährleisten, dass keine Überlappungen zwischen Trainings- und Validierungsdaten existieren und somit die Gefahr von verfälschten Trainingsergebnissen ausgeschlossen ist. Die genaue Methodik der Fold-Erstellung ist in Kapitel \ref{subsec:Fold_creation} beschrieben.
+Im Gegensatz zu den von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} bereitgestellten Folds, deren Zusammenstellung identische Bilder gleichzeitig im Trainings- und Validierungssatz aufweist, wurden für diese Arbeit eigene, disjunkte Folds generiert. Letztere gewährleisten, dass keine Überlappungen zwischen Trainings- und Validierungsdaten existieren und somit die Gefahr von verfälschten Trainingsergebnissen durch Overfitting ausgeschlossen ist. Die genaue Methodik der Fold-Erstellung ist in Kapitel \ref{subsec:Fold_creation} beschrieben.
 
 Die Datenaufteilung erfolgte in sechs Folds (0-5): Fünf Folds (Fold 0 bis 4) wurden jeweils für Training und Validierung genutzt, während Fold 5 ausschließlich für abschließende Testzwecke reserviert blieb. Dadurch wurde erreicht, dass die finale Evaluation auf bisher ungesehenen, neutralen Daten stattfand.
 

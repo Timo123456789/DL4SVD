@@ -9,6 +9,7 @@ import pandas as pd
 REMOVE_TOP_N = 754
 
 def main():
+    print("test")
     path_obb = r'Code\data\folds\data\cross_validation\obb'
     path_aab= r'Code\data\folds\data\cross_validation\aab'
     path_aab_old = r'Code\data\folds\data\cross_validation\aab_old'
@@ -214,20 +215,30 @@ def calculate_oriented_bounding_box_area(points):
     return area
 
 def plot_area_boxplots(obb_areas, aab_areas, aab_old_areas):
-    # DataFrame for Seaborn
+       # DataFrame for Seaborn
     df = pd.DataFrame({
         "Area": obb_areas + aab_areas + aab_old_areas,
-        "Type": (["OBB"] * len(obb_areas)) + (["AAB"] * len(aab_areas)) + (["AAB in OBB Model"] * len(aab_old_areas))
+        "Type": (["obb"] * len(obb_areas)) 
+              + (["abb"] * len(aab_areas)) 
+              + (["abb in obb"] * len(aab_old_areas))
     })
 
     plt.figure(figsize=(10, 6))
-    sns.boxplot(data=df, x="Type", y="Area", palette={"OBB": "orange", "AAB": "steelblue", "AAB in OBB Model": "green"})
-    plt.title("Boxplot of Areas per Bounding Box Type")
-    plt.ylabel("Area (pixels)")
-    plt.xlabel("Bounding Box Type")
+    ax = sns.boxplot(
+        data=df, x="Type", y="Area",
+        palette={"obb": "orange", "abb": "steelblue", "abb in obb": "green"}
+    )
+
+    # Schriftgrößen anpassen
+    ax.set_ylabel("Area (pixels)", fontsize=14)
+    ax.set_xlabel("Bounding Box Type", fontsize=14)
+    ax.tick_params(axis="x", labelsize=12)
+    ax.tick_params(axis="y", labelsize=12)
+    #ax.set_title("Boxplot of Areas per Bounding Box Type", fontsize=16)
+
     plt.grid(True, linestyle=":", alpha=0.6)
     plt.tight_layout()
-    #plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\boxplot_areas.svg", format="svg", transparent=True)
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\abb_vs_obb\boxplot_areas.svg", format="svg", transparent=True)
     plt.show()
 
 if __name__ == "__main__":
