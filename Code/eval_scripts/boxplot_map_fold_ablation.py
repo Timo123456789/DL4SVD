@@ -150,13 +150,15 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
     sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette='Set2')
     sns.stripplot(data=df, x='Modell', y='mAP@50-95', color='black', alpha=0.5, jitter=False, dodge=True)
 
-    plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
-    plt.ylabel("mAP@50-95")
-    plt.xlabel("Model")
-    plt.xticks(rotation=0)
+    #plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
+    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.xlabel("Model", fontsize=14)
+    plt.xticks(rotation=0, fontsize=12)
+    plt.yticks(fontsize=12)
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
     allsets_string = "_".join(set_paths_dict.keys()) 
-    plt.savefig(allsets_string + "_best_val_on_val.svg", format="svg", transparent=True)
+    allsets_string="ablation"
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\03ablation\best_val_on_val.svg", format="svg", transparent=True)
     
     print("val on val")
     # Für jedes Modell den besten mAP@50-95 Wert ausgeben
@@ -205,12 +207,13 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
             if not val.empty:
                 x_pos = list(modell_order).index(modell)
                 y_val = val.values[0]
-                plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10, label='Best Validation Fold' if modell == list(best_fold_indices.keys())[0] else "")
+                plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10)
 
-    plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
-    plt.ylabel("mAP@50-95")
-    plt.xlabel("Model")
-    plt.xticks(rotation=0)
+    #plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
+    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.xlabel("Model", fontsize=14)
+    plt.xticks(rotation=0, fontsize=12)
+    plt.yticks(fontsize=12)
 
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
 
@@ -227,7 +230,8 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
             plt.legend(handles=[handles[labels.index('Best Validation Fold')]], labels=['Best Validation Fold'])
 
     allsets_string = "_".join(set_paths_dict.keys()) 
-    plt.savefig(allsets_string + "_best_val_on_test.svg", format="svg", transparent=True)
+    allsets_string="ablation"
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\03ablation\best_val_on_test.svg", format="svg", transparent=True)
 
 # Für jedes Modell den besten mAP@50-95 Wert ausgeben
     print("val on test")
@@ -315,9 +319,10 @@ def create_boxplot_top_folds(val_paths_dict, test_paths_dict, top_n=1):
         plt.legend(handles=[legend_element])
 
     plt.title(f"Test mAP@50-95 of Top-{top_n} Validation Folds per Model")
-    plt.ylabel("mAP@50-95 (Test)")
-    plt.xlabel("Model")
-    plt.xticks(rotation=0)
+    plt.ylabel("mAP@50-95 (Test)", fontsize=14)
+    plt.xlabel("Model", fontsize=14)
+    plt.xticks(rotation=0, fontsize=12)
+    plt.yticks(fontsize=12)
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
     allsets_string = "_".join(test_paths_dict.keys()) 
     plt.savefig(allsets_string + "_best_val_on_test.svg", format="svg", transparent=True)

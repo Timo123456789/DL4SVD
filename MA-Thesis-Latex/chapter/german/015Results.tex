@@ -1,27 +1,30 @@
 %!TEX root = ../thesis.tex
 \chapter{Results}
 \label{ch:results}
-\begin{itemize}
-    \item Unterteilung des Kapitels analog zur Fig. \ref{fig:Flowchart} in drei aufeinanderfolgende Abschnitte um Entscheidungen und Ergebnisse zu begründen
-    \item mAP50-95 of all 5 Folds for every model
-\end{itemize}
+Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunächst den Vergleich von \textit{abb}- und \textit{obb}-Formaten, anschließend die Permutationsexperimente zur Überprüfung der Robustheit und abschließend die Ablationsstudie zur Bewertung einzelner Komponenten. 
+
+
+% \begin{itemize}
+%     \item Unterteilung des Kapitels analog zur Fig. \ref{fig:Flowchart} in drei aufeinanderfolgende Abschnitte (abb vs. obb, Permutation Expermimente, Ablation Studie) um Entscheidungen und Ergebnisse zu begründen
+%     \item mAP50-95 of all 5 Folds for every model, bzw. bei den bb formaten
+% \end{itemize}
 \section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
 
-
+\todo{Bilder in Originalgröße in Appendix packen}
 \begin{figure}[h]
     \centering
     
     % Erste Zeile
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[trim={550pt 0pt 410pt 990pt},clip,width=\textwidth]{images/015Results/abb_vs_obb/abb_truck.png}
+        \includegraphics[trim={550pt 0pt 410pt 990pt},clip,width=\textwidth]{images/015Results/01abb_vs_obb/abb_truck.png}
         \caption{Label: "Truck", abb format, area: $\approx 1378 \text{px}$}
         \label{fig:abb_truck}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[trim={550pt 0pt 410pt 990pt},clip,width=\textwidth]{images/015Results/abb_vs_obb/obb_truck.png}
+        \includegraphics[trim={550pt 0pt 410pt 990pt},clip,width=\textwidth]{images/015Results/01abb_vs_obb/obb_truck.png}
         \caption{Label: "Truck", obb format, area: $\approx 967 \text{px}$}
         \label{fig:obb_truck}
     \end{subfigure}
@@ -31,18 +34,18 @@
     % Zweite Zeile
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[trim={680pt 50pt 250pt 865pt},clip,width=\textwidth]{images/015Results/abb_vs_obb/abb_ship.png}
+        \includegraphics[trim={680pt 50pt 250pt 865pt},clip,width=\textwidth]{images/015Results/01abb_vs_obb/abb_ship.png}
         \caption{Labels: "Ship", abb format}
         \label{fig:abb_ship}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[trim={680pt 50pt 250pt 865pt},clip,width=\textwidth]{images/015Results/abb_vs_obb/obb_ship.png}
+        \includegraphics[trim={680pt 50pt 250pt 865pt},clip,width=\textwidth]{images/015Results/01abb_vs_obb/obb_ship.png}
         \caption{Labels: "Ship", obb format}
         \label{fig:obb_ship}
     \end{subfigure}  
-    \caption{Comparison of the bounding box formats of two different object classes}
+    \caption[Comparison of the bounding box formats of two different object classes]{Comparison of the bounding box formats of two different object classes (for full-sized images see \ref{fig:comparison_bb_format_fs})}
     \label{fig:comparison_bb_format}
 \end{figure}
 \todo{nicht nur erläutern was man sieht sondern auch was man daraus folgert (analyse) im Bildunterschrift}
@@ -64,7 +67,7 @@ Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) v
 
 \begin{figure}[htbp]
     \centering
-    \includesvg[width=0.8\textwidth]{images/015Results/abb_vs_obb/boxplot_areas.svg}
+    \includesvg[width=0.8\textwidth]{images/015Results/01abb_vs_obb/boxplot_areas.svg}
     \caption[Comparison of Bounding Box Area in pixels for \acrshort{abb}, \acrshort{obb}, abb in obb]{Comparison of Bounding Box Area in pixels for \acrshort{abb}, \acrshort{obb}, abb in obb. "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. (Own representation)}
     \label{fig:bbox_area}
 \end{figure}
@@ -72,22 +75,23 @@ Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) v
 
 \begin{figure}[htbp]
     \centering
-    \includesvg[width=0.8\textwidth]{images/015Results/abb_vs_obb/abb_obb_best_val_on_val.svg}
+    \includesvg[width=0.8\textwidth]{images/015Results/01abb_vs_obb/abb_obb_best_val_on_val.svg}
     \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. (Own representation)}
     \label{fig:obb_abb_map50-95:val_on_val}
 \end{figure}
-Die Analyse der \acrshort{mAP}50--95 des besten Validierungsmodells auf dem Validierungsdatensatz (Abbildung \ref{fig:obb_abb_map50-95:val_on_val}) zeigt, dass das \acrshort{obb}-Modell in allen Fällen eine bessere Leistung erzielt als das \acrshort{abb}-Modell. Interessanterweise erzielt \acrshort{abb} auf dem \acrshort{obb}-Modell eine höhere Performance als die angepassten \acrshort{obb}-Boxen innerhalb desselben Modells (yolov9u). Dasselbe Phänomen lässt sich auch auf dem Testdatensatz beobachten (Abbildung \ref{fig:obb_abb_map50-95:test_on_val}), sodass \acrshort{abb} in Verbindung mit dem \acrshort{obb}-Modell bessere Ergebnisse liefert. Auffällig ist, dass bei den \acrshort{abb}-basierten Modellen (sowohl \acrshort{abb} als auch "abb in obb") stets Fold 1 den besten Wert beim besten Validation Dataset auf dem Validation Dataset erreicht hat, während beim \acrshort{obb}-Modell Fold 0 dort die besten Ergebnisse lieferte (s. Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val}). Die Ergebnisse der jeweiligen Folds sind durch den roten Punkt in Abbildung \ref{fig:obb_abb_map50-95:test_on_val} gekennzeichnet. 
- Die Konsistenz über alle fünf Folds der Kreuzvalidierung ist gut, was auf eine robuste Trainierbarkeit der Modelle hinweist.
+Die Analyse der \acrshort{mAP}50--95 des besten Validierungsmodells auf dem Validierungsdatensatz (Abbildung \ref{fig:obb_abb_map50-95:val_on_val}) zeigt, dass das \acrshort{obb}-Modell in allen Fällen eine bessere Leistung erzielt als das \acrshort{abb}-Modell. Interessanterweise erzielt \acrshort{abb} auf dem \acrshort{obb}-Modell eine höhere Performance als die angepassten \acrshort{obb}-Boxen innerhalb desselben Modells (yolov9u). Dasselbe Phänomen lässt sich auch auf dem Testdatensatz beobachten (Abbildung \ref{fig:obb_abb_map50-95:test_on_val}), sodass \acrshort{abb} in Verbindung mit dem \acrshort{obb}-Modell bessere Ergebnisse liefert. Auffällig ist, dass bei den \acrshort{abb}-basierten Modellen (sowohl \acrshort{abb} als auch "abb in obb") stets Fold 1 den besten Wert beim besten Validation Dataset auf dem Validation Dataset erreicht hat, während beim \acrshort{obb}-Modell Fold 0 dort die besten Ergebnisse lieferte (s. Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val}). Die Ergebnisse der jeweiligen Folds sind durch den roten Punkt in Abbildung \ref{fig:obb_abb_map50-95:val_on_test} gekennzeichnet. 
+% Die Konsistenz über alle fünf Folds der Kreuzvalidierung ist gut, was auf eine robuste Trainierbarkeit der Modelle hinweist.
 
+\todo{Tabelle gleich zu \ref{tab:best_map_fold_perm_exp} machen }
 \begin{table}[h]
 \centering
-\begin{tabular}{l c}
+\begin{tabular}{l c c}
 \hline
-\textbf{Model} & \textbf{Best Fold} \\
+\textbf{Model} & \textbf{Best mAP Fold (Validation)} & \textbf{Best mAP Fold (Test)} \\ 
 \hline
-abb &  1 \\
-obb &  0 \\
-abb in obb &  1 \\
+abb &  1 & 1 \\
+obb &  0 & 0 \\
+abb in obb &  1 & 1 \\
 \hline
 \end{tabular}
 \caption{Best fold per model at Bounding Box format}
@@ -98,7 +102,7 @@ Aufgrund der geringeren Überlappungswahrscheinlichkeit und der genaueren Objekt
 % \begin{itemize}
 %     \item Wenn man nun die \acrshort{mAP}50-95 des besten Validerungsmodells auf dem Validierungsdatensatz betrachtet (s. Fig. \ref{fig:obb_abb_map50-95:val_on_val}), sieht man das das obb Modell in jedem Fall eine bessere Performance hat als das abb Modell
 %     \item Unterschied im obb Modell ist zwischen den Bounding Box Formaten vorhanden; \acrshort{abb} hat auf dem obb Modell eine höhere Leistung als die eigentlich "besseren" / angepassten \acrshort{obb} auf dem obb Modell (yolov9u)
-%     \item gleiches Phänomen ist auf dem Testdatensatz zu sehen (s. Fig. \ref{fig:obb_abb_map50-95:test_on_val})
+%     \item gleiches Phänomen ist auf dem Testdatensatz zu sehen (s. Fig. \ref{fig:obb_abb_map50-95:val_on_test})
 %     \item \acrshort{abb} performt besser mit dem obb modell
 %     \item Konsistenz aller Modelle über die 5 Folds der Kreuzvalidierung ist gut, was eine robuste Trainierbarkeit bedeutet
 %     \item obb Modell für die Permutation entschieden, da Gefahr von Überlappungen geringer und genauere Umrandung der Objekte
@@ -106,9 +110,9 @@ Aufgrund der geringeren Überlappungswahrscheinlichkeit und der genaueren Objekt
 
 \begin{figure}[htbp]
     \centering
-    \includesvg[width=0.8\textwidth]{images/015Results/abb_vs_obb/aab_obb_best_val_on_test.svg}
+    \includesvg[width=0.8\textwidth]{images/015Results/01abb_vs_obb/aab_obb_best_val_on_test.svg}
     \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on test dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:obb_abb_map50-95:val_on_val}).(Own representation)}
-    \label{fig:obb_abb_map50-95:test_on_val}
+    \label{fig:obb_abb_map50-95:val_on_test}
 \end{figure}
 
 
@@ -136,92 +140,601 @@ Aufgrund der geringeren Überlappungswahrscheinlichkeit und der genaueren Objekt
 %     \item For the channel permutation I used the obb model
 
 % \end{itemize}
+\FloatBarrier
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
 
-\section{Comparision at Mean Average Precision 50-95}
-\begin{itemize}
-    \item \todo{Bild einfügen best val dataset on val data}
-    \item \todo{Tabelle einfügen  Comparison of best performed Fold by mAP50-95 (s. Defence)}
-    \item See the performance of the best validation model on the validation data (per fold and model)
-    \item RGBIR has the best performance followed by irgb 
-    \item 3. place are rgb and rirb
-    \item Rgir and both ndvi models has the poorest map values
-\end{itemize}
+\section{Permutation Experiments}
+\begin{figure}[t]
+    \centering
+    \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/perm_exp_best_val_on_test.svg}
+    \caption[Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on test dataset). The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:perm_exp_map50-95:val_on_val}). (Own representation)}
+    \label{fig:perm_exp_map50-95:val_on_test}
+\end{figure}
 
-\begin{itemize}
-    \item \todo{Bild einfügen; best val dataset on test data}
-    \item Best Validation Models on the test data (Fold 5)
-    \item Red Dots are the best validation model at the validation data on the test data
-    \item (means the highest whisker from the previous slide)
-    \item Difference between the quantils, rgir performs at best
-    \item Then the rirb model and rgb model 
-\end{itemize}
+\begin{figure}[b]
+    \centering
+    \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/perm_exp_best_val_on_val.svg}
+    \caption[Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on validation dataset).(Own representation)}
+    \label{fig:perm_exp_map50-95:val_on_val}
+\end{figure}
+Im Folgenden werden zunächst die allgemeinen Ergebnisse der Modelle hinsichtlich der Detektionsleistung beschrieben und mit den in Abbildung \ref{fig:perm_exp_map50-95:val_on_test} dargestellten \acrshort{mAP}50--95-Werten verglichen. Anschließend erfolgt eine detaillierte Analyse der Klassenerkennungsleistung anhand der Differenzmatrizen.  
 
-\begin{itemize}
-    \item \todo{Tabelle einfügen}
-    \item Difference Between best mAP Fold at the validation data
-    \item From 0 to 4
-    \item Smaller difference at the mAP Performance at the test data
-    \item Fold 2 and 3
-    \item Now looking at the confusion and difference matrices
-\end{itemize}
+Abbildung \ref{fig:perm_exp_map50-95:val_on_test} verdeutlicht, dass das RGIR-Modell die beste \acrshort{mAP}50--95-Performance auf dem Testfold erreicht, gefolgt von den Modellen RIRB und RGB. Auffällig sind dabei die vergleichsweise hohen Unterschiede zwischen den Quantilen, was auf eine stärkere Streuung der Ergebnisse hindeutet. Das RGBIR-Modell liegt im Ranking an vierter Stelle, während das IRGB-Modell deutlich schwächer abschneidet als die zuvor genannten Modelle, jedoch immer noch bessere Ergebnisse erzielt als die beiden Modelle, die einen NDVI-Kanal beinhalten. Letztere zeigen insgesamt die schwächste Performance, was auf eine eingeschränkte Nützlichkeit des NDVI-Kanals für diese Aufgabe hindeutet.  
 
+Vergleicht man die Ergebnisse mit denen des Validierungsbeispiels (vgl. Abbildung \ref{fig:perm_exp_map50-95:val_on_val}), so zeigen sich insgesamt größere Schwankungen zwischen den Quantilen. Während beim Validierungsdatensatz die Ergebnisse der meisten Modelle eng beieinanderliegen und sich lediglich die NDVI-basierten Modelle klar absetzen, weisen die Resultate auf dem Testdatensatz eine breitere Spannweite auf. Insbesondere RGIR zeigt hier die größte Quantilspanne und erreicht im Vergleich zu den fünf Hauptmodellen die schwächste Robustheit.  
 
+Ein detaillierterer Blick auf die Klassenerkennungsleistung wird in den Differenzmatrizen (vgl. Abbildung \ref{fig:perm_exp_diffM_all}) deutlich. Diese veranschaulichen die spezifischen Stärken und Schwächen der einzelnen Modelle im Vergleich zu RGBIR. Während einige Modelle bei bestimmten Klassen deutliche Vorteile aufweisen, zeigen sich bei anderen Klassen systematische Fehlklassifikationen. So können Unterschiede von über 20\,\% bei einzelnen Klassenbeispielen auftreten, die die Gesamtbewertung einzelner Modelle maßgeblich beeinflussen.  
 
-\section{Comparision with Confusion Matrices}
-\begin{itemize}
-    \item \todo{beide confusionsmatricen einfügen}
-    \item Normalisierte Konfusions Matrix mit 9 Klassen und der Einteilung Background (Hintergrund)
-    \item Right: Confusion Matric of RGBIR Modell on Fold 2:
-    \item Good Performance at Cars, Trucks, Ships, Tractors, Camping Cars, Pick Up and planes
-    \item Many confusion at vehicle with background
-    \item Nearly the same for RGIR at Fold 3
-    \item Both modells detected nearly all Planes
-    \item Difference Matrics at next slide
-\end{itemize}
+Tabelle \ref{tab:best_map_fold_perm_exp} fasst die besten Ergebnisse pro Fold zusammen. Während das jeweils beste Validierungsmodell auf dem Validierungsdatensatz über alle Folds hinweg ein- bis zweimal als bestes Modell abschnitt, konnte das beste Validierungsmodell auf dem Testdatensatz nur in Fold 2 und Fold 3 die Spitzenposition erreichen. Dies deutet darauf hin, dass die Generalisierungsfähigkeit der Modelle stark variieren kann und insbesondere die Übertragbarkeit vom Validierungs- auf den Testdatensatz nicht in allen Fällen konsistent ist.  \todo{ist eigenltihc analyse}
 
-\begin{itemize}
-    \item \todo{Differenzmatrix RGBIR vs RGIR einfügen}
-    \item At all Difference Matrices is red for the better performance of the RGBIR Model and blue for the other modell
-    \item RGBIR detected Trucks, Ships and Tractor more accurate than the RGIR Model
-    \item RGBIR seems more robust for common ground vehicles
-    \item Both modells detect all planes (in short every modell detect all planes)
-    \item Both modells misclassifier background as any class (RGBIR is better at vehicle and Camping Car) 
-\end{itemize}
-
-\begin{itemize}
-    \item \todo{Differenzmatrix RGBIR vs RGB einfügen}
-    \item RGBIR is better for detecting Ships (12\%) and Vehicles (15\%), slightliy degrades performance of car detection
-    \item Vehicle is much better than in RGB Model (15\%)
-    \item IR input helps for common vehicle recognition (vehicle includes Excavators, construction equipment, etc.)
-    \item RGB is better in identifying ship and vehicle as background
-\end{itemize}
+% \begin{itemize}
+%     \item erst allgemeine Beschreibung mit map vergleichen und dann tiefer in die Details der KLassenerkennungsleistung der einzelnen Modelle mit Differenzmatrixen
+%     \item Abb. \ref{fig:perm_exp_map50-95:val_on_test} zeigt, dass RGIR Modell hat die beste \acrshort{mAP}50-95 Leistung auf dem Testfold: dann rirb and RGB Modell
+%     \item relativ hohe Differenzen zwischen den Quantilen
+%     \item RGBIR ist an vierter Stelle,
+%     \item IRGB ist deutlich schlechter als die anderen Modelle aber besser als die Modelle mit NDVI
+%     \item Modelle mit NDVI Kanal schneiden deutlich schlechter ab
+%     \item Insgesamt stärkere Schwankungen zwischen den Quantilen als beim Validierungsmodellbeispiel (s. Fig. \ref{fig:perm_exp_map50-95:val_on_val}.). Hier sind die Quantiler der ersten Modelle näher beieinander, nur die beiden ndvi modelle sind deutlich schlechter; rgir hat die größe Quantils spannweite und ist am schlechtesten von den 5 Hauptmodellen
+%     \item Tab. \ref{tab:best_map_fold_perm_exp} zeigt, dass beim besten Validerungsmodell auf dem Validierungsdatensatz alle Folds ein oder zweimal am besten abgeschnitten haben; bei besten Validerungsmodell auf dem Testdatensatz nur Fold 2 und 3
+% \end{itemize}
 
 
-\begin{itemize}
-    \item \todo{Differenzmatrix RGBIR vs IRGB einfügen}
-    \item RGBIR recognize Ships 21 \% better than the irgb model
-    \item Particulary stronger for camping car and van classification (6\%)
-    \item IRGB has more  background-ship and background-vehicle confusion
-\end{itemize}
-
-\begin{itemize}
-    \item \todo{Differenzmatrix RGBIR vs RIRB einfügen}
-    \item RGBIR detects Ships and vans better than RIRB Model
-    \item RIRB misclassified van and ship as background more often than RGBIR
-
-\end{itemize}
 
 
-\begin{itemize}
-    \item \todo{Differenzmatrix RGBIR vs GBNDBVI und RGBNDVI einfügen}
-    \item RGBIR have a better performance in Ship, Tractor and Vehicle
-    \item Both ndvi modells show  a tendency for confusing background with other classes
-\end{itemize}
+\begin{table}[h!]
+\centering
 
+\begin{tabular}{lcc}
+\hline
+\textbf{Model} & \textbf{Best mAP Fold (Validation)} & \textbf{Best mAP Fold (Test)} \\ \hline
+RGBIR    & 0 & 2 \\
+RGB      & 0 & 2 \\
+IRGB     & 1 & 3 \\
+RIRB     & 4 & 2 \\
+RGIR     & 3 & 3 \\
+GBNDVI   & 1 & 2 \\
+RGBNDVI  & 4 & 2 \\ \hline
+\end{tabular}
+\caption{Best mAP folds for validation and test sets}
+\label{tab:best_map_fold_perm_exp}
+\end{table}
+
+
+
+% \todo{wirklich clearpage nutzen?}
+% %\clearpage
+
+\FloatBarrier
+\subsection{Comparison with Confusion Matrices}
+\label{subsec:permexp_comp_confusion_matric}
+\todo{erklären warum die letzte spalte nie beschrieben wird?}
+
+
+\begin{figure}[htbp]
+    \centering
+    \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/rgbir_F2.svg}
+    \caption[Confusion Matrix for RGBIR Modell (Fold 2)]{Confusion Matrix for RGBIR Modell (Fold 2). (Own representation)}
+    \label{fig:perm_exp_confM_rgbir_f2}
+\end{figure}
+
+Die in Abbildung~\ref{fig:perm_exp_confM_rgbir_f2} dargestellte Confusion Matrix für das RGBIR-Modell (Fold~2) zeigt eine sehr starke Leistung. Insbesondere bei der Klasse \textit{plane} erreicht das Modell eine perfekte Erkennungsrate von 100~\%. Auch die Klassen \textit{car}, \textit{ship}, \textit{tractor} weisen eine hervorragende Performance von über 80~\% auf. Gute Ergebnisse im Bereich von 60–80~\% werden für die Klassen \textit{truck}, \textit{camping car}, \textit{van} und \textit{pick up} erzielt. Die generische Klasse \textit{vehicle} zeigt mit über 52~\% eine akzeptable Erkennungsrate. Problematisch ist hingegen, dass die Klasse \textit{Vehicle} häufig als \textit{Background} fehlklassifiziert wird (über 40~\%). Zusätzlich tritt eine erhöhte Fehlklassifikationsrate bei \textit{camping car} (28~\%) und \textit{truck} (16~\%) auf, während die restlichen Klassen zwischen 8–12~\% liegen. Aufgrund dieser starken Gesamtleistung dient das RGBIR-Modell (Fold~2) als Basis für die Differenzmatrizen. Ausschlaggebend ist auch, dass in diesem Permutationsdurchlauf alle verfügbaren Bänder unverändert in Rohform enthalten sind.
+
+Zur Interpretation der Differenzmatrizen gilt: Rot markiert eine bessere Performance des RGBIR (F2) Modells, Blau eine bessere Leistung des Vergleichsmodells. Je stärker die Farbintensität, desto größer der Unterschied. Die Unterschiede werden in vier Kategorien eingeteilt: gering (0–5~\%), moderat (5–10~\%), hoch (10–20~\%) und sehr hoch (>20~\%) (Tabelle~\ref{tab:diff_cat}). Die Vergleichsreihenfolge startet mit dem schwächsten Modell und arbeitet sich bis zum besten Modell gemäß den Ergebnissen aus Abbildung~\ref{fig:perm_exp_map50-95:val_on_test} vor.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c c}
+\hline
+\textbf{Difference (in \% from reference)} & \textbf{Category} \\ \hline
+0 -- 5 \%   & low \\ 
+5 -- 10 \%  & moderate \\ 
+10 -- 20 \% & high \\ 
+> 20 \%     & very high \\ \hline
+\end{tabular}
+\caption{Classification of differences relative to the reference}
+\label{tab:diff_cat}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    % Erste Spalte
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGBNDVI_F2.svg}
+        \caption{RGBNDVI (F2)}
+        \label{fig:perm_exp_diffM_rgbndvi_f2}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_GBNDVI_F2.svg}
+        \caption{GBNDVI (F2)}
+        \label{fig:perm_exp_diffM_gbndvi_f2}
+    \end{subfigure}
+    
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_IRGB_F3.svg}
+        \caption{IRGB (F3)}
+        \label{fig:perm_exp_diffM_irgb_f3}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RIRB_F2.svg}
+        \caption{RIRB (F2)}
+        \label{fig:perm_exp_diffM_RIRB_f2}
+    \end{subfigure}
+    
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGB_F2.svg}
+        \caption{RGB (F2)}
+        \label{fig:perm_exp_diffM_RGB_f2}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGIR_F3.svg}
+        \caption{RGIR (F3)}
+        \label{fig:perm_exp_diffM_RGIR_f3}
+    \end{subfigure}
+
+    \caption[Difference Matrices compared to RGBIR (Fold 2)]{Difference Matrices for all models compared against RGBIR (Fold 2). Red indicates better performance for RGBIR, blue for the respective comparison model.}
+    \label{fig:perm_exp_diffM_all}
+\end{figure}
+\todo{Beschreibung Figures länger machen, mehr Analyse weniger "was sieht man"}
+
+% \begin{figure}[b]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGBNDVI_F2.svg}
+%     \caption[Difference Matrix for RGBNDVI (Fold 2)]{Difference Matrix for RGBNDVI (Fold 2). (Own representation)}
+%     \label{fig:perm_exp_diffM_rgbndvi_f2}
+% \end{figure}
+
+Abbildung~\ref{fig:perm_exp_diffM_rgbndvi_f2} verdeutlicht deutliche Unterschiede zugunsten von RGBIR. Besonders stark zeigt sich dies bei der korrekten Erkennung von \textit{ship} (24~\%), \textit{vehicle} (16~\%), \textit{plane} (12~\%) und \textit{tractor} (10~\%). Auch bei Verwechslungen zwischen \textit{car} und \textit{van} treten Unterschiede von mehr als 10~\% auf. Dagegen weist RGBNDVI höhere Fehlklassifikationen auf, beispielsweise bei \textit{plane} (12~\%) und \textit{van} (23~\%), die fälschlich als \textit{background} erkannt werden. Insgesamt zeigt RGBIR fünf Fälle, in denen es mindestens 5~\% besser abschneidet, während RGBNDVI keinen Vorteil verzeichnen kann.
+
+% \begin{figure}[t]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_GBNDVI_F2.svg}
+%     \caption[Difference Matrix for GBNDVI (Fold 2)]{Difference Matrix for GBNDVI (Fold 2). (Own representation)}
+%     \label{fig:perm_exp_diffM_gbndvi_f2}
+% \end{figure}
+
+In Abbildung~\ref{fig:perm_exp_diffM_gbndvi_f2} zeigt sich ein sehr hoher Unterschied bei der Klasse \textit{tractor}, wo RGBIR deutlich überlegen ist. Die Verbesserung bei \textit{ship} beträgt dagegen lediglich 8~\%. Auffällig ist, dass \textit{tractor}, \textit{ship} und \textit{van} im GBNDVI-Modell häufiger fälschlich als \textit{background} klassifiziert werden. Insgesamt ist RGBIR in vier Fällen um mindestens 5~\% besser, während GBNDVI keine Vorteile aufweist.
+
+% \begin{figure}[b]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_IRGB_F3.svg}
+%     \caption[Difference Matrix for IRGB (Fold 3)]{Difference Matrix for IRGB (Fold 3). (Own representation)}
+%     \label{fig:perm_exp_diffM_irgb_f3}
+% \end{figure}
+
+Wie Abbildung~\ref{fig:perm_exp_diffM_irgb_f3} zeigt, bleibt \textit{ship} eine Klasse, bei der RGBIR besonders stark ist (+21~\%). Dennoch treten in beiden Modellen Fehlklassifikationen auf, etwa die Verwechslung von \textit{ship} mit \textit{camping car} oder \textit{background}. Insgesamt ist RGBIR in drei Fällen mindestens 5~\% besser, während IRGB keinen Vorteil aufweist.
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RIRB_F2.svg}
+%     \caption[Difference Matrix for RIRB (Fold 2)]{Difference Matrix for RIRB (Fold 2). (Own representation)}
+%     \label{fig:perm_exp_diffM_RIRB_f2}
+% \end{figure}
+
+Abbildung~\ref{fig:perm_exp_diffM_RIRB_f2} zeigt ein gemischtes Bild: RGBIR weist Vorteile bei den Klassen \textit{vehicle} und \textit{camping car} auf, während RIRB bei \textit{camping car} eine moderate Verbesserung (6~\%) erzielt. Auffällig sind die hohen Fehlklassifikationen im RIRB-Modell, bei denen \textit{van} (21~\%) und \textit{ship} (12~\%) als \textit{background} erkannt werden. Insgesamt ist RGBIR in zwei Fällen besser, während RIRB in einem Fall Vorteile aufweist.
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGB_F2.svg}
+%     \caption[Difference Matrix for RGB (Fold 2)]{Difference Matrix for RGB (Fold 2). (Own representation)}
+%     \label{fig:perm_exp_diffM_RGB_f2}
+% \end{figure}
+
+In Abbildung~\ref{fig:perm_exp_diffM_RGB_f2} zeigen sich deutliche Unterschiede zugunsten des RGBIR-Modells bei den Klassen \textit{ship} und \textit{vehicle}. Dennoch treten auch hier moderate Fehlklassifikationen auf, etwa die Verwechslung von \textit{pick up} mit \textit{car} (6~\%) oder \textit{van} mit \textit{pick up}. Während RGB \textit{vehicle} (15~\%) und \textit{ship} (10~\%) häufiger als \textit{background} verkennt, klassifiziert RGBIR den \textit{background} häufiger fälschlich als \textit{pick up}. Insgesamt ist RGBIR in zwei Klassen klar überlegen.
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGIR_F3.svg}
+%     \caption[Difference Matrix for RGIR (Fold 3)]{Difference Matrix for RGIR (Fold 3). (Own representation)}
+%     \label{fig:perm_exp_diffM_RGIR_f3}
+% \end{figure}
+
+Der letzte Vergleich in Abbildung~\ref{fig:perm_exp_diffM_RGIR_f3} zwischen RGBIR und RGIR (Fold~3) zeigt nahezu einen Gleichstand. Während RGBIR \textit{cars} häufiger mit \textit{vans} verwechselt und \textit{camping car} öfter als \textit{background} klassifiziert, ist RGIR bei \textit{ship} und \textit{van} moderat besser. Insgesamt weist RGBIR in einer Klasse Vorteile von mindestens 5~\% auf, während RGIR in ebenfalls einer Klasse überlegen ist.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Comparision with Confusion Matrices}
+% \todo{Beschreibung Figures länger machen, mehr analyse weniger "was sieht man"}
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/rgbir_F2.svg}
+%     \caption[Confusion Matrix for RGBIR Modell (Fold 2)]{Confusion Matrix for RGBIR Modell (Fold 2) .(Own representation)}
+%     \label{fig:perm_exp_confM_rgbir_f2}
+% \end{figure}
+% \begin{itemize}
+%     \item exatk bei planes (100\%)
+%     \item hervoragende Performance (>80\%) bei Cars, Ships, Tractors, Planes
+%     \item gute Performance (>60\% und <80 \%  ) bei Truck, Camping Car, van und Pick Up
+%     \item akzeptable Performance  (> 60\%)bei vehicle
+%     \item Background wird oft als Vehicle fehlklassifiziert (>40\%), Cmaping Car liegt bei (28\%), Truck bei 16\%. Rest in einer spanne von 8-12\%
+% \end{itemize}
+% \begin{itemize}
+%     \item \ref{fig:perm_exp_confM_rgbir_f2} ist basis für Differenzmatrixen, weil es das beste Modell des Permuationsdurchlauf des \acrshort{RGBIR} Durchlaufes ist. Dieser Durchlauf wird gewählt weil er alle vorhanden Bänder unverändert in Rohform enthält
+%     \item Interpretation der folgenden Differenzmatrixen wie folgt: Rot für bessere Performance des RGBIR (F2) Modells und Blau für das jeweils andere. Je satter die Farbe desto extremer der Unterschied
+%     \item Vergleich fängt mit schlechtestem Modell an und arbeitet sich zum besten Modell laut oberen Whisker von Abb. \ref{fig:perm_exp_map50-95:val_on_test} hoch 
+%     \item Unterschied (in \% von der Referenz)	Kategorie
+%     \item 0 – 5 \%	gering
+%     \item 5 – 10 \%	moderat/mittel
+%     \item 10 – 20 \%	hoch
+%     \item > 20 \%	sehr hoch
+% \end{itemize}
+
+% \begin{table}[h!]
+% \centering
+% \begin{tabular}{c c}
+% \hline
+% \textbf{Difference (in \% from reference)} & \textbf{Category} \\ \hline
+% 0 -- 5 \%   & low \\ 
+% 5 -- 10 \%  & moderate \\ 
+% 10 -- 20 \% & high \\ 
+% > 20 \%     & very high \\ \hline
+% \end{tabular}
+% \caption{Classification of differences relative to the reference}
+% \end{table}
+
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGBNDVI_F2.svg}
+%     \caption[Difference Matrix for RGBNDVI (Fold 2)]{Difference Matrix for RGBNDVI (Fold 2).(Own representation)}
+%     \label{fig:perm_exp_diffM_rgbndvi_f2}
+% \end{figure}
+% \begin{itemize}
+%     \item hohe Unterschiede (>10\%) bei Verwechselung von Car und Van zugunsten RGBIR
+%     \item hohe bis sehr hohe Unterschiede bei der (richtigen) Erkennungsleistung von Ship (24\%), Vehicle (16\%), Plane (12\%) und Tractor (10\%) zugunsten RGBIR
+%     \item restliche Unterschiede bei Verwechslungen von Detekionen im geringen (0-5\%) und moderaten (5-10\%) Bereich
+%     \item Plane (12\%) und van (23\%)  wird oft als background fehlklassifiziert; restliche fehlklassifizierungen liegen im geringen bis mittleren Bereich zulasten von RGBNDVI
+%     \item Insgesamt: 5x RGBIR mind. 5\% besser (diagonale der CM), 0x blau
+% \end{itemize}
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_GBNDVI_F2.svg}
+%     \caption[Difference Matrix for GBNDVI (Fold 2)]{Difference Matrix for GBNDVI (Fold 2).(Own representation)}
+%     \label{fig:perm_exp_diffM_gbndvi_f2}
+% \end{figure}
+% \begin{itemize}
+%     \item sehr hohe Unterschiede zugunsten RGBIR bei richtiger Erkennungsleistung von Tractor
+%     \item Ship hat "nur" eine bessere Leistung von 8\% anstatt 24\%
+%     \item Tractor, Ship, van wird öfters als Background fehlklassifiziert
+%     \item Insgesamt: 4x RGBIR mind. 5\% besser (diagonale CM) 0x blau
+% \end{itemize}
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_IRGB_F3.svg}
+%     \caption[Difference Matrix for IRGB (Fold 3)]{Difference Matrix for IRGB (Fold 3).(Own representation)}
+%     \label{fig:perm_exp_diffM_irgb_f3}
+% \end{figure}
+% \begin{itemize}
+%     \item Ship hat wieder eine bessere Leistung von 21\%
+%     \item Ship wird oft als Campoing Car missclassifiziert
+%     \item Ship wird oft als Background nicht erkannt
+%     \item Insgesamt: 3x RGBIR mind. 5\% besser (diagonale CM) 0x blau
+% \end{itemize}
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RIRB_F2.svg}
+%     \caption[Difference Matrix for RIRB (Fold 2)]{Difference Matrix for RIRB (Fold 2).(Own representation)}
+%     \label{fig:perm_exp_diffM_RIRB_f2}
+% \end{figure}
+% \begin{itemize}
+%     \item MOderate Verwechslung von Van als Car (9 \%)
+%     \item hoher Unterschied bei Ship und van Klassifizierung
+%     \item moderat bessere Leistung zugunsten RIRB bei Camping Car (6\%)
+%     \item hohe Fehldetektion von RIRB von Van als Background (21\%); 12 \% bei Ship
+%     \item moderate bessere Leistung von RGBIR bei Vehicle, camping car in bezug auf Verwechlseung Background/label
+%     \item Insgesamt: 2x RGBIR mind. 5\% besser (diagonale CM) 1x blau
+% \end{itemize}
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGB_F2.svg}
+%     \caption[Difference Matrix for RGB (Fold 2)]{Difference Matrix for RGB (Fold 2).(Own representation)}
+%     \label{fig:perm_exp_diffM_RGB_f2}
+% \end{figure}
+% \begin{itemize}
+%     \item hohe Unterschiede zugnsten RGBIR bei Ship, und Vehicle Detektion
+%     \item moderate VErwechslungen von Pick up mit Cars (6\%) und vans mit pck ups bei RGBIR
+%     \item Background wird oft (7\%) häufiger als Pick up identifiziert von RGBIR
+%     \item RGB erkennt Vehicle (15\%) und Ship (10\%) oft als Background
+%     \item Insgesamt: 2x RGBIR mind. 5\% besser (diagonale CM) 0x blau
+% \end{itemize}
+% \begin{figure}[htbp]
+%     \centering
+%     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/Difference_Matrices/RGBIR_F2_vs_RGIR_F3.svg}
+%     \caption[Difference Matrix for RGIR (Fold 3)]{Difference Matrix for RGIR (Fold 3).(Own representation)}
+%     \label{fig:perm_exp_diffM_RGIR_f3}
+% \end{figure}
+% \begin{itemize}
+%     \item cars werden öfter mit van verwecheslt von rgbir
+%     \item camping car wird öfter von rgbir als Background klassifiziert als bei rgir
+%     \item bei ship und van ist rgir moderat besser
+%     \item Insgesamt: 1x RGBIR mind. 5\% besser (diagonale CM) 1x blau (nahezu gleihcstand)
+% \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{itemize}
+%     \item \todo{beide confusionsmatricen einfügen}
+%     \item Normalisierte Konfusions Matrix mit 9 Klassen und der Einteilung Background (Hintergrund)
+%     \item Right: Confusion Matric of RGBIR Modell on Fold 2:
+%     \item Good Performance at Cars, Trucks, Ships, Tractors, Camping Cars, Pick Up and planes
+%     \item Many confusion at vehicle with background
+%     \item Nearly the same for RGIR at Fold 3
+%     \item Both modells detected nearly all Planes
+%     \item Difference Matrics at next slide
+% \end{itemize}
+
+% \begin{itemize}
+%     \item \todo{Differenzmatrix RGBIR vs RGIR einfügen}
+%     \item At all Difference Matrices is red for the better performance of the RGBIR Model and blue for the other modell
+%     \item RGBIR detected Trucks, Ships and Tractor more accurate than the RGIR Model
+%     \item RGBIR seems more robust for common ground vehicles
+%     \item Both modells detect all planes (in short every modell detect all planes)
+%     \item Both modells misclassifier background as any class (RGBIR is better at vehicle and Camping Car) 
+% \end{itemize}
+
+% \begin{itemize}
+%     \item \todo{Differenzmatrix RGBIR vs RGB einfügen}
+%     \item RGBIR is better for detecting Ships (12\%) and Vehicles (15\%), slightliy degrades performance of car detection
+%     \item Vehicle is much better than in RGB Model (15\%)
+%     \item IR input helps for common vehicle recognition (vehicle includes Excavators, construction equipment, etc.)
+%     \item RGB is better in identifying ship and vehicle as background
+% \end{itemize}
+
+
+% \begin{itemize}
+%     \item \todo{Differenzmatrix RGBIR vs IRGB einfügen}
+%     \item RGBIR recognize Ships 21 \% better than the irgb model
+%     \item Particulary stronger for camping car and van classification (6\%)
+%     \item IRGB has more  background-ship and background-vehicle confusion
+% \end{itemize}
+
+% \begin{itemize}
+%     \item \todo{Differenzmatrix RGBIR vs RIRB einfügen}
+%     \item RGBIR detects Ships and vans better than RIRB Model
+%     \item RIRB misclassified van and ship as background more often than RGBIR
+
+% \end{itemize}
+
+
+% \begin{itemize}
+%     \item \todo{Differenzmatrix RGBIR vs GBNDBVI und RGBNDVI einfügen}
+%     \item RGBIR have a better performance in Ship, Tractor and Vehicle
+%     \item Both ndvi modells show  a tendency for confusing background with other classes
+% \end{itemize}
+\FloatBarrier
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
 \section{Ablation Studies}
 \begin{itemize}
-    \item \todo{Tabelle mit Best Folds Ablation Studies einfügen}
+    \item Fold 4 und 2 am besten bei vali datensatz
+    \item Fold 0,2,3 bei test datensatz
 \end{itemize}
+\begin{itemize}
+    \item ir ist am besten mit höchstem Map wert
+\end{itemize}
+Die Boxplots in Fig. \ref{fig:ablation_map50-95:val_on_test} der 6-fold Cross-Validation zeigen, dass die Modelle für die Kanäle Red, Green, Blue und IR im Bereich von mAP50–95 = 0,52–0,54 liegen. Ein einzelner Wert im IR-Modell erreicht 0,5777, liegt damit jedoch deutlich außerhalb des zentralen Bereichs der anderen Folds und ist als Ausreißer zu interpretieren. Insgesamt lassen sich zwischen den Modellen Red, Green, Blue und IR keine signifikanten Unterschiede feststellen, während NDVI mit einem Median von etwa 0,44 signifikant schlechter abschneidet. Ähnliche Ergebnisse sind in Fig. \ref{fig:ablation_map50-95:val_on_val} zu sehen.
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \includesvg[width=0.8\textwidth]{images/015Results/03ablation/best_val_on_test.svg}
+    \caption[Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on test dataset). The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:ablation_map50-95:val_on_val}).(Own representation)}
+    \label{fig:ablation_map50-95:val_on_test}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \centering
+    \includesvg[width=0.8\textwidth]{images/015Results/03ablation/best_val_on_val.svg}
+    \caption[Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on validation dataset). (Own representation)}
+    \label{fig:ablation_map50-95:val_on_val}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    % Erste Spalte
+       
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/03ablation/conf_matr_ir_f0.svg}
+        \caption{IR (F3)}
+        \label{fig:ablation_confM_IR_f0}
+    \end{subfigure}
+
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/03ablation/diff_matric/IR_F0_vs_R_F2.svg}
+        \caption{Red (F2)}
+        \label{fig:ablation_diffM_r_f2}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/03ablation/diff_matric/IR_F0_vs_G_F3.svg}
+        \caption{Green (F3)}
+        \label{fig:ablation_diffM_g_f3}
+    \end{subfigure}
+    
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/03ablation/diff_matric/IR_F0_vs_B_F2.svg}
+        \caption{Blue (F2)}
+        \label{fig:ablation_diffM_b_f2}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/015Results/03ablation/diff_matric/IR_F0_vs_NDVI_F0.svg}
+        \caption{NDVI (F0)}
+        \label{fig:ablation_diffM_NDVI_f0}
+    \end{subfigure}
+    
+
+
+    \caption[Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model]{Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model. Red indicates better performance for IR, blue for the respective comparison model. All values falling within the interval [–0.04, 0.04] are excluded from the matrix.}
+    \label{fig:ablation_diffM_all}
+\end{figure}
+
+\begin{itemize}
+    \item Beschreibung der Differenzmatrixen erfolgt analog zu Kap. \ref{subsec:permexp_comp_confusion_matric} und Tab. \ref{tab:diff_cat} mit der Confusion Matrix IR (s. Fig. \ref{fig:ablation_confM_IR_f0}) als Referenz
+    \item ebenfalls perfekte Erkennungsrate von 100 \% bei planes
+    \item >80\%: Car, Tractor (hervorragend)
+    \item 60-80\% Truck, Ship, Camping Car, Pick Up (gut)
+    \item 40-60\%: van, Vehicle
+    \item nicht erkennung von vehicle (als Background) mit 45 \% häufig
+    \item erhöhte Fehlklassifikationen (>17\%) ebenfalls bei Pick UP, Ship, Camping Car (28\%) und van (39 \%)
+\end{itemize}
+\begin{itemize}
+    \item \ref{fig:ablation_diffM_r_f2} zeigt, dass IR  hohe Leistung im Gegensatz zm reinen Roten Kanal bei der Erkennung von Vehicle hat
+    \item dafür scheint IR Bei der Erkennung von Vans nicht wichtig zu sein, R war 16 \% besser als IR
+    \item 
+\end{itemize}
+\begin{table}[h]
+\centering
+\begin{tabular}{l c c}
+\hline
+\textbf{Channel} & \textbf{Best mAP Fold (Validation)} & \textbf{Best mAP Fold (Test)} \\ 
+\hline
+red   & 4 & 2 (0.5408) \\
+green & 4 & 3 (0.5449) \\
+blue  & 4 & 2 (0.5449) \\
+ir    & 4 & 0 (0.5777) \\
+ndvi  & 2 & 0 (0.4467) \\
+\hline
+\end{tabular}
+\caption{Best fold per model on validation and test sets, with test mAP@50-95 values}
+\label{tab:best_folds_test}
+\end{table}
+
+\begin{figure}[h!]
+\centering
+\renewcommand{\arraystretch}{1.2} % mehr Platz zwischen Zeilen
+\begin{tabular}{c|ccccccc}
+    & \textbf{Car}
+    & \textbf{Truck}
+    & \textbf{Pick-Up}
+    & \textbf{Camping Car}
+    & \textbf{Ship}
+    & \textbf{Plane}
+    & \textbf{Vehicle} \\ \hline
+    \rotatebox{90}{\textbf{Label}} 
+    %Car
+    & \includegraphics[trim={1460pt 1740pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_labels.jpg"}
+    %Truck
+    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"}
+    %Pick Up
+    & \includegraphics[trim={120pt 200pt 1590pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"}
+    %Camping Car
+    & \includegraphics[trim={840pt 1515pt 710pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_labels.jpg"}
+    %Ship
+    & \includegraphics[trim={50pt 1695pt 1680pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_labels.jpg"}
+    %Plane
+    & \includegraphics[trim={1100pt 1100pt 600pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_labels.jpg"}
+    %vehicle
+    & \includegraphics[trim={50pt 21pt 1650pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"} \\ \hline
+    \rotatebox{90}{\textbf{Red}} 
+     %Car
+    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch0_pred.jpg"}
+    %Truck
+    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"}
+    %Pick Up
+    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"}
+    %Camping Car
+    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch0_pred.jpg"}
+    %Ship
+    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch1_pred.jpg"}
+    %Plane
+    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch1_pred.jpg"}
+    %vehicle
+    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"} \\ \hline
+    \rotatebox{90}{\textbf{Green}} 
+     %Car
+    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch0_pred.jpg"}
+    %Truck
+    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"}
+    %Pick Up
+    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"}
+    %Camping Car
+    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch0_pred.jpg"}
+    %Ship
+    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch1_pred.jpg"}
+    %Plane
+    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch1_pred.jpg"}
+    %vehicle
+    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"} \\ \hline
+    \rotatebox{90}{\textbf{Blue}} 
+     %Car
+    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch0_pred.jpg"}
+    %Truck
+    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"}
+    %Pick Up
+    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"}
+    %Camping Car
+    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch0_pred.jpg"}
+    %Ship
+    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch1_pred.jpg"}
+    %Plane
+    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch1_pred.jpg"}
+    %vehicle
+    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"} \\ \hline
+    \rotatebox{90}{\textbf{IR}} 
+     %Car
+    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_pred.jpg"}
+    %Truck
+    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"}
+    %Pick Up
+    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"}
+    %Camping Car
+    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_pred.jpg"}
+    %Ship
+    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_pred.jpg"}
+    %Plane
+    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_pred.jpg"}
+    %vehicle
+    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"} \\ \hline
+    \rotatebox{90}{\textbf{NDVI}} 
+     %Car
+    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch0_pred.jpg"}
+    %Truck
+    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"}
+    %Pick Up
+    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"}
+    %Camping Car
+    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch0_pred.jpg"}
+    %Ship
+    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch1_pred.jpg"}
+    %Plane
+    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch1_pred.jpg"}
+    %vehicle
+    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"} \\ \hline
+    
+\end{tabular}
+\caption{Examples of different classes for the object recognition performance of individual channels in the ablation study}
+\end{figure}
+
+
 % \begin{figure}[h] 
 %     \centering
 %     % Erste Subfigur
@@ -259,3 +772,5 @@ Aufgrund der geringeren Überlappungswahrscheinlichkeit und der genaueren Objekt
 %     \caption{Comparison of Confusion Matrices between r-g-b-ir und ir-g-b for Fold 4} % Gemeinsame Unterschrift für beide Bilder
 %     \label{fig:combined_maps} % Label für die gesamte Figure-Umgebung
 % \end{figure}
+
+\todo{minderwertige labelerstellung erwähnen}

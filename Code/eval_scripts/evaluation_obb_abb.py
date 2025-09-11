@@ -69,7 +69,7 @@ def main():
         # plt.gca().add_artist(legend1)
         # legend2 = plt.legend(handles=legend_elements_obb, title='OBB', loc='upper left', bbox_to_anchor=(1.01, 0.5))
 
-        # plt.title(f'{string_title} over Epochs – 5-Fold Cross Validation (window size: {window_size})')
+        # plt.title(f'{string_title} over Epochs – 6-Fold Cross Validation (window size: {window_size})')
         # plt.xlabel('Epoch')
         # plt.ylabel(string_title)
         # plt.grid(True, linestyle=':', alpha=0.6)

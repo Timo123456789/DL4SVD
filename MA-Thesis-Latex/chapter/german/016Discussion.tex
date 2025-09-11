@@ -5,13 +5,36 @@
     \item unterteilung analog zu  und Fig. \ref{fig:Flowchart} und Chap. \ref{ch:results}
 \end{itemize}
 
-\section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
+\section*{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
 \begin{itemize}
     \item in \ref{fig:comparison_bb_format} ist deutlich zu sehen, dass \acrshort{obb} deutlich exakter entlang der Objektgrenzen verlaufen und weniger umgebenes Areal umfassen; keine Überlappung ist wichtig, sorgt möglicherweise für eine bessere Erkennungsleistung bei nahe aneinander liegenden Objekten
     \item exaktere Objektgrenzen sieht man auch an geringeren Flächeninhalten über alle Objekte hinweg (s.\ref{fig:bbox_area})
     \item bessere Performance von \acrshort{abb} auf dem \acrshort{obb} Modell Wahrscheinlich dadurch, dass kleine Abweichunge/Änderungen in der Orientierung große Auswirkungen auf die \acrshort{mAP} haben
     \item \acrshortpl{obb} sind schmaler als \acrshort{abb} sodass dort eine höhere ungeauigekt beim \acrshort{mAP} herrscht
-    \item \todo{Schreiben warum der eine Fold meistesn besser war als der andere? keine idee warum.. \ref{tab:best_folds_area}}
+    \item \todo{Schreiben warum der eine Fold meistesn besser war als der andere? keine idee warum.. \ref{tab:best_folds_area} (vllt weil die Verteilung bei F 0 und 1 am besten für das Training geeignet ist?)}
 \end{itemize}
-\section{Permutation Experiments}
-\section{Ablation Studies}
+
+
+
+\section*{Permutation Experiments}
+\begin{itemize}
+    \item das RGIR Modell hat beste MAP Leistung auf Testfold, B ist möglicherweise ein unwichtiger Kanal zur Fahrzeugdetektion
+    \item NDVI könnte für Noise im Datensatz sorgen, sodass Fahrzeuge schlechter erkannt werden, deswegen performance beider modelle so schlecht
+    \item IRGB ist mittelprächtig, weil möglicherweise der rote kanal für Fahrzeugdetektion wichitg ist 
+    \item Fold 2 und 3 scheinen für den Testdatensatz die beste Verteilung der Trainingsdaten zu haben, da diese die höchsten MAP Werte haben, bei validierungsmodell auf Validierungsdatensatz hat jeder fold mindestens einmal am besten abgeschnitten (-> Verteilung spielt dort weniger eine große Rolle) \todo{Verteilungen genauer analysieren}
+\end{itemize}
+\begin{itemize}
+    \item \todo{Verteilung genauer analysieren anhand performance bei Klassenerkennung bei Confusion Matrix}
+    \item absolute Zahlen statt nur Prozentzahlen analysieren; geringe Anzahl bei Klassen kann hohe Auswirkungen auf die Prozentzahlen haben (absolute Zahlen angucken?; dadurch Aussagekraft beurteilen)
+\end{itemize}
+\begin{itemize}
+    \item \acrshort{RGBNDVI} zeigt schlechtere Performance bei Ship, Vehicle und Plane;background wird als van fehlklassifiziert; 
+    \item 12\% Unterschied bei Plane kommt wohl exakt aus der fehlklassifizierung des plane als background
+    \item beide NDVI Modelle performen schlechter als RGBIR; liegt möglicherweise an Noise durch NDVI die den Algorithmus beeinflusst
+    \item 
+\end{itemize}
+\section*{Ablation Studies}
+\section*{Implication}
+\begin{itemize}
+    \item alle Flugzeuge werden unabhängig von der Kanalpermuation und sogar bei einzelnen Kanälen erkannt, wahrscheinlich wegen der prägnanten Form 
+\end{itemize}

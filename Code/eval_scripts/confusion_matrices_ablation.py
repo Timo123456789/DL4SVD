@@ -13,7 +13,7 @@ def read_confusion_matrix(csv_path):
     cm.set_index(cm.columns[0], inplace=True)
     return cm
 
-def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
+def plot_and_save_diff_old(model_1, fold_1, model_2, fold_2, out_path):
     csv_path1 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_1}\fold{fold_1}\metrics_and_confusion_test.csv"
     csv_path2 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_2}\fold{fold_2}\metrics_and_confusion_test.csv"
     cm1 = read_confusion_matrix(csv_path1)
@@ -33,11 +33,14 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
         cbar=True,
         mask=mask.T,                  # Maske ebenfalls transponieren!
         linewidths=0.5,
-        linecolor='white'
+        linecolor='white',
+        annot_kws={"size": 16}
     )
-    plt.title(f"Normalized Difference Matrix ({model_1}_F{fold_1} vs {model_2}_F{fold_2})")
-    plt.ylabel("Predicted Label")     # Achsenbeschriftungen getauscht
-    plt.xlabel("True Label")
+    #plt.title(f"Normalized Difference Matrix ({model_1}_F{fold_1} vs {model_2}_F{fold_2})")
+    plt.ylabel("Predicted Label",fontsize=12)     # Achsenbeschriftungen getauscht
+    plt.xlabel("True Label",fontsize=12)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.tight_layout()
     svg_out_path = out_path.replace(".png", ".svg")
     plt.savefig(svg_out_path, format="svg", transparent=True)
@@ -45,10 +48,51 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
     plt.close()
 
 
+def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
+    csv_path1 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_1}\fold{fold_1}\metrics_and_confusion_test.csv"
+    csv_path2 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_2}\fold{fold_2}\metrics_and_confusion_test.csv"
+
+    cm1 = read_confusion_matrix(csv_path1)
+    cm2 = read_confusion_matrix(csv_path2)
+
+    cm1_normalized = cm1.div(cm1.sum(axis=1), axis=0).fillna(0)
+    cm2_normalized = cm2.div(cm2.sum(axis=1), axis=0).fillna(0)
+
+    diff_matrix_normalized = cm1_normalized - cm2_normalized
+
+    # Maske für Werte im Bereich [-0.05, 0.05]
+    mask = diff_matrix_normalized.abs() <= 0.04
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(
+        diff_matrix_normalized.T,
+        annot=True,
+        fmt=".2f",
+        cmap="coolwarm",
+        center=0,
+        cbar=True,
+        mask=mask.T,              # maskiert auch Annotationen
+        linewidths=0.5,
+        linecolor='white',
+        annot_kws={"size": 16}
+    )
+
+    plt.ylabel("Predicted Label", fontsize=12)
+    plt.xlabel("True Label", fontsize=12)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.tight_layout()
+
+    svg_out_path = out_path.replace(".png", ".svg")
+    plt.savefig(svg_out_path, format="svg", transparent=True)
+    plt.savefig(out_path, transparent=False)
+    plt.close()
+
 def plot_and_save_confusion(model, fold, out_path):
     csv_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model}\fold{fold}\metrics_and_confusion_test.csv"
     cm = read_confusion_matrix(csv_path)
     cm_normalized = cm.div(cm.sum(axis=1), axis=0).fillna(0)
+    print(cm_normalized)
     mask = cm_normalized == 0  # Nullwerte maskieren
     plt.figure(figsize=(10, 8))
     sns.heatmap(
@@ -59,20 +103,59 @@ def plot_and_save_confusion(model, fold, out_path):
         cbar=True,
         mask=mask.T,               # Maske transponieren!
         linewidths=0.5,
-        linecolor='white'
+        linecolor='white',
+        annot_kws={"size": 16}
     )
-    plt.title(f"Normalized Confusion Matrix ({model}_F{fold})")
-    plt.ylabel("Predicted Label")
-    plt.xlabel("True Label")
+    plt.ylabel("Predicted Label",fontsize=12)     # Achsenbeschriftungen getauscht
+    plt.xlabel("True Label",fontsize=12)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.tight_layout()
+    
+    plt.savefig(out_path)
+    svg_out_path = out_path.replace(".png", ".svg")
+    plt.savefig(svg_out_path, format="svg", transparent=True)
     plt.show()
-    #plt.savefig(out_path)
-    #svg_out_path = out_path.replace(".png", ".svg")
-    #plt.savefig(svg_out_path, format="svg", transparent=True)
     plt.close()
+def plot_and_save_confusion_new(model, fold, out_path):
+    csv_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model}\fold{fold}\metrics_and_confusion_test.csv"
+    cm = read_confusion_matrix(csv_path)
+    cm_normalized = cm.div(cm.sum(axis=1), axis=0).fillna(0)
+    print(cm_normalized)
+
+    # Maske für Werte im Bereich [-0.05, 0.05]
+    mask = cm_normalized.abs() <= 0.05
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(
+        cm_normalized.T,           # Achsen tauschen
+        annot=True,
+        fmt=".2f",
+        cmap="Blues",
+        cbar=True,
+        mask=mask.T,               # Maske transponieren!
+        linewidths=0.5,
+        linecolor='white',
+        annot_kws={"size": 16}
+    )
+
+    plt.ylabel("Predicted Label", fontsize=12)
+    plt.xlabel("True Label", fontsize=12)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.tight_layout()
+    
+    plt.savefig(out_path)
+    svg_out_path = out_path.replace(".png", ".svg")
+    plt.savefig(svg_out_path, format="svg", transparent=True)
+    plt.show()
+    plt.close()
+
+    
 if __name__ == "__main__":
-    output_dir = r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\confusion_matrices\Difference_Matrices\ablation"
+    output_dir = r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\03ablation\diff_matric"
    
+    plot_and_save_confusion_new("ir",0,r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\03ablation\conf_matr_ir_f0.png")
 
     # plot_and_save_confusion("red","2", r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\confusion_matrices\red_F2.png" )
     # plot_and_save_confusion("green","2", r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\confusion_matrices\green_F2.png" )

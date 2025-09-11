@@ -4,7 +4,7 @@
 \begin{figure}[htbp]
     \centering
     \includesvg[width=\textwidth]{images/Ablaufdiagramm_white}
-    \caption{Flowchart for workflow. Source: own representation}
+    \caption[Flowchart for workflow]{Flowchart for workflow. Source: own representation}
     \label{fig:Flowchart}
 \end{figure}
 
@@ -34,7 +34,7 @@
 % Im Rahmen der Experimente werden verschiedene Kanalpermutationen (s. Tab. \ref{tab:perm}) getestet.
 
 
-Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart (s. Fig. \ref{fig:Flowchart}) dargestellt. Im folgenden Abschnitt wird die Methodik dieser Arbeit beschrieben. Zunächst wird die Datengrundlage anhand der verwendeten Datensätze erläutert. Darauf aufbauend werden die eingesetzten \acrshort{YOLO}-Versionen vorgestellt. Im Anschluss folgt die Implementierung, bestehend aus den verwendeten Python-Packages sowie einer Beschreibung des Programmcodes. Danach werden die zentralen Herausforderungen im Preprocessing dargestellt. Anschließend werden die Ergebnisse der 5-Fold-Cross-Validation präsentiert, wobei eigene Folds erstellt wurden, die für alle Experimente mit \acrshort{abb}, \acrshort{obb} sowie den Permutationen (s. Tab. \ref{tab:perm}) genutzt wurden. Abschließend wird die Hardware beschrieben, auf der die Experimente durchgeführt wurden, nämlich das \acrlong{HPC} \acrshort{PALMA}, sowie die dort ausgeführten Bash-Skripte mit den für \acrshort{YOLO} verwendeten Hyperparametern.  
+Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart (s. Fig. \ref{fig:Flowchart}) dargestellt. Im folgenden Abschnitt wird die Methodik dieser Arbeit beschrieben. Zunächst wird die Datengrundlage anhand der verwendeten Datensätze erläutert. Darauf aufbauend werden die eingesetzten \acrshort{YOLO}-Versionen vorgestellt. Im Anschluss folgt die Implementierung, bestehend aus den verwendeten Python-Packages sowie einer Beschreibung des Programmcodes. Danach werden die zentralen Herausforderungen im Preprocessing dargestellt. Anschließend werden die Ergebnisse der 6-Fold-Cross-Validation präsentiert, wobei eigene Folds erstellt wurden, die für alle Experimente mit \acrshort{abb}, \acrshort{obb} sowie den Permutationen (s. Tab. \ref{tab:perm}) genutzt wurden. Abschließend wird die Hardware beschrieben, auf der die Experimente durchgeführt wurden, nämlich das \acrlong{HPC} \acrshort{PALMA}, sowie die dort ausgeführten Bash-Skripte mit den für \acrshort{YOLO} verwendeten Hyperparametern.  
 
 % \begin{itemize}
 %     \item Im folgenden Abschbnitt wird die Methodik beschrieben
@@ -78,7 +78,7 @@ Die Datenbasis umfasst 2 Datensätze, die annotierte Luft- und Satellitenbildern
 \subsection{Vehicle Detection on Aerial Images (VEDAI) Dataset}
 \label{subsec:VEDAI}
 
-Das \Acrshort{VEDAI} Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl \acrshort{RGB}-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie \acrshort{NIR} oder \acrshort{IR} auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in ungefähr 1200 Bildern annotiert. Diese Objekte sind in 9 Klassen (Boat, Camping Car, Car, Pickup, Plane, Tractor, Truck, Van und Others) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht \cite{Razakarivony2015}. \\
+Das \Acrshort{VEDAI} Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl \acrshort{RGB}-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie \acrshort{NIR} oder \acrshort{IR} auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in ungefähr 1200 Bildern annotiert. Diese Objekte sind in 9 Klassen (Ship, Camping Car, Car, Pickup, Plane, Tractor, Truck, Van und Vehicles) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht \cite{Razakarivony2015}. \\
 Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was ausreichend ist um einzelne Fahrzeuge zu erkennen. Die Bilder mit einer Größe von 1024 \texttimes 1024 Pixeln sind bei einer Befliegung im Jahr 2012 in US Amerikanischen Bundesstaat Utah aufgenommen worden \cite{Razakarivony2015}. 
 \todo{Bsp. Bild für jede Klasse zeigen (aus Paper nehmen!; Quellenverlinkung für text und bild nicht vergessen)}
 
@@ -98,6 +98,7 @@ Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-
 
 
 \section{YOLOv9}
+\todo{überarbeiten ist noch proposal stand; mehr auf warum und yolov9 eigenheiten eingehen, nicht basis erklären sondern das was an yolov9 geändert wurde}
 Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der "\Acrfull{YOLO}" Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde \cite{yolo_v9u_github}, ermöglicht eine schnelle und präzise Objekterkennung. \acrshort{YOLO} basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
 
 Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird \acrshort{YOLO} verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie \acrshort{NIR} oder \acrshort{IR} integriert werden, um einen Vergleich zu dem reinen 3 Kanal \acrshort{RGB} Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
@@ -111,6 +112,7 @@ Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.
 \label{subsec:yolov9e}
 
 Die \texttt{YOLOv9}-Modellreihe umfasst verschiedene Varianten, die sich hinsichtlich ihrer Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Die Bandbreite reicht dabei von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \Acrfullpl{GFLOP} bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}). 
+\todo{Quelle für Tabelle einfügen}
 \begin{table}[h]
 \centering
 \begin{tabular}{l|c|c|c|c|c} % keine äußeren vertikalen Linien
@@ -361,23 +363,24 @@ Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundun
         \caption{Two Coordinates out ouf range and higher 1}
         \label{fig:higher1}
     \end{subfigure}
-    \caption{Example for label coordinates outside of the image}
+    \caption[Example for label coordinates outside of the image]{Example for label coordinates outside of the image (for full-sized Image see \ref{fig:example_coords_ooR_fs})}
     \label{fig:example_coords_ooR}
 \end{figure}
 
-Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Folds nicht disjunkt waren, erhöhte sich das Risiko von Overfitting (s. Kap. \ref{subsec:overfitting}), sodass eigene Folds erstellt werden mussten, deren Erstellung im folgenden Kapitel beschrieben wird.
+Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Folds nicht disjunkt waren, erhöhte sich das Risiko von Overfitting (s. Kap. \ref{subsec:overfitting}), sodass eigene Folds erstellt werden mussten, deren Erstellung im folgenden Kapitel beschrieben wird. \todo{satz überarbeitne, doppelung}
 
 
 
 
 
 
-\section{5 Fold Cross Validation}
+\section{6-Fold-Cross-Validation}
 \label{sec_5Fold_CV}
+\todo{es ist eigentlich 6 fold cross validation}
 
-Um die Robustheit der Ergebnisse sicherzustellen und eine fundierte Vergleichbarkeit verschiedener Modelle zu ermöglichen, wurde in dieser Arbeit eine 5-Fold-Cross-Validation angewendet. Insbesondere wurde Wert darauf gelegt, die Evaluation nicht nur auf einem Teildatensatz durchzuführen, sondern eine Mehrfachteilung der Daten vorzunehmen, sodass Schwankungen durch unterschiedliche Trainings- und Validierungsaufteilungen minimiert werden.
+Um die Robustheit der Ergebnisse sicherzustellen und eine fundierte Vergleichbarkeit verschiedener Modelle zu ermöglichen, wurde in dieser Arbeit eine 6-Fold-Cross-Validation angewendet. Insbesondere wurde Wert darauf gelegt, die Evaluation nicht nur auf einem Teildatensatz durchzuführen, sondern eine Mehrfachteilung der Daten vorzunehmen, sodass Schwankungen durch unterschiedliche Trainings- und Validierungsaufteilungen minimiert werden.
 
-Im Gegensatz zu den von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} bereitgestellten Folds, deren Zusammenstellung identische Bilder gleichzeitig im Trainings- und Validierungssatz aufweist, wurden für diese Arbeit eigene, disjunkte Folds generiert. Letztere gewährleisten, dass keine Überlappungen zwischen Trainings- und Validierungsdaten existieren und somit die Gefahr von verfälschten Trainingsergebnissen durch Overfitting ausgeschlossen ist. Die genaue Methodik der Fold-Erstellung ist in Kapitel \ref{subsec:Fold_creation} beschrieben.
+Im Gegensatz zu den von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} bereitgestellten Folds, deren Zusammenstellung identische Bilder gleichzeitig im Trainings- und Validierungssatz aufweist, wurden für diese Arbeit eigene, disjunkte Folds generiert. Letztere gewährleisten, dass keine Überlappungen zwischen Trainings- und Validierungsdaten existieren und somit die Gefahr von verfälschten Trainingsergebnissen durch Overfitting ausgeschlossen ist. Die genaue Methodik der Fold-Erstellung ist in Kapitel \ref{subsec:Fold_creation} beschrieben. \todo{absatz überarbeiten wiederholung mit 4.5}
 
 Die Datenaufteilung erfolgte in sechs Folds (0-5): Fünf Folds (Fold 0 bis 4) wurden jeweils für Training und Validierung genutzt, während Fold 5 ausschließlich für abschließende Testzwecke reserviert blieb. Dadurch wurde erreicht, dass die finale Evaluation auf bisher ungesehenen, neutralen Daten stattfand.
 
@@ -470,7 +473,7 @@ PALMA (Abkürzung für "\Acrlong{PALMA}") wird von dem \Acrfull{CIT} der Univers
 \label{tab:Spec_Palma}
 \end{table}
 
-Die hohe Rechenleistung und Speicherkapazität des Clusters machten es möglich, auch komplexe Trainingsprozesse mit großen Bilddaten effizient zu verarbeiten.
+Die hohe Rechenleistung und Speicherkapazität des Clusters machten es möglich, auch komplexe Trainingsprozesse mit vielen hochauflösenden Bilddaten effizient und schnell zu verarbeiten.
 % \begin{itemize}
 %     \item UV als Python Umgebung auf Palma genutzt
 %     \item Bash Scripte geschrieben um die Modelle auf diversen GPUS (HGX, etc) zu trainieren

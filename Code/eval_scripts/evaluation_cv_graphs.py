@@ -132,7 +132,7 @@ def create_graphs_from_sets(set_paths_dict, window_size, bool_arr):
         )
         ax.add_artist(legend)
 
-    plt.title(f'{string_title} over Epochs – 5-Fold Cross Validation (window size: {window_size})')
+    plt.title(f'{string_title} over Epochs – 6-Fold Cross Validation (window size: {window_size})')
     plt.xlabel('Epoch')
     plt.ylabel(string_title)
     plt.grid(True, linestyle=':', alpha=0.6)
@@ -220,7 +220,7 @@ def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_ar
     path = rf'C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\{setA}\{str(comp_val)}\{setA}_vs_{setB}{namestring}.png'
     
 
-    plt.title(f'{string_title} at {setA} vs. {setB} over Epochs – 5-Fold Cross Validation (window size: {window_size})')
+    plt.title(f'{string_title} at {setA} vs. {setB} over Epochs – 6-Fold Cross Validation (window size: {window_size})')
     plt.xlabel('Epoch')
     plt.ylabel(string_title)
     plt.grid(True, linestyle=':', alpha=0.6)

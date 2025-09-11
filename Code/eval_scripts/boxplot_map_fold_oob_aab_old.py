@@ -149,6 +149,9 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
     df['Modell'] = df['Modell'].replace({'aab_old': 'abb in obb'})  
     df['Modell'] = df['Modell'].replace({'aab': 'abb'})
     
+    print("val on val")
+    print(df)
+
     # Plot erstellen
     plt.figure(figsize=(10, 6))
     sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette={"obb": "orange", "abb": "steelblue", "abb in obb": "green"})
@@ -231,7 +234,7 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
     #     handles, labels = plt.gca().get_legend_handles_labels()
     #     if 'Best Validation Fold' in labels:
     #         plt.legend(handles=[handles[labels.index('Best Validation Fold')]], labels=['Best Validation Fold'])
-    print("best_fold_indices")
+    print("best_fold_indices val on test")
     print(best_fold_indices)
 
     allsets_string = "_".join(set_paths_dict.keys()) 

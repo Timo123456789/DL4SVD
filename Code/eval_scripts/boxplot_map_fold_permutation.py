@@ -77,7 +77,7 @@ def main():
         for i, path in enumerate(paths):
             map_val = extract_map50_95(path)
             if map_val is not None:
-                print(f"  Fold {i} Test: mAP50-95 = {map_val:.4f}")
+                print(f"  Fold {i} Test: mAP50-95 = {map_val:.6f}")
             else:
                 print(f"  Fold {i}: Fehler beim Einlesen.")
 
@@ -149,13 +149,14 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
     sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette='Set2')
     sns.stripplot(data=df, x='Modell', y='mAP@50-95', color='black', alpha=0.5, jitter=False, dodge=True)
 
-    plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
-    plt.ylabel("mAP@50-95")
-    plt.xlabel("Model")
-    plt.xticks(rotation=30)
+    #plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
+    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.xlabel("Model", fontsize=14)
+    plt.xticks(rotation=0, fontsize=12)
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
     allsets_string = "_".join(set_paths_dict.keys())
-    plt.savefig(allsets_string + "_best_val_on_val.svg", format="svg", transparent=True)
+    allsets_string="perm_exp"
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\02perm_exp\perm_exp_best_val_on_val.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()
 
@@ -192,12 +193,13 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
             if not val.empty:
                 x_pos = list(modell_order).index(modell)
                 y_val = val.values[0]
-                plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10, label='Best Validation Fold' if modell == list(best_fold_indices.keys())[0] else "")
+                #plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10, label='Best Validation Fold' if modell == list(best_fold_indices.keys())[0] else "")
+                plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10)
 
-    plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
-    plt.ylabel("mAP@50-95")
-    plt.xlabel("Model")
-    plt.xticks(rotation=0)
+    #plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
+    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.xlabel("Model", fontsize=14)
+    plt.xticks(rotation=0, fontsize=12)
 
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
 
@@ -208,13 +210,14 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
     #        fontsize=5, color='red', alpha=0.7)
 
     # Legende: 'Best Validation Fold' nur einmal anzeigen
-    if best_fold_indices:
-        handles, labels = plt.gca().get_legend_handles_labels()
-        if 'Best Validation Fold' in labels:
-            plt.legend(handles=[handles[labels.index('Best Validation Fold')]], labels=['Best Validation Fold'])
+    # if best_fold_indices:
+    #     handles, labels = plt.gca().get_legend_handles_labels()
+    #     if 'Best Validation Fold' in labels:
+    #         plt.legend(handles=[handles[labels.index('Best Validation Fold')]], labels=['Best Validation Fold'])
 
     allsets_string = "_".join(set_paths_dict.keys())
-    plt.savefig(allsets_string+"_best_val_on_test.svg", format="svg", transparent=True)
+    allsets_string = "perm_exp"
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\02perm_exp\perm_exp_best_val_on_test.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()
 
