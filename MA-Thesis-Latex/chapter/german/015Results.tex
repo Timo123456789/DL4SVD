@@ -1,7 +1,7 @@
 %!TEX root = ../thesis.tex
 \chapter{Results}
 \label{ch:results}
-Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunächst den Vergleich von \textit{abb}- und \textit{obb}-Formaten, anschließend die Permutationsexperimente zur Überprüfung der Robustheit und abschließend die Ablationsstudie zur Bewertung einzelner Komponenten. 
+Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunächst den Vergleich von \textit{abb}- und \textit{obb}-Formaten, anschließend die Permutationsexperimente zur Überprüfung der Robustheit und abschließend die Ablationsstudie zur Bewertung einzelner Komponenten. \todo{Bewertung einzelner Komponenten eigenltich in Diskussion? oder doch hier am Ende? findet hier am Ende noch nciht statt}
 
 
 % \begin{itemize}
@@ -221,7 +221,7 @@ RGBNDVI  & 4 & 2 \\ \hline
 \begin{figure}[htbp]
     \centering
     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/rgbir_F2.svg}
-    \caption[Confusion Matrix for RGBIR Modell (Fold 2)]{Confusion Matrix for RGBIR Modell (Fold 2). (Own representation)}
+    \caption[Confusion Matrix for RGBIR Modell (Fold 2)]{Confusion Matrix for RGBIR Modell (Fold 2). All values falling within the interval [–0.05, 0.05] are excluded from the matrix. (Own representation)}
     \label{fig:perm_exp_confM_rgbir_f2}
 \end{figure}
 
@@ -285,7 +285,7 @@ Zur Interpretation der Differenzmatrizen gilt: Rot markiert eine bessere Perform
         \label{fig:perm_exp_diffM_RGIR_f3}
     \end{subfigure}
 
-    \caption[Difference Matrices compared to RGBIR (Fold 2)]{Difference Matrices for all models compared against RGBIR (Fold 2). Red indicates better performance for RGBIR, blue for the respective comparison model.}
+    \caption[Difference Matrices compared to RGBIR (Fold 2)]{Difference Matrices for all models compared against RGBIR (Fold 2). Red indicates better performance for RGBIR, blue for the respective comparison model. All values falling within the interval [–0.05, 0.05] are excluded from the matrices.}
     \label{fig:perm_exp_diffM_all}
 \end{figure}
 \todo{Beschreibung Figures länger machen, mehr Analyse weniger "was sieht man"}
@@ -528,14 +528,19 @@ Der letzte Vergleich in Abbildung~\ref{fig:perm_exp_diffM_RGIR_f3} zwischen RGBI
 %##########################################################################
 %##########################################################################
 \section{Ablation Studies}
-\begin{itemize}
-    \item Fold 4 und 2 am besten bei vali datensatz
-    \item Fold 0,2,3 bei test datensatz
-\end{itemize}
-\begin{itemize}
-    \item ir ist am besten mit höchstem Map wert
-\end{itemize}
+% \begin{itemize}
+%     \item Fold 4 und 2 am besten bei vali datensatz
+%     \item Fold 0,2,3 bei test datensatz
+% \end{itemize}
+% \begin{itemize}
+%     \item ir ist am besten mit höchstem Map wert
+% \end{itemize}
 Die Boxplots in Fig. \ref{fig:ablation_map50-95:val_on_test} der 6-fold Cross-Validation zeigen, dass die Modelle für die Kanäle Red, Green, Blue und IR im Bereich von mAP50–95 = 0,52–0,54 liegen. Ein einzelner Wert im IR-Modell erreicht 0,5777, liegt damit jedoch deutlich außerhalb des zentralen Bereichs der anderen Folds und ist als Ausreißer zu interpretieren. Insgesamt lassen sich zwischen den Modellen Red, Green, Blue und IR keine signifikanten Unterschiede feststellen, während NDVI mit einem Median von etwa 0,44 signifikant schlechter abschneidet. Ähnliche Ergebnisse sind in Fig. \ref{fig:ablation_map50-95:val_on_val} zu sehen.
+
+Die Auswertung der Ergebnisse in \ref{tab:ablation_best_folds_test}zeigt außerdem, dass insbesondere Fold~4 und Fold~2 die besten Resultate auf dem Validierungsdatensatz erzielen konnten. Auf dem Testdatensatz hingegen erreichen die Folds~0, 2 und~3 die besten Leistungen.  
+
+Insgesamt weist das IR-Modell die höchste Performance auf und erzielt den höchsten \acrshort{mAP}-Wert im Vergleich zu den anderen untersuchten Varianten.  
+
 
 
 
@@ -593,24 +598,72 @@ Die Boxplots in Fig. \ref{fig:ablation_map50-95:val_on_test} der 6-fold Cross-Va
     
 
 
-    \caption[Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model]{Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model. Red indicates better performance for IR, blue for the respective comparison model. All values falling within the interval [–0.04, 0.04] are excluded from the matrix.}
+    \caption[Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model]{Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model. Red indicates better performance for IR, blue for the respective comparison model. All values falling within the interval [–0.05, 0.05] are excluded from the matrices.}
     \label{fig:ablation_diffM_all}
 \end{figure}
 
-\begin{itemize}
-    \item Beschreibung der Differenzmatrixen erfolgt analog zu Kap. \ref{subsec:permexp_comp_confusion_matric} und Tab. \ref{tab:diff_cat} mit der Confusion Matrix IR (s. Fig. \ref{fig:ablation_confM_IR_f0}) als Referenz
-    \item ebenfalls perfekte Erkennungsrate von 100 \% bei planes
-    \item >80\%: Car, Tractor (hervorragend)
-    \item 60-80\% Truck, Ship, Camping Car, Pick Up (gut)
-    \item 40-60\%: van, Vehicle
-    \item nicht erkennung von vehicle (als Background) mit 45 \% häufig
-    \item erhöhte Fehlklassifikationen (>17\%) ebenfalls bei Pick UP, Ship, Camping Car (28\%) und van (39 \%)
-\end{itemize}
-\begin{itemize}
-    \item \ref{fig:ablation_diffM_r_f2} zeigt, dass IR  hohe Leistung im Gegensatz zm reinen Roten Kanal bei der Erkennung von Vehicle hat
-    \item dafür scheint IR Bei der Erkennung von Vans nicht wichtig zu sein, R war 16 \% besser als IR
-    \item 
-\end{itemize}
+Im Anschluss an die Analyse der Permutations-Experimente (vgl. Abschnitt \ref{subsec:permexp_comp_confusion_matric}) wird nun die Klassifikationsleistung der Modelle unter Verwendung der Confusion Matrix des IR-Modells als Referenz untersucht (siehe Abbildung \ref{fig:ablation_confM_IR_f0}). Die Auswertung erfolgt analog zur Kategorisierung der Unterschiede in Tabelle \ref{tab:diff_cat}.  
+
+Das IR-Modell zeigt eine perfekte Erkennungsrate von 100\,\% bei der Klasse \textit{Plane}. Sehr hohe Erkennungsraten von über 80\,\% konnten zudem für die Klassen \textit{Car} und \textit{Tractor} erzielt werden, was auf eine insgesamt hervorragende Klassifikationsleistung in diesen Kategorien hinweist.  
+
+Eine gute Performance mit Erkennungsraten zwischen 60\,\% und 80\,\% wurde für die Klassen \textit{Truck}, \textit{Ship}, \textit{Camping Car} sowie \textit{Pick Up} erreicht. Demgegenüber liegen die Erkennungsraten für die Klassen \textit{Van} und \textit{Vehicle} im Bereich von 40--60\,\%, was lediglich eine moderate Klassifikationsleistung darstellt.  
+
+Auffällig ist insbesondere die fehlerhafte Klassifikation der Klasse \textit{Vehicle}, die in 45\,\% der Fälle dem \textit{Background} zugeordnet wurde. Darüber hinaus treten erhöhte Fehlklassifikationen in mehreren weiteren Kategorien auf: \textit{Pick Up}, \textit{Ship}, \textit{Camping Car} (28\,\%) sowie \textit{Van} (39\,\%) weisen besonders hohe Raten an Fehlzuordnungen auf. Diese Ergebnisse verdeutlichen die spezifischen Schwächen des IR-Modells im Vergleich zu den in den Permutations-Experimenten untersuchten Varianten.  
+
+
+% \begin{itemize}
+%     \item Beschreibung der Differenzmatrixen erfolgt analog zu Kap. \ref{subsec:permexp_comp_confusion_matric} und Tab. \ref{tab:diff_cat} mit der Confusion Matrix IR (s. Fig. \ref{fig:ablation_confM_IR_f0}) als Referenz
+%     \item ebenfalls perfekte Erkennungsrate von 100 \% bei planes
+%     \item >80\%: Car, Tractor (hervorragend)
+%     \item 60-80\% Truck, Ship, Camping Car, Pick Up (gut)
+%     \item 40-60\%: van, Vehicle
+%     \item nicht erkennung von vehicle (als Background) mit 45 \% häufig
+%     \item erhöhte Fehlklassifikationen (>17\%) ebenfalls bei Pick UP, Ship, Camping Car (28\%) und van (39 \%)
+% \end{itemize}
+Die Analyse der Differenzmatrizen verdeutlicht die jeweilige Bedeutung einzelner Kanäle im Vergleich zum IR-Referenzmodell (vgl. Abbildung \ref{fig:ablation_confM_IR_f0}).  
+
+Abbildung \ref{fig:ablation_diffM_r_f2} zeigt, dass IR eine deutlich höhere Leistung bei der Erkennung der Klasse \textit{Vehicle} im Vergleich zum reinen roten Kanal aufweist. Für die Klasse \textit{Van} erweist sich hingegen der rote Kanal als vorteilhaft, da er hier eine um 16\,\% höhere Erkennungsrate erzielt. Das IR-Modell zeigt dagegen Vorteile bei der Klassifikation von \textit{Van} (12\,\%), \textit{Camping Car} (9\,\%) sowie moderat bei \textit{Pick Up} (6\,\%).  
+
+In Abbildung \ref{fig:ablation_diffM_g_f3} wird der Vergleich mit dem grünen Kanal dargestellt. Hier erzielt der grüne Kanal eine deutlich höhere Leistung bei der Erkennung von \textit{Ship} (26\,\%) sowie eine hohe Verbesserung bei \textit{Van} (17\,\%). Das IR-Modell ist dagegen bei der Erkennung von \textit{Truck} (14\,\%) überlegen. Besonders auffällig ist die Unterscheidung von Objekten gegenüber dem Hintergrund: Hier weist IR bei \textit{Van} mit 25\,\% eine deutlich bessere Leistung auf. Auch bei \textit{Ship} und \textit{Vehicle} erreicht IR eine hohe Präzision, während bei \textit{Camping Car} (8\,\%) und \textit{Pick Up} (6\,\%) moderate Vorteile bestehen. Demgegenüber zeigt der grüne Kanal bessere Resultate bei \textit{Truck} (15\,\%) und moderat bei \textit{Tractor} (6\,\%). Bei der Klasse \textit{Car} ergibt sich kein signifikanter Unterschied. Insgesamt ist IR in sieben Fällen mindestens 5\,\% besser, während der grüne Kanal in sechs Fällen Vorteile aufweist.  
+
+Abbildung \ref{fig:ablation_diffM_b_f2} stellt den Vergleich mit dem blauen Kanal dar. Dieser zeigt moderate Vorteile bei \textit{Camping Car} und \textit{Pick Up} sowie eine deutliche Verbesserung bei \textit{Van} (13\,\%). Das IR-Modell ist hingegen bei \textit{Truck} (10\,\%) sowie moderat bei \textit{Ship} und \textit{Vehicle} (je 9\,\%) überlegen. Zudem gelingt es IR, \textit{Van} besser vom Hintergrund zu unterscheiden (10\,\%) und moderate Vorteile bei \textit{Camping Car} (6\,\%) sowie \textit{Pick Up} (5\,\%) zu erzielen. Der blaue Kanal zeigt hingegen moderate Verbesserungen bei der Unterscheidung von \textit{Truck} und \textit{Vehicle} gegenüber dem Hintergrund. Insgesamt ist IR in sechs Fällen klar überlegen, während der blaue Kanal in fünf Fällen Vorteile aufweist.  
+
+Im Vergleich mit NDVI weist IR eine höhere Präzision bei den Klassen \textit{Car}, \textit{Truck}, \textit{Tractor} sowie \textit{Camping Car} auf und ist insbesondere bei \textit{Ship} (24\,\%) deutlich exakter. Auch bei \textit{Vehicle} erreicht IR eine moderate Verbesserung (6\,\%). NDVI zeigt dagegen Vorteile bei der Unterscheidung von Hintergrund und Objekt, insbesondere moderat bei \textit{Truck} und \textit{Camping Car}, sowie eine höhere Präzision bei \textit{Ship} (26\,\%) und \textit{Tractor} (13\,\%). Insgesamt ist IR in sieben Fällen mindestens 5\,\% besser als NDVI, während NDVI lediglich in vier Fällen Vorteile bei der Hintergrund-Objekt-Unterscheidung aufweist.  
+
+Zusammenfassend wird die gute Leistung aller Modelle bei der Klassifikation der Klasse \textit{Car} auch in den Beispielbildern in Abbildung \ref{fig:ablation_example_pics} deutlich. Gleichzeitig zeigen die Differenzmatrizen, dass Verwechslungen zwischen Hintergrund und Objekt nach wie vor häufig sind, beispielsweise bei \textit{Truck} oder \textit{Ship} im Vergleich zwischen Blue und IR (vgl. Abbildung \ref{fig:ablation_diffM_b_f2} sowie Confusion Matrix \ref{fig:ablation_confM_IR_f0}). Auch die Verwechslung von \textit{Vehicle} mit \textit{Truck} im Green-Modell ist in der Differenzmatrix \ref{fig:ablation_diffM_g_f3} sichtbar. Das NDVI-Modell weist darüber hinaus auch in den Beispielbildern eine besonders schwache Leistung auf: \textit{Truck} und \textit{Ship} werden nicht erkannt, \textit{Pick Up} wird sowohl als \textit{Pick Up} als auch als \textit{Car} klassifiziert und \textit{Vehicle} wird mit \textit{Truck} verwechselt.  
+
+% \begin{itemize}
+%     \item \ref{fig:ablation_diffM_r_f2} zeigt, dass IR  hohe Leistung im Gegensatz zm reinen Roten Kanal bei der Erkennung von Vehicle hat
+%     \item dafür scheint IR Bei der Erkennung von Vans nicht wichtig zu sein, R war 16 \% besser als IR
+%     \item Ir war deutlich besser bei der erkenung von vans (12 \%) und camping cars (9 \%), moderat bei pick Up (6\%)
+% \end{itemize}
+% \begin{itemize}
+%     \item \ref{fig:ablation_diffM_g_f3} zeigt das Green bei Shipdetection eine deutlich höhere Leistung (26\%) erbracht hat, hoch war die Leistung auhc bei vans (17 \%)
+%     \item IR war dagegen bei Trucks (14\%) besser 
+%     \item bei der Untershciedung von Objekt zu Hintergrund war IR bei van mit 25\% deutlihc besser; hohe Leistung bei Ship und Vehicle und moderate bessere Leistung bei Camping Car (8\%) und pick up (6\%)
+%     \item bei Truck war Green deutlich bessser (15\%), bei Tractor Moderat (6\%)
+%     \item kein signifikanter Unterschied bei Car Detection
+%     \item insgesamt war ir 7x besser, green 6x (beides mind 5 \% besser)
+% \end{itemize}
+% \begin{itemize}
+%     \item \ref{fig:ablation_diffM_b_f2} zeigt den blauen Kanal
+%     \item blue schneidet moderat besser bei Camping Car und Pick up sowie deutlich besser bei van (13 \%) ab.
+%     \item ir ist besser bei truck 10 \%, moderat besser bei ship und vehicle (9\%) 
+%     \item IR kann besser van von hintergrund unterscheiden (10 \%) und moderat besser camping car 6\%  udn pick up 5 \%
+%     \item blue ist moderat besser bei Truck und vehicle  von Hintergrund 
+%     \item ingesatm ist ir 6x besser als blue, blue ist 5x besser als ir
+% \end{itemize}
+% \begin{itemize}
+%     \item IR hat eine höhere Präzision bei Car, Truck, Tractor, Camping Car und ist deutlich exakter bei Ship (24\%); moderat besser bei vehicle (6 \%)
+%     \item ndvi kann besser hintergrund von Objekt untershceiden (moderat bie Truck und Cmaping Car); höhere Präzision bei Ship (26\%) und Tractor (13\%)
+%     \item insgesamt: ir 7x mind. 5\% besser als ndvi, ndvi nru bei hintergrund von objekt unterschiedung 4x 
+% \end{itemize}
+% \begin{itemize}
+%     \item insgesamt ist die gute Leistung aller Modelle bei der Car Klassifizierung in Fig \ref{fig:ablation_example_pics} zu sehen
+%     \item Verwechselung von Backgroudn mit Objekt (beispielhaft Truck oder ship) ist auch in der Differencmatrix \ref{fig:ablation_diffM_b_f2} für Blue und IR (s. Confusionmatrix \ref{fig:ablation_confM_IR_f0}) zu sehen
+%     \item Verwechslung von Vehicle mit Truck von Green Model ist auch in Differencmatrix \ref{fig:ablation_diffM_g_f3} zu sehen
+%     \item NDVI Modell schneidet auch in Beispielbildern sehr schlehct ab, Truck und SHip werden nicht erkannt, Pick up wird doppelt als Pick up und Car klassifiziert und Vehicle mit Truck verwechselt
+% \end{itemize}
 \begin{table}[h]
 \centering
 \begin{tabular}{l c c}
@@ -625,7 +678,7 @@ ndvi  & 2 & 0 (0.4467) \\
 \hline
 \end{tabular}
 \caption{Best fold per model on validation and test sets, with test mAP@50-95 values}
-\label{tab:best_folds_test}
+\label{tab:ablation_best_folds_test}
 \end{table}
 
 \begin{figure}[h!]
@@ -732,6 +785,7 @@ ndvi  & 2 & 0 (0.4467) \\
     
 \end{tabular}
 \caption{Examples of different classes for the object recognition performance of individual channels in the ablation study}
+\label{fig:ablation_example_pics}
 \end{figure}
 
 
