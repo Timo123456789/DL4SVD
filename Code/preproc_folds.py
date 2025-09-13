@@ -28,7 +28,7 @@ def main():
         path_all_images = r'Code\data\all_vedai_images'
         path_labels = r'Code\data\annotation.txt'
         
-    show_every_picture_with_oriented_bounding_box(path_all_images, r'Code\data\folds\tempfold\fold0.txt', path_labels, True, False, False, perm_object)
+    show_every_picture_with_oriented_bounding_box(path_all_images, r'Code\data\folds\tempfold\fold5.txt', path_labels, True, False, False, perm_object)
     #create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma)
 
     #create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object)
@@ -696,6 +696,7 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
 
     for line in lines_fold:
         target = line
+        
         # if ir == True:
         #     image_path = image_path_rgb
         # else:
@@ -716,10 +717,11 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
             img_rgb = get_bounding_box_in_px(img_rgb,i, oriented, ret_pts)
             img_ir = get_bounding_box_in_px(img_ir,i, oriented, ret_pts)
             img_merged = get_bounding_box_in_px(img_merged,i,oriented, ret_pts)
+            print(label_as_txt(i))
            
             #pts = calc_pixel_like_authors(i)
             
-
+    
 
         
         # #cv2.circle(img, pts[0], 2, (0,255,0), 16)
@@ -751,6 +753,9 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
         if img_rgb is not None and img_ir is not None:
             cv2.imshow(window_name_rgb, img_rgb)  # Bild anzeigen
          
+            cv2.resizeWindow(window_name_rgb, 1000, 1000)  # Breite=800px, Höhe=600px
+
+         
             #cv2.resizeWindow(window_name_rgb, 1024, 1024)
             #cv2.imshow(window_name_ir, img_ir)  # Bild anzeigen
             #cv2.resizeWindow(window_name_ir, 1024, 1024)
@@ -758,7 +763,34 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
             #cv2.resizeWindow(window_name_merged, 1024, 1024)
             cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
             cv2.destroyAllWindows()  # Fenster schlieÃŸen
-      
+
+
+def label_as_txt(string):
+    parts = string.split()
+    veh_type = parts[12]
+    if veh_type is not None:
+        label = f"{veh_type}"
+    else:
+        label = None
+    if veh_type == '001':
+        label = 'Car'
+    elif veh_type == '002':
+        label = 'Truck'
+    elif veh_type == '023':
+        label = 'Ship'
+    elif veh_type == '004':
+        label = 'Tractor'
+    elif veh_type == '005':
+        label = 'Camping Car'
+    elif veh_type == '009':
+        label = 'van'
+    elif veh_type == '010':
+        label = 'vehicle'
+    elif veh_type == '011':
+        label = 'pick-up'
+    elif veh_type == '031':
+        label = 'plane'
+    return label
 
 def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=2):
     """
@@ -909,14 +941,14 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
         text_color = (255, 255, 255)  # WeiÃŸ
         padding = 2
 
-        # Zeichne den Hintergrund des Textes
-        # cv2.rectangle(image,
-        #               (text_x - padding, text_y - text_size[1] - padding),
-        #               (text_x + text_size[0] + padding, text_y + padding),
-        #               text_bg_color, cv2.FILLED)
+        #Zeichne den Hintergrund des Textes
+        cv2.rectangle(image,
+                      (text_x - padding, text_y - text_size[1] - padding),
+                      (text_x + text_size[0] + padding, text_y + padding),
+                      text_bg_color, cv2.FILLED)
 
-        # Zeichne den Text
-        #cv2.putText(image, label, (text_x, text_y), font, font_scale, text_color, font_thickness, cv2.LINE_AA)
+        #Zeichne den Text
+        cv2.putText(image, label, (text_x, text_y), font, font_scale, text_color, font_thickness, cv2.LINE_AA)
 
     return image
 
