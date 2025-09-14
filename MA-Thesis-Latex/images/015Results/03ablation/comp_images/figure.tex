@@ -1,0 +1,225 @@
+% \begin{figure}[h!]
+% \centering
+% %\renewcommand{\arraystretch}{1.2} % mehr Platz zwischen Zeilen
+% \begin{tabular}{c|ccccccccc}
+%     & \textbf{Car}
+%     & \textbf{Truck}
+%     & \textbf{Camping Car}
+%     & \textbf{Tractor}
+%     & \textbf{Plane}
+%     & \textbf{Ship}
+%     & \textbf{Vehicle}
+%     & \textbf{Pick-Up}
+%     & \textbf{Van} \\ \hline
+%     \rotatebox{90}{\textbf{Label}} 
+%     %Car
+%     & \includegraphics[trim={870pt 620pt 60pt 320pt},clip,width=\textwidth/10]{images/015Results/03ablation/comp_images/ground_truth/523.png}
+%     %Truck
+%     & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"}
+%     %Camping Car (PICKUP)
+%     & \includegraphics[trim={740pt 400pt 160pt 510pt},clip,width=\textwidth/10]{images/015Results/03ablation/comp_images/ground_truth/523.png}
+%     %Tractor
+%     & \includegraphics[trim={840pt 1515pt 710pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_labels.jpg"}
+%     %Plane
+%     & \includegraphics[trim={50pt 1695pt 1680pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_labels.jpg"}
+%     %vehicle
+%     & \includegraphics[trim={50pt 21pt 1650pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"} \\ \hline
+%     \rotatebox{90}{\textbf{Red}} 
+%     %  %Car
+%     % & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch0_pred.jpg"}
+%     % %Truck
+%     % & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"}
+%     % %Pick Up
+%     % & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"}
+%     % %Camping Car
+%     % & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch0_pred.jpg"}
+%     % %Ship
+%     % & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch1_pred.jpg"}
+%     % %Plane
+%     % & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch1_pred.jpg"}
+%     % %vehicle
+%     % & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"} \\ \hline
+%     % \rotatebox{90}{\textbf{Green}} 
+%     %  %Car
+%     % & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch0_pred.jpg"}
+%     % %Truck
+%     % & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"}
+%     % %Pick Up
+%     % & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"}
+%     % %Camping Car
+%     % & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch0_pred.jpg"}
+%     % %Ship
+%     % & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch1_pred.jpg"}
+%     % %Plane
+%     % & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch1_pred.jpg"}
+%     % %vehicle
+%     % & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"} \\ \hline
+%     % \rotatebox{90}{\textbf{Blue}} 
+%     %  %Car
+%     % & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch0_pred.jpg"}
+%     % %Truck
+%     % & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"}
+%     % %Pick Up
+%     % & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"}
+%     % %Camping Car
+%     % & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch0_pred.jpg"}
+%     % %Ship
+%     % & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch1_pred.jpg"}
+%     % %Plane
+%     % & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch1_pred.jpg"}
+%     % %vehicle
+%     % & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"} \\ \hline
+%     % \rotatebox{90}{\textbf{IR}} 
+%     %  %Car
+%     % & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_pred.jpg"}
+%     % %Truck
+%     % & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"}
+%     % %Pick Up
+%     % & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"}
+%     % %Camping Car
+%     % & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_pred.jpg"}
+%     % %Ship
+%     % & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_pred.jpg"}
+%     % %Plane
+%     % & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_pred.jpg"}
+%     % %vehicle
+%     % & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"} \\ \hline
+%     % \rotatebox{90}{\textbf{NDVI}} 
+%     %  %Car
+%     % & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch0_pred.jpg"}
+%     % %Truck
+%     % & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"}
+%     % %Pick Up
+%     % & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"}
+%     % %Camping Car
+%     % & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch0_pred.jpg"}
+%     % %Ship
+%     % & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch1_pred.jpg"}
+%     % %Plane
+%     % & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch1_pred.jpg"}
+%     % %vehicle
+%     % & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"} \\ \hline
+    
+% \end{tabular}
+% \caption{Examples of different classes for the object recognition performance of individual channels in the ablation study}
+% \label{fig:ablation_example_pics}
+% \end{figure}
+
+
+\begin{figure}[h!]
+\centering
+\renewcommand{\arraystretch}{1.2} % mehr Platz zwischen Zeilen
+\setlength{\tabcolsep}{2pt} % weniger Platz zwischen Spalten
+\begin{tabularx}{\textwidth}{c|*{9}{X}}
+    & \textbf{Car}
+    & \textbf{Truck}
+    & \textbf{Camping Car}
+    & \textbf{Tractor}
+    & \textbf{Plane}
+    & \textbf{Ship}
+    & \textbf{Vehicle}
+    & \textbf{Pick-Up}
+    & \textbf{Van} \\ \hline
+    \rotatebox{90}{\textbf{Label}} 
+    %Car
+    & \includegraphics[trim={880pt 630pt 70pt 330pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/523.png}
+    %Truck
+    & \includegraphics[trim={360pt 200pt 540pt 715pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/212.png}
+    %Camping Car
+    & \includegraphics[trim={730pt 220pt 200pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/523.png}
+    %Tractor
+    & \includegraphics[trim={850pt 110pt 80pt 830pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/523.png}
+    %Plane
+    &  \includegraphics[trim={650pt 120pt 170pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/487.png}
+    %Ship
+    & \includegraphics[trim={230pt 200pt 680pt 725pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/509.png}
+    %vehicle
+    & \includegraphics[trim={440pt 360pt 460pt 555pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/427.png}
+    %Pick Up
+    & \includegraphics[trim={740pt 420pt 180pt 510pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/523.png}
+    %Van
+    & \includegraphics[trim={300pt 355pt 610pt 570pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ground_truth/198.png} \\ \hline
+
+    \rotatebox{90}{\textbf{Red}} 
+    %Car
+    & \includegraphics[trim={880pt 630pt 70pt 330pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/523.png}
+    %Truck
+    & \includegraphics[trim={360pt 200pt 540pt 715pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/212.png}
+    %Camping Car
+    & \includegraphics[trim={730pt 220pt 200pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/523.png}
+    %Tractor
+    & \includegraphics[trim={850pt 110pt 80pt 830pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/523.png}
+    %Plane
+    &  \includegraphics[trim={650pt 120pt 170pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/487.png}
+    %Ship
+    & \includegraphics[trim={230pt 200pt 680pt 725pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/509.png}
+    %vehicle
+    & \includegraphics[trim={440pt 360pt 460pt 555pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/427.png}
+    %Pick Up
+    & \includegraphics[trim={740pt 420pt 180pt 510pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/523.png}
+    %Van
+    & \includegraphics[trim={300pt 355pt 610pt 570pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/red/198.png} \\ \hline
+
+    \rotatebox{90}{\textbf{Green}} 
+    %Car
+    & \includegraphics[trim={880pt 630pt 70pt 330pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/523.png}
+    %Truck
+    & \includegraphics[trim={360pt 200pt 540pt 715pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/212.png}
+    %Camping Car
+    & \includegraphics[trim={730pt 220pt 200pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/523.png}
+    %Tractor
+    & \includegraphics[trim={850pt 110pt 80pt 830pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/523.png}
+    %Plane
+    &  \includegraphics[trim={650pt 120pt 170pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/487.png}
+    %Ship
+    & \includegraphics[trim={230pt 200pt 680pt 725pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/509.png}
+    %vehicle
+    & \includegraphics[trim={440pt 360pt 460pt 555pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/427.png}
+    %Pick Up
+    & \includegraphics[trim={740pt 420pt 180pt 510pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/523.png}
+    %Van
+    & \includegraphics[trim={300pt 355pt 610pt 570pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/green/198.png} \\ \hline
+
+    \rotatebox{90}{\textbf{Blue}} 
+    %Car
+    & \includegraphics[trim={880pt 630pt 70pt 330pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/523.png}
+    %Truck
+    & \includegraphics[trim={360pt 200pt 540pt 715pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/212.png}
+    %Camping Car
+    & \includegraphics[trim={730pt 220pt 200pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/523.png}
+    %Tractor
+    & \includegraphics[trim={850pt 110pt 80pt 830pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/523.png}
+    %Plane
+    &  \includegraphics[trim={650pt 120pt 170pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/487.png}
+    %Ship
+    & \includegraphics[trim={230pt 200pt 680pt 725pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/509.png}
+    %vehicle
+    & \includegraphics[trim={440pt 360pt 460pt 555pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/427.png}
+    %Pick Up
+    & \includegraphics[trim={740pt 420pt 180pt 510pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/523.png}
+    %Van
+    & \includegraphics[trim={300pt 355pt 610pt 570pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/blue/198.png} \\ \hline
+
+       \rotatebox{90}{\textbf{NDVI}} 
+    %Car
+    & \includegraphics[trim={880pt 630pt 70pt 330pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/523.png}
+    %Truck
+    & \includegraphics[trim={360pt 200pt 540pt 715pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/212.png}
+    %Camping Car
+    & \includegraphics[trim={730pt 220pt 200pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/523.png}
+    %Tractor
+    & \includegraphics[trim={850pt 110pt 80pt 830pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/523.png}
+    %Plane
+    &  \includegraphics[trim={650pt 120pt 170pt 720pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/487.png}
+    %Ship
+    & \includegraphics[trim={230pt 200pt 680pt 725pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/509.png}
+    %vehicle
+    & \includegraphics[trim={440pt 360pt 460pt 555pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/427.png}
+    %Pick Up
+    & \includegraphics[trim={740pt 420pt 180pt 510pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/523.png}
+    %Van
+    & \includegraphics[trim={300pt 355pt 610pt 570pt},clip,width=\linewidth]{images/015Results/03ablation/comp_images/ndvi/198.png} \\ \hline
+\end{tabularx}
+\caption{Examples of different classes for the object recognition performance of individual channels in the ablation study. For Color Scheme explanation see \ref{tab:class_colors_colored}}
+\label{fig:ablation_example_pics}
+\end{figure}

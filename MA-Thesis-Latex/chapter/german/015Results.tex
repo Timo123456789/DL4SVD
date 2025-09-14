@@ -3,6 +3,30 @@
 \label{ch:results}
 Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunächst den Vergleich von \textit{abb}- und \textit{obb}-Formaten, anschließend die Permutationsexperimente zur Überprüfung der Robustheit und abschließend die Ablationsstudie zur Bewertung einzelner Komponenten. \todo{Bewertung einzelner Komponenten eigenltich in Diskussion? oder doch hier am Ende? findet hier am Ende noch nciht statt}
 
+\todo{Farbzuordnung der Klassen erklären und anschneiden}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{cc}
+\hline
+\textbf{Class} & \textbf{Color} \\
+\hline
+Ground Truth & \cellcolor{black!100} \textcolor{white}{Black} \\
+Car         & \cellcolor{green!70} Green \\
+Truck       & \cellcolor{red!70} Red \\
+Ship        & \cellcolor{blue!70} Blue \\
+Tractor     & \cellcolor{yellow!70} Yellow \\
+CampingCar  & \cellcolor{magenta!70} Magenta \\
+Van         & \cellcolor{orange!70} Orange \\
+Vehicle     & \cellcolor{purple!70} Purple \\
+Pick-up     & \cellcolor{cyan!60} Turquoise \\
+Plane       & \cellcolor{pink!70} Apricot / Light Red \\
+\hline
+\end{tabular}
+\caption{Classes with corresponding colors, including Ground Truth}
+\label{tab:class_colors_colored}
+\end{table}
+
 
 % \begin{itemize}
 %     \item Unterteilung des Kapitels analog zur Fig. \ref{fig:Flowchart} in drei aufeinanderfolgende Abschnitte (abb vs. obb, Permutation Expermimente, Ablation Studie) um Entscheidungen und Ergebnisse zu begründen
@@ -630,6 +654,7 @@ Abbildung \ref{fig:ablation_diffM_b_f2} stellt den Vergleich mit dem blauen Kana
 
 Im Vergleich mit NDVI weist IR eine höhere Präzision bei den Klassen \textit{Car}, \textit{Truck}, \textit{Tractor} sowie \textit{Camping Car} auf und ist insbesondere bei \textit{Ship} (24\,\%) deutlich exakter. Auch bei \textit{Vehicle} erreicht IR eine moderate Verbesserung (6\,\%). NDVI zeigt dagegen Vorteile bei der Unterscheidung von Hintergrund und Objekt, insbesondere moderat bei \textit{Truck} und \textit{Camping Car}, sowie eine höhere Präzision bei \textit{Ship} (26\,\%) und \textit{Tractor} (13\,\%). Insgesamt ist IR in sieben Fällen mindestens 5\,\% besser als NDVI, während NDVI lediglich in vier Fällen Vorteile bei der Hintergrund-Objekt-Unterscheidung aufweist.  
 
+\todo{abschnitt überarbeiten bildmatrix wird neu generiert!}
 Zusammenfassend wird die gute Leistung aller Modelle bei der Klassifikation der Klasse \textit{Car} auch in den Beispielbildern in Abbildung \ref{fig:ablation_example_pics} deutlich. Gleichzeitig zeigen die Differenzmatrizen, dass Verwechslungen zwischen Hintergrund und Objekt nach wie vor häufig sind, beispielsweise bei \textit{Truck} oder \textit{Ship} im Vergleich zwischen Blue und IR (vgl. Abbildung \ref{fig:ablation_diffM_b_f2} sowie Confusion Matrix \ref{fig:ablation_confM_IR_f0}). Auch die Verwechslung von \textit{Vehicle} mit \textit{Truck} im Green-Modell ist in der Differenzmatrix \ref{fig:ablation_diffM_g_f3} sichtbar. Das NDVI-Modell weist darüber hinaus auch in den Beispielbildern eine besonders schwache Leistung auf: \textit{Truck} und \textit{Ship} werden nicht erkannt, \textit{Pick Up} wird sowohl als \textit{Pick Up} als auch als \textit{Car} klassifiziert und \textit{Vehicle} wird mit \textit{Truck} verwechselt.  
 
 % \begin{itemize}
@@ -681,112 +706,7 @@ ndvi  & 2 & 0 (0.4467) \\
 \label{tab:ablation_best_folds_test}
 \end{table}
 
-\begin{figure}[h!]
-\centering
-\renewcommand{\arraystretch}{1.2} % mehr Platz zwischen Zeilen
-\begin{tabular}{c|ccccccc}
-    & \textbf{Car}
-    & \textbf{Truck}
-    & \textbf{Pick-Up}
-    & \textbf{Camping Car}
-    & \textbf{Ship}
-    & \textbf{Plane}
-    & \textbf{Vehicle} \\ \hline
-    \rotatebox{90}{\textbf{Label}} 
-    %Car
-    & \includegraphics[trim={1460pt 1740pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_labels.jpg"}
-    %Truck
-    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"}
-    %Pick Up
-    & \includegraphics[trim={120pt 200pt 1590pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"}
-    %Camping Car
-    & \includegraphics[trim={840pt 1515pt 710pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_labels.jpg"}
-    %Ship
-    & \includegraphics[trim={50pt 1695pt 1680pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_labels.jpg"}
-    %Plane
-    & \includegraphics[trim={1100pt 1100pt 600pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_labels.jpg"}
-    %vehicle
-    & \includegraphics[trim={50pt 21pt 1650pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_labels.jpg"} \\ \hline
-    \rotatebox{90}{\textbf{Red}} 
-     %Car
-    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch0_pred.jpg"}
-    %Truck
-    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"}
-    %Pick Up
-    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"}
-    %Camping Car
-    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch0_pred.jpg"}
-    %Ship
-    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch1_pred.jpg"}
-    %Plane
-    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch1_pred.jpg"}
-    %vehicle
-    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/red/fold2/val_at_test/val_batch2_pred.jpg"} \\ \hline
-    \rotatebox{90}{\textbf{Green}} 
-     %Car
-    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch0_pred.jpg"}
-    %Truck
-    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"}
-    %Pick Up
-    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"}
-    %Camping Car
-    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch0_pred.jpg"}
-    %Ship
-    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch1_pred.jpg"}
-    %Plane
-    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch1_pred.jpg"}
-    %vehicle
-    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/green/fold3/val_at_test/val_batch2_pred.jpg"} \\ \hline
-    \rotatebox{90}{\textbf{Blue}} 
-     %Car
-    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch0_pred.jpg"}
-    %Truck
-    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"}
-    %Pick Up
-    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"}
-    %Camping Car
-    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch0_pred.jpg"}
-    %Ship
-    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch1_pred.jpg"}
-    %Plane
-    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch1_pred.jpg"}
-    %vehicle
-    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/blue/fold2/val_at_test/val_batch2_pred.jpg"} \\ \hline
-    \rotatebox{90}{\textbf{IR}} 
-     %Car
-    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_pred.jpg"}
-    %Truck
-    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"}
-    %Pick Up
-    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"}
-    %Camping Car
-    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch0_pred.jpg"}
-    %Ship
-    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_pred.jpg"}
-    %Plane
-    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch1_pred.jpg"}
-    %vehicle
-    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ir/fold0/val_at_test/val_batch2_pred.jpg"} \\ \hline
-    \rotatebox{90}{\textbf{NDVI}} 
-     %Car
-    & \includegraphics[trim={1460pt 1750pt 310pt 30pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch0_pred.jpg"}
-    %Truck
-    & \includegraphics[trim={1650pt 1050pt 70pt 700pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"}
-    %Pick Up
-    & \includegraphics[trim={120pt 200pt 1550pt 1510pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"}
-    %Camping Car
-    & \includegraphics[trim={840pt 1515pt 700pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch0_pred.jpg"}
-    %Ship
-    & \includegraphics[trim={50pt 1695pt 1660pt 38pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch1_pred.jpg"}
-    %Plane
-    & \includegraphics[trim={1180pt 1100pt 500pt 600pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch1_pred.jpg"}
-    %vehicle
-    & \includegraphics[trim={50pt 21pt 1580pt 1678pt},clip,width=\textwidth/10]{"C:/Users/timol/OneDrive - Universität Münster/14. Fachsemester_SS_24/Palma_Runs/new_val_detect/ndvi/fold0/val_at_test/val_batch2_pred.jpg"} \\ \hline
-    
-\end{tabular}
-\caption{Examples of different classes for the object recognition performance of individual channels in the ablation study}
-\label{fig:ablation_example_pics}
-\end{figure}
+\input{images/015Results/03ablation/comp_images/figure.tex}
 
 
 % \begin{figure}[h] 

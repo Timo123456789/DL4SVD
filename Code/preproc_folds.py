@@ -899,6 +899,7 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
     p3 = (int(pt3[1]), int(pt3[0]))
     p4 = (int(pt4[1]), int(pt4[0]))
 
+    color = (0, 0, 0)
     # Zeichne die Linien des Polygons
     cv2.line(image, p1, p2, color, thickness)
     cv2.line(image, p2, p3, color, thickness)
@@ -930,25 +931,25 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
     elif veh_type == '031':
         label = 'plane'
 
-    if label:
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 0.5
-        font_thickness = 1
-        text_size = cv2.getTextSize(label, font, font_scale, font_thickness)[0]
-        text_x = int(Xvehicle + 15)
-        text_y = int(Yvehicle - 15)
-        text_bg_color = (0, 0, 0)  # Schwarz
-        text_color = (255, 255, 255)  # WeiÃŸ
-        padding = 2
+    # if label:
+    #     font = cv2.FONT_HERSHEY_SIMPLEX
+    #     font_scale = 0.5
+    #     font_thickness = 1
+    #     text_size = cv2.getTextSize(label, font, font_scale, font_thickness)[0]
+    #     text_x = int(Xvehicle + 15)
+    #     text_y = int(Yvehicle - 15)
+    #     text_bg_color = (0, 0, 0)  # Schwarz
+    #     text_color = (255, 255, 255)  # WeiÃŸ
+    #     padding = 2
 
-        #Zeichne den Hintergrund des Textes
-        cv2.rectangle(image,
-                      (text_x - padding, text_y - text_size[1] - padding),
-                      (text_x + text_size[0] + padding, text_y + padding),
-                      text_bg_color, cv2.FILLED)
+    #     #Zeichne den Hintergrund des Textes
+    #     cv2.rectangle(image,
+    #                   (text_x - padding, text_y - text_size[1] - padding),
+    #                   (text_x + text_size[0] + padding, text_y + padding),
+    #                   text_bg_color, cv2.FILLED)
 
-        #Zeichne den Text
-        cv2.putText(image, label, (text_x, text_y), font, font_scale, text_color, font_thickness, cv2.LINE_AA)
+    #     #Zeichne den Text
+    #     cv2.putText(image, label, (text_x, text_y), font, font_scale, text_color, font_thickness, cv2.LINE_AA)
 
     return image
 

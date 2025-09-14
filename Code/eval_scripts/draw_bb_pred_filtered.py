@@ -8,7 +8,7 @@ from preproc_folds import get_bounding_box_in_px, read_file, select_all_labels_i
 
 
 
-# Klassen + Farben (BGR für OpenCV)
+# Klassen + Farben (BGR für OpenCV) OLD
 CLASS_MAP = {
     1: ("Car",        (0, 255, 0)),      
     2: ("Truck",      (0, 0, 255)),      
@@ -18,6 +18,18 @@ CLASS_MAP = {
     6: ("Van",        (255, 255, 0)),    
     7: ("Vehicle",    (128, 128, 255)),  
     8: ("Pick-up",    (128, 255, 128)),  
+    9: ("Plane",      (255, 128, 0))     
+}
+
+CLASS_MAP = {
+    1: ("Car",        (0, 255, 0)),      
+    2: ("Truck",      (0, 0, 255)),      
+    3: ("Ship",       (255, 0, 0)),      
+    4: ("Tractor",    (0, 255, 255)),    
+    5: ("CampingCar", (255, 0, 255)),    
+    6: ("Van",        (0, 128, 255)),    
+    7: ("Vehicle",    (128, 0, 255)),  
+    8: ("Pick-up",    (0, 255, 128)),  
     9: ("Plane",      (255, 128, 0))     
 }
 
@@ -46,13 +58,15 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
 
 
     
-    base_output = r"MA-Thesis-Latex/images/015Results"
-    output_path_full = rf"{base_output}\{output_path}\comp_images\{pred_name}\{image_id_path}.png"
+
 
 
 
     image_id_raw = image_id
     image_id = int(image_id)
+
+    base_output = r"MA-Thesis-Latex/images/015Results"
+    output_path_full = rf"{base_output}\{output_path}\comp_images\{pred_name}\{image_id}.png"
     
     with open(json_path, "r") as f:
         predictions = json.load(f)
