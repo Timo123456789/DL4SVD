@@ -9,30 +9,20 @@ from preproc_folds import get_bounding_box_in_px, read_file, select_all_labels_i
 
 
 # Klassen + Farben (BGR für OpenCV) OLD
-CLASS_MAP = {
-    1: ("Car",        (0, 255, 0)),      
-    2: ("Truck",      (0, 0, 255)),      
-    3: ("Ship",       (255, 0, 0)),      
-    4: ("Tractor",    (0, 255, 255)),    
-    5: ("CampingCar", (255, 0, 255)),    
-    6: ("Van",        (255, 255, 0)),    
-    7: ("Vehicle",    (128, 128, 255)),  
-    8: ("Pick-up",    (128, 255, 128)),  
-    9: ("Plane",      (255, 128, 0))     
-}
 
-CLASS_MAP = {
-    1: ("Car",        (0, 255, 0)),      
-    2: ("Truck",      (0, 0, 255)),      
-    3: ("Ship",       (255, 0, 0)),      
-    4: ("Tractor",    (0, 255, 255)),    
-    5: ("CampingCar", (255, 0, 255)),    
-    6: ("Van",        (0, 128, 255)),    
-    7: ("Vehicle",    (128, 0, 255)),  
-    8: ("Pick-up",    (0, 255, 128)),  
-    9: ("Plane",      (255, 128, 0))     
-}
 
+CLASS_MAP = {  # BGR
+    1: ("Car",        (44, 160, 44)),     # grün
+    2: ("Truck",      (40, 39, 214)),     # rot
+    3: ("Ship",       (180, 119, 31)),    # blau
+    4: ("Tractor",    (14, 127, 255)),    # Orange
+    5: ("CampingCar", (189, 103, 148)),   # lila
+    6: ("Van",        (75, 86, 140)),     # braun
+    7: ("Vehicle",    (194, 119, 227)),   # pink
+    8: ("Pick-up",    (127, 255, 0)),     # Türkis/Grünblau (gut kontrastierend zu Truck & Plane)
+    9: ("Plane",      (34, 189, 188)),    # Hellblau
+    10: ("Ground Truth", (0, 0, 0))       # schwarz
+}
 def draw_predictions(input_path, json_path, output_path, image_id, score_threshold=0.3, allowed_classes=None, all_images=True):
     """
     Zeichnet Vorhersagen in ein Bild.

@@ -14,8 +14,8 @@ twoside,
 BCOR=12mm,
 cleardoublepage=empty,
 DIV=13,
-%draft=false
-final
+draft=false
+%final
 ]{scrreprt}
 
 
@@ -54,12 +54,23 @@ final
 
 %floatbarrier package
 \usepackage{placeins}
+%für vergleichsatbelle
 \usepackage{tabularx}
 \usepackage{array}
 
 %für farben in erklärtabelle
 \usepackage[table]{xcolor}
 \usepackage{colortbl}
+\definecolor{CarColor}{RGB}{44,160,44}        % BGR (44,160,44)
+\definecolor{TruckColor}{RGB}{214,39,40}     % BGR (40,39,214)
+\definecolor{ShipColor}{RGB}{31,119,180}        % BGR (180,119,31)
+\definecolor{TractorColor}{RGB}{255,127,14}      % BGR (14,127,255)
+\definecolor{CampingCarColor}{RGB}{148,103,189}% BGR (189,103,148)
+\definecolor{VanColor}{RGB}{140,86,75}         % BGR (75,86,140)
+\definecolor{VehicleColor}{RGB}{227,119,194}   % BGR (194,119,227)
+\definecolor{PickUpColor}{RGB}{0,255,127}      % BGR (127,255,0)
+\definecolor{PlaneColor}{RGB}{188,189,34}      % BGR (34,189,188)
+\definecolor{GroundTruthColor}{RGB}{0,0,0}  
 
 
 % set line spacing

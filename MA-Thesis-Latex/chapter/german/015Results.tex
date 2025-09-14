@@ -5,27 +5,51 @@ Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunä
 
 \todo{Farbzuordnung der Klassen erklären und anschneiden}
 
+
+
 \begin{table}[h!]
 \centering
 \begin{tabular}{cc}
 \hline
 \textbf{Class} & \textbf{Color} \\
 \hline
-Ground Truth & \cellcolor{black!100} \textcolor{white}{Black} \\
-Car         & \cellcolor{green!70} Green \\
-Truck       & \cellcolor{red!70} Red \\
-Ship        & \cellcolor{blue!70} Blue \\
-Tractor     & \cellcolor{yellow!70} Yellow \\
-CampingCar  & \cellcolor{magenta!70} Magenta \\
-Van         & \cellcolor{orange!70} Orange \\
-Vehicle     & \cellcolor{purple!70} Purple \\
-Pick-up     & \cellcolor{cyan!60} Turquoise \\
-Plane       & \cellcolor{pink!70} Apricot / Light Red \\
+Car        & \tikz\fill[CarColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Truck      & \tikz\fill[TruckColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Ship       & \tikz\fill[ShipColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Tractor    & \tikz\fill[TractorColor] (0,0) rectangle (0.5cm,0.3cm); \\
+CampingCar & \tikz\fill[CampingCarColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Van        & \tikz\fill[VanColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Vehicle    & \tikz\fill[VehicleColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Pick-up    & \tikz\fill[PickUpColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Plane      & \tikz\fill[PlaneColor] (0,0) rectangle (0.5cm,0.3cm); \\
+Ground Truth & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
 \hline
 \end{tabular}
 \caption{Classes with corresponding colors, including Ground Truth}
-\label{tab:class_colors_colored}
+\label{tab:class_colors}
 \end{table}
+
+% \begin{table}[h!]
+% \centering
+% \begin{tabular}{cc}
+% \hline
+% \textbf{Class} & \textbf{Color} \\
+% \hline
+% Ground Truth & \cellcolor{black!100} \textcolor{white}{Black} \\
+% Car         & \cellcolor{green!70} Green \\
+% Truck       & \cellcolor{red!70} Red \\
+% Ship        & \cellcolor{blue!70} Blue \\
+% Tractor     & \cellcolor{yellow!70} Yellow \\
+% CampingCar  & \cellcolor{magenta!70} Magenta \\
+% Van         & \cellcolor{orange!70} Orange \\
+% Vehicle     & \cellcolor{purple!70} Purple \\
+% Pick-up     & \cellcolor{cyan!60} Turquoise \\
+% Plane       & \cellcolor{pink!70} Apricot / Light Red \\
+% \hline
+% \end{tabular}
+% \caption{Classes with corresponding colors, including Ground Truth}
+% \label{tab:class_colors_colored}
+% \end{table}
 
 
 % \begin{itemize}
