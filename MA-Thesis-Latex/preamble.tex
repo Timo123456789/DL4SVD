@@ -37,8 +37,35 @@ draft=false
 \usepackage{listings}
 \usepackage{svg}
 
-\lstset{language = Python, breaklines = true}
-\lstset{numbers=left, numberstyle=\small, stepnumber=2, numbersep=8pt, frame=single, aboveskip= 10pt, belowskip=10pt}
+%\lstset{language = Python, breaklines = true}
+%\lstset{numbers=left, numberstyle=\small, stepnumber=2, numbersep=8pt, frame=single, aboveskip= 10pt, belowskip=10pt}
+
+\lstset{
+        basicstyle=\ttfamily\normalsize,
+        language = Python,
+        breaklines = true,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        frame = lines,
+        %commentstyle = \color{white},
+        %morecomment  = [l][\@gobble]{\#}, 
+        %morecomment  = [is]{\"""}{\"""},
+        breakatwhitespace = false,
+}
+\lstdefinestyle{intext}{
+        basicstyle=\ttfamily\scriptsize,
+        language = Python,
+        breaklines = true,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        frame = lines,
+        %commentstyle = \color{white},
+        morecomment  = [l][\@gobble]{\#}, 
+        morecomment  = [is]{\"""}{\"""},
+        breakatwhitespace = false,
+}
 
 \newif\ifimportant
 % Setze hier, ob Deutsch oder Englisch gezeigt werden soll
