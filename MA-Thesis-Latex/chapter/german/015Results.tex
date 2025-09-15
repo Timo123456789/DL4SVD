@@ -13,6 +13,7 @@ Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunä
 \hline
 \textbf{Class} & \textbf{Color} \\
 \hline
+\acrshort{GT} & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
 Car        & \tikz\fill[CarColor] (0,0) rectangle (0.5cm,0.3cm); \\
 Truck      & \tikz\fill[TruckColor] (0,0) rectangle (0.5cm,0.3cm); \\
 Ship       & \tikz\fill[ShipColor] (0,0) rectangle (0.5cm,0.3cm); \\
@@ -22,10 +23,9 @@ Van        & \tikz\fill[VanColor] (0,0) rectangle (0.5cm,0.3cm); \\
 Vehicle    & \tikz\fill[VehicleColor] (0,0) rectangle (0.5cm,0.3cm); \\
 Pick-up    & \tikz\fill[PickUpColor] (0,0) rectangle (0.5cm,0.3cm); \\
 Plane      & \tikz\fill[PlaneColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Ground Truth & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
 \hline
 \end{tabular}
-\caption{Classes with corresponding colors, including Ground Truth}
+\caption{Classes with corresponding colors, including \acrshort{GT}}
 \label{tab:class_colors}
 \end{table}
 
@@ -35,7 +35,7 @@ Ground Truth & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
 % \hline
 % \textbf{Class} & \textbf{Color} \\
 % \hline
-% Ground Truth & \cellcolor{black!100} \textcolor{white}{Black} \\
+% \acrshort{GT} & \cellcolor{black!100} \textcolor{white}{Black} \\
 % Car         & \cellcolor{green!70} Green \\
 % Truck       & \cellcolor{red!70} Red \\
 % Ship        & \cellcolor{blue!70} Blue \\
@@ -47,7 +47,7 @@ Ground Truth & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
 % Plane       & \cellcolor{pink!70} Apricot / Light Red \\
 % \hline
 % \end{tabular}
-% \caption{Classes with corresponding colors, including Ground Truth}
+% \caption{Classes with corresponding colors, including \acrshort{GT}}
 % \label{tab:class_colors_colored}
 % \end{table}
 
@@ -59,6 +59,7 @@ Ground Truth & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
 \section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
 
 \todo{Bilder in Originalgröße in Appendix packen}
+\todo{erwähnen das obb abb auf RGB Bildern trainiert wurde (oder?)}
 \begin{figure}[h]
     \centering
     
@@ -99,7 +100,7 @@ Ground Truth & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
 \todo{nicht nur erläutern was man sieht sondern auch was man daraus folgert (analyse) im Bildunterschrift}
 
 
-In Abbildung \ref{fig:comparison_bb_format} wird ein Vergleich zwischen \acrshort{obb} und \acrshort{abb} für verschiedene Objektklassen dargestellt. Besonders deutlich wird dieser Unterschied beim LKW-Beispiel: In Abbildung \ref{fig:abb_truck} nimmt die \acrshort{abb} mit ca. 1378 px eine deutlich größere Fläche ein als die \acrshort{obb} in Abbildung \ref{fig:obb_truck} mit ca. 967 px. Beim Vergleich stark rotierten Objekten, wie etwa bei den Schiffen in Abbildung \ref{fig:abb_ship} und \ref{fig:obb_ship}, zeigt sich, dass die \acrshort{obb} das Objekt selbst deutlich präziser umschließt und weniger umliegendes Areal einbezieht. Ein weiterer Vorteil der \acrshort{obb} ist das Fehlen von Überlappungen zwischen den Boxen.
+In Abbildung \ref{fig:comparison_bb_format} wird ein Vergleich zwischen \acrshort{obb} und \acrshort{abb} für verschiedene Objektklassen dargestellt. Besonders deutlich wird dieser Unterschied beim LKW-Beispiel: In Abbildung \ref{fig:abb_truck} nimmt die \acrshort{abb} mit ca. 1378 px eine deutlich größere Fläche ein als die \acrshort{obb} in Abbildung \ref{fig:obb_truck} mit ca. 967 px. Beim Vergleich stark rotierten Objekten, wie etwa bei den Schiffen in Abbildung \ref{fig:abb_ship} und \ref{fig:obb_ship}, zeigt sich, dass die \acrshort{obb} das Objekt selbst deutlich präziser umschließt und weniger umliegendes Areal einbezieht. Ein weiterer Vorteil der \acrshort{obb} ist das Fehlen von Überlappungen zwischen den Boxen. Für weitere Beispiele s. Abb. \ref{fig:aab_obb_example_pics}.
 
 Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) verdeutlicht, dass \acrshort{obb} im Mittel kompakter ist (Median \acrshort{abb}: ca. 1000 px, Median \acrshort{obb}: >700 px). Die \acrshort{abb}-Flächen entsprechen exakt den "abb in obb", da die Bounding Boxes identisch sind; der einzige Unterschied liegt im trainierten Modell. Die Bounding Boxen nehmen  als \acrshort{obb} (ca. 700 px pro Box) etwa 0,066\% der Gesamtfläche des Bildes ein, als \acrshort{abb} (ca. 1000 px pro Box) etwa 0,095\%. Damit liegen \acrshort{obb} knapp unterhalb der Untergrenze für sehr kleine Objekte nach \citeauthor{Chen2017} \cite{Chen2017} (s. Kap. \ref{ch:state_of_research}) und gelten als "very small objects", während \acrshort{abb} oberhalb der Untergrenze für kleine Objekte liegt und damit als "small object" gilt.
 
@@ -127,8 +128,8 @@ Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) v
     \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. (Own representation)}
     \label{fig:obb_abb_map50-95:val_on_val}
 \end{figure}
-Die Analyse der \acrshort{mAP}50--95 des besten Validierungsmodells auf dem Validierungsdatensatz (Abbildung \ref{fig:obb_abb_map50-95:val_on_val}) zeigt, dass das \acrshort{obb}-Modell in allen Fällen eine bessere Leistung erzielt als das \acrshort{abb}-Modell. Interessanterweise erzielt \acrshort{abb} auf dem \acrshort{obb}-Modell eine höhere Performance als die angepassten \acrshort{obb}-Boxen innerhalb desselben Modells (yolov9u). Dasselbe Phänomen lässt sich auch auf dem Testdatensatz beobachten (Abbildung \ref{fig:obb_abb_map50-95:val_on_test}), sodass \acrshort{abb} in Verbindung mit dem \acrshort{obb}-Modell bessere Ergebnisse liefert. Auffällig ist, dass bei den \acrshort{abb}-basierten Modellen (sowohl \acrshort{abb} als auch "abb in obb") stets Fold 1 den besten Wert beim Validation Dataset auf dem Validation Dataset erreicht hat, während beim \acrshort{obb}-Modell Fold 0 dort die besten Ergebnisse lieferte (s. Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val}). Die Ergebnisse der jeweiligen Folds mit dem höchsten \acrshort{mAP}50-95 Wert aus Abb. \ref{fig:obb_abb_map50-95:val_on_val} sind durch den roten Punkt in Abbildung \ref{fig:obb_abb_map50-95:val_on_test} gekennzeichnet. Auffällig ist, dass die meisten roten Punkte im Bereich des Medians der Modelle liegen und lediglich das \acrshort{RGIR}-Modell eine Übereinstimmung zwischen dem besten Fold im Testdatensatz und dem besten Fold im Validierungsdatensatz aufweist.
-% Die Konsistenz über alle fünf Folds der Kreuzvalidierung ist gut, was auf eine robuste Trainierbarkeit der Modelle hinweist.
+Die Analyse der \acrshort{mAP}50--95 des besten Validierungsmodells auf dem Validierungsdatensatz (Abbildung \ref{fig:obb_abb_map50-95:val_on_val}) zeigt, dass das \acrshort{obb}-Modell in allen Fällen eine bessere Leistung erzielt als das \acrshort{abb}-Modell. Interessanterweise erzielt \acrshort{abb} auf dem \acrshort{obb}-Modell eine höhere Performance als die angepassten \acrshort{obb}-Boxen innerhalb desselben Modells (yolov9u). Dasselbe Phänomen lässt sich auch auf dem Testdatensatz beobachten (Abbildung \ref{fig:obb_abb_map50-95:val_on_test}), sodass \acrshort{abb} in Verbindung mit dem \acrshort{obb}-Modell bessere Ergebnisse liefert. Auffällig ist, dass bei den \acrshort{abb}-basierten Modellen (sowohl \acrshort{abb} als auch "abb in obb") stets Fold 1 den besten Wert beim Validation Dataset auf dem Validation Dataset erreicht hat, während beim \acrshort{obb}-Modell Fold 0 dort die besten Ergebnisse lieferte (s. Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val}). Die Ergebnisse der jeweiligen Folds mit dem höchsten \acrshort{mAP}50-95 Wert aus Abb. \ref{fig:obb_abb_map50-95:val_on_val} sind durch den roten Punkt in Abbildung \ref{fig:obb_abb_map50-95:val_on_test} gekennzeichnet. Auffällig ist, dass die meisten roten Punkte im Bereich des Medians der Modelle liegen und lediglich das \acrshort{RGIR}-Modell eine Übereinstimmung zwischen dem besten Fold im Testdatensatz und dem besten Fold im Validierungsdatensatz aufweist. \todo{nächster Satz ist eigentlich analyse (auskommentiert)}
+% Die Konsistenz über alle fünf Folds der Kreuzvalidierung ist gut, was auf eine robuste Trainierbarkeit der Modelle hinweist. 
 
 \begin{table}[h]
 \centering
@@ -144,6 +145,19 @@ abb in obb &  1 & 1 \\
 \caption{Best fold per model at Bounding Box format}
 \label{tab:best_folds_area}
 \end{table}
+
+
+Die Auswirkungen der unterschiedlichen Rotationen der erkannten Objekte lassen sich in Abbildung \ref{fig:aab_obb_example_pics} exemplarisch an der Klasse \texttt{plane} beobachten. Die Bounding Boxes unterscheiden sich hinsichtlich ihrer Rotationswinkel deutlich zwischen den drei Modellen. Abweichungen in der Überlappung der erkannten Bounding Boxes mit den Ground-Truth-Annotationen treten hingegen wesentlich seltener auf, was die höhere \acrshort{mAP}-Performance der \acrshort{abb}-basierten Modelle erklärt. Auf weitere Auffälligkeiten, wie die Schwierigkeiten bei der Trennung von Objekten und Hintergrund, wird in den folgenden Abschnitten eingegangen.  
+
+Aufgrund der geringeren Wahrscheinlichkeit für Überlappungsfehler sowie der präziseren Objektumrandung wurde das \acrshort{obb}-Modell für die Durchführung der Permutationstests ausgewählt.
+
+% \begin{itemize}
+%     \item Auswirkungen der verschiedenen Rotationen der erkanntne Objekte kann man gut in Abb \ref{fig:aab_obb_example_pics} bei \texttt{plane} seehn, die BBs unterscheiden sich in der Rotation zwischen allen 3 Modellen stark. Abweichungen bei der Überlappung der erkannten abbs mit dem Ground Truth abb sind deutlich seltener, was eine höhere map performance erklärt. Auf die weiteren Auffälligkeitne, wie die Schwierigkeiten bei Objekt-Hintergrund Unterscheidung, wird in den nächsten Abschnitten eingegangen.
+% \end{itemize}
+
+\input{images/015Results/01abb_vs_obb/comp_images/figure.tex}
+
+
 
 Aufgrund der geringeren Überlappungswahrscheinlichkeit und der genaueren Objektumrandung wurde das \acrshort{obb}-Modell für die weiteren Modelle im Rahmen der Permutationstests ausgewählt.
 % \begin{itemize}
@@ -345,7 +359,7 @@ Zur Interpretation der Differenzmatrizen gilt: Rot markiert eine bessere Perform
 %     \label{fig:perm_exp_diffM_rgbndvi_f2}
 % \end{figure}
 
-Abbildung~\ref{fig:perm_exp_diffM_rgbndvi_f2} verdeutlicht deutliche Unterschiede zugunsten von RGBIR. Besonders stark zeigt sich dies bei der korrekten Erkennung von \textit{ship} (24~\%), \textit{vehicle} (16~\%), \textit{plane} (12~\%) und \textit{tractor} (10~\%). Auch bei Verwechslungen zwischen \textit{car} und \textit{van} treten Unterschiede von mehr als 10~\% auf. Dagegen weist RGBNDVI höhere Fehlklassifikationen auf, beispielsweise bei \textit{plane} (12~\%) und \textit{van} (23~\%), die fälschlich als \textit{background} erkannt werden. Insgesamt zeigt RGBIR fünf Fälle, in denen es mindestens 5~\% besser abschneidet, während RGBNDVI keinen Vorteil verzeichnen kann.
+Abbildung~\ref{fig:perm_exp_diffM_rgbndvi_f2} verdeutlicht deutliche Unterschiede zugunsten von RGBIR. Besonders stark zeigt sich dies bei der korrekten Erkennung von \textit{ship} (24~\%), \textit{vehicle} (16~\%), \textit{plane} (12~\%) und \textit{tractor} (10~\%). Auch bei Verwechslungen zwischen \textit{car} und \textit{van} treten Unterschiede von mehr als 10~\% auf. Dagegen weist RGBNDVI weniger hohe Fehlklassifikationen auf, beispielsweise bei \textit{plane} (12~\%) und \textit{van} (23~\%), die weniger häufig fälschlich als \textit{background} erkannt werden. Insgesamt zeigt RGBIR fünf Klassen (\textit{Ship}, \textit{Tractor}, \textit{Vehicle}, \textit{Plane}), in denen es mindestens 5~\% besser abschneidet, während RGBNDVI keinen Vorteil verzeichnen kann.
 
 % \begin{figure}[t]
 %     \centering
@@ -354,7 +368,7 @@ Abbildung~\ref{fig:perm_exp_diffM_rgbndvi_f2} verdeutlicht deutliche Unterschied
 %     \label{fig:perm_exp_diffM_gbndvi_f2}
 % \end{figure}
 
-In Abbildung~\ref{fig:perm_exp_diffM_gbndvi_f2} zeigt sich ein sehr hoher Unterschied bei der Klasse \textit{tractor}, wo RGBIR deutlich überlegen ist. Die Verbesserung bei \textit{ship} beträgt dagegen lediglich 8~\%. Auffällig ist, dass \textit{tractor}, \textit{ship} und \textit{van} im GBNDVI-Modell häufiger fälschlich als \textit{background} klassifiziert werden. Insgesamt ist RGBIR in vier Fällen um mindestens 5~\% besser, während GBNDVI keine Vorteile aufweist.
+In Abbildung~\ref{fig:perm_exp_diffM_gbndvi_f2} zeigt sich ein sehr hoher Unterschied bei der Klasse \textit{tractor}, wo RGBIR deutlich überlegen ist. Die Verbesserung bei \textit{ship} beträgt dagegen lediglich 8~\%. Auffällig ist, dass \textit{tractor}, \textit{ship} und \textit{van} im GBNDVI-Modell weniger häufig fälschlich als \textit{background} klassifiziert werden. Insgesamt ist RGBIR in vier Klassen (\textit{Ship}, \textit{Tractor}, \textit{Van}, \textit{Vehicle}) um mindestens 5~\% besser, während GBNDVI keine Vorteile aufweist.
 
 % \begin{figure}[b]
 %     \centering
@@ -363,7 +377,7 @@ In Abbildung~\ref{fig:perm_exp_diffM_gbndvi_f2} zeigt sich ein sehr hoher Unters
 %     \label{fig:perm_exp_diffM_irgb_f3}
 % \end{figure}
 
-Wie Abbildung~\ref{fig:perm_exp_diffM_irgb_f3} zeigt, bleibt \textit{ship} eine Klasse, bei der RGBIR besonders stark ist (+21~\%). Dennoch treten in beiden Modellen Fehlklassifikationen auf, etwa die Verwechslung von \textit{ship} mit \textit{camping car} oder \textit{background}. Insgesamt ist RGBIR in drei Fällen mindestens 5~\% besser, während IRGB keinen Vorteil aufweist.
+Wie Abbildung~\ref{fig:perm_exp_diffM_irgb_f3} zeigt, bleibt \textit{ship} eine Klasse, bei der RGBIR besonders stark ist (+21~\%). Dennoch treten in beiden Modellen Fehlklassifikationen auf, etwa die Verwechslung von \textit{ship} mit \textit{camping car} oder \textit{background}. Insgesamt ist RGBIR in drei Klassen (\textit{Ship}, \textit{Camping Car}, \textit{Vehicle}) mindestens 5~\% besser, während IRGB keinen Vorteil aufweist.
 
 % \begin{figure}[htbp]
 %     \centering
@@ -372,7 +386,7 @@ Wie Abbildung~\ref{fig:perm_exp_diffM_irgb_f3} zeigt, bleibt \textit{ship} eine 
 %     \label{fig:perm_exp_diffM_RIRB_f2}
 % \end{figure}
 
-Abbildung~\ref{fig:perm_exp_diffM_RIRB_f2} zeigt ein gemischtes Bild: RGBIR weist Vorteile bei den Klassen \textit{vehicle} und \textit{camping car} auf, während RIRB bei \textit{camping car} eine moderate Verbesserung (6~\%) erzielt. Auffällig sind die hohen Fehlklassifikationen im RIRB-Modell, bei denen \textit{van} (21~\%) und \textit{ship} (12~\%) als \textit{background} erkannt werden. Insgesamt ist RGBIR in zwei Fällen besser, während RIRB in einem Fall Vorteile aufweist.
+Abbildung~\ref{fig:perm_exp_diffM_RIRB_f2} zeigt ein gemischtes Bild: RGBIR weist Vorteile bei den Klassen \textit{vehicle} und \textit{camping car} auf, während RIRB bei \textit{camping car} eine moderate Verbesserung (6~\%) erzielt. Auffällig sind die weniger häufigen Fehlklassifikationen im RIRB-Modell, bei denen \textit{van} (21~\%) und \textit{ship} (12~\%) nicht als \textit{background} erkannt werden. Insgesamt ist RGBIR in zwei Klassen (\textit{Ship}, \textit{Van}) besser, während RIRB in einer Klasse (\textit{Camping Car}) Vorteile aufweist.
 
 % \begin{figure}[htbp]
 %     \centering
@@ -381,7 +395,7 @@ Abbildung~\ref{fig:perm_exp_diffM_RIRB_f2} zeigt ein gemischtes Bild: RGBIR weis
 %     \label{fig:perm_exp_diffM_RGB_f2}
 % \end{figure}
 
-In Abbildung~\ref{fig:perm_exp_diffM_RGB_f2} zeigen sich deutliche Unterschiede zugunsten des RGBIR-Modells bei den Klassen \textit{ship} und \textit{vehicle}. Dennoch treten auch hier moderate Fehlklassifikationen auf, etwa die Verwechslung von \textit{pick up} mit \textit{car} (6~\%) oder \textit{van} mit \textit{pick up}. Während RGB \textit{vehicle} (15~\%) und \textit{ship} (10~\%) häufiger als \textit{background} verkennt, klassifiziert RGBIR den \textit{background} häufiger fälschlich als \textit{pick up}. Insgesamt ist RGBIR in zwei Klassen klar überlegen.
+In Abbildung~\ref{fig:perm_exp_diffM_RGB_f2} zeigen sich deutliche Unterschiede zugunsten des RGBIR-Modells bei den Klassen \textit{ship} und \textit{vehicle}. Dennoch treten auch hier moderate Fehlklassifikationen auf, etwa die Verwechslung von \textit{pick up} mit \textit{car} (6~\%) oder \textit{van} mit \textit{pick up}. Während RGB \textit{vehicle} (15~\%) und \textit{ship} (10~\%) weniger häufiger als \textit{background} verkennt, klassifiziert RGBIR den \textit{background} häufiger fälschlich als \textit{pick up}. Insgesamt ist RGBIR in zwei Klassen (\textit{Ship}, \textit{Vehicle}) überlegen.
 
 % \begin{figure}[htbp]
 %     \centering
@@ -390,7 +404,19 @@ In Abbildung~\ref{fig:perm_exp_diffM_RGB_f2} zeigen sich deutliche Unterschiede 
 %     \label{fig:perm_exp_diffM_RGIR_f3}
 % \end{figure}
 
-Der letzte Vergleich in Abbildung~\ref{fig:perm_exp_diffM_RGIR_f3} zwischen RGBIR und RGIR (Fold~3) zeigt nahezu einen Gleichstand. Während RGBIR \textit{cars} häufiger mit \textit{vans} verwechselt und \textit{camping car} öfter als \textit{background} klassifiziert, ist RGIR bei \textit{ship} und \textit{van} moderat besser. Insgesamt weist RGBIR in einer Klasse Vorteile von mindestens 5~\% auf, während RGIR in ebenfalls einer Klasse überlegen ist.
+Der letzte Vergleich in Abbildung~\ref{fig:perm_exp_diffM_RGIR_f3} zwischen RGBIR und RGIR (Fold~3) zeigt nahezu einen Gleichstand. Während RGBIR \textit{cars} häufiger mit \textit{vans} verwechselt und \textit{camping car} öfter als \textit{background} klassifiziert, ist RGIR bei \textit{ship} und \textit{van} moderat besser. Insgesamt zeigen beide Modelle eine vergleichbare Leistung, ohne dass eines der beiden eine höhere Klassifikationsgenauigkeit bei einer Klasse erzielt.
+
+Abbildung \ref{fig:perm_exp_example_pics} verdeutlicht die Erkennungsleistung der verschiedenen Modelle für ausgewählte Klassen. Besonders deutlich wird dabei die herausragende Klassifikationsleistung aller Modelle für die Klasse \textit{car}. Ähnlich verhält es sich bei der Klasse \textit{truck}, wobei das IRGB-Modell im gezeigten Beispiel die Objekte teilweise sowohl als \textit{truck} als auch als \textit{vehicle} klassifiziert. Ebenfalls sehr gute Ergebnisse zeigen die Modelle für die Klassen \textit{camping car}, \textit{tractor}, \textit{plane}, \textit{pick up} und \textit{van}, wobei beim GBNDVI-Modell eine Verwechslung von \textit{van} mit \textit{car} auftritt, jedoch mit geringer Konfidenz. Die Klasse \textit{ship} wird von fast allen Modellen als \textit{camping car} mit geringer Konfidenz fehlklassifiziert; bei RGBIR und IRGB erfolgt zudem eine Doppelklassifikation als \textit{ship} und \textit{camping car}. Lediglich das RGBNDVI-Modell erkennt \textit{ship} korrekt. Schließlich wird die Klasse \textit{vehicle} von keinem der Modelle zuverlässig erkannt.
+
+% \begin{itemize}
+%     \item in abb. \ref{fig:perm_exp_example_pics} ist die hervoragende Erkennungsleistung über alle Modelle hinweg bei der Klasse car gut zu sehen
+%     \item Das gleihche gilt für Truck, obwohl IRGB die klasse Truck im Beispiel doppelt als Truck und Vehicle klassifiziert
+%     \item sehr gute Leistung ebefalls bei Camping Car, Tractor, Plane, pick up, van (Verwechslung von Van mit Car bei gbndvi mit geringer confidence)
+%     \item Ship wird von fast allen Modellen als Camping Car mit geringer Confidence fehlklassifiziert (bei rgbir  und irgb wird es doppelt als ship und CampingCar erkannt), nur rgbndvi klassifiziert richtig
+%     \item vehicle wird von keinem Modell erkannt 
+% \end{itemize}
+\input{images/015Results/02perm_exp/comp_images/figure.tex}
+\FloatBarrier
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Comparision with Confusion Matrices}
@@ -565,7 +591,8 @@ Der letzte Vergleich in Abbildung~\ref{fig:perm_exp_diffM_RGIR_f3} zwischen RGBI
 %     \item RGBIR have a better performance in Ship, Tractor and Vehicle
 %     \item Both ndvi modells show  a tendency for confusing background with other classes
 % \end{itemize}
-\FloatBarrier
+
+
 %##########################################################################
 %##########################################################################
 %##########################################################################
@@ -678,8 +705,10 @@ Abbildung \ref{fig:ablation_diffM_b_f2} stellt den Vergleich mit dem blauen Kana
 
 Im Vergleich mit NDVI weist IR eine höhere Präzision bei den Klassen \textit{Car}, \textit{Truck}, \textit{Tractor} sowie \textit{Camping Car} auf und ist insbesondere bei \textit{Ship} (24\,\%) deutlich exakter. Auch bei \textit{Vehicle} erreicht IR eine moderate Verbesserung (6\,\%). NDVI zeigt dagegen Vorteile bei der Unterscheidung von Hintergrund und Objekt, insbesondere moderat bei \textit{Truck} und \textit{Camping Car}, sowie eine höhere Präzision bei \textit{Ship} (26\,\%) und \textit{Tractor} (13\,\%). Insgesamt ist IR in sieben Fällen mindestens 5\,\% besser als NDVI, während NDVI lediglich in vier Fällen Vorteile bei der Hintergrund-Objekt-Unterscheidung aufweist.  
 
-\todo{abschnitt überarbeiten bildmatrix wird neu generiert!}
-Zusammenfassend wird die gute Leistung aller Modelle bei der Klassifikation der Klasse \textit{Car} auch in den Beispielbildern in Abbildung \ref{fig:ablation_example_pics} deutlich. Gleichzeitig zeigen die Differenzmatrizen, dass Verwechslungen zwischen Hintergrund und Objekt nach wie vor häufig sind, beispielsweise bei \textit{Truck} oder \textit{Ship} im Vergleich zwischen Blue und IR (vgl. Abbildung \ref{fig:ablation_diffM_b_f2} sowie Confusion Matrix \ref{fig:ablation_confM_IR_f0}). Auch die Verwechslung von \textit{Vehicle} mit \textit{Truck} im Green-Modell ist in der Differenzmatrix \ref{fig:ablation_diffM_g_f3} sichtbar. Das NDVI-Modell weist darüber hinaus auch in den Beispielbildern eine besonders schwache Leistung auf: \textit{Truck} und \textit{Ship} werden nicht erkannt, \textit{Pick Up} wird sowohl als \textit{Pick Up} als auch als \textit{Car} klassifiziert und \textit{Vehicle} wird mit \textit{Truck} verwechselt.  
+Zusammenfassend lässt sich festhalten, dass sämtliche Modelle – mit Ausnahme des NDVI-Modells – eine hohe Klassifikationsleistung in der Kategorie \textit{Car} aufweisen, was sich auch in den Beispielabbildungen deutlich widerspiegelt (vgl. Abbildung \ref{fig:ablation_example_pics}). Gleichzeitig zeigen sowohl die Differenzmatrizen als auch die Abbildungen, dass Fehlklassifikationen zwischen Hintergrund und Objekt weiterhin in erheblichem Maße auftreten, insbesondere innerhalb der Klasse \textit{Vehicle} (vgl. Confusion Matrix \ref{fig:ablation_confM_IR_f0}). Auffällig ist hierbei der IR-Kanal, der in dem in Abbildung \ref{fig:ablation_example_pics} dargestellten Beispielen eine besonders hohe Verwechslungsrate zwischen Objekten und Hintergrund aufweist, während in den übrigen Kanälen insgesamt mehr Objekte korrekt erkannt werden. Darüber hinaus wird die Verwechslung der Klasse \textit{Van} mit \textit{Car} im Red-Modell in der Differenzmatrix \ref{fig:ablation_diffM_g_f3} bestätigt. Im Vergleich zum Referenzmodell (6\,\%, vgl. Abbildung \ref{fig:ablation_confM_IR_f0}) ist hierbei weder eine Leistungssteigerung noch eine Verschlechterung festzustellen. Das NDVI-Modell weist hingegen eine deutlich reduzierte Leistungsfähigkeit auf: In dAbbildung \ref{fig:ablation_example_pics} wird sichtbar, dass – mit Ausnahme der korrekten Klassifikation von \textit{Van} sowie der Fehlklassifikation von \textit{Truck} als \textit{Vehicle} – keine zutreffenden Ergebnisse erzielt wurden. Sämtliche weiteren Klassen wurden fälschlicherweise dem Hintergrund zugeordnet.
+
+
+
 
 % \begin{itemize}
 %     \item \ref{fig:ablation_diffM_r_f2} zeigt, dass IR  hohe Leistung im Gegensatz zm reinen Roten Kanal bei der Erkennung von Vehicle hat

@@ -21,7 +21,7 @@ CLASS_MAP = {  # BGR
     7: ("Vehicle",    (194, 119, 227)),   # pink
     8: ("Pick-up",    (127, 255, 0)),     # Türkis/Grünblau (gut kontrastierend zu Truck & Plane)
     9: ("Plane",      (34, 189, 188)),    # Hellblau
-    10: ("Ground Truth", (0, 0, 0))       # schwarz
+    10: ("\acrshort{GT}", (0, 0, 0))       # schwarz
 }
 def draw_predictions(input_path, json_path, output_path, image_id, score_threshold=0.3, allowed_classes=None, all_images=True):
     """
@@ -43,7 +43,10 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
         print(image_path)
     else:
         base = r"Code\data\testfold_data"
-        image_path = rf"{base}\{pred_name}\images\{image_id_path}.png"
+        if pred_name == "rgbir" or pred_name == "rgbndvi":
+            image_path = rf"{base}\{pred_name}\images\{image_id_path}.tiff"
+        else:
+            image_path = rf"{base}\{pred_name}\images\{image_id_path}.png"
         print(image_path)
 
 
@@ -54,9 +57,13 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
 
     image_id_raw = image_id
     image_id = int(image_id)
+    print(image_id)
 
     base_output = r"MA-Thesis-Latex/images/015Results"
-    output_path_full = rf"{base_output}\{output_path}\comp_images\{pred_name}\{image_id}.png"
+    if pred_name == "rgbir" or pred_name == "rgbndvi":
+        output_path_full = rf"{base_output}\{output_path}\comp_images\{pred_name}\{image_id}.png"
+    else:
+        output_path_full = rf"{base_output}\{output_path}\comp_images\{pred_name}\{image_id}.png"
     
     with open(json_path, "r") as f:
         predictions = json.load(f)
@@ -70,6 +77,7 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
     preds_for_image = [
         p for p in predictions if p["image_id"] == image_id and p["score"] >= score_threshold
     ]
+    print(preds_for_image)
 
     # ggf. nach Klassen filtern
     # if allowed_classes is not None:
@@ -85,11 +93,18 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
     for pred in preds_for_image:
         cat_id = pred["category_id"]
         label, color = CLASS_MAP.get(cat_id, (f"cat{cat_id}", (200, 200, 200)))
-
-        poly = pred["poly"]
-        points = np.array(poly, dtype=np.int32).reshape((-1, 2))
+        
+        if "poly" in pred:
+            poly = pred["poly"]
+            points = np.array(poly, dtype=np.int32).reshape((-1, 2))
+        elif "bbox" in pred:
+            print(pred["bbox"])
+            poly = bbox_to_cv2_polygon(pred["bbox"])
+            print(poly)
+            points = np.array(poly, dtype=np.int32).reshape((-1, 2))
 
         # Dünne Bounding Box einzeichnen
+        print(points)
         cv2.polylines(image, [points], isClosed=True, color=color, thickness=2)
 
         # # Text vorbereiten
@@ -128,9 +143,9 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
         cv2.putText(image, text, (x, y - 2), font, font_scale, (255, 255, 255), font_thickness)
 
     # Bild anzeigen
-    print("Saving to:", output_path)
+    print("Saving to:", output_path_full)
 
-    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(output_path_full).parent.mkdir(parents=True, exist_ok=True)
 
    
     success = cv2.imwrite(str(output_path_full), image)
@@ -141,31 +156,106 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
     return True  # Bild wurde angezeigt
 
 
+import numpy as np
 
-def generate_ground_truth(results_base,output_path, images):
+def bbox_to_cv2_polygon(bbox):
+    """
+    Wandelt eine bbox [x, y, w, h] in ein cv2-kompatibles Polygon um.
+    Rückgabe: numpy array, dtype=int32, Form (n_points, 1, 2)
+    """
+    x, y, w, h = bbox
+    # Eckpunkte berechnen
+    points = [
+        [x, y],           # oben links
+        [x + w, y],       # oben rechts
+        [x + w, y + h],   # unten rechts
+        [x, y + h]        # unten links
+    ]
+    # In numpy array umwandeln und in int konvertieren
+    points = np.array(points, dtype=np.int32)
+    # OpenCV benötigt Form (n_points, 1, 2)
+    points = points.reshape((-1, 1, 2))
+    return points
+def generate_ground_truth(results_base,output_path, images, abb, perm_exp):
     path_labels = r'Code\data\annotation.txt'
     base_output = r"MA-Thesis-Latex/images/015Results"
     output_path_full = rf"{base_output}\{output_path}\comp_images\ground_truth"
 
     labels = read_file(path_labels)
-    for _, image_id in images:
-        print(image_id)
-        image_id_zeros = str(image_id).zfill(8)
-        filtered_labels = select_all_labels_in_img(image_id_zeros, labels)
-        base = r"Code\data\testfold_data"
-        image_path = rf"{base}\ir\images\{image_id_zeros}.png"
-        img = cv2.imread(image_path)
+    # for _, image_id in images:
+    #     print(image_id)
+    #     image_id_zeros = str(image_id).zfill(8)
+    #     filtered_labels = select_all_labels_in_img(image_id_zeros, labels)
+    #     base = r"Code\data\testfold_data"
+    #     if aab:
+    #         image_path = rf"{base}\obb\images\{image_id_zeros}.png"
+    #     img = cv2.imread(image_path)
 
-        for i in filtered_labels:
-            img = get_bounding_box_in_px(img,i, True, False)
+    #     for i in filtered_labels:
+    #         img = get_bounding_box_in_px(img,i, True, False)
 
-        # window_name_rgb = f"{image_id_zeros}"+".png"
-        # cv2.imshow(window_name_rgb, img)
-        # cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
-        # cv2.destroyAllWindows() 
-        output_path_with_png = rf"{base_output}\{output_path}\comp_images\ground_truth\{image_id}.png"
-        cv2.imwrite(output_path_with_png, img)
+    #     # window_name_rgb = f"{image_id_zeros}"+".png"
+    #     # cv2.imshow(window_name_rgb, img)
+    #     # cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
+    #     # cv2.destroyAllWindows() 
+    #     output_path_with_png = rf"{base_output}\{output_path}\comp_images\ground_truth\{image_id}.png"
+    #     cv2.imwrite(output_path_with_png, img)
 
+    if aab:
+        for _, image_id in images:
+            print(image_id)
+            image_id_zeros = str(image_id).zfill(8)
+            filtered_labels = select_all_labels_in_img(image_id_zeros, labels)
+            base = r"Code\data\testfold_data"
+            if aab:
+                image_path = rf"{base}\obb\images\{image_id_zeros}.png"
+            img = cv2.imread(image_path)
+
+            for i in filtered_labels:
+                img = get_bounding_box_in_px(img,i, True, False)
+
+            # window_name_rgb = f"{image_id_zeros}"+".png"
+            # cv2.imshow(window_name_rgb, img)
+            # cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
+            # cv2.destroyAllWindows() 
+            output_path_with_png = rf"{base_output}\{output_path}\comp_images\ground_truth_obb\{image_id}.png"
+            cv2.imwrite(output_path_with_png, img)
+        for _, image_id in images:
+            print(image_id)
+            image_id_zeros = str(image_id).zfill(8)
+            filtered_labels = select_all_labels_in_img(image_id_zeros, labels)
+            base = r"Code\data\testfold_data"
+            if aab:
+                image_path = rf"{base}\obb\images\{image_id_zeros}.png"
+            img = cv2.imread(image_path)
+
+            for i in filtered_labels:
+                img = get_bounding_box_in_px(img,i, False, False)
+
+            window_name_rgb = f"{image_id_zeros}"+".png"
+            # cv2.imshow(window_name_rgb, img)
+            # cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
+            # cv2.destroyAllWindows() 
+            output_path_with_png = rf"{base_output}\{output_path}\comp_images\ground_truth_abb\{image_id}.png"
+            cv2.imwrite(output_path_with_png, img)
+    if perm_exp:
+        for _, image_id in images:
+            print(image_id)
+            image_id_zeros = str(image_id).zfill(8)
+            filtered_labels = select_all_labels_in_img(image_id_zeros, labels)
+            base = r"Code\data\testfold_data"
+            if perm_exp:
+                image_path = rf"{base}\rgbir\images\{image_id_zeros}.tiff"
+            img = cv2.imread(image_path)
+
+            for i in filtered_labels:
+                img = get_bounding_box_in_px(img,i, True, False)
+            # window_name_rgb = f"{image_id_zeros}"+".png"
+            # cv2.imshow(window_name_rgb, img)
+            # cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
+            # cv2.destroyAllWindows() 
+            output_path_with_png = rf"{base_output}\{output_path}\comp_images\ground_truth\{image_id}.png"
+            cv2.imwrite(output_path_with_png, img)
 
 
 
@@ -174,8 +264,8 @@ def generate_ground_truth(results_base,output_path, images):
 
     return 0
 if __name__ == "__main__":
-    output_path = "03ablation"
-    pred_arr = [
+    output_path_ablation = "03ablation"
+    pred_arr_ablation = [
         ("red", 2),
         ("green", 3),
         ("blue", 2),
@@ -183,6 +273,34 @@ if __name__ == "__main__":
         ("ndvi", 0)
     ]
 
+    output_path_abb_obb = "01abb_vs_obb"
+    pred_arr_abb_obb = [
+        #("aab_old", 1)#,
+        ("aab", 0)#,
+        #("obb", 1)
+    ]
+
+    output_path_perm_exp = "02perm_exp"
+    pred_arr_perm_exp = [
+        ("rgbir", 2),
+        ("rgb", 2),
+        ("irgb", 3),
+        ("rirb", 2),
+        ("rgir", 3),
+        ("gbndvi", 2),
+        ("rgbndvi", 2)
+    ]
+
+    output_path = output_path_abb_obb
+    pred_arr = pred_arr_abb_obb
+
+    output_path = output_path_perm_exp
+    pred_arr = pred_arr_perm_exp
+
+    output_path = output_path_ablation
+    pred_arr = pred_arr_ablation
+    aab = False
+    perm_exp = False
     images = [
         ("car", 523),
         ("truck", 212),
@@ -196,11 +314,14 @@ if __name__ == "__main__":
     ]
     
     results_base = Path(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\03ablation\comp_images")
-    generate_ground_truth(results_base, output_path,images)
+    #generate_ground_truth(results_base, output_path,images, aab, perm_exp)
 
     for pred_name, fold_num in pred_arr:
         # Dynamischer JSON-Pfad
-        json_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\new_val_detect\{pred_name}\fold{fold_num}\val_at_test\predictions.json"
+        if perm_exp:
+            json_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\new_val_detect\{pred_name}\fold{fold_num}\real_test\predictions.json"
+        else:
+            json_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\new_val_detect\{pred_name}\fold{fold_num}\val_at_test\predictions.json"
 
         for _, image_id in images:
             

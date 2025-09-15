@@ -830,6 +830,7 @@ def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_
     # Zeichne die achsenparallele Bounding Box
     bbox_pt1 = (min_x, min_y)
     bbox_pt2 = (max_x, max_y)
+    color = (0, 0, 0)
     cv2.rectangle(image, bbox_pt1, bbox_pt2, color, thickness)
 
     label = None
