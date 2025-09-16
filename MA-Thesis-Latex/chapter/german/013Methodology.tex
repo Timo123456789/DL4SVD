@@ -86,12 +86,12 @@ Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was au
 
 \subsection{Dataset for Objectdetection in Aerial Images (DOTA) 1.5}
 \label{subsec:DOTA}
+Das \Acrfull{DOTA} eignet sich aufgrund seiner Vielfalt an Klassen und seiner domänenspezifischen Ausrichtung besonders gut als Grundlage für das Pretraining in den Permutationsexperimenten. Der Datensatz enthält eine große Anzahl annotierter Objekte aus verschiedenen Kategorien, die in hochauflösenden Satellitenbildern enthalten sind. Die Bildauflösungen im \acrshort{DOTA}-Datensatz variieren stark und reichen von 800~$\times$~800 bis hin zu 20\,000~$\times$~20\,000 Pixeln. Dabei umfasst der Datensatz sowohl \acrshort{RGB}-Bilder als auch Graustufenbilder, die den panchromatischen Kanal der GF2- und JL1-Satelliten darstellen. Die Bilder stammen aus verschiedenen Quellen, unter anderem von Google Earth sowie weiteren kommerziellen und institutionellen Anbietern.
 
-Das \Acrfull{DOTA} eignet sich aufgrund seiner Vielfalt an Klassen und seiner domänenspezifischen Ausrichtung besonders gut als Grundlage für das Pretraining in den Permutationsexperimenten. Er enthält eine große Anzahl annotierter Objekte aus verschiedenen Kategorien, die in hochauflösenden Satellitenbildern enthalten sind.
+Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-Datensatzes berücksichtigt. Besonders relevant für die anschließenden Experimente sind die Klassen \textit{Large Vehicle}, \textit{Small Vehicle}, \textit{Plane} und \textit{Ship}, da sie eine hohe Bedeutung für die Objekterkennung im urbanen und infrastrukturellen Kontext besitzen.
 
-Die Bildauflösungen im \acrshort{DOTA}-Datensatz variieren stark und reichen von 800~$\times$~800 bis hin zu 20\,000~$\times$~20\,000 Pixeln. Die Datensätze umfassen sowohl \acrshort{RGB}-Bilder als auch Graustufenbilder, die den panchromatischen Kanal der GF2- und JL1-Satelliten darstellen. Die Bilder stammen aus verschiedenen Quellen, unter anderem von Google Earth und weiteren kommerziellen oder institutionellen Anbietern.
+Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgeführt, wobei eine \textit{Patience} von 150 verwendet wurde. Alle weiteren Hyperparameter wurden analog zu den in Tabelle~\ref{tab:hyperparameters} dargestellten Einstellungen gewählt. Die erzielten Ergebnisse zeigen einen mittleren \acrshort{mAP} zwischen 50 und 95 von ca. 0,42, was angesichts der großen Anzahl an Bildern und Klassen als zufriedenstellender Wert zu bewerten ist. Es ist kein Overfitting erkennbar, und die Precision-Werte sind insgesamt gut. Die Trainingsverläufe sind in Abbildung~\ref{fig:DOTA_train_values} dargestellt.
 
-Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-Datensatzes berücksichtigt. Von besonderem Interesse für die anschließenden Experimente sind jedoch die Klassen \textit{Large Vehicle}, \textit{Small Vehicle}, \textit{Plane} und \textit{Ship}, da sie eine hohe Relevanz für die Objekterkennung im urbanen bzw. infrastrukturellen Kontext besitzen.
 
 \todo{Hinweis: Für eine bessere Anschaulichkeit sollen beispielhafte Bilder für jede Klasse aus der Originalpublikation übernommen und entsprechend mit Quellenangabe referenziert werden.}
 
@@ -99,6 +99,7 @@ Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-
 
 \section{YOLOv9}
 \todo{überarbeiten ist noch proposal stand; mehr auf warum und yolov9 eigenheiten eingehen, nicht basis erklären sondern das was an yolov9 geändert wurde}
+\todo{warum kann yolov8 obb? was wurde dort eingefügt?}
 Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der "\Acrfull{YOLO}" Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde \cite{yolo_v9u_github}, ermöglicht eine schnelle und präzise Objekterkennung. \acrshort{YOLO} basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
 
 Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird \acrshort{YOLO} verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie \acrshort{NIR} oder \acrshort{IR} integriert werden, um einen Vergleich zu dem reinen 3 Kanal \acrshort{RGB} Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
@@ -107,6 +108,7 @@ Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit
 
 \subsection{YOLOv9u by Wong Kin Yiu}
 \label{subsec:yolov9u}
+\todo{welceh änderungen gab es an yolo im vergleicih zur original arhcitektur}
 
 Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der \acrshort{YOLO}-Architektur durch den Einsatz von \acrshort{PGI} und \acrshort{GELAN} dar. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren \acrshort{YOLO}-Versionen, sowie der originalen \acrshort{YOLO}v9-Version, und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks. Diese Version wird genutzt, da sie \acrlong{obb} unterstützt.
 
