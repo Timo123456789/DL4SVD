@@ -1,33 +1,13 @@
 %!TEX root = ../thesis.tex
 \chapter{Results}
 \label{ch:results}
-Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunächst den Vergleich von \textit{abb}- und \textit{obb}-Formaten, anschließend die Permutationsexperimente zur Überprüfung der Robustheit und abschließend die Ablationsstudie zur Bewertung einzelner Komponenten. \todo{Bewertung einzelner Komponenten eigenltich in Diskussion? oder doch hier am Ende? findet hier am Ende noch nciht statt}
+Das Kapitel orientiert sich an Abbildung~\ref{fig:Flowchart} und behandelt zunächst den Vergleich von \textit{abb}- und \textit{obb}-Formaten, anschließend die Permutationsexperimente zur Überprüfung der Robustheit und abschließend die Ablationsstudie zur Bewertung einzelner Komponenten. 
 
-\todo{Farbzuordnung der Klassen erklären und anschneiden}
+In den Bildcollagen (vgl. Abb. \ref{fig:aab_obb_example_pics}, \ref{fig:perm_exp_example_pics} und \ref{fig:ablation_example_pics}) wird das in Tab. \ref{tab:class_colors} definierte Farbschema verwendet, um die dargestellten Modellvorhersagen klar unterscheidbar zu machen und eine eindeutige Zuordnung zu den jeweiligen Klassen zu gewährleisten.
+% \begin{itemize}
+%     \item Bei den Bildcollagen  (s. Abb.  \ref{fig:aab_obb_example_pics}, \ref{fig:perm_exp_example_pics} und \ref{fig:ablation_example_pics}) wird das in Tab. \ref{tab:class_colors} angegebene Farbschema genutzt, damti die in den Figures abgebildeten Predictions unterscheidbar und eindeutig einer Klasse zuordbar sind.
+% \end{itemize}
 
-
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{cc}
-\hline
-\textbf{Class} & \textbf{Color} \\
-\hline
-\acrshort{GT} & \tikz\fill[GroundTruthColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Car        & \tikz\fill[CarColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Truck      & \tikz\fill[TruckColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Ship       & \tikz\fill[ShipColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Tractor    & \tikz\fill[TractorColor] (0,0) rectangle (0.5cm,0.3cm); \\
-CampingCar & \tikz\fill[CampingCarColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Van        & \tikz\fill[VanColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Vehicle    & \tikz\fill[VehicleColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Pick-up    & \tikz\fill[PickUpColor] (0,0) rectangle (0.5cm,0.3cm); \\
-Plane      & \tikz\fill[PlaneColor] (0,0) rectangle (0.5cm,0.3cm); \\
-\hline
-\end{tabular}
-\caption{Classes with corresponding colors, including \acrshort{GT}}
-\label{tab:class_colors}
-\end{table}
 
 % \begin{table}[h!]
 % \centering
@@ -57,7 +37,7 @@ Plane      & \tikz\fill[PlaneColor] (0,0) rectangle (0.5cm,0.3cm); \\
 %     \item mAP50-95 of all 5 Folds for every model, bzw. bei den bb formaten
 % \end{itemize}
 \section{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
-
+\todo{Abschnitt machen wo Red Dots und "aab in obb"}
 \todo{Bilder in Originalgröße in Appendix packen}
 \todo{erwähnen das obb abb auf RGB Bildern trainiert wurde (oder?)}
 \begin{figure}[h]
@@ -100,9 +80,9 @@ Plane      & \tikz\fill[PlaneColor] (0,0) rectangle (0.5cm,0.3cm); \\
 \todo{nicht nur erläutern was man sieht sondern auch was man daraus folgert (analyse) im Bildunterschrift}
 
 
-In Abbildung \ref{fig:comparison_bb_format} wird ein Vergleich zwischen \acrshort{obb} und \acrshort{abb} für verschiedene Objektklassen dargestellt. Besonders deutlich wird dieser Unterschied beim LKW-Beispiel: In Abbildung \ref{fig:abb_truck} nimmt die \acrshort{abb} mit ca. 1378 px eine deutlich größere Fläche ein als die \acrshort{obb} in Abbildung \ref{fig:obb_truck} mit ca. 967 px. Beim Vergleich stark rotierten Objekten, wie etwa bei den Schiffen in Abbildung \ref{fig:abb_ship} und \ref{fig:obb_ship}, zeigt sich, dass die \acrshort{obb} das Objekt selbst deutlich präziser umschließt und weniger umliegendes Areal einbezieht. Ein weiterer Vorteil der \acrshort{obb} ist das Fehlen von Überlappungen zwischen den Boxen. Für weitere Beispiele s. Abb. \ref{fig:aab_obb_example_pics}.
+In Abbildung \ref{fig:comparison_bb_format} wird ein Vergleich zwischen \acrshort{obb} und \acrshort{abb} für verschiedene Objektklassen dargestellt. Besonders deutlich wird dieser Unterschied beim LKW-Beispiel: In Abbildung \ref{fig:abb_truck} nimmt die \acrshort{abb} mit ca. 1378 px eine deutlich größere Fläche ein als die \acrshort{obb} in Abbildung \ref{fig:obb_truck} mit ca. 967 px. Beim Vergleich stark rotierten Objekten, wie etwa bei den Schiffen in Abbildung \ref{fig:abb_ship} und \ref{fig:obb_ship}, zeigt sich, dass die \acrshort{obb} das Objekt selbst deutlich präziser umschließt und weniger umliegendes Areal einbezieht. Ein weiterer Vorteil der \acrshort{obb} ist das Fehlen von Überlappungen zwischen den Boxen. Für weitere Beispiele s. Abb. \ref{fig:aab_obb_example_pics}. Die Zeile "abb in obb" beschreibt, dass das \acrshort{obb}-Modell (\acrshort{YOLO}v9u) mit \acrshort{abb}-Bounding Boxen trainiert wurde. Dies bedeutet, dass die im \acrshort{VEDAI}-Datensatz vorhandenen \acrshortpl{obb} in das für \acrshort{YOLO}v9 vorgesehene Bounding Box Format \todo{Ref Beschreibung einfügen} als \acrshort{abb} (also mit 8 Koordinaten, die eine achsenparallele Bounding Box aufspannen) umgewandelt wurden. 
 
-Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) verdeutlicht, dass \acrshort{obb} im Mittel kompakter ist (Median \acrshort{abb}: ca. 1000 px, Median \acrshort{obb}: >700 px). Die \acrshort{abb}-Flächen entsprechen exakt den "abb in obb", da die Bounding Boxes identisch sind; der einzige Unterschied liegt im trainierten Modell. Die Bounding Boxen nehmen  als \acrshort{obb} (ca. 700 px pro Box) etwa 0,066\% der Gesamtfläche des Bildes ein, als \acrshort{abb} (ca. 1000 px pro Box) etwa 0,095\%. Damit liegen \acrshort{obb} knapp unterhalb der Untergrenze für sehr kleine Objekte nach \citeauthor{Chen2017} \cite{Chen2017} (s. Kap. \ref{ch:state_of_research}) und gelten als "very small objects", während \acrshort{abb} oberhalb der Untergrenze für kleine Objekte liegt und damit als "small object" gilt.
+Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) verdeutlicht, dass \acrshort{obb} im Mittel kompakter ist (Median \acrshort{abb}: ca. 1000 px, Median \acrshort{obb}: >700 px). Die \acrshort{abb}-Flächen entsprechen nahezu exakt den "abb in obb", da die Bounding Boxes fast identisch sind; der einzige Unterschied liegt im trainierten Modell und den Berechnungen der Ecken der \acrshort{abb}. Die Bounding Boxen nehmen  als \acrshort{obb} (ca. 700 px pro Box) etwa 0,066\% der Gesamtfläche des Bildes ein, als \acrshort{abb} (ca. 1000 px pro Box) etwa 0,095\%. Damit liegen \acrshort{obb} knapp unterhalb der Untergrenze für sehr kleine Objekte nach \citeauthor{Chen2017} \cite{Chen2017} (s. Kap. \ref{ch:state_of_research}) und gelten als "very small objects", während \acrshort{abb} oberhalb der Untergrenze für kleine Objekte liegt und damit als "small object" gilt.
 
 
 % \begin{itemize}
@@ -128,7 +108,7 @@ Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) v
     \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. (Own representation)}
     \label{fig:obb_abb_map50-95:val_on_val}
 \end{figure}
-Die Analyse der \acrshort{mAP}50--95 des besten Validierungsmodells auf dem Validierungsdatensatz (Abbildung \ref{fig:obb_abb_map50-95:val_on_val}) zeigt, dass das \acrshort{obb}-Modell in allen Fällen eine bessere Leistung erzielt als das \acrshort{abb}-Modell. Interessanterweise erzielt \acrshort{abb} auf dem \acrshort{obb}-Modell eine höhere Performance als die angepassten \acrshort{obb}-Boxen innerhalb desselben Modells (yolov9u). Dasselbe Phänomen lässt sich auch auf dem Testdatensatz beobachten (Abbildung \ref{fig:obb_abb_map50-95:val_on_test}), sodass \acrshort{abb} in Verbindung mit dem \acrshort{obb}-Modell bessere Ergebnisse liefert. Auffällig ist, dass bei den \acrshort{abb}-basierten Modellen (sowohl \acrshort{abb} als auch "abb in obb") stets Fold 1 den besten Wert beim Validation Dataset auf dem Validation Dataset erreicht hat, während beim \acrshort{obb}-Modell Fold 0 dort die besten Ergebnisse lieferte (s. Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val}). Die Ergebnisse der jeweiligen Folds mit dem höchsten \acrshort{mAP}50-95 Wert aus Abb. \ref{fig:obb_abb_map50-95:val_on_val} sind durch den roten Punkt in Abbildung \ref{fig:obb_abb_map50-95:val_on_test} gekennzeichnet. Auffällig ist, dass die meisten roten Punkte im Bereich des Medians der Modelle liegen und lediglich das \acrshort{RGIR}-Modell eine Übereinstimmung zwischen dem besten Fold im Testdatensatz und dem besten Fold im Validierungsdatensatz aufweist. \todo{nächster Satz ist eigentlich analyse (auskommentiert)}
+Die Analyse der \acrshort{mAP}50--95 des besten Validierungsmodells auf dem Validierungsdatensatz (Abbildung \ref{fig:obb_abb_map50-95:val_on_val}) zeigt, dass das \acrshort{obb}-Modell in allen Fällen eine bessere Leistung erzielt als das \acrshort{abb}-Modell. Interessanterweise erzielen \acrshortpl{abb} auf dem \acrshort{obb}-Modell eine höhere Performance als die angepassten \acrshort{obb}-Boxen innerhalb desselben Modells (yolov9u). Dasselbe Phänomen lässt sich auch auf dem Testdatensatz beobachten (Abbildung \ref{fig:obb_abb_map50-95:val_on_test}), sodass \acrshort{abb} in Verbindung mit dem \acrshort{obb}-Modell bessere Ergebnisse liefert. Auffällig ist, dass bei den \acrshort{abb}-basierten Modellen (sowohl \acrshort{abb} als auch "abb in obb") stets Fold 1 den besten Wert beim Validation Dataset auf dem Validation Dataset erreicht hat, während beim \acrshort{obb}-Modell Fold 0 dort die besten Ergebnisse lieferte (s. Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val}). Die Ergebnisse der jeweiligen Folds mit dem höchsten \acrshort{mAP}50-95 Wert aus Abb. \ref{fig:obb_abb_map50-95:val_on_val} sind durch den roten Punkt in Abbildung \ref{fig:obb_abb_map50-95:val_on_test} gekennzeichnet. Also hat laut Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val} der Fold 1 den höchsten \acrshort{mAP} Wert im \acrshort{abb} Modell. Auf dem Testfold hat dieser Fold 1 jedoch lediglich das untere Quantil erreicht, wie in Abb. \ref{fig:obb_abb_map50-95:val_on_test} am roten Punkt zu sehen. erzielt Auffällig ist, dass die meisten roten Punkte im Bereich des Medians der Modelle liegen und lediglich das \acrshort{RGIR}-Modell eine Übereinstimmung zwischen dem besten Fold im Testdatensatz und dem besten Fold im Validierungsdatensatz aufweist. \todo{nächster Satz ist eigentlich analyse (auskommentiert)}
 % Die Konsistenz über alle fünf Folds der Kreuzvalidierung ist gut, was auf eine robuste Trainierbarkeit der Modelle hinweist. 
 
 \begin{table}[h]
@@ -270,14 +250,10 @@ RGBNDVI  & 4 & 2 \\ \hline
 
 
 
-% \todo{wirklich clearpage nutzen?}
-% %\clearpage
 
 \FloatBarrier
 \subsection{Comparison with Confusion Matrices}
 \label{subsec:permexp_comp_confusion_matric}
-\todo{erklären warum die letzte spalte nie beschrieben wird?}
-\todo{irgendow kurz erklären wie eine differenzmatrix erzeugt wird? }
 
 
 \begin{figure}[htbp]
@@ -289,7 +265,33 @@ RGBNDVI  & 4 & 2 \\ \hline
 
 Die in Abbildung~\ref{fig:perm_exp_confM_rgbir_f2} dargestellte Confusion Matrix für das RGBIR-Modell (Fold~2) zeigt eine sehr starke Leistung. Insbesondere bei der Klasse \textit{plane} erreicht das Modell eine perfekte Erkennungsrate von 100~\%. Auch die Klassen \textit{car}, \textit{ship}, \textit{tractor} weisen eine hervorragende Performance von über 80~\% auf. Gute Ergebnisse im Bereich von 60–80~\% werden für die Klassen \textit{truck}, \textit{camping car}, \textit{van} und \textit{pick up} erzielt. Die generische Klasse \textit{vehicle} zeigt mit über 52~\% eine akzeptable Erkennungsrate. Problematisch ist hingegen, dass die Klasse \textit{Vehicle} häufig als \textit{Background} fehlklassifiziert wird (über 40~\%). Zusätzlich tritt eine erhöhte Fehlklassifikationsrate bei \textit{camping car} (28~\%) und \textit{truck} (16~\%) auf, während die restlichen Klassen zwischen 8–12~\% liegen. Aufgrund dieser starken Gesamtleistung dient das RGBIR-Modell (Fold~2) als Basis für die Differenzmatrizen. Ausschlaggebend ist auch, dass in diesem Permutationsdurchlauf alle verfügbaren Bänder unverändert in Rohform enthalten sind.
 
+Die Abb. \ref{fig:wrong_labels} zeigt, dass die Qualität der Labelannotation teilweise unzureichend ist. So enthält beispielsweise Bild 34, das eine typische Vorstadtumgebung darstellt, keine annotierten Objekte, obwohl Fahrzeuge eindeutig sichtbar sind. Das trainierte Modell erkennt diese jedoch mit hoher Konfidenz. Infolgedessen wird die Trennschärfe zwischen \acrshort{GT}-Hintergrund und Objekten beeinträchtigt, was sich insbesondere in der letzten Spalte der Confusion Matrix widerspiegelt.
+
+Zur quantitativen Analyse der Unterschiede zwischen den Vorhersagen verschiedener Modelle werden Differenzmatrizen erzeugt. Dabei werden die Confusion-Matrizen zunächst zeilenweise normalisiert und anschließend elementweise voneinander subtrahiert. Geringfügige Abweichungen werden dabei maskiert, um diese nicht überzubewerten. Aufgrund der teilweise minderwertigen Labeldarstellung, deren Ausmaß nicht quantifiziert werden kann, werden die Unterschiede in der letzten Spalte (Background/Object-Unterscheidung) in der folgenden Analyse nur eingeschränkt berücksichtigt.
+
+
 Zur Interpretation der Differenzmatrizen gilt: Rot markiert eine bessere Performance des RGBIR (F2) Modells, Blau eine bessere Leistung des Vergleichsmodells. Je stärker die Farbintensität, desto größer der Unterschied. Die Unterschiede werden in vier Kategorien eingeteilt: gering (0–5~\%), moderat (5–10~\%), hoch (10–20~\%) und sehr hoch (>20~\%) (Tabelle~\ref{tab:diff_cat}). Die Vergleichsreihenfolge startet mit dem schwächsten Modell und arbeitet sich bis zum besten Modell gemäß den Ergebnissen aus Abbildung~\ref{fig:perm_exp_map50-95:val_on_test} vor.
+
+
+\begin{figure}[h] 
+    \centering
+    % Erste Subfigur
+    \begin{subfigure}[b]{0.45\textwidth} % [b] für bottom alignment, 0.48\textwidth damit noch Platz ist
+        \includegraphics[width=\textwidth]{images/015Results/wrong_labels/comp_images/00000034_co.png} % Bildpfad zum ersten Bild
+        \caption{\Acrlong{GT} } % Unterschrift für das erste Bild
+        \label{fig:cm_trgbir} % Label für Referenzierung von Bild 1
+    \end{subfigure}
+    \hfill % Fügt horizontalen Platz zwischen den Subfiguren ein
+    % Zweite Subfigur
+    \begin{subfigure}[b]{0.45\textwidth} % 0.48\textwidth für das zweite Bild
+        \includegraphics[width=\textwidth]{images/015Results/wrong_labels/comp_images/rgbir/34.png} % Bildpfad zum zweiten Bild
+        \caption{Prediction} % Unterschrift für das zweite Bild
+        \label{fig:cm_irgb} % Label für Referenzierung von Bild 2
+    \end{subfigure}
+    \caption{Comparison of image 00000034\_co.png shows a discrepancy between ground truth and model prediction: vehicles are recognisable in the GT but not annotated, while the model (RGBIR, F0, (Validation on Validation)) detects and classifies them correctly. This calls into question the validity of GT-based metrics for distinguishing between background and object.} % Gemeinsame Unterschrift für beide Bilder
+    \label{fig:wrong_labels} % Label für die gesamte Figure-Umgebung
+\end{figure}
+
 
 \begin{table}[h]
 \centering
@@ -799,5 +801,14 @@ ndvi  & 2 & 0 (0.4467) \\
 %     \caption{Comparison of Confusion Matrices between r-g-b-ir und ir-g-b for Fold 4} % Gemeinsame Unterschrift für beide Bilder
 %     \label{fig:combined_maps} % Label für die gesamte Figure-Umgebung
 % \end{figure}
+% \section{Further Findings}
+% \label{sec:Further_findings}
 
-\todo{minderwertige labelerstellung erwähnen}
+% Die Abb. \ref{fig:wrong_labels} zeigt, dass die Qualität der Labelannotation teilweise unzureichend ist. So enthält beispielsweise Bild 34, das eine typische Vorstadtumgebung darstellt, keine annotierten Objekte, obwohl Fahrzeuge eindeutig sichtbar sind. Das trainierte Modell erkennt diese jedoch mit hoher Konfidenz. Infolgedessen wird die Trennschärfe zwischen \acrshort{GT}-Hintergrund und Objekten reduziert, auch wenn sich dieser Effekt nur selten in den Confusion- oder Differenzmatrizen widerspiegelt.
+
+% % \begin{itemize}
+% %     \item teilweise minderwertige Labeldarstellung auffällig
+% %     \item Bspw. Bild 34 zeigt eine klassische Vorstadt, ohne irgendwelche gelabelten Objekte, obwohl eindeutig Fahrzeuge sichtbar sind auf dem Bild. Der trainierte Algorithmus erkennt auch mit hoher Confidence Autos und andere Fahrzeuge.
+% %     \item Sorgt dafür das Unterschied von (\acrshort{GT}) Background zu Objekt schlecht eingeschätzt werden können. treten jedoch ohnehin selten in den Confusion Matrizen oder Differenzmatriezn auf.
+% % \end{itemize}
+

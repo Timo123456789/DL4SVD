@@ -90,7 +90,7 @@ Das \Acrfull{DOTA} eignet sich aufgrund seiner Vielfalt an Klassen und seiner do
 
 Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-Datensatzes berücksichtigt. Besonders relevant für die anschließenden Experimente sind die Klassen \textit{Large Vehicle}, \textit{Small Vehicle}, \textit{Plane} und \textit{Ship}, da sie eine hohe Bedeutung für die Objekterkennung im urbanen und infrastrukturellen Kontext besitzen.
 
-Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgeführt, wobei eine \textit{Patience} von 150 verwendet wurde. Alle weiteren Hyperparameter wurden analog zu den in Tabelle~\ref{tab:hyperparameters} dargestellten Einstellungen gewählt. Die erzielten Ergebnisse zeigen einen mittleren \acrshort{mAP} zwischen 50 und 95 von ca. 0,42, was angesichts der großen Anzahl an Bildern und Klassen als zufriedenstellender Wert zu bewerten ist. Es ist kein Overfitting erkennbar, und die Precision-Werte sind insgesamt gut. Die Trainingsverläufe sind in Abbildung~\ref{fig:DOTA_train_values} dargestellt.
+Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgeführt, wobei eine \textit{Patience} von 150 verwendet wurde. Alle weiteren Hyperparameter wurden analog zu den in Tabelle~\ref{tab:hyperparameters} dargestellten Einstellungen gewählt. Die erzielten Ergebnisse zeigen einen mittleren \acrshort{mAP}50-95 von ca. 0,42, was angesichts der großen Anzahl an Bildern und Klassen als zufriedenstellender Wert zu bewerten ist. Es ist kein Overfitting erkennbar, und die Precision-Werte sind insgesamt gut. Die Metriken des Trainingsverlauf sind in Abbildung~\ref{fig:DOTA_train_values} dargestellt.
 
 
 \todo{Hinweis: Für eine bessere Anschaulichkeit sollen beispielhafte Bilder für jede Klasse aus der Originalpublikation übernommen und entsprechend mit Quellenangabe referenziert werden.}
@@ -98,25 +98,55 @@ Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgefü
 
 
 \section{YOLOv9}
+\label{sec:yolov9}
 \todo{überarbeiten ist noch proposal stand; mehr auf warum und yolov9 eigenheiten eingehen, nicht basis erklären sondern das was an yolov9 geändert wurde}
 \todo{warum kann yolov8 obb? was wurde dort eingefügt?}
 Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der "\Acrfull{YOLO}" Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde \cite{yolo_v9u_github}, ermöglicht eine schnelle und präzise Objekterkennung. \acrshort{YOLO} basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
 
-Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird \acrshort{YOLO} verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. Dabei könnten zusätzliche multispektrale Kanäle wie \acrshort{NIR} oder \acrshort{IR} integriert werden, um einen Vergleich zu dem reinen 3 Kanal \acrshort{RGB} Training zu ermöglichen. Die Vergleichbarkeit kann gewährleistet werden, wenn die gleichen Trainings- und Testdaten verwendet werden, bei denen der einzige Unterschied das weitere Band ist.
+Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird \acrshort{YOLO} in der Version 9 verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. 
 
-\todo{Unterschiedliches Labelformat beider Varianten erklären? und bei Implementierung auf Abschnitt verweisen?}
+Die Varianten \acrshort{YOLO}v9u und \acrshort{YOLO}v9e unterscheiden sich primär hinsichtlich des verwendeten Labelformats. \acrshort{YOLO}v9e verwendet ein normiertes Koordinatensystem:
+\begin{equation}
+x_\text{norm} = \frac{x_\text{pixel}}{w_\text{image}},\;\;
+y_\text{norm} = \frac{y_\text{pixel}}{h_\text{image}},\;\;
+w_\text{norm} = \frac{w_\text{box}}{w_\text{image}},\;\;
+h_\text{norm} = \frac{h_\text{box}}{h_\text{image}}
+\end{equation}
+
+\acrshort{YOLO}v9u hingegen verwendet ein Polygonformat:
+\begin{equation}
+(\text{class\_index},\ x_1, y_1, x_2, y_2, x_3, y_3, x_4, y_4).
+\end{equation}
+
+% Dieses unterschiedliche Labelformat reflektiert die jeweiligen Stärken der Modelle: \texttt{YOLOv9e} ist auf axis-aligned Bounding Boxes optimiert, während \texttt{YOLOv9u} die präzise Darstellung orientierter Objekte ermöglicht.
+
+
+% \begin{itemize}
+%     \item Beide Varianten \acrshort{YOLO}v9u und \acrshort{YOLO}v9e unterscheiden sich durch das genutzte Labelformat
+%     \item yolov9e: normalized_x = x_pixel / image_width normalized_y = y_pixel / image_height  normalized_width = box_width_pixel / image_width  normalized_height = box_height_pixel / image_height
+%     \item yolov9u: class_index x1 y1 x2 y2 x3 y3 x4 y4
+% \end{itemize}
+
+%\todo{Unterschiedliches Labelformat beider Varianten erklären? und bei Implementierung auf Abschnitt verweisen?}
 
 \subsection{YOLOv9u by Wong Kin Yiu}
 \label{subsec:yolov9u}
 \todo{welceh änderungen gab es an yolo im vergleicih zur original arhcitektur}
 
-Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der \acrshort{YOLO}-Architektur durch den Einsatz von \acrshort{PGI} und \acrshort{GELAN} dar. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren \acrshort{YOLO}-Versionen, sowie der originalen \acrshort{YOLO}v9-Version, und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks. Diese Version wird genutzt, da sie \acrlong{obb} unterstützt.
+Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine signifikante Weiterentwicklung der \acrshort{YOLO}-Architektur im Vergleich zu \acrshort{YOLO}v8 dar, insbesondere durch die Integration von \acrshort{PGI} und \acrshort{GELAN}. Der Einsatz von \acrshort{PGI} ermöglicht eine vereinfachte Integration neuer, leichtgewichtiger Netzwerkarchitekturen und adressiert die Einschränkung der Deep Supervision, die bisher nur bei sehr tiefen neuronalen Netzen effektiv genutzt werden konnte. Die Implementierung des von \citeauthor{wang2024_sapkota} entwickelten \acrshort{GELAN} erlaubt durch den Einsatz herkömmlicher Faltungen eine effizientere Nutzung der Modellparameter, was sowohl die Rechenleistung als auch die Genauigkeit positiv beeinflusst.  
+
+Über die klassische Objekterkennung hinaus unterstützt \texttt{YOLOv9u}, durch den Aufbau auf \acrshort{YOLO}v8, zusätzliche Aufgabenfelder wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Somit bietet das Modell eine erweiterte Funktionalität im Vergleich zu früheren \acrshort{YOLO}-Versionen sowie der ursprünglichen \acrshort{YOLO}v9 und ist besonders geeignet für komplexe Szenarien, in denen mehrere Aufgaben innerhalb eines Frameworks simultan bearbeitet werden müssen. Diese Version wird insbesondere aufgrund ihrer Unterstützung für \acrlong{obb} eingesetzt.
+
+
+% Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der \acrshort{YOLO}-Architektur im Vergleich zu \acrshort{YOLO}v8 durch den Einsatz von \acrshort{PGI} und \acrshort{GELAN} dar. Der Einsatz von \acrshort{PGI} ermöglicht die vereinfachte Anwenung neuer leichtgewichtiger Netzwerkarchitekturen und löst das Problem der Verwendung von Deep Supervision nur für extrem tiefe neuronale Netze. Das Nutzen von des von \citeauthor{wang2024_sapkota} entworfenen \acrshort{GELAN} kann durch die Verwendung der herkömmlichen Faltungen eine höhere Parameterauslastung erreichen. Dies bietet auc hVorteile für die Geschwindigkeit und Genauigkeit. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} durch die Basis von \acrshort{YOLO}v8 zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren \acrshort{YOLO}-Versionen, sowie der originalen \acrshort{YOLO}v9-Version, und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks. Diese Version wird genutzt, da sie \acrlong{obb} unterstützt.
 
 \subsection{YOLOv9e by Ultralytics}
 \label{subsec:yolov9e}
 
-Die \texttt{YOLOv9}-Modellreihe umfasst verschiedene Varianten, die sich hinsichtlich ihrer Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Die Bandbreite reicht dabei von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \Acrfullpl{GFLOP} bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}). 
-\todo{Quelle für Tabelle einfügen}
+Die ursprüngliche \texttt{YOLOv9}-Modellreihe umfasst mehrere Varianten, die sich in Bezug auf Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Alle Varianten integrieren die von \citeauthor{wang2024_sapkota} entwickelten \acrshort{PGI}- und \acrshort{GELAN}-Architekturen und unterstützen zudem die Verarbeitung von \acrshort{abb}. Die Bandbreite reicht von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \acrshortpl{GFLOP} bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}).  
+
+Aufgrund der höchsten erzielten Genauigkeit (\acrshort{mAP}$_{\text{val}}^{50\text{-}95} = 55,6$) sowie der höchsten Rechenkapazität wurde das \texttt{YOLOv9e}-Modell für alle Experimente mit axis-aligned Bounding Boxes verwendet. Die Wahl dieser Variante erfolgte mit dem Ziel, die maximale Detektionsleistung im Rahmen der Evaluierung sicherzustellen. Zudem wird diese Version genutzt, da sie die Verarbeitung von \acrlong{abb} unterstützt.
+
 \begin{table}[h]
 \centering
 \begin{tabular}{l|c|c|c|c|c} % keine äußeren vertikalen Linien
@@ -128,13 +158,13 @@ YOLOv9m & 640 & 51.4 & 68.1 & 20.1 & 76.8 \\
 YOLOv9c & 640 & 53.0 & 70.2 & 25.5 & 102.8 \\
 YOLOv9e & 640 & 55.6 & 72.8 & 58.1 & 192.5 \\
 \end{tabular}
-\caption{Comparison of YOLOv9 model variants in terms of accuracy and computational complexity at an input resolution of 640$\times$640 pixels.}
+\caption{Comparison of YOLOv9 model variants in terms of accuracy and computational complexity at an input resolution of 640$\times$640 pixels. \cite{ultralyics_yolov9,wang2024_sapkota}}
 \label{tab:yolov9-models}
 \end{table}
 
 
 
-Aufgrund der höchsten erzielten Genauigkeit (\acrshort{mAP}$_{\text{val}}^{50\text{-}95} = 55.6$) sowie der höchsten Rechenkapazität wurde das \texttt{YOLOv9e}-Modell für alle Experimente mit axis-aligned Bounding Boxes verwendet. Die Wahl dieses Modells erfolgte mit dem Ziel, die bestmögliche Detektionsleistung im Rahmen der Evaluierung zu gewährleisten. Diese Version wird genutzt, da sie \acrlong{abb} unterstützt.
+
 
 \section{Programming Environment}
 Die genutzte Programmiersprache ist Python. Die Scripte für den \acrshort{HPC} \acrshort{PALMA} wurden in Bash geschrieben.
@@ -187,7 +217,7 @@ Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundun
     \label{fig:example_coords_ooR}
 \end{figure}
 
-Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Folds nicht disjunkt waren, erhöhte sich das Risiko von Overfitting (s. Kap. \ref{subsec:overfitting}), sodass eigene Folds erstellt werden mussten, deren Erstellung im folgenden Kapitel beschrieben wird. \todo{satz überarbeitne, doppelung}
+Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Folds nicht disjunkt waren, erhöhte sich das Risiko von Overfitting (s. Kap. \ref{subsec:overfitting}), sodass eigene Folds erstellt werden mussten, deren Erstellung im folgenden Abschnitt beschrieben wird. \todo{satz überarbeitne, doppelung}
 
 
 

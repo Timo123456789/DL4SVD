@@ -45,6 +45,7 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
         base = r"Code\data\testfold_data"
         if pred_name == "rgbir" or pred_name == "rgbndvi":
             image_path = rf"{base}\{pred_name}\images\{image_id_path}.tiff"
+            image_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\Code\data\all_vedai_images\{image_id_path}_co.png"
         else:
             image_path = rf"{base}\{pred_name}\images\{image_id_path}.png"
         print(image_path)
@@ -56,12 +57,14 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
 
 
     image_id_raw = image_id
+    image_path = rf"MA-Thesis-Latex\images\015Results\{output_path}\comp_images\{image_id_path}_co.png"
     image_id = int(image_id)
     print(image_id)
 
     base_output = r"MA-Thesis-Latex/images/015Results"
     if pred_name == "rgbir" or pred_name == "rgbndvi":
         output_path_full = rf"{base_output}\{output_path}\comp_images\{pred_name}\{image_id}.png"
+        
     else:
         output_path_full = rf"{base_output}\{output_path}\comp_images\{pred_name}\{image_id}.png"
     
@@ -72,7 +75,7 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
     image = cv2.imread(str(image_path))
     if image is None:
         raise FileNotFoundError(f"Bild {image_path} konnte nicht geladen werden.")
-
+ 
     # Filtere nur Predictions für das gewünschte Bild und über Schwellwert
     preds_for_image = [
         p for p in predictions if p["image_id"] == image_id and p["score"] >= score_threshold
@@ -105,7 +108,7 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
 
         # Dünne Bounding Box einzeichnen
         print(points)
-        cv2.polylines(image, [points], isClosed=True, color=color, thickness=2)
+        cv2.polylines(image, [points], isClosed=True, color=color, thickness=6)
 
         # # Text vorbereiten
         # text = f"{label} {pred['score']:.2f}"
@@ -130,8 +133,8 @@ def draw_predictions(input_path, json_path, output_path, image_id, score_thresho
         text = f"{pred['score']:.2f}"
         x, y = points[0]
         font = cv2.FONT_HERSHEY_PLAIN
-        font_scale = 1
-        font_thickness = 1
+        font_scale = 3
+        font_thickness = 3
 
         # Textgröße bestimmen
         (w, h), _ = cv2.getTextSize(text, font, font_scale, font_thickness)
@@ -299,7 +302,12 @@ if __name__ == "__main__":
 
     output_path = output_path_ablation
     pred_arr = pred_arr_ablation
-    aab = False
+
+    output_path = "wrong_labels"
+    pred_arr = [
+        ("rgbir", 0)
+    ]
+    aab = True
     perm_exp = False
     images = [
         ("car", 523),
@@ -312,18 +320,22 @@ if __name__ == "__main__":
         ("vehicle", 427),
         ("camping car", 523)
     ]
+
+    images_wrong_labels = [
+        ("car", 34)
+    ]
     
     results_base = Path(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\03ablation\comp_images")
-    #generate_ground_truth(results_base, output_path,images, aab, perm_exp)
+    #generate_ground_truth(results_base, output_path,images_wrong_labels, aab, perm_exp)
 
     for pred_name, fold_num in pred_arr:
         # Dynamischer JSON-Pfad
         if perm_exp:
-            json_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\new_val_detect\{pred_name}\fold{fold_num}\real_test\predictions.json"
+            json_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\new_val_detect\{pred_name}\fold{fold_num}\val_at_test\predictions.json"
         else:
             json_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\new_val_detect\{pred_name}\fold{fold_num}\val_at_test\predictions.json"
 
-        for _, image_id in images:
+        for _, image_id in images_wrong_labels:
             
             input_path = [pred_name, fold_num]
             draw_predictions(

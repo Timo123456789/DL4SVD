@@ -7,13 +7,13 @@
 \todo{weniger Funktionsnamen}
 Damit die Trainingsdaten vom Deep-Learning-Modell YOLOv9 verarbeitet werden können, ist eine Vorverarbeitung notwendig, die deren Format und Struktur an die Anforderungen des Modells anpasst. Der genaue Ablauf dieser Vorverarbeitung wird im Folgenden beschrieben.
 \subsection{DOTA Dataset}
-Im Rahmen der Datenvorverarbeitung wurden ausschließlich die originalen Rohbilder des \acrshort{DOTA}-Datensatzes verwendet, ohne dass ein Zuschnitt oder eine anderweitige Modifikation der Bildinhalte vorgenommen wurde. Der Fokus der Verarbeitung lag auf der Umwandlung der vorhandenen Labeldaten in das \texttt{YOLOv9-OBB}-Format, welches polygonale Objektumrandungen in Form einer Punktsequenz \((x_1, y_1, x_2, y_2, \ldots)\) beschreibt (vgl. \todo{text\texttt{\textbackslash todo\{Ref zur Formatbeschreibung einfügen\}}}).
+Im Rahmen der Datenvorverarbeitung wurden ausschließlich die originalen Rohbilder des \acrshort{DOTA}-Datensatzes verwendet, ohne dass ein Zuschnitt oder eine anderweitige Modifikation der Bildinhalte vorgenommen wurde. Der Fokus der Verarbeitung lag auf der Umwandlung der vorhandenen Labeldaten in das \texttt{YOLOv9-OBB}-Format. (vgl. Kap. \ref{sec:yolov9}).
 
 Für jedes Bild stellt \acrshort{DOTA} eine separate Textdatei bereit, die alle zugehörigen Annotationen enthält. Zu Beginn wurde eine standardisierte Ordnerstruktur nach dem \acrshort{YOLO}-Schema erstellt, bestehend aus den Unterverzeichnissen \texttt{train/images}, \texttt{train/labels}, \texttt{val/images} und \texttt{val/labels}. Die Annotationsdateien wurden daraufhin zeilenweise eingelesen und verarbeitet.
 
 Jede Zeile, die ein einzelnes Objekt beschreibt, wurde zunächst an die jeweilige Bildgröße angepasst, wobei die absoluten Koordinaten der Objektrahmen in relative Werte normalisiert wurden. Da die Auflösung der Bilder im \acrshort{DOTA}-Datensatz stark variiert (zwischen \(800 \times 800\) und \(20{,}000 \times 20{,}000\) Pixeln), war eine dynamische Skalierung erforderlich. Die konvertierten Informationen wurden anschließend in das \texttt{YOLOv9}-Format überführt, wobei die Klassen-ID jeweils am Anfang der Zeile stand. Die so erzeugten Labeldateien wurden unter Beibehaltung des ursprünglichen Dateinamens gespeichert.
 
-Insgesamt wurden sämtliche 16 im \acrshort{DOTA}-Datensatz enthaltenen Objektklassen berücksichtigt und entsprechend konvertiert. Die Bilddaten selbst blieben unangetastet und wurden in ihrer Originalform auf den HPC Cluster \acrshort{PALMA} übertragen. Aufgrund der hohen Anzahl an verfügbaren Annotationen gestaltete sich der Konvertierungsprozess zeitintensiv.
+Insgesamt wurden sämtliche 16 im \acrshort{DOTA}-Datensatz enthaltenen Objektklassen berücksichtigt und entsprechend konvertiert. Die Bilddaten selbst blieben unangetastet und wurden in ihrer Originalform auf den HPC Cluster \acrshort{PALMA} übertragen. Aufgrund der hohen Anzahl an verfügbaren Annotationen gestaltete sich der Konvertierungsprozess als auch der Trainingsprozess zeitintensiv.
 
 % \begin{itemize}
 %     \item Bilder nicht zugeschnitten, Rohbilder verwendet, wie vom Dataset bereitgestellt
