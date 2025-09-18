@@ -90,20 +90,68 @@ Das \Acrfull{DOTA} eignet sich aufgrund seiner Vielfalt an Klassen und seiner do
 
 Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-Datensatzes berücksichtigt. Besonders relevant für die anschließenden Experimente sind die Klassen \textit{Large Vehicle}, \textit{Small Vehicle}, \textit{Plane} und \textit{Ship}, da sie eine hohe Bedeutung für die Objekterkennung im urbanen und infrastrukturellen Kontext besitzen.
 
-Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgeführt, wobei eine \textit{Patience} von 150 verwendet wurde. Alle weiteren Hyperparameter wurden analog zu den in Tabelle~\ref{tab:hyperparameters} dargestellten Einstellungen gewählt. Die erzielten Ergebnisse zeigen einen mittleren \acrshort{mAP}50-95 von ca. 0,42, was angesichts der großen Anzahl an Bildern und Klassen als zufriedenstellender Wert zu bewerten ist. Es ist kein Overfitting erkennbar, und die Precision-Werte sind insgesamt gut. Die Metriken des Trainingsverlauf sind in Abbildung~\ref{fig:DOTA_train_values} dargestellt.
+Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgeführt, wobei eine \textit{Patience} von 150 verwendet wurde. Alle weiteren Hyperparameter wurden analog zu den in Tabelle~\ref{tab:hyperparameters} dargestellten Einstellungen gewählt. Die erzielten Ergebnisse zeigen einen mittleren \acrshort{mAP}50-95 von ca. 0,42, was angesichts der großen Anzahl an Bildern und Klassen als zufriedenstellender Wert zu bewerten ist. Es ist kein Overfitting erkennbar, und die Precision-Werte sind insgesamt gut. Die Metriken des Trainingsverlauf sind in Abbildung~\ref{fig:DOTA_train_values} und Beispielklassen in Fig. \ref{fig:DOTA_exClasses} dargestellt.
 
 
-\todo{Hinweis: Für eine bessere Anschaulichkeit sollen beispielhafte Bilder für jede Klasse aus der Originalpublikation übernommen und entsprechend mit Quellenangabe referenziert werden.}
 
 
 
 \section{YOLOv9}
 \label{sec:yolov9}
-\todo{überarbeiten ist noch proposal stand; mehr auf warum und yolov9 eigenheiten eingehen, nicht basis erklären sondern das was an yolov9 geändert wurde}
+%\todo{überarbeiten ist noch proposal stand; mehr auf warum und yolov9 eigenheiten eingehen, nicht basis erklären sondern das was an yolov9 geändert wurde}
 \todo{warum kann yolov8 obb? was wurde dort eingefügt?}
-Um Objekte auf hochauflösenden Satellitenbildern zu detektieren, bietet sich der "\Acrfull{YOLO}" Algorithmus an. Dieser Algorithmus, der in der Version 9 im Jahr 2024 veröffentlicht wurde \cite{yolo_v9u_github}, ermöglicht eine schnelle und präzise Objekterkennung. \acrshort{YOLO} basiert auf einer einzigen neuronalen Netzwerkarchitektur, die das Bild in Raster unterteilt und für jedes Rasterfeld Vorhersagen über die Position und Klasse von Objekten trifft. 
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
 
-Die Hauptvorteile von \acrshort{YOLO} sind seine Geschwindigkeit und Genauigkeit, die es ermöglichen, große Datensätze effizient zu analysieren. Für diese Arbeit wird \acrshort{YOLO} in der Version 9 verwendet, um Fahrzeuge auf Luftbildern zu detektieren und zu klassifizieren. 
+\begin{figure}[ht]
+  \centering
+  
+  \begin{subfigure}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/013Methods/yolov1_arch.png}
+    \caption{v1}
+    \label{subfig_yolov1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/013Methods/yolov8_arch.png}
+    \caption{v8}
+    \label{subfig_yolov8}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/013Methods/yolov9_arch.png}
+    \caption{v9}
+    \label{subfig_yolov9}
+  \end{subfigure}
+  
+  \caption{Different YOLO Architectures}
+\end{figure}
+
+
+
+% \begin{itemize}
+%     \item Weiterentwicklung von YOLO zeigt sich in dem Unterschied zur Archtektur von YOLOv1 über v8 bis zu v9
+%     \item yolov1 kann durch die One Stage Methode eine große Anzahl von Parametern und Berechnungen vermeiden, da Sie durch die   \acrshort{FCL} in der zweiten Schicht erzeugt werden
+%     \item yolov8 basiert auf yolov5 und nimmt azhlreiche optimierungen hinzu. Die \acrfull{ELAN} Integration aus YOLOv7 wird um eine zusätzliche Residual Connection erweitert und der Decoder, basierend auf YOLOv6, bleibt identisch
+%     \item Yolov8 hat eine Verbesserung der Trainingsleistung von 30\% udn bietet verschiedene Möglichkeiten um nachgelagerte Aufgaben des Downstreamdetectors zu ermöglichen (wie segment anything, instance segmentation, pose estimation, multiple object tracking)
+%     \item yolov9 kann durch die \acrshort{PGI} Integartion das Problem vermeiden, dass wichtige Informationen bei der oberflächlichen Netzebene verloren gehen. PGI sorgen für eine robustere Leistung ,weil die Originalinformaitonen maximal tief beibehalten werden
+% \end{itemize}
+
+Die Entwicklung von \acrshort{YOLO} über die verschiedenen Versionen hinweg zeigt deutliche Fortschritte. Während \acrshort{YOLO}v1 (s. Fig. \ref{subfig_yolov1}) durch die One-Stage-Methode eine große Anzahl an Parametern und Rechenaufwand einsparen konnte, indem Vorhersagen durch die \acrshort{FCL} in der zweiten Schicht erzeugt wurden, baut \acrshort{YOLO}v8 (s. Fig. \ref{subfig_yolov1}) auf \acrshort{YOLO}v5 auf und integriert zahlreiche Optimierungen \cite{Wang2024_yolo_review}. Dazu gehört die \acrfull{ELAN}-Integration aus \acrshort{YOLO}v7, die um eine zusätzliche Residual Connection erweitert wurde, während der Decoder auf \acrshort{YOLO}v6 basiert und unverändert bleibt. Diese Version zeigt zudem eine Verbesserung der Trainingsleistung um etwa 30\% und ermöglicht verschiedene nachgelagerte Aufgaben wie Segmentierung, Instanzsegmentierung, Posenabschätzung und Multiple-Object-Tracking. \acrshort{YOLO}v9 (s. Fig. \ref{subfig_yolov9}) integriert schließlich \acrshort{PGI}, um zu verhindern, dass wichtige Informationen auf oberflächlicher Netzebene verloren gehen. \acrshort{PGI} sorgen für eine robustere Leistung, indem die Originalinformationen maximal tief beibehalten werden \cite{Wang2024_yolo_review}.
+
+
+Die zentralen Stärken von \acrshort{YOLO}v9 liegen in seiner hohen Verarbeitungsgeschwindigkeit sowie der präzisen Objekterkennung, wodurch eine effiziente Analyse großer Datensätze ermöglicht wird. 
+
 
 Die Varianten \acrshort{YOLO}v9u und \acrshort{YOLO}v9e unterscheiden sich primär hinsichtlich des verwendeten Labelformats. \acrshort{YOLO}v9e verwendet ein normiertes Koordinatensystem:
 \begin{equation}
@@ -117,6 +165,9 @@ h_\text{norm} = \frac{h_\text{box}}{h_\text{image}}
 \begin{equation}
 (\text{class\_index},\ x_1, y_1, x_2, y_2, x_3, y_3, x_4, y_4).
 \end{equation}
+%\todo{passt das so rein? überhaupt sinnvoll? verstehen und so...}
+% Die YOLOv9-Architektur nutzt einen tiefen, GELAN-basierten Backbone mit umfangreicher Feature-Fusion (\texttt{CBLinear}, \texttt{CBFuse}) und Downsampling-Blöcken (\texttt{ADown}), wodurch klassische achsenausgerichtete Bounding-Boxes über den \texttt{Detect}-Layer erzeugt werden. YOLOv9u hingegen verfolgt einen schlankeren Aufbau mit flacherem Backbone, reduzierter Tiefe der \texttt{RepNCSPELAN4}-Blöcke und minimaler Backbone-Fusion. Die Downsampling-Stufen erfolgen hier über einfache Convolutionen, und die Detektion zielt auf orientierte Bounding-Boxes (\texttt{OBB}) ab. Somit besteht ein klarer Trade-off zwischen Modellkomplexität und Effizienz sowie spezialisierter Detektionsfähigkeit.
+
 
 % Dieses unterschiedliche Labelformat reflektiert die jeweiligen Stärken der Modelle: \texttt{YOLOv9e} ist auf axis-aligned Bounding Boxes optimiert, während \texttt{YOLOv9u} die präzise Darstellung orientierter Objekte ermöglicht.
 
@@ -131,11 +182,10 @@ h_\text{norm} = \frac{h_\text{box}}{h_\text{image}}
 
 \subsection{YOLOv9u by Wong Kin Yiu}
 \label{subsec:yolov9u}
-\todo{welceh änderungen gab es an yolo im vergleicih zur original arhcitektur}
 
-Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine signifikante Weiterentwicklung der \acrshort{YOLO}-Architektur im Vergleich zu \acrshort{YOLO}v8 dar, insbesondere durch die Integration von \acrshort{PGI} und \acrshort{GELAN}. Der Einsatz von \acrshort{PGI} ermöglicht eine vereinfachte Integration neuer, leichtgewichtiger Netzwerkarchitekturen und adressiert die Einschränkung der Deep Supervision, die bisher nur bei sehr tiefen neuronalen Netzen effektiv genutzt werden konnte. Die Implementierung des von \citeauthor{wang2024_sapkota} entwickelten \acrshort{GELAN} erlaubt durch den Einsatz herkömmlicher Faltungen eine effizientere Nutzung der Modellparameter, was sowohl die Rechenleistung als auch die Genauigkeit positiv beeinflusst.  
+Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github}, um die ursprüngliche \acrshort{YOLO}v9 Version um diverse nachgelagerte Aufgaben zu erweitern. Hierzu zählen Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. In der vorliegenden Arbeit wird \acrshort{YOLO}v9u eingesetzt, da diese als Open-Source-Variante verfügbar ist und die zugrundeliegende Methodik durch das veröffentlichte Paper dokumentiert wurde \cite{wang2024_sapkota}. \acrshort{YOLO}v9e ist hingegen von Ultralytics nur als kommerzielle Variante verfügbar \cite{ultralyics_2023}.
 
-Über die klassische Objekterkennung hinaus unterstützt \texttt{YOLOv9u}, durch den Aufbau auf \acrshort{YOLO}v8, zusätzliche Aufgabenfelder wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Somit bietet das Modell eine erweiterte Funktionalität im Vergleich zu früheren \acrshort{YOLO}-Versionen sowie der ursprünglichen \acrshort{YOLO}v9 und ist besonders geeignet für komplexe Szenarien, in denen mehrere Aufgaben innerhalb eines Frameworks simultan bearbeitet werden müssen. Diese Version wird insbesondere aufgrund ihrer Unterstützung für \acrlong{obb} eingesetzt.
+ 
 
 
 % Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github} und stellt eine umfassende Weiterentwicklung der \acrshort{YOLO}-Architektur im Vergleich zu \acrshort{YOLO}v8 durch den Einsatz von \acrshort{PGI} und \acrshort{GELAN} dar. Der Einsatz von \acrshort{PGI} ermöglicht die vereinfachte Anwenung neuer leichtgewichtiger Netzwerkarchitekturen und löst das Problem der Verwendung von Deep Supervision nur für extrem tiefe neuronale Netze. Das Nutzen von des von \citeauthor{wang2024_sapkota} entworfenen \acrshort{GELAN} kann durch die Verwendung der herkömmlichen Faltungen eine höhere Parameterauslastung erreichen. Dies bietet auc hVorteile für die Geschwindigkeit und Genauigkeit. Neben der klassischen Objekterkennung unterstützt \texttt{YOLOv9u} durch die Basis von \acrshort{YOLO}v8 zusätzliche Aufgaben wie Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. Damit bietet das Modell eine erweiterte Funktionalität gegenüber früheren \acrshort{YOLO}-Versionen, sowie der originalen \acrshort{YOLO}v9-Version, und eignet sich insbesondere für komplexe Szenarien mit mehreren Aufgabenstellungen innerhalb eines Frameworks. Diese Version wird genutzt, da sie \acrlong{obb} unterstützt.
@@ -143,9 +193,18 @@ Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.
 \subsection{YOLOv9e by Ultralytics}
 \label{subsec:yolov9e}
 
-Die ursprüngliche \texttt{YOLOv9}-Modellreihe umfasst mehrere Varianten, die sich in Bezug auf Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Alle Varianten integrieren die von \citeauthor{wang2024_sapkota} entwickelten \acrshort{PGI}- und \acrshort{GELAN}-Architekturen und unterstützen zudem die Verarbeitung von \acrshort{abb}. Die Bandbreite reicht von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \acrshortpl{GFLOP} bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}).  
+Die \texttt{YOLOv9}-Modellreihe von Ultralytics umfasst mehrere Varianten, die sich in Bezug auf Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Alle Varianten integrieren die von \citeauthor{wang2024_sapkota} entwickelten \acrshort{PGI}- und \acrshort{GELAN}-Architekturen und unterstützen zudem die Verarbeitung von \acrshort{abb}. Die Bandbreite reicht von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \acrshortpl{GFLOP} bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}).  
 
 Aufgrund der höchsten erzielten Genauigkeit (\acrshort{mAP}$_{\text{val}}^{50\text{-}95} = 55,6$) sowie der höchsten Rechenkapazität wurde das \texttt{YOLOv9e}-Modell für alle Experimente mit axis-aligned Bounding Boxes verwendet. Die Wahl dieser Variante erfolgte mit dem Ziel, die maximale Detektionsleistung im Rahmen der Evaluierung sicherzustellen. Zudem wird diese Version genutzt, da sie die Verarbeitung von \acrlong{abb} unterstützt.
+
+% \subsection{Differences YOLOv9u and YOLOv9e}
+% \todo{wirklich nötig?}
+% Die YOLOv9-Architektur und ihre Variante YOLOv9u unterscheiden sich in mehreren wesentlichen Aspekten, die sowohl die Modellkomplexität als auch die Detektionsfähigkeiten betreffen. YOLOv9 verwendet einen tiefen, GELAN-basierten Backbone, der mehrere Feature-Fusionsblöcke (\texttt{CBLinear}, \texttt{CBFuse}) sowie Downsampling-Blöcke (\texttt{ADown}) integriert. Diese Struktur ermöglicht eine intensive Mischung von Merkmalen über unterschiedliche Auflösungsebenen hinweg und unterstützt dadurch die Erkennung von Objekten in verschiedenen Skalen. Der Head von YOLOv9 kombiniert Features auf mehreren Ebenen mittels Upsampling und Concat-Operationen und erzeugt klassische, achsenausgerichtete Bounding-Boxes über den finalen \texttt{Detect}-Layer.  
+
+% Im Gegensatz dazu verfolgt YOLOv9u einen kompakteren und effizienteren Aufbau. Der Backbone ist flacher und verzichtet weitgehend auf interne Feature-Fusionen im Vergleich zu YOLOv9. Downsampling erfolgt hier über einfache Convolutional-Blöcke mit Stride 2, und die Tiefe der \texttt{RepNCSPELAN4}-Blöcke ist reduziert. Im Head werden die Features ebenfalls mittels Upsampling und Concat kombiniert, jedoch ohne die zusätzlichen Downsampling-Blöcke des Originals. Ein entscheidender funktionaler Unterschied besteht darin, dass YOLOv9u orientierte Bounding-Boxes (\texttt{OBB}) generiert, während YOLOv9 klassische Bounding-Boxes liefert.  
+
+% Zusammenfassend lässt sich sagen, dass YOLOv9 eine komplexere und tiefere Architektur mit intensiver Feature-Fusion darstellt, die tendenziell eine höhere Genauigkeit bei klassischen Bounding-Boxes ermöglicht. YOLOv9u hingegen bietet eine schlankere, effizientere Struktur mit reduzierter Rechenlast und ist speziell für die Detektion orientierter Objekte optimiert. Die Wahl zwischen beiden Varianten hängt somit von den Anforderungen an Genauigkeit, Rechenaufwand und Art der zu detektierenden Objekte ab.
+
 
 \begin{table}[h]
 \centering
@@ -164,6 +223,14 @@ YOLOv9e & 640 & 55.6 & 72.8 & 58.1 & 192.5 \\
 
 
 
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
+%##########################################################################
 
 
 \section{Programming Environment}
@@ -173,7 +240,7 @@ Die genutzte Programmiersprache ist Python. Die Scripte für den \acrshort{HPC} 
 Es wurden diverse Python Packages zur Implementatierung genutzt, die im folgenden kurz beschrieben werden. 
 \subsubsection{Computer Vision 2}
 Ein Teil der "Open Source Computer Vision" Bibliothek ist \Acrfull{CV2} \cite{opencv_about}. Die aktuelle Version 4.12.0 wurde am 09.07.2025 veröffentlicht \cite{opencv_release}. \\
-Die Bibliothek bietet Algorithmen und Funktionen zur Bild- und Videobearbeitung an, die in dieser Arbeit hauptsächlich dazu genutzt werden, die verschiedenen Kanäle zu neuen Bildern zu kombinieren.
+Die Bibliothek bietet Algorithmen und Funktionen zur Bild- und Videobearbeitung an, die in dieser Arbeit hauptsächlich dazu genutzt werden, die verschiedenen Kanäle zu neuen Bildern zu kombinieren. Hierbei ist zu beachte, dass \acrshort{CV2} mit Blue, Green, Red als Farbkombination abspeichert, was zu Falschfarbdarstellungen einiger Abbildungen (wie Fig. \ref{fig:perm_exp_example_pics}) führen kann.
 \subsubsection{Numpy}
 Ein weiteres Open-Source Projekt ist NumPy, welches 2005 gegründet wurde, um numerische Operationen in Python zu implementieren \cite{numpy_about}. Die aktuelle Version ist 2.3.0 und wurde am 07.06.2025 veröffentlicht \cite{numpy_main_web}. \\
 Mithilfe dieser Bibliothek kann eine zufällige Verteilung der Bilddaten auf die Folds realisiert werden, indem die eingelesene Bildliste einer zufälligen Permutation unterzogen wird. Darüber hinaus stellt die Bibliothek Funktionen zur Verfügung, mit denen sowohl die Berechnung und Reskalierung des \acrshort{NDVI}-Kanals als auch die Transformation der Bounding-Box-Koordinaten in das für das \acrshort{YOLO}-Framework erforderliche Format durchgeführt werden können. Zusätzlich ermöglicht sie die Umrechnung axis-aligned Bounding Boxes in oriented Bounding Boxes sowie die Flächenberechnung beider Bounding-Box-Typen.
