@@ -1,12 +1,28 @@
 %!TEX root = ../thesis.tex
 \begin{abstract}
 \section*{Abstract}
+\todo{passt das so?}
 
-This document was compiled in final mode but can also be compiled in draft mode with an extra big margin for todo notes.
-To enable this, goto \texttt{preamble.tex} and replace the line line \texttt{draft=false} with \texttt{final}.
-Remember to switch it of when compiling your thesis for printing.
+Die präzise Detektion und Klassifikation kleiner Fahrzeuge in hochaufgelösten Fernerkundungsdaten ist für Anwendungen wie Verkehrsüberwachung und Stadtplanung essenziell. 
+Ziel dieser Arbeit war es, den Einfluss zusätzlicher spektraler Kanäle und unterschiedlicher \textsc{YOLO}-Architekturen auf die Leistung bei der Objekterkennung zu untersuchen. 
 
-\blindtext
+Experimente auf multispektralen Luftbildern zeigen, dass Infrarotkanäle die Detektionsgenauigkeit kleiner Fahrzeuge verbessern, während Vegetationsindizes wie der NDVI nicht konsistent vorteilhaft sind. 
+RGB-Daten allein liefern bereits solide Ergebnisse, wobei die Verfügbarkeit umfangreicher Trainingsdaten den größten Einfluss auf die Modellperformance hat. 
+\textsc{YOLOv9} erweist sich dabei als besonders geeignet für kleine Objekte und übertrifft ältere Versionen wie \textsc{YOLOv3}. 
 
+Die Ergebnisse bestätigen das Potenzial tiefenlernender Verfahren für die Fahrzeugdetektion in multispektralen Fernerkundungsdaten und eröffnen Perspektiven für weiterführende Untersuchungen, etwa zur Nutzung multitemporaler Daten oder Skalierungseffekten.
 
 \end{abstract}
+
+
+% Die automatische Detektion und Klassifikation von Fahrzeugen in hochaufgelösten Fernerkundungsdaten ist eine zentrale Herausforderung für Anwendungen in Stadtplanung, Verkehrsüberwachung und Sicherheitsanalysen. 
+% Insbesondere kleine Objekte stellen dabei hohe Anforderungen an die Bildverarbeitung, da sie in komplexen Szenen häufig schwer von der Umgebung zu unterscheiden sind. 
+
+% Ziel dieser Arbeit war es, den Einfluss zusätzlicher spektraler Kanäle sowie unterschiedlicher Modellarchitekturen auf die Erkennung und Klassifikation kleiner Fahrzeuge zu untersuchen. 
+% Hierfür wurden verschiedene Varianten des \textsc{YOLO}-Detektors auf multispektralen Luftbildern evaluiert und der Nutzen von Infrarot- und Vegetationsindizes im Vergleich zu reinen RGB-Daten analysiert. 
+
+% Die Ergebnisse zeigen, dass die Einbeziehung von Infrarotkanälen die Detektionsleistung insbesondere bei kleinen Objekten verbessert, während Indizes wie der NDVI nicht in allen Fällen vorteilhaft sind. 
+% Zudem konnte nachgewiesen werden, dass die Verfügbarkeit umfangreicher, qualitativ hochwertiger Trainingsdaten einen stärkeren Einfluss auf die Modellperformance hat als die bloße Erweiterung der Eingangskanäle. 
+% Im direkten Vergleich erwies sich \textsc{YOLOv9} als besonders geeignet für die Erkennung kleiner Objekte und zeigte deutliche Verbesserungen gegenüber älteren Versionen wie \textsc{YOLOv3}. 
+
+% Die Arbeit unterstreicht das Potenzial tiefenlernender Verfahren zur präzisen Fahrzeugdetektion in multispektralen Fernerkundungsdaten und legt die Grundlage für weiterführende Studien, etwa zur Integration multitemporaler Daten oder zur Untersuchung von Skalierungseffekten in Richtung satellitengestützter Anwendungen.

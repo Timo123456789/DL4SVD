@@ -3,25 +3,39 @@
 \label{ch:conclusion}
 
 \section{Conclusion}
-\begin{itemize}
-    \item Forschungfragen konnten beantwortet werden. 
-    \item Zusätzliche Bildkänale konnen Ergebnisse verbessern (IR) aber auch verschlechtern (NDVI)
-    \item Leistung für die Erkennung kleiner Objekte ist auch mit reinen RGB Daten gut, auch wenn IR die Genauigkeit nochmals verbessert
-    \item Erhöhte Menge an Hochwertigen Trainingsdaten schlägt die hinzunahme eines weiteren Kanals im Sinne der "Verbesserung der Modellperformance"
-    \item Grundsätzlich eignet sich YOLOv9 für die Erkennung kleiner Objekte (vlg zu yolov3?)
-\end{itemize}
+Die in dieser Arbeit formulierten Forschungsfragen konnten erfolgreich beantwortet werden. 
+Es zeigte sich, dass zusätzliche Bildkanäle wie Infrarot (IR) die Detektionsleistung insbesondere bei kleinen Objekten verbessern können, während spektrale Indizes wie der NDVI nicht in jedem Fall vorteilhaft sind. 
+Die Experimente verdeutlichen, dass bereits RGB-Daten eine robuste Grundlage für die Erkennung kleiner Fahrzeuge bieten, wenngleich IR-Daten die Genauigkeit weiter erhöhen. 
+Zudem wurde ersichtlich, dass die Verfügbarkeit umfangreicher, qualitativ hochwertiger Trainingsdaten einen größeren Einfluss auf die Modellleistung hat als die Erweiterung der Eingangskanäle. 
+Die Untersuchungen bestätigen, dass \textsc{YOLOv9} für die Detektion kleiner Objekte geeignet ist und architekturelle Weiterentwicklungen gegenüber älteren Versionen wie \textsc{YOLOv3} zu messbaren Verbesserungen in Klassifikation und Genauigkeit führen.
+
 \section{Outlook}
-\begin{itemize}
-    \item mehr indizes (wie NDVI ) nutzen ujdn vergleichen
-    \item noch mehr kanäle und infos in yolo reinwerfen
-    \item andere yolo versionen verwenden
-    \item yolo selbst modifizierne
-    \item 2 Stage Detectoren ( RCNN und so) ausprobieren und vergleichen
-    \item luftbilder runtersaklieren (von 12.5cm/pixel auf 30 cm/pixel (wie bei Airbus) um zu schauen wie die Leistung von YOLO da aussieht -> Eignung für Satellitenrohdaten kann evaluiert werden)
-    \item weitere Untersuhcungen ob Fahrzeugfarbe einfluss auf Erkennungsleistung DL Modell aht
-    \item  \textbf{Zeitlicher Kontext (Future Work):} 
-    Multitemporale Bilder ermöglichen es, dynamische Muster zu erkennen 
-    (z.\,B. regelmäßige Pendlerfahrzeuge vs. dauerhaft abgestellte Fahrzeuge). 
-    Damit können Veränderungen im Raum-Zeit-Kontext erfasst werden
-\end{itemize}
+Zukünftige Arbeiten sollten eine systematische Integration weiterer spektraler Indizes und zusätzlicher Kanäle evaluieren, um deren Einfluss auf die Modellleistung präziser zu bestimmen. 
+Darüber hinaus bietet die Anwendung und Modifikation weiterer \textsc{YOLO}-Varianten sowie der Vergleich mit zweistufigen Detektoren (z.\,B. \textsc{R-CNN}-basierte Verfahren) ein vielversprechendes Untersuchungsfeld. 
+Ein weiterer Ansatz besteht in der Analyse von Skalierungseffekten, etwa durch die Reduktion der räumlichen Auflösung auf Satellitenniveau, um die Übertragbarkeit auf Rohdaten realer Systeme (z.\,B. Airbus, 30\,cm/Pixel) zu evaluieren. 
+Auch die Rolle objektspezifischer Merkmale, wie etwa die Fahrzeugfarbe, sollte vertieft untersucht werden. 
+Langfristig eröffnet insbesondere die Nutzung multitemporaler Daten neue Perspektiven, da sich damit dynamische Muster und Veränderungen im Raum-Zeit-Kontext (z.\,B. Pendlerverkehr versus Dauerabstellung) erfassen lassen.
+
+% \section{Conclusion}
+% \begin{itemize}
+%     \item Forschungfragen konnten beantwortet werden. 
+%     \item Zusätzliche Bildkänale konnen Ergebnisse verbessern (IR) aber auch verschlechtern (NDVI)
+%     \item Leistung für die Erkennung kleiner Objekte ist auch mit reinen RGB Daten gut, auch wenn IR die Genauigkeit nochmals verbessert
+%     \item Erhöhte Menge an Hochwertigen Trainingsdaten schlägt die hinzunahme eines weiteren Kanals im Sinne der "Verbesserung der Modellperformance"
+%     \item Grundsätzlich eignet sich YOLOv9 für die Erkennung kleiner Objekte, Auswirkungen der Veränderungne an der Architektur auf Klassifizierung und Genauigkeit kleiner Objekte ist sichtbar (im vgl. zu YOLOv3)
+% \end{itemize}
+% \section{Outlook}
+% \begin{itemize}
+%     \item mehr indizes (wie NDVI ) nutzen ujdn vergleichen
+%     \item noch mehr kanäle und infos in yolo reinwerfen
+%     \item andere yolo versionen verwenden
+%     \item yolo selbst modifizierne
+%     \item 2 Stage Detectoren ( RCNN und so) ausprobieren und vergleichen
+%     \item luftbilder runtersaklieren (von 12.5cm/pixel auf 30 cm/pixel (wie bei Airbus) um zu schauen wie die Leistung von YOLO da aussieht -> Eignung für Satellitenrohdaten kann evaluiert werden)
+%     \item weitere Untersuhcungen ob Fahrzeugfarbe einfluss auf Erkennungsleistung DL Modell aht
+%     \item  \textbf{Zeitlicher Kontext (Future Work):} 
+%     Multitemporale Bilder ermöglichen es, dynamische Muster zu erkennen 
+%     (z.\,B. regelmäßige Pendlerfahrzeuge vs. dauerhaft abgestellte Fahrzeuge). 
+%     Damit können Veränderungen im Raum-Zeit-Kontext erfasst werden
+% \end{itemize}
 
