@@ -5,269 +5,285 @@
     \item unterteilung analog zu  und Fig. \ref{fig:Flowchart} und Chap. \ref{ch:results}
 \end{itemize}
 
-\section*{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
-\begin{itemize}
-    \item in \ref{fig:comparison_bb_format} ist deutlich zu sehen, dass \acrshort{obb} deutlich exakter entlang der Objektgrenzen verlaufen und weniger umgebenes Areal umfassen; keine Überlappung ist wichtig, sorgt möglicherweise für eine bessere Erkennungsleistung bei nahe aneinander liegenden Objekten
-    \item exaktere Objektgrenzen sieht man auch an geringeren Flächeninhalten über alle Objekte hinweg (s.\ref{fig:bbox_area})
-    \item bessere Performance von \acrshort{abb} auf dem \acrshort{obb} Modell Wahrscheinlich dadurch, dass kleine Abweichunge/Änderungen in der Orientierung große Auswirkungen auf die \acrshort{mAP} haben
-    \item \acrshortpl{obb} sind schmaler als \acrshort{abb} sodass dort eine höhere ungeauigekt beim \acrshort{mAP} herrscht
-    \item \todo{Schreiben warum der eine Fold meistesn besser war als der andere? keine idee warum.. \ref{tab:best_folds_area} (vllt weil die Verteilung bei F 0 und 1 am besten für das Training geeignet ist?)}
-\end{itemize}
+% \section*{Oriented Bounding Boxes and Axis Aligned Bounding Boxes}
+% \begin{itemize}
+%     \item in \ref{fig:comparison_bb_format} ist deutlich zu sehen, dass \acrshort{obb} deutlich exakter entlang der Objektgrenzen verlaufen und weniger umgebenes Areal umfassen; keine Überlappung ist wichtig, sorgt möglicherweise für eine bessere Erkennungsleistung bei nahe aneinander liegenden Objekten
+%     \item exaktere Objektgrenzen sieht man auch an geringeren Flächeninhalten über alle Objekte hinweg (s.\ref{fig:bbox_area})
+%     \item bessere Performance von \acrshort{abb} auf dem \acrshort{obb} Modell Wahrscheinlich dadurch, dass kleine Abweichunge/Änderungen in der Orientierung große Auswirkungen auf die \acrshort{mAP} haben
+%     \item \acrshortpl{obb} sind schmaler als \acrshort{abb} sodass dort eine höhere ungeauigekt beim \acrshort{mAP} herrscht
+%     \item \todo{Schreiben warum der eine Fold meistesn besser war als der andere? keine idee warum.. \ref{tab:best_folds_area} (vllt weil die Verteilung bei F 0 und 1 am besten für das Training geeignet ist?)}
+% \end{itemize}
 
 
 
-\section*{Permutation Experiments}
-\begin{itemize}
-    \item das RGIR Modell hat beste MAP Leistung auf Testfold, B ist möglicherweise ein unwichtiger Kanal zur Fahrzeugdetektion
-    \item NDVI könnte für Noise im Datensatz sorgen, sodass Fahrzeuge schlechter erkannt werden, deswegen performance beider modelle so schlecht
-    \item IRGB ist mittelprächtig, weil möglicherweise der rote kanal für Fahrzeugdetektion wichitg ist 
-    \item Fold 2 und 3 scheinen für den Testdatensatz die beste Verteilung der Trainingsdaten zu haben, da diese die höchsten MAP Werte haben, bei validierungsmodell auf Validierungsdatensatz hat jeder fold mindestens einmal am besten abgeschnitten (-> Verteilung spielt dort weniger eine große Rolle) \todo{Verteilungen genauer analysieren}
-\end{itemize}
-\begin{itemize}
-    \item \todo{Verteilung genauer analysieren anhand performance bei Klassenerkennung bei Confusion Matrix (?Irrelevant weil immer auf Testdaten und dort ist die Objektanzahl immer gleich?)}
-    \item absolute Zahlen statt nur Prozentzahlen analysieren; geringe Anzahl bei Klassen kann hohe Auswirkungen auf die Prozentzahlen haben (absolute Zahlen angucken?; dadurch Aussagekraft beurteilen)
-\end{itemize}
-\begin{itemize}
-    \item \acrshort{RGBNDVI} zeigt schlechtere Performance bei Ship, Vehicle und Plane;background wird als van fehlklassifiziert; 
-    \item 12\% Unterschied bei Plane kommt wohl exakt aus der fehlklassifizierung des plane als background
-    \item beide NDVI Modelle performen schlechter als RGBIR; liegt möglicherweise an Noise durch NDVI die den Algorithmus beeinflusst
-    \item 
-\end{itemize}
-\section*{Ablation Studies}
-\begin{itemize}
-    \item Ablation: erst Verbesserung njr bei 3 kanalälen erwähnen dann 3+1 auflisten
-\end{itemize}
-\section*{Implication}
-\begin{itemize}
-    \item alle Flugzeuge werden unabhängig von der Kanalpermuation und sogar bei einzelnen Kanälen erkannt, wahrscheinlich wegen der prägnanten Form 
-    \item 
-\end{itemize}
+% \section*{Permutation Experiments}
+% \begin{itemize}
+%     \item das RGIR Modell hat beste MAP Leistung auf Testfold, B ist möglicherweise ein unwichtiger Kanal zur Fahrzeugdetektion
+%     \item NDVI könnte für Noise im Datensatz sorgen, sodass Fahrzeuge schlechter erkannt werden, deswegen performance beider modelle so schlecht
+%     \item IRGB ist mittelprächtig, weil möglicherweise der rote kanal für Fahrzeugdetektion wichitg ist 
+%     \item Fold 2 und 3 scheinen für den Testdatensatz die beste Verteilung der Trainingsdaten zu haben, da diese die höchsten MAP Werte haben, bei validierungsmodell auf Validierungsdatensatz hat jeder fold mindestens einmal am besten abgeschnitten (-> Verteilung spielt dort weniger eine große Rolle) \todo{Verteilungen genauer analysieren}
+% \end{itemize}
+% \begin{itemize}
+%     \item \todo{Verteilung genauer analysieren anhand performance bei Klassenerkennung bei Confusion Matrix (?Irrelevant weil immer auf Testdaten und dort ist die Objektanzahl immer gleich?)}
+%     \item absolute Zahlen statt nur Prozentzahlen analysieren; geringe Anzahl bei Klassen kann hohe Auswirkungen auf die Prozentzahlen haben (absolute Zahlen angucken?; dadurch Aussagekraft beurteilen)
+% \end{itemize}
+% \begin{itemize}
+%     \item \acrshort{RGBNDVI} zeigt schlechtere Performance bei Ship, Vehicle und Plane;background wird als van fehlklassifiziert; 
+%     \item 12\% Unterschied bei Plane kommt wohl exakt aus der fehlklassifizierung des plane als background
+%     \item beide NDVI Modelle performen schlechter als RGBIR; liegt möglicherweise an Noise durch NDVI die den Algorithmus beeinflusst
+%     \item 
+% \end{itemize}
+% \section*{Ablation Studies}
+% \begin{itemize}
+%     \item Ablation: erst Verbesserung njr bei 3 kanalälen erwähnen dann 3+1 auflisten
+% \end{itemize}
+% \section*{Implication}
+% \begin{itemize}
+%     \item alle Flugzeuge werden unabhängig von der Kanalpermuation und sogar bei einzelnen Kanälen erkannt, wahrscheinlich wegen der prägnanten Form 
+%     \item 
+% \end{itemize}
 
-\todo{Rückgriff auf State of Research nciht vergessen? Fahrzeugverteilung in gesamter Region etc}
-\todo{Räumlcihen Kontext beachten; Vorteile von Spatial Kontext einfügen}
+% \todo{Rückgriff auf State of Research nciht vergessen? Fahrzeugverteilung in gesamter Region etc}
+% \todo{Räumlcihen Kontext beachten; Vorteile von Spatial Kontext einfügen}
 
 %Nur Hypthesen
 %###########################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
 
-\section{ABB vs. OBB}
+% \section{ABB vs. OBB}
 
-\subsection*{Hypothesis 1.1}
-\begin{itemize}
-  \item OBB laufen exakter an den Objektgrenzen entlang und umfassen weniger umgebendes Areal.
-  \item $\rightarrow$ höhere Genauigkeit bei Objekterfassung (sichtbar an den geringeren Flächeninhalten).
-  \item Dennoch bessere Performance von ABB gegenüber OBB.
-  \item $\rightarrow$ Möglicherweise, weil kleine Abweichungen in der Orientierung der Bounding Boxes große Auswirkungen auf die mAP haben.
-  \item Kleine Änderungen der Orientierung reduzieren die Überlappung zum Ground Truth stark, Performance von OBB sinkt.
-  % Siehe Abbildung 5.12 für Beispiel mit Klasse Plane
-\end{itemize}
-
-\subsection*{Hypothesis 1.2}
-\begin{itemize}
-  \item Fold 0 und 1 erreichen die höchste mAP.
-  \item Ursache: Objektverteilung in Trainings- und Validierungsdatensatz passt am besten zu den Testdaten.
-\end{itemize}
-
-
-\section{Permutationsexperimente}
-
-\subsection*{Hypothesis 2.1}
-\begin{itemize}
-  \item RGIR-Modell erzielt die beste mAP auf dem Testfold.
-  \item $\rightarrow$ Der blaue Kanal ist möglicherweise ein unwichtiger Kanal für die Fahrzeugdetektion.
-\end{itemize}
-
-\subsection*{Hypothesis 2.2}
-\begin{itemize}
-  \item NDVI könnte für Noise im Datensatz sorgen.
-  \item Fahrzeuge werden dadurch schlechter erkannt.
-  \item $\rightarrow$ Schlechte Performance beider Modelle (RGBNDVI und GBNDVI).
-\end{itemize}
-
-\subsection*{Hypothesis 2.3}
-\begin{itemize}
-  \item IRGB ist das schlechteste Modell der 5 Primärpermutationen.
-  \item $\rightarrow$ Möglicherweise ist der rote Kanal entscheidend für Fahrzeugdetektion.
-  \item NDVI ausgelassen (vgl. H 2.2).
-\end{itemize}
-
-\subsection*{Hypothesis 2.4}
-\begin{itemize}
-  \item RGBNDVI: 12\% Unterschied bei Klasse Plane durch Fehlklassifizierung als Hintergrund.
-  \item Leistungsvorteil von RGBIR erklärt sich durch das Fehlen von NDVI (Noise).
-\end{itemize}
-
-\subsection*{Hypothesis 2.5}
-\begin{itemize}
-  \item Blauer Kanal unterstützt Ship-Detektion.
-  \item Deutlich bessere Leistung des RGBIR-Modells im Vergleich zu IRGB, RIRB und RGB.
-  \item Kaum Unterschiede bei RGIR.
-\end{itemize}
-
-\subsection*{Hypothesis 2.6}
-\begin{itemize}
-  \item Alle Modelle haben Schwierigkeiten, Hintergrund von Objekten zu unterscheiden.
-  \item Besonders schwache Performance bei Klassen \emph{Ship} und \emph{Van}.
-  \item RGBIR-Modell liefert die besten Ergebnisse.
-\end{itemize}
-
-\subsection*{Hypothesis 2.7}
-\begin{itemize}
-  \item Flugzeuge werden in allen Modellen (auch mit NDVI) zuverlässig zu 100\% erkannt.
-  \item Grund: Prägnante Form und eindeutige Umgebungen (Flugplatz = Asphalt, in der Luft, im Flug teilweise über Wasser).
-\end{itemize}
-
-
-\section{Ablationsstudien}
-
-\subsection*{Hypothesis 3.1}
-\begin{itemize}
-  \item Einzelne Kanäle haben wenig Einfluss auf die Erkennungsleistung.
-  \item Erst die Kombination verbessert die Leistung deutlich.
-  \item Einzelne Kanäle: mAP $<$ 0.55; Kombinationen: ca. 0.61--0.63.
-  \item NDVI sehr schwach (0.42--0.44) $\rightarrow$ schwierig für Objekterkennung und Klassifizierung.
-\end{itemize}
-
-\subsection*{Hypothesis 3.2}
-\begin{itemize}
-  \item Klasse \emph{Car} zeigt keine Unterschiede zwischen Kanalmodellen.
-  \item Autos werden robust erkannt (außer mit NDVI).
-  \item Grund: Hohe Anzahl an Trainingsdaten + charakteristische Form.
-  \item $\rightarrow$ Erkennung gelingt auch ohne Kanal-Kombination mit >80\%.
-\end{itemize}
-
-\subsection*{Hypothesis 3.3}
-\begin{itemize}
-  \item Größte Unterschiede bei Nichtdetektion und Klassifizierung von Hintergrund-Objekten.
-  \item IR liefert hier die besten Werte.
-  \item Erst Kombination der Kanäle ermöglicht deutliche Verbesserungen.
-\end{itemize}
-
-\subsection*{Hypothesis 3.4}
-\begin{itemize}
-  \item Beste Folds im Testdatensatz auch bei Kanalmodellen: meist Fold 2 und Fold 3.
-  \item Fold 0 liefert nur bei IR und NDVI bessere Ergebnisse.
-  \item IR erzielt mit 0.5777 den höchsten mAP im Vergleich zu Blue/Green (0.5449).
-  \item $\rightarrow$ IR ist gut geeignet für Objekterkennung und -klassifizierung; bietet viel Informationsgehalt um Erkennungsleistung zu verbessern
-  \item Modell ohne IR Kanal (RGB) schneidet schlechter ab als Kombination RGBIR 
-\end{itemize}
-
-\subsection*{Hypothesis 3.5}
-\begin{itemize}
-  \item NDVI so schlecht, weil Wertebereich 0--255 (vgl. Fig. 5.12).
-  \item NDVI: schwarz-weiß; andere Kanäle: Grauverläufe. s. \ref{fig:ablation_example_pics}
-\end{itemize}
-
-\subsection*{Hypothesis 3.6}
-\begin{itemize}
-  \item Verwechslungen von \emph{Vehicle} mit \emph{Truck}.
-  \item Klasse Vehicle ist sehr generisch und umfasst auch Baumaschinen, Radlader etc.
-\end{itemize}
-
-\subsection*{Hypothesis 3.7}
-\begin{itemize}
-  \item \emph{Ship} wird oft als \emph{Camping Car} erkannt.
-  \item Beide sind große, meist weiße Objekte auf Anhängern.
-  \item Camping Cars sind im Datensatz uniform und rechteckig.
-  \item Spitz zulaufender Bug von Schiffen spielt weniger Rolle.
-\end{itemize}
-
-
-\section{Implikationen: Räumlicher Kontext}
-
-\subsection*{Hypothesis 4.1}
-\begin{itemize}
-  \item Testdaten: Vor allem Fahrzeuge in amerikanischen Vorstädten (Einfamilienhäuser mit Auffahrten, Gärten) oder auf einsamen Straßen.
-  \item Erkennung dort vergleichsweise einfach (klare Formen in gleichförmiger Umgebung).
-  \item In Stadtszenen deutlich schwieriger.
-  \item Modell könnte lernen, dass bestimmte Umgebungen mit typischen Fahrzeugkombinationen assoziiert sind (z. B. Pick-up + Ship + Camping Car auf einer Auffahrt eines Vorstadthauses).
-\end{itemize}
-
-\subsection*{Hypothesis 4.2}
-\begin{itemize}
-  \item Fahrzeuge auf Schrottplätzen oder überwuchert von Gestrüpp sind schwer erkennbar.
-  \item Gründe: fehlende eindeutige Merkmale, andere Farben (Rost), veränderte Formen (nur Teile sichtbar).
-\end{itemize}
-
-\subsection*{Hypothesis 4.3}
-\begin{itemize}
-  \item Autos meist grau, schwarz oder weiß.
-  \item Weiße Autos auf grauem Asphalt leicht zu erkennen.
-  \item Graue oder schwarze Autos sind schwieriger vom Hintergrund zu unterscheiden.
-  \item Mögliche Ergänzung: Farbstatistiken aus \emph{UTAH 2012}.
-\end{itemize}
+% \subsection*{Hypothesis 1.1}
+% \begin{itemize}
+%   \item OBB laufen exakter an den Objektgrenzen entlang und umfassen weniger umgebendes Areal.
+%   \item $\rightarrow$ höhere Genauigkeit bei Objekterfassung (sichtbar an den geringeren Flächeninhalten).
+%   \item Dennoch bessere Performance von ABB gegenüber OBB.
+%   \item $\rightarrow$ Möglicherweise, weil kleine Abweichungen in der Orientierung der Bounding Boxes große Auswirkungen auf die mAP haben.
+%   \item Kleine Änderungen der Orientierung reduzieren die Überlappung zum Ground Truth stark, Performance von OBB sinkt.
+%   % Siehe Abbildung 5.12 für Beispiel mit Klasse Plane
+% \end{itemize}
 
 
 
-%State of Research Einordnung
-\begin{itemize}
-    \item YOLO kann zur Fahrzeugdetektion eingesetzt werden, wenn Auflösung und spektralkanalanzahl es zulassen. Bei der relativ hohen Auflösung (12.5 \texttimes 12.5 cm pro Pixel) ist eine Erkennung von diversen Fahrezugklassen möglich -> Insbesondere Auto, da Genauigkeit von über 80\% erreicht; liegt aber an vielen Trainingsdaten
-    \item obb entsprechen der definiton als very small objects nach \cite{Chen2017}; damit ist die Detektion von very small Objects mit YOLOv9 auf hochauflösenden Satbildern möglich  \todo{Josis Thesis Ergebnisse anschneiden?}
-    \item YOLOv9 kann spezifizierte Ground Truth Objekte nicht nur zuverlässig lokalisieren sondern auch einer Kategorie zuzuordnen
-    \begin{itemize}
-        \item damit ist der Anwendungsfall, dass ma ndie Fahrzeugverteilung einer gesamten Region zu einem bestimmten Zeitpunkt erfassen möchte möglich
-        \item Hindernis ist die Datensammlung, aber mit dem regelmäßgen Überflug von Kleinstsatelliten von Planet \cite{planet_labs} oder Airbus \cite{airbus_neo} ist dies deutlich leichter
-        \item Frage ob die Auflösung der Satelliten (50 cm/Pixel bei Planet \cite{planet_labs}, 30 cm/Pixel bei Airbus \cite{airbus_neo}) ausreicht
-        \item Anwendungsfall Coronapandemie
-        \item Außerdem wurden Satellitenbilder (d. h Auslastung der Parkplatzflächen) von chinesischen Krematorien genutzt, um die offiziellen Daten zur Covid Mortalität der Regierung zu überprüfen. Dies konnte in Kombination mit Augenzeugenbefragungen dafür genutzt werden, die offiziellen Zahlen zur Sterblichkeit anzuzweifeln \cite{Spiegel_article}
-        
-    \end{itemize}
-\end{itemize}
 
-%Weitere Bemerkungen
-\section*{Über die reine Objektdetektion mit mehr Layern hinaus}
+% \section{Permutationsexperimente}
 
-\begin{itemize}
-    \item \textbf{Räumlicher Kontext:} 
-    Fahrzeuge treten oft in typischen Mustern auf (Parkplätze, Straßen, Häfen). 
-    Das Modell kann Beziehungen zwischen Objekten und ihrer Umgebung nutzen. 
-    Beispiel: Ein \emph{Ship} wird realistischer erkannt, wenn es in der Nähe von Wasserflächen liegt.
+% \subsection*{Hypothesis 2.1}
+% \begin{itemize}
+%   \item RGIR-Modell erzielt die beste mAP auf dem Testfold.
+%   \item $\rightarrow$ Der blaue Kanal ist möglicherweise ein unwichtiger Kanal für die Fahrzeugdetektion. 
+%   \item blau niedrigste Wellenlänge (420-490) (vgl. zu Rot (650-780) und Grün  (490-575)und vor allem IR (>800 nm)) \cite{bfs_Strahlung}, sollte aber für YOLO keine Rolle spielen, da intern Kanäle permutiert werden; yolo "sieht" ja nicht sondern arbeitet mit numerischen Werten
+% \end{itemize}
 
-    \item \textbf{Semantische Kontextinformation:} 
-    Multispektrale Daten liefern neben Form auch Materialeigenschaften (z.\,B. Metall vs. Vegetation). 
-    Dadurch wird die Klassifikation robuster gegenüber Tarnung, Schatten oder Farbvariationen.
+% \subsection*{Hypothesis 2.2}
+% \begin{itemize}
+%   \item NDVI könnte für Noise im Datensatz sorgen.
+%   \item Fahrzeuge werden dadurch schlechter erkannt.
+%   \item $\rightarrow$ Schlechte Performance beider Modelle (RGBNDVI und GBNDVI).
+%   \item Fahrzeuge sind auch ohne NDVI gut erkennbar im Datensatz; Unterscheidung von Vegetation durch NDVI bringt keinen Vorteil sondern nur Verwirrung
+% \end{itemize}
 
-    \item \textbf{Objekt-Umwelt-Interaktionen:} 
-    Kanäle wie NDVI oder IR zeigen, ob Fahrzeuge überwachsen, gealtert oder verwittert sind. 
-    So können nicht nur Objekte erkannt, sondern auch deren \emph{Zustand} oder Nutzung beschrieben werden.
+% \subsection*{Hypothesis 2.3}
+% \begin{itemize}
+%   \item IRGB ist das schlechteste Modell der 5 Primärpermutationen.
+%   \item $\rightarrow$ Möglicherweise ist der rote Kanal entscheidend für Fahrzeugdetektion. ALle drei Känale haben die höchste Wellenlänge der verfügbaren Daten  sollte aber für YOLO keine Rolle spielen, da intern Kanäle permutiert werden
+%   \item Beurteilung schlechteste Performance: NDVI ausgelassen (vgl. H 2.2).
+% \end{itemize}
 
-    \item \textbf{Generalisierung:} 
-    Durch zusätzliche Kanäle können Modelle besser zwischen unterschiedlichen Umgebungen 
-    (Stadt vs. Wüste vs. Wald) generalisieren. 
-    Das erhöht die Robustheit bei neuen Testgebieten.
+% \subsection*{Hypothesis 2.4}
+% \begin{itemize}
+%   \item RGBNDVI: 12\% Unterschied bei Klasse Plane durch Fehlklassifizierung als Hintergrund.
+%   \item Leistungsvorteil von RGBIR erklärt sich durch das Fehlen von NDVI (Noise).
+% \end{itemize}
 
-    \item \textbf{Erweiterte Klassifikation:} 
-    Über die reine Fahrzeugerkennung hinaus können Kategorien wie 
-    \emph{Fahrzeugtyp, Zustand oder Nutzungskontext} unterschieden werden 
-    (z.\,B. parkendes Auto in Wohngebiet vs. bewegendes Auto auf Landstraße).
+% \subsection*{Hypothesis 2.5}
+% \begin{itemize}
+%   \item Kombinationen von Kanälen unterstützt Ship-Detektion.
+%   \item Deutlich bessere Leistung des RGBIR-Modells im Vergleich zu IRGB, RIRB und RGB.
+%   \item Kaum Unterschiede bei RGIR.
+% \end{itemize}
 
-    \item \textbf{Multimodale Fusion:} 
-    Mehr Layer erlauben eine Kombination mit weiteren Datenquellen 
-    (z.\,B. SAR, LiDAR, Höhenmodelle). 
-    Damit lassen sich über Objektdetektion hinaus Anwendungen wie 
-    \emph{Verkehrsdichte, Infrastrukturzustand oder Nutzungsmuster} realisieren.
+% \subsection*{Hypothesis 2.6}
+% \begin{itemize}
+%   \item Alle Modelle haben Schwierigkeiten, Hintergrund von Objekten zu unterscheiden.
+%   \item Besonders schwache Performance bei Klassen \emph{Ship} und \emph{Van}.
+%   \item Unterscheidung nach Fahrzeugtyp ist generell schwer
+%   \item YOLO unterscheidet wahrscheinlich mehr an Form, Kontur, Größe, Kontext des Objektes nach der Klasse und nicht direkt über Pixel und Farbunterschiede
+% \end{itemize}
 
-    \item \textbf{Zeitlicher Kontext (Future Work):} 
-    Multitemporale Bilder ermöglichen es, dynamische Muster zu erkennen 
-    (z.\,B. regelmäßige Pendlerfahrzeuge vs. dauerhaft abgestellte Fahrzeuge). 
-    Damit können Veränderungen im Raum-Zeit-Kontext erfasst werden.
-\end{itemize}
-
-%Beantwortung Forschungsfragen
-\begin{itemize}
-    \item \item Forschungsfragen:
-        \item INwieiweit profitiert YOLO von der Eingabe zusätzlicher Kanäle: Verbesserung durch IR Kanal ist sichtbar, NDVI als Vegetationindize verschlechtert die Perforamnce jedoch
-        \item Vegetationseparierung ist wohl doch nciht so wichtig, bzw. charakteristische Formen und Objekte sind bei Objekterkennung- und klassifizierung wichtiger als reine Hintergrund/Vegetations zu Objektunterscheidung
-        \item obb vs abb: abb performt durch höhere map besser, aber obb bietet genauere vorhergesagte bbs ohne unwichtige Umgebung in der BOunding box einzuschließen
-        \item obb spart also rechenleistung und kapazität, weil DL Modell weniger lernen muss, nicht relevantes von relevanten zu untershceiden (Hintergund von Objekt)
-        \item VErbessern einzelne Kanäle die Leistung: Erst die Kombination der Kanäle verbessert die Leistung hinreichend; einzelne Kanäle wie R, G, B schneiden fast gleich ab, während IR besser als diese drei Kanäle abschneidet. NDVI bietet schlechteste Performance als Vegetationindize in diesem Experiment; Kombination aus zwei der Echtfarbkanäle + IR bietet beste Performacne (RGIR, RIRB, RGB, RGBIR, IRGB)
-        \item 
-\end{itemize}
-\begin{itemize}
-    \item YOLOv9 Änderungen helfne bei Erkennung kleine Objekte (vgl Josis Thesies \todo{Vergleich Josis Thesis})
-\end{itemize}
+% \subsection*{Hypothesis 2.7}
+% \begin{itemize}
+%   \item Flugzeuge werden in nahezu allen Modellen (auch mit NDVI) zuverlässig  erkannt.
+%   \item Grund: Prägnante Form und eindeutige Umgebungen (Flugplatz = Asphalt, in der Luft, im Flug teilweise über Wasser).
+% \end{itemize}
 
 
+% \section{Ablationsstudien}
 
+% \subsection*{Hypothesis 3.1}
+% \begin{itemize}
+%   \item Einzelne Kanäle haben wenig Einfluss auf die Erkennungsleistung.
+%   \item Erst die Kombination verbessert die Leistung deutlich.
+%   \item Einzelne Kanäle: mAP $<$ 0.55; Kombinationen: ca. 0.61--0.63.
+%   \item NDVI sehr schwach (0.42--0.44) $\rightarrow$ schwierig für Objekterkennung und Klassifizierung.
+%   \item Radiometrische Auflösung aller Kanäle ist 8 bit, somit scheidet das als Grund für die Schlechte NDVI Performance aus
+% \end{itemize}
+
+% \subsection*{Hypothesis 3.2}
+% \begin{itemize}
+%   \item Klasse \emph{Car} zeigt keine Unterschiede zwischen Kanalmodellen.
+%   \item Autos werden robust erkannt (außer mit NDVI).
+%   \item NDVI Performance wahrscheinlich schlecht, weil NDVI Kanal den (farblichen) Unterschied zum Hintergrund minimiert
+%   \item Grund: Hohe Anzahl an Trainingsdaten + charakteristische Form + heben sich gut vom Hintergrund ab (Farbe etc. H 4.3).
+%   \item $\rightarrow$ Erkennung gelingt auch ohne Kanal-Kombination mit >80\%.
+% \end{itemize}
+
+% \subsection*{Hypothesis 3.3}
+% \begin{itemize}
+%   \item Größte Unterschiede bei Nichtdetektion und Klassifizierung von Hintergrund-Objekten.
+%   \item IR liefert hier die besten Werte.
+%   \item Erst Kombination der Kanäle ermöglicht deutliche Verbesserungen.
+% \end{itemize}
+
+% \subsection*{Hypothesis 3.4}
+% \begin{itemize}
+%   \item Beste Folds im Testdatensatz auch bei Kanalmodellen: meist Fold 2 und Fold 3.
+%   \item Fold 0 liefert nur bei IR und NDVI bessere Ergebnisse.
+%   \item IR erzielt mit 0.5777 den höchsten mAP im Vergleich zu Blue/Green (0.5449).
+%   \item $\rightarrow$ IR ist gut geeignet für Objekterkennung und -klassifizierung; bietet viel Informationsgehalt um Erkennungsleistung zu verbessern
+%   \item Modell ohne IR Kanal (RGB) schneidet schlechter ab als Kombination RGBIR 
+% \end{itemize}
+
+% \subsection*{Hypothesis 3.5}
+% \begin{itemize}
+%   \item NDVI so schlecht, weil Wertebereich 0--255 (vgl. Fig. 5.12).
+%   \item NDVI: schwarz-weiß; andere Kanäle: Grauverläufe. s. \ref{fig:ablation_example_pics}
+% \end{itemize}
+
+% \subsection*{Hypothesis 3.6}
+% \begin{itemize}
+%   \item Verwechslungen von \emph{Vehicle} mit \emph{Truck}.
+%   \item Klasse Vehicle ist sehr generisch und umfasst auch Baumaschinen, Radlader etc.
+% \end{itemize}
+
+% \subsection*{Hypothesis 3.7}
+% \begin{itemize}
+%   \item \emph{Ship} wird oft als \emph{Camping Car} erkannt.
+%   \item Beide sind große, meist weiße Objekte auf Anhängern.
+%   \item Camping Cars sind im Datensatz uniform und rechteckig.
+%   \item Spitz zulaufender Bug von Schiffen spielt weniger Rolle; Boote können mit Planen abgedeckt sein und damit wird die Form weiter verschleiert
+% \end{itemize}
+
+% \subsection*{Hypothesis 3.8}
+% \begin{itemize}
+%   \item Unterscheidung einzelner Fahrzeugtypen (abseits Car) schwierig weil Datengrundlage zu diesen sehr gering
+%   \item insbesondere sichtbar bei VEhicle und deren VErwechslungen mit anderen Klassen sowie Background
+% \end{itemize}
+% \section{Implikationen: Räumlicher Kontext}
+
+% \subsection*{Hypothesis 4.1}
+% \begin{itemize}
+%   \item Testdaten: Vor allem Fahrzeuge in amerikanischen Vorstädten (Einfamilienhäuser mit Auffahrten, Gärten) oder auf einsamen Straßen.
+%   \item Erkennung dort vergleichsweise einfach (klare Formen in gleichförmiger Umgebung).
+%   \item In Stadtszenen deutlich schwieriger.
+%   \item Modell könnte lernen, dass bestimmte Umgebungen mit typischen Fahrzeugkombinationen assoziiert sind (z. B. Pick-up + Ship + Camping Car auf einer Auffahrt eines Vorstadthauses).
+% \end{itemize}
+
+% \subsection*{Hypothesis 4.2}
+% \begin{itemize}
+%   \item Fahrzeuge auf Schrottplätzen oder überwuchert von Gestrüpp sind schwer erkennbar.
+%   \item Gründe: fehlende eindeutige Merkmale, andere Farben (Rost), veränderte Formen (nur Teile sichtbar).
+% \end{itemize}
+
+% \subsection*{Hypothesis 4.3}
+% \begin{itemize}
+%   \item Autos meist grau, schwarz oder weiß.
+%   \item Weiße Autos auf grauem Asphalt leicht zu erkennen.
+%   \item Graue oder schwarze Autos sind schwieriger vom Hintergrund zu unterscheiden.
+%   \item weiß ist mit 24\% und schwarz (23\%) häufigste Farbe in den Vereinigten Staaten von Amerika \cite{abc_utah}
+% \end{itemize}
+
+
+
+% State of Research Einordnung
+% \begin{itemize}
+%     \item YOLO kann zur Fahrzeugdetektion eingesetzt werden, wenn Auflösung und spektralkanalanzahl es zulassen. Bei der relativ hohen Auflösung (12.5 \texttimes 12.5 cm pro Pixel) ist eine Erkennung von diversen Fahrezugklassen möglich -> Insbesondere Auto, da Genauigkeit von über 80\% erreicht; liegt aber wahrscheinlich an vielen Trainingsdaten
+%     \item obb entsprechen der definiton als very small objects nach \cite{Chen2017}; damit ist die Detektion von very small Objects mit YOLOv9 auf hochauflösenden Satbildern möglich  \todo{Josis Thesis Ergebnisse anschneiden?}
+%     \item YOLOv9 kann spezifizierte Ground Truth Objekte nicht nur zuverlässig lokalisieren sondern auch einer Kategorie zuzuordnen
+%     \begin{itemize}
+%         \item damit ist der Anwendungsfall, dass ma ndie Fahrzeugverteilung einer gesamten Region zu einem bestimmten Zeitpunkt erfassen möchte möglich
+%         \item Hindernis ist die Datensammlung, aber mit dem regelmäßgen Überflug von Kleinstsatelliten von Planet \cite{planet_labs} oder Airbus \cite{airbus_neo} ist dies deutlich leichter
+%         \item Frage ob die Auflösung der Satelliten (50 cm/Pixel bei Planet \cite{planet_labs}, 30 cm/Pixel bei Airbus \cite{airbus_neo}) ausreicht
+%         \item Anwendungsfall Coronapandemie
+%         \item Außerdem wurden Satellitenbilder (d. h Auslastung der Parkplatzflächen) von chinesischen Krematorien genutzt, um die offiziellen Daten zur Covid Mortalität der Regierung zu überprüfen. Dies konnte in Kombination mit Augenzeugenbefragungen dafür genutzt werden, die offiziellen Zahlen zur Sterblichkeit anzuzweifeln \cite{Spiegel_article}
+%     \end{itemize}
+% \end{itemize}
+
+% %Weitere Bemerkungen
+% \section*{Über die reine Objektdetektion mit mehr Layern hinaus}
+
+% \begin{itemize}
+%     \item \textbf{Räumlicher Kontext:} 
+%     Fahrzeuge treten oft in typischen Mustern auf (Parkplätze, Straßen, Häfen). 
+%     Das Modell kann Beziehungen zwischen Objekten und ihrer Umgebung nutzen. 
+%     Beispiel: Ein \emph{Ship} wird realistischer erkannt, wenn es in der Nähe von Wasserflächen liegt.
+
+%     \item \textbf{Semantische Kontextinformation:} 
+%     Multispektrale Daten liefern neben Form auch Materialeigenschaften (z.\,B. Metall vs. Vegetation). 
+%     Dadurch wird die Klassifikation robuster gegenüber Tarnung, Schatten oder Farbvariationen.
+
+%     \item \textbf{Objekt-Umwelt-Interaktionen:} 
+%     Kanäle wie NDVI oder IR zeigen, ob Fahrzeuge überwachsen, gealtert oder verwittert sind. 
+%     So können nicht nur Objekte erkannt, sondern auch deren \emph{Zustand} oder Nutzung beschrieben werden.
+
+%     \item \textbf{Generalisierung:} 
+%     Durch zusätzliche Kanäle können Modelle besser zwischen unterschiedlichen Umgebungen 
+%     (Stadt vs. Wüste vs. Wald) generalisieren. 
+%     Das erhöht die Robustheit bei neuen Testgebieten.
+
+%     \item \textbf{Erweiterte Klassifikation:} 
+%     Über die reine Fahrzeugerkennung hinaus können Kategorien wie 
+%     \emph{Fahrzeugtyp, Zustand oder Nutzungskontext} unterschieden werden 
+%     (z.\,B. parkendes Auto in Wohngebiet vs. bewegendes Auto auf Landstraße).
+
+%     \item \textbf{Multimodale Fusion:} 
+%     Mehr Layer erlauben eine Kombination mit weiteren Datenquellen 
+%     (z.\,B. SAR, LiDAR, Höhenmodelle). 
+%     Damit lassen sich über Objektdetektion hinaus Anwendungen wie 
+%     \emph{Verkehrsdichte, Infrastrukturzustand oder Nutzungsmuster} realisieren.
+
+   
+% \end{itemize}
+
+% \begin{itemize}
+%     \item YOLOv9 Änderungen helfne bei Erkennung kleine Objekte (YOLOv3 hat schlecht (Map:0,10) udn yolov9 hinreichend gut (map:0,42)) abgeshcnitten
+% \end{itemize}
+
+
+% %Beantwortung Forschungsfragen
+% \begin{itemize}
+%         \item Forschungsfragen:
+%         \item INwieiweit profitiert YOLO von der Eingabe zusätzlicher Kanäle: Verbesserung durch IR Kanal ist sichtbar, NDVI als Vegetationindize verschlechtert die Perforamnce jedoch
+%         \item Vegetationseparierung ist wohl doch nciht so wichtig, bzw. charakteristische Formen und Objekte sind bei Objekterkennung- und klassifizierung wichtiger als reine Hintergrund/Vegetations zu Objektunterscheidung
+%         \item obb vs abb: abb performt durch höhere map besser, aber obb bietet genauere vorhergesagte bbs ohne unwichtige Umgebung in der BOunding box einzuschließen
+%         \item obb spart also rechenleistung und kapazität, weil DL Modell weniger lernen muss, nicht relevantes von relevanten zu untershceiden (Hintergund von Objekt)
+%         \item VErbessern einzelne Kanäle die Leistung: Erst die Kombination der Kanäle verbessert die Leistung hinreichend; einzelne Kanäle wie R, G, B schneiden fast gleich ab, während IR besser als diese drei Kanäle abschneidet. NDVI bietet schlechteste Performance als Vegetationindize in diesem Experiment; Kombination aus zwei oder 3 der Echtfarbkanäle + IR bietet beste Performacne (RGIR, RIRB, RGB, RGBIR, IRGB)
+%         \item 
+% \end{itemize}
+
+%#############################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+
+Die Experimente zur Verwendung von Axis-Aligned Bounding Boxes (ABB) im Vergleich zu Oriented Bounding Boxes (OBB) zeigen interessante Ergebnisse. OBB verlaufen exakter entlang der Objektgrenzen und erfassen weniger umliegendes Areal, was theoretisch zu einer höheren Genauigkeit bei der Objekterfassung führen sollte. Dies zeigt sich in den geringeren Flächeninhalten der Bounding Boxes. Überraschenderweise zeigt jedoch das ABB-Modell eine bessere Performance in Bezug auf die mean Average Precision (mAP). Eine mögliche Erklärung liegt darin, dass kleine Abweichungen in der Orientierung der OBB die Überlappung mit der Ground Truth stark reduzieren können. Selbst minimale Winkelabweichungen führen zu deutlich niedrigeren Intersection-over-Union-Werten, wodurch die mAP der OBB-Modelle sinkt. ABB bietet somit eine stabilere Performance, während OBB die Bounding Boxes genauer an das Objekt anpasst und damit Rechenressourcen effizienter nutzen kann. \todo{erkennntnisse \ref{fig:aab_obb_example_pics} einfließen lassen? }
+
+Die Analyse der Kanalpermutationen zeigt, dass die Wahl der Spektralkanäle einen signifikanten Einfluss auf die Objekterkennungsleistung hat. Modelle, die den IR-Kanal in Kombination mit RGB nutzen, erzielen die höchste mAP, während der blaue Kanal offenbar wenig zur Fahrzeugdetektion beiträgt. Dies ist plausibel, da der blaue Spektralbereich (420–490\,nm) im Vergleich zu Rot (650–780\,nm), Grün (490–575\,nm) und Infrarot (>800\,nm) nur begrenzte Informationen liefert \todo{BELEGE? FALSCH!}. Der NDVI-Kanal hingegen reduziert die Leistung der Modelle, vermutlich aufgrund zusätzlicher Störungen im Datensatz. Fahrzeuge sind auch ohne NDVI gut erkennbar, da die Unterscheidung von Vegetation keinen entscheidenden Vorteil für die Detektion bietet und stattdessen zu Verwirrung führt.
+
+Die Untersuchung der Primärpermutationen zeigt, dass das IRGB-Modell die schlechteste Performance aufweist, was die Bedeutung des roten Kanals für die Fahrzeugdetektion unterstreicht. Modelle wie RGBIR profitieren von der Kombination aus Echtfarbkanälen und IR, während NDVI die Erkennungsleistung reduziert. Alle Modelle zeigen Schwierigkeiten bei der Trennung von Hintergrund und Objekten, insbesondere bei den Klassen \emph{Ship} und \emph{Van}. Flugzeuge werden hingegen zuverlässig erkannt, vermutlich aufgrund ihrer charakteristischen Form und eindeutigen Umgebung, wie beispielsweise Flughäfen oder Wasserflächen.
+
+Die Ablationsstudien bestätigen, dass einzelne Kanäle nur begrenzten Einfluss auf die Erkennungsleistung haben. Erst die Kombination mehrerer Kanäle führt zu einer deutlichen Verbesserung der mAP. Einzelkanäle erreichen Werte unter 0,55, während Kombinationen wie  \todo{richtiges Modell?}RGIR Werte zwischen 0,61 und 0,63 erzielen. Der NDVI-Kanal liefert mit 0,42–0,44 die schlechteste Performance, was nicht durch die radiometrische Auflösung (8\,bit) erklärt werden kann. Fahrzeuge der Klasse \emph{Car} werden robust erkannt, selbst ohne Kanalkombination, vermutlich aufgrund der hohen Anzahl an Trainingsdaten und ihrer charakteristischen Form. Die größten Unterschiede treten bei Hintergrundobjekten auf, wobei IR die besten Ergebnisse liefert und Kombinationen der Kanäle Verbesserungen ermöglichen. Schwierigkeiten bestehen insbesondere bei generischen Klassen wie \emph{Vehicle} und bei Verwechslungen zwischen \emph{Ship} und \emph{Camping Car}, da die Form oder teilweise Abdeckung der Objekte die Unterscheidung erschwert. Die Unterscheidung einzelner Fahrzeugtypen abseits von \emph{Car} bleibt aufgrund begrenzter Daten eine Herausforderung.
+
+Der räumliche Kontext der Objekte beeinflusst die Detektion ebenfalls maßgeblich. Fahrzeuge in strukturierten Vorstadtszenen lassen sich vergleichsweise einfach erkennen, während Fahrzeuge auf Schrottplätzen oder überwucherten Flächen schwer zu detektieren sind. Auch die Farbe spielt eine Rolle: weiße Fahrzeuge auf grauem Asphalt werden leicht erkannt, während graue oder schwarze Fahrzeuge schwerer vom Hintergrund zu unterscheiden sind. Dies korreliert mit der Verteilung der Fahrzeugfarben in den USA, wobei Weiß (24\%) und Schwarz (23\%) besonders häufig vorkommen \cite{abc_utah}.
+
+YOLO-Modelle \todo{widerspruch zu Ablationsabsatz} eignen sich zur Fahrzeugdetektion, wenn Auflösung und Anzahl der Spektralkanäle ausreichend sind. Bei hochauflösenden Daten (12,5\,cm $\times$ 12,5\,cm pro Pixel) ist eine zuverlässige Erkennung verschiedener Fahrzeugklassen möglich, insbesondere für Autos, die eine mAP von über 80\,\% erreichen. Dies ist wahrscheinlich auf die große Anzahl an Trainingsdaten zurückzuführen. OBB entsprechen der Definition von \emph{very small objects} nach \cite{Chen2017} und ermöglichen somit die Detektion kleiner Objekte mit YOLOv9. \todo{mehr vielleicht} YOLOv9 kann Ground Truth-Objekte zuverlässig lokalisieren und kategorisieren, was Anwendungen wie die Analyse von Fahrzeugverteilungen über ganze Regionen erlaubt, insbesondere in Kombination mit regelmäßigen Satellitenüberflügen \cite{planet_labs, airbus_neo}.  \todo{rausnehmen?}Solche Daten wurden beispielsweise zur Evaluierung der COVID-19-Pandemie genutzt \cite{Spiegel_article}.
+
+\todo{mehr vieleicht? BELEGE für die Sache}Die Nutzung multispektraler Kanäle und räumlicher Kontextinformationen bietet mehrere Vorteile. Das Modell kann typische Muster erkennen, wie Parkplätze oder Hafenbereiche, und semantische Informationen aus multispektralen Kanälen liefern, die die Klassifikation robuster gegenüber Tarnung, Schatten oder Farbvariationen machen. Kanäle wie NDVI oder IR ermöglichen zudem die Bewertung von Objektzustand und Nutzung. Die Kombination mehrerer Kanäle verbessert die Generalisierung auf unterschiedliche Umgebungen wie Stadt, Wald oder Wüste und erhöht somit die Robustheit gegenüber neuen Testgebieten. Über die reine Fahrzeugerkennung hinaus können Kategorien wie Fahrzeugtyp, Zustand oder Nutzungskontext unterschieden werden. \todo{eignetlihc ausblick}Die Kombination mit weiteren Datenquellen, etwa SAR, LiDAR oder Höhenmodellen, ermöglicht Anwendungen wie Verkehrsdichteanalyse, Infrastrukturzustand oder Nutzungsmuster.
 
 %###########################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
 
