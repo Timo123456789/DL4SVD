@@ -8,8 +8,6 @@
     \label{fig:Flowchart}
 \end{figure}
 
-\todo{Verweis auf Github Repo noch erwähnen?}
-\todo{muss noch irgendwo das Ergebnis des DOTA Trainings erwähnt werden?}
 % \begin{itemize}
 %     \item Methods und Implementierung zusammenlegen
 %     \item Mein Vorschlag neuer Reihenfolge
@@ -34,7 +32,7 @@
 % Im Rahmen der Experimente werden verschiedene Kanalpermutationen (s. Tab. \ref{tab:perm}) getestet.
 
 
-Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart (s. Fig. \ref{fig:Flowchart}) dargestellt. Im folgenden Abschnitt wird die Methodik dieser Arbeit beschrieben. Zunächst wird die Datengrundlage anhand der verwendeten Datensätze erläutert. Darauf aufbauend werden die eingesetzten \acrshort{YOLO}-Versionen vorgestellt. Im Anschluss folgt die Implementierung, bestehend aus den verwendeten Python-Packages sowie einer Beschreibung des Programmcodes. Danach werden die zentralen Herausforderungen im Preprocessing dargestellt. Anschließend werden die Ergebnisse der 6-Fold-Cross-Validation präsentiert, wobei eigene Folds erstellt wurden, die für alle Experimente mit \acrshort{abb}, \acrshort{obb} sowie den Permutationen (s. Tab. \ref{tab:perm}) genutzt wurden. Abschließend wird die Hardware beschrieben, auf der die Experimente durchgeführt wurden, nämlich das \acrlong{HPC} \acrshort{PALMA}, sowie die dort ausgeführten Bash-Skripte mit den für \acrshort{YOLO} verwendeten Hyperparametern.  
+Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart (s. Fig. \ref{fig:Flowchart}) dargestellt. Im folgenden Abschnitt wird die Methodik dieser Arbeit beschrieben. Zunächst wird die Datengrundlage anhand der verwendeten Datensätze erläutert. Darauf aufbauend werden die eingesetzten \acrshort{YOLO}-Versionen vorgestellt. Im Anschluss folgt die Implementierung, bestehend aus den verwendeten Python-Packages sowie einer Beschreibung des Programmcodes, welcher auf Github \cite{Github_timo} zur Verfügung gestellt wird. Danach werden die zentralen Herausforderungen im Preprocessing dargestellt. Anschließend werden die Ergebnisse der 6-Fold-Cross-Validation präsentiert, wobei eigene Folds erstellt wurden, die für alle Experimente mit \acrshort{abb}, \acrshort{obb} sowie den Permutationen (s. Tab. \ref{tab:perm}) genutzt wurden. Abschließend wird die Hardware beschrieben, auf der die Experimente durchgeführt wurden, nämlich der \acrlong{HPC} \acrshort{PALMA}, sowie die dort ausgeführten Bash-Skripte mit den für \acrshort{YOLO} verwendeten Hyperparametern.  
 
 % \begin{itemize}
 %     \item Im folgenden Abschbnitt wird die Methodik beschrieben
@@ -78,9 +76,8 @@ Die Datenbasis umfasst 2 Datensätze, die annotierte Luft- und Satellitenbildern
 \subsection{Vehicle Detection on Aerial Images (VEDAI) Dataset}
 \label{subsec:VEDAI}
 
-Das \Acrshort{VEDAI} Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl \acrshort{RGB}-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie \acrshort{NIR} oder \acrshort{IR} auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in ungefähr 1200 Bildern annotiert. Diese Objekte sind in 9 Klassen (Ship, Camping Car, Car, Pickup, Plane, Tractor, Truck, Van und Vehicles) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht \cite{Razakarivony2015}. \\
-Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was ausreichend ist um einzelne Fahrzeuge zu erkennen. Die Bilder mit einer Größe von 1024 \texttimes 1024 Pixeln sind bei einer Befliegung im Jahr 2012 in US Amerikanischen Bundesstaat Utah aufgenommen worden \cite{Razakarivony2015}. 
-\todo{Bsp. Bild für jede Klasse zeigen (aus Paper nehmen!; Quellenverlinkung für text und bild nicht vergessen)}
+Das \Acrshort{VEDAI} Dataset \cite{vedai_web}  aus dem Jahr 2015 bietet sich als Datengrundlage an, da es hochauflösende Luftbilder enthält, die speziell für die Fahrzeugerkennung geeignet sind \cite{Razakarivony2015}. Es umfasst annotierte Daten, die Fahrzeuge in unterschiedlichen Szenarien, Größen und Orientierungen zeigen. Außerdem ist es ein Benchmark für die Detektion von sehr kleinen Objekten. Das Dataset enthält sowohl \acrshort{RGB}-Bilder als auch multispektrale Daten, was es ideal für die Untersuchung der Auswirkungen zusätzlicher Kanäle wie \acrshort{IR} auf die Objekterkennung macht. Es sind mehr als 3700 Objekte in ungefähr 1200 Bildern annotiert. Diese Objekte sind in 9 Klassen (Ship, Camping Car, Car, Pickup, Plane, Tractor, Truck, Van und Vehicles) unterteilt und der Hintergrund der Objekte ist abwechslungsreich, was die Robustheit des trainierten Modelles erhöht \cite{Razakarivony2015}. \\
+Die Auflösung der Bilder liegt bei 12.5 cm \texttimes 12.5 cm pro Pixel, was ausreichend ist um einzelne Fahrzeuge zu erkennen. Die Bilder mit einer Größe von 1024 \texttimes 1024 Pixeln sind bei einer Befliegung im Jahr 2012 in US Amerikanischen Bundesstaat Utah aufgenommen worden \cite{Razakarivony2015}. Beispielbilder für jede Klasse sind in den Abbildungen \ref{fig:aab_obb_example_pics}, \ref{fig:perm_exp_example_pics} und \ref{fig:ablation_example_pics} zu sehen.
 
 
 
@@ -90,7 +87,7 @@ Das \Acrfull{DOTA} eignet sich aufgrund seiner Vielfalt an Klassen und seiner do
 
 Für das Training in dieser Arbeit wurden alle 16 verfügbaren Klassen des DOTA-Datensatzes berücksichtigt. Besonders relevant für die anschließenden Experimente sind die Klassen \textit{Large Vehicle}, \textit{Small Vehicle}, \textit{Plane} und \textit{Ship}, da sie eine hohe Bedeutung für die Objekterkennung im urbanen und infrastrukturellen Kontext besitzen.
 
-Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgeführt, wobei eine \textit{Patience} von 150 verwendet wurde. Alle weiteren Hyperparameter wurden analog zu den in Tabelle~\ref{tab:hyperparameters} dargestellten Einstellungen gewählt. Die erzielten Ergebnisse zeigen einen mittleren \acrshort{mAP}50-95 von ca. 0,42, was angesichts der großen Anzahl an Bildern und Klassen als zufriedenstellender Wert zu bewerten ist. Es ist kein Overfitting erkennbar, und die Precision-Werte sind insgesamt gut. Die Metriken des Trainingsverlauf sind in Abbildung~\ref{fig:DOTA_train_values} und Beispielklassen in Fig. \ref{fig:DOTA_exClasses} dargestellt.
+Das Training wurde mit dem Modell \acrshort{YOLO}v9u über 1500 Epochen durchgeführt, wobei eine \textit{Patience} von 150 verwendet wurde. Alle weiteren Hyperparameter wurden analog zu den in Tabelle~\ref{tab:hyperparameters} dargestellten Einstellungen gewählt. Die erzielten Ergebnisse zeigen einen mittleren \acrshort{mAP}50-95 von ca. 0,42, was angesichts der großen Anzahl an Bildern und Klassen als zufriedenstellender Wert zu bewerten ist. Es ist kein Overfitting erkennbar, und die Precision-Werte sind insgesamt gut. Die Metriken des Trainingsverlauf sind in Abbildung~\ref{fig:DOTA_train_values} und Beispielklassen in Fig. \ref{fig:DOTA_exClasses} dargestellt.
 
 
 
@@ -98,7 +95,6 @@ Das Training wurde mit dem Modell \textit{YOLOv9u} über 1500 Epochen durchgefü
 
 \section{YOLOv9}
 \label{sec:yolov9}
-%\todo{überarbeiten ist noch proposal stand; mehr auf warum und yolov9 eigenheiten eingehen, nicht basis erklären sondern das was an yolov9 geändert wurde}
 \todo{warum kann yolov8 obb? was wurde dort eingefügt?}
 %##########################################################################
 %##########################################################################
@@ -154,17 +150,21 @@ Die zentralen Stärken von \acrshort{YOLO}v9 liegen in seiner hohen Verarbeitung
 
 
 Die Varianten \acrshort{YOLO}v9u und \acrshort{YOLO}v9e unterscheiden sich primär hinsichtlich des verwendeten Labelformats. \acrshort{YOLO}v9e verwendet ein normiertes Koordinatensystem:
+\hypertarget{eq:yolov9}{}
 \begin{equation}
 x_\text{norm} = \frac{x_\text{pixel}}{w_\text{image}},\;\;
 y_\text{norm} = \frac{y_\text{pixel}}{h_\text{image}},\;\;
 w_\text{norm} = \frac{w_\text{box}}{w_\text{image}},\;\;
 h_\text{norm} = \frac{h_\text{box}}{h_\text{image}}
 \end{equation}
+\label{Eq:yolov9}
 
+\hypertarget{eq:yolov9u}{}
 \acrshort{YOLO}v9u hingegen verwendet ein Polygonformat:
 \begin{equation}
 (\text{class\_index},\ x_1, y_1, x_2, y_2, x_3, y_3, x_4, y_4).
 \end{equation}
+
 %\todo{passt das so rein? überhaupt sinnvoll? verstehen und so...}
 % Die YOLOv9-Architektur nutzt einen tiefen, GELAN-basierten Backbone mit umfangreicher Feature-Fusion (\texttt{CBLinear}, \texttt{CBFuse}) und Downsampling-Blöcken (\texttt{ADown}), wodurch klassische achsenausgerichtete Bounding-Boxes über den \texttt{Detect}-Layer erzeugt werden. YOLOv9u hingegen verfolgt einen schlankeren Aufbau mit flacherem Backbone, reduzierter Tiefe der \texttt{RepNCSPELAN4}-Blöcke und minimaler Backbone-Fusion. Die Downsampling-Stufen erfolgen hier über einfache Convolutionen, und die Detektion zielt auf orientierte Bounding-Boxes (\texttt{OBB}) ab. Somit besteht ein klarer Trade-off zwischen Modellkomplexität und Effizienz sowie spezialisierter Detektionsfähigkeit.
 
@@ -183,7 +183,7 @@ h_\text{norm} = \frac{h_\text{box}}{h_\text{image}}
 \subsection{YOLOv9u by Wong Kin Yiu}
 \label{subsec:yolov9u}
 
-Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.1.23}\cite{yolo_v9u_github}, um die ursprüngliche \acrshort{YOLO}v9 Version um diverse nachgelagerte Aufgaben zu erweitern. Hierzu zählen Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. In der vorliegenden Arbeit wird \acrshort{YOLO}v9u eingesetzt, da diese als Open-Source-Variante verfügbar ist und die zugrundeliegende Methodik durch das veröffentlichte Paper dokumentiert wurde \cite{wang2024_sapkota}. \acrshort{YOLO}v9e ist hingegen von Ultralytics nur als kommerzielle Variante verfügbar \cite{ultralyics_2023}.
+Die Implementierung von \acrshort{YOLO}v9u basiert auf der Version \acrshort{YOLO}v8.1.23 \cite{yolo_v9u_github}, um die ursprüngliche \acrshort{YOLO}v9 Version um diverse nachgelagerte Aufgaben zu erweitern. Hierzu zählen Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. In der vorliegenden Arbeit wird \acrshort{YOLO}v9u eingesetzt, da diese als Open-Source-Variante verfügbar ist und die zugrundeliegende Methodik durch das veröffentlichte Paper dokumentiert wurde \cite{wang2024_sapkota}. Das Modell \acrshort{YOLO}v9e wird von Ultralytics bereitgestellt, jedoch ohne begleitende wissenschaftliche Veröffentlichung, sodass dessen Aufbau und methodische Grundlagen nicht nachvollziehbar dokumentiert sind \cite{ultralyics_2023}.
 
  
 
@@ -193,9 +193,9 @@ Die Implementierung von \texttt{YOLOv9u} basiert auf der Version \texttt{YOLOv8.
 \subsection{YOLOv9e by Ultralytics}
 \label{subsec:yolov9e}
 
-Die \texttt{YOLOv9}-Modellreihe von Ultralytics umfasst mehrere Varianten, die sich in Bezug auf Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Alle Varianten integrieren die von \citeauthor{wang2024_sapkota} entwickelten \acrshort{PGI}- und \acrshort{GELAN}-Architekturen und unterstützen zudem die Verarbeitung von \acrshort{abb}. Die Bandbreite reicht von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \acrshortpl{GFLOP} bis hin zur leistungsstärksten \texttt{YOLOv9e}-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}).  
+Die \acrshort{YOLO}v9-Modellreihe von Ultralytics umfasst mehrere Varianten, die sich in Bezug auf Modellgröße, Genauigkeit und Rechenkomplexität unterscheiden. Alle Varianten integrieren die von \citeauthor{wang2024_sapkota} entwickelten \acrshort{PGI}- und \acrshort{GELAN}-Architekturen und unterstützen zudem die Verarbeitung von \acrshort{abb}. Die Bandbreite reicht von der kompakten \texttt{YOLOv9t}-Variante mit einer Eingabebildgröße von $640 \times 640$ Pixeln, 2 Millionen Parametern und 7{,}7 \acrshortpl{GFLOP} bis hin zur leistungsstärksten \acrshort{YOLO}v9e-Variante mit 58{,}1 Millionen Parametern und 192{,}5 \acrshortpl{GFLOP} (siehe Tabelle~\ref{tab:yolov9-models}).  
 
-Aufgrund der höchsten erzielten Genauigkeit (\acrshort{mAP}$_{\text{val}}^{50\text{-}95} = 55,6$) sowie der höchsten Rechenkapazität wurde das \texttt{YOLOv9e}-Modell für alle Experimente mit axis-aligned Bounding Boxes verwendet. Die Wahl dieser Variante erfolgte mit dem Ziel, die maximale Detektionsleistung im Rahmen der Evaluierung sicherzustellen. Zudem wird diese Version genutzt, da sie die Verarbeitung von \acrlong{abb} unterstützt.
+Aufgrund der höchsten erzielten Genauigkeit (\acrshort{mAP}50-95 = 55,6) sowie der höchsten Rechenkapazität wurde das \texttt{YOLOv9e}-Modell für alle Experimente mit axis-aligned Bounding Boxes verwendet. Die Wahl dieser Variante erfolgte mit dem Ziel, die maximale Detektionsleistung im Rahmen der Evaluierung sicherzustellen. Zudem wird diese Version genutzt, da sie die Verarbeitung von \acrlong{abb} unterstützt.
 
 % \subsection{Differences YOLOv9u and YOLOv9e}
 % \todo{wirklich nötig?}
@@ -246,7 +246,6 @@ Ein weiteres Open-Source Projekt ist NumPy, welches 2005 gegründet wurde, um nu
 Mithilfe dieser Bibliothek kann eine zufällige Verteilung der Bilddaten auf die Folds realisiert werden, indem die eingelesene Bildliste einer zufälligen Permutation unterzogen wird. Darüber hinaus stellt die Bibliothek Funktionen zur Verfügung, mit denen sowohl die Berechnung und Reskalierung des \acrshort{NDVI}-Kanals als auch die Transformation der Bounding-Box-Koordinaten in das für das \acrshort{YOLO}-Framework erforderliche Format durchgeführt werden können. Zusätzlich ermöglicht sie die Umrechnung axis-aligned Bounding Boxes in oriented Bounding Boxes sowie die Flächenberechnung beider Bounding-Box-Typen.
 \subsubsection{Scipy}
 SciPy ist in der Version 1.16.0 am 22.06.25 veröffentlicht worden \cite{scipy-main}. Diese Bibliothek bietet Algorithmen für wissenschaftliche Berechnungen in Python an \cite{scipy-main}. Die Unterfunktion "ConvexHull" wird zur Flächenberechnung der oriented Bounding Boxen genutzt.
-\todo{ab jetzt nur für analyse}
 \subsection{Additional Python-Packages for data analysis}
 Zur Analyse der Modelle wurden die folgenden Bibliotheken verwendet.
 \subsubsection*{Matplotlib}
@@ -261,7 +260,7 @@ Die Bibliothek "pandas" ist ebenfalls ein Open Source Datenanalyse und -manipuli
 
 \section{Challenges Preprocessing}
 Bei der Verarbeitung des VEDAI-Datensatzes traten mehrere technische Herausforderungen auf. 
-Zunächst mussten die vorhandenen Label in das \textit{YOLOv9}-OBB-Format konvertiert werden, um mit dem gewählten Modell kompatibel zu sein. 
+Zunächst mussten die vorhandenen Label in das \acrshort{YOLO}v9-\acrshort{obb}-Format konvertiert werden, um mit dem gewählten Modell kompatibel zu sein. 
 Dabei zeigte sich, dass ein kleiner Teil der Daten (7 von 3\,757 Instanzen) Koordinatenwerte aufwies, die außerhalb des zulässigen Bereichs lagen (d.\,h. kleiner als 0 (s. Fig. \ref{fig:smaller0}) oder größer als 1 (s. Fig. \ref{fig:higher1})) . 
 Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundung der Werte auf den gültigen Wertebereich behoben. 
 
@@ -284,7 +283,7 @@ Dieses Problem wurde durch den Einsatz von Exception Handling sowie durch Rundun
     \label{fig:example_coords_ooR}
 \end{figure}
 
-Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Folds nicht disjunkt waren, erhöhte sich das Risiko von Overfitting (s. Kap. \ref{subsec:overfitting}), sodass eigene Folds erstellt werden mussten, deren Erstellung im folgenden Abschnitt beschrieben wird. \todo{satz überarbeitne, doppelung}
+% Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Folds nicht disjunkt waren, erhöhte sich das Risiko von Overfitting (s. Kap. \ref{subsec:overfitting}), sodass eigene Folds erstellt werden mussten (s. Kap. \ref{subsec:Fold_creation}), deren Verteilung im folgenden Abschnitt beschrieben wird. \todo{satz überarbeitne, doppelung}
 
 
 
@@ -293,11 +292,10 @@ Da die von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} verwendeten Fol
 
 \section{6-Fold-Cross-Validation}
 \label{sec_5Fold_CV}
-\todo{es ist eigentlich 6 fold cross validation}
 
 Um die Robustheit der Ergebnisse sicherzustellen und eine fundierte Vergleichbarkeit verschiedener Modelle zu ermöglichen, wurde in dieser Arbeit eine 6-Fold-Cross-Validation angewendet. Insbesondere wurde Wert darauf gelegt, die Evaluation nicht nur auf einem Teildatensatz durchzuführen, sondern eine Mehrfachteilung der Daten vorzunehmen, sodass Schwankungen durch unterschiedliche Trainings- und Validierungsaufteilungen minimiert werden.
 
-Im Gegensatz zu den von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} bereitgestellten Folds, deren Zusammenstellung identische Bilder gleichzeitig im Trainings- und Validierungssatz aufweist, wurden für diese Arbeit eigene, disjunkte Folds generiert. Letztere gewährleisten, dass keine Überlappungen zwischen Trainings- und Validierungsdaten existieren und somit die Gefahr von verfälschten Trainingsergebnissen durch Overfitting ausgeschlossen ist. Die genaue Methodik der Fold-Erstellung ist in Kapitel \ref{subsec:Fold_creation} beschrieben. \todo{absatz überarbeiten wiederholung mit 4.5}
+Im Gegensatz zu den von \citeauthor{Razakarivony2015} \cite{Razakarivony2015} bereitgestellten Folds, deren Zusammenstellung identische Bilder gleichzeitig im Trainings- und Validierungssatz aufweist, wurden für diese Arbeit eigene, disjunkte Folds generiert. Letztere gewährleisten, dass keine Überlappungen zwischen Trainings- und Validierungsdaten existieren und somit die Gefahr von verfälschten Trainingsergebnissen durch Overfitting ausgeschlossen ist. Die genaue Methodik der Fold-Erstellung ist in Kapitel \ref{subsec:Fold_creation} beschrieben. 
 
 Die Datenaufteilung erfolgte in sechs Folds (0-5): Fünf Folds (Fold 0 bis 4) wurden jeweils für Training und Validierung genutzt, während Fold 5 ausschließlich für abschließende Testzwecke reserviert blieb. Dadurch wurde erreicht, dass die finale Evaluation auf bisher ungesehenen, neutralen Daten stattfand.
 
@@ -447,11 +445,11 @@ Die hohe Rechenleistung und Speicherkapazität des Clusters machten es möglich,
 
 \section{Bash Scripts}
 
-Für das Training der Modelle wurden mehrere \texttt{Bash}-Skripte entwickelt, die für den Hochleistungsrechner \acrshort{PALMA} ausgelegt waren. Die Trainingsläufe erfolgten primär über \texttt{\acrshort{SLURM} Job Arrays}, wobei jeder Fold einer Permutation einem separaten Job zugeordnet wurde. Somit entsprach ein Modell stets einem Fold innerhalb einer bestimmten Permutation.  
+Für das Training der Modelle wurden mehrere \texttt{Bash}-Skripte entwickelt, die für den Hochleistungsrechner \acrshort{PALMA} ausgelegt waren. Die Trainingsläufe erfolgten primär über \acrshort{SLURM} Job Arrays, wobei jeder Fold einer Permutation einem separaten Job zugeordnet wurde. Somit entsprach ein Modell stets einem Fold innerhalb einer bestimmten Permutation.  
 
-Die Entscheidung zwischen \acrlong{abb} und \acrlong{obb} erfolgte unter denselben Trainingsparametern wie bei den Permutationsexperimenten (s. Tab.~\ref{tab:hyperparameters}), jedoch mit unterschiedlichen Modellen: \texttt{YOLOv9e} für \acrshort{abb} und \texttt{YOLOv9u} für \acrshort{obb}, da jeweils nur diese Varianten die entsprechenden Bounding-Box-Formate unterstützen. In diesem Fall wurde kein vortrainiertes Modell genutzt, sondern ein Training \textit{from scratch} durchgeführt.  
+Die Entscheidung zwischen \acrlong{abb} und \acrlong{obb} erfolgte unter denselben Trainingsparametern wie bei den Permutationsexperimenten (s. Tab.~\ref{tab:hyperparameters}), jedoch mit unterschiedlichen Modellen: \acrshort{YOLO}v9e für \acrshort{abb} und \acrshort{YOLO}v9u für \acrshort{obb}, da jeweils nur diese Varianten die entsprechenden Bounding-Box-Formate unterstützen. In diesem Fall wurde kein vortrainiertes Modell genutzt, sondern ein Training \textit{from scratch} durchgeführt.  
 
-Im Anschluss wurden die Permutationsexperimente durchgeführt. Dabei kamen einheitlich die in Tab.~\ref{tab:hyperparameters} aufgeführten Hyperparameter zum Einsatz. Die Bildauflösung betrug 1024~$\times$~1024 Pixel, die Trainingsdauer umfasste 500 Epochen, und ein frühzeitiges Beenden war durch einen \texttt{patience}-Wert von 0 deaktiviert, um eine konsistente Vergleichbarkeit sicherzustellen. Grundlage war ein auf dem \acrshort{DOTA}-Datensatz vortrainiertes Modell, wobei durchgängig die Architektur \texttt{YOLOv9u} (s. Kap.~\ref{subsec:yolov9u}) verwendet wurde.  
+Im Anschluss wurden die Permutationsexperimente durchgeführt. Dabei kamen einheitlich die in Tab.~\ref{tab:hyperparameters} aufgeführten Hyperparameter zum Einsatz. Die Bildauflösung betrug 1024~$\times$~1024 Pixel, die Trainingsdauer umfasste 500 Epochen, und ein frühzeitiges Beenden war durch einen \texttt{patience}-Wert von 0 deaktiviert, um eine konsistente Vergleichbarkeit sicherzustellen. Grundlage war ein auf dem \acrshort{DOTA}-Datensatz vortrainiertes Modell, wobei durchgängig die Architektur \acrshort{YOLO}v9u (s. Kap.~\ref{subsec:yolov9u}) verwendet wurde.  
 
 Für die Ablationsstudien wurde hingegen auf den Einsatz eines vortrainierten Modells verzichtet, während alle übrigen Trainingsparameter unverändert blieben.  
 
