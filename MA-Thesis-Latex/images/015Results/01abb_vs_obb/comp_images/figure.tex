@@ -109,6 +109,6 @@
     %Van
     & \includegraphics[trim={300pt 355pt 610pt 570pt},clip,width=\linewidth]{images/015Results/01abb_vs_obb/comp_images/aab_old/198.png} \\ \hline
 \end{tabularx}
-\caption[aab and obb: Examples of different classes for the object recognition performance]{Examples of different classes for the object recognition performance of different bounding box formats. The numbers displayed on the bounding boxes indicate the confidence of the model in the classification of the respective box. For Color Scheme explanation see Tab. \ref{tab:class_colors}}.
+\caption[aab and obb: Examples of different classes for the object recognition performance]{Examples of different classes for the object recognition performance of different bounding box formats. The numbers displayed on the bounding boxes indicate the confidence of the model in the classification of the respective box. For Color Scheme explanation see Tab. \ref{tab:class_colors}. The example of the class \textit{Plane} clearly illustrates the influence of rotational capability on prediction quality. \acrshort{abb} proposes a \acrshort{BB} that is very close to the \acrshort{GT}, while \acrshort{obb} and ‘ABB in OBB’ apply different rotations and are therefore based on different \acrshortpl{GT}. This results in lower \acrshort{mAP} values for \acrshort{obb}, whereas ‘ABB in OBB’ achieves higher performance due to its larger bounding boxes and better overlap with the \acrshort{GT}. (Own representation)}
 \label{fig:aab_obb_example_pics}
 \end{figure}

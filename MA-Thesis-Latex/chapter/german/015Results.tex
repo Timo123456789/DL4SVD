@@ -72,7 +72,8 @@ In den Bildcollagen (vgl. Abb. \ref{fig:aab_obb_example_pics}, \ref{fig:perm_exp
         \caption{Labels: "Ship", obb format}
         \label{fig:obb_ship}
     \end{subfigure}  
-    \caption[Comparison of the bounding box formats of two different object classes]{Comparison of the bounding box formats of two different object classes (for full-sized images see \ref{fig:comparison_bb_format_fs})}
+    \caption[Comparison of the bounding box formats of two different object classes]{Comparison of the bounding box formats of two different object classes (for full-sized images see \ref{fig:comparison_bb_format_fs}). \acrshort{obb} enclose objects much more accurately than \acrshort{abb}, as they include fewer irrelevant background areas. The reduced risk of overlap with neighbouring structures allows the model to extract more relevant object features and thus learn a more accurate representation of the classes (Own representation).
+}
     \label{fig:comparison_bb_format}
 \end{figure}
 \todo{nicht nur erläutern was man sieht sondern auch was man daraus folgert (analyse) im Bildunterschrift}
@@ -80,7 +81,7 @@ In den Bildcollagen (vgl. Abb. \ref{fig:aab_obb_example_pics}, \ref{fig:perm_exp
 
 In Abbildung \ref{fig:comparison_bb_format} wird ein Vergleich zwischen \acrshort{obb} und \acrshort{abb} für verschiedene Objektklassen dargestellt. Besonders deutlich wird dieser Unterschied beim LKW-Beispiel: In Abbildung \ref{fig:abb_truck} nimmt die \acrshort{abb} mit ca. 1378 px eine deutlich größere Fläche ein als die \acrshort{obb} in Abbildung \ref{fig:obb_truck} mit ca. 967 px. Beim Vergleich stark rotierten Objekten, wie etwa bei den Schiffen in Abbildung \ref{fig:abb_ship} und \ref{fig:obb_ship}, zeigt sich, dass die \acrshort{obb} das Objekt selbst deutlich präziser umschließt und weniger umliegendes Areal einbezieht. Ein weiterer Vorteil der \acrshort{obb} ist das Fehlen von Überlappungen zwischen den Boxen. Für weitere Beispiele s. Abb. \ref{fig:aab_obb_example_pics}. Die Zeile "abb in obb" beschreibt, dass das \acrshort{obb}-Modell (\acrshort{YOLO}v9u) mit \acrshort{abb}-Bounding Boxen trainiert wurde. Dies bedeutet, dass die im \acrshort{VEDAI}-Datensatz vorhandenen \acrshortpl{obb} in das für \acrshort{YOLO}v9 vorgesehene Bounding Box Format (s. \hyperlink{eq:yolov9u}{Equ.} in Kap. \ref{sec:yolov9}) als \acrshort{abb} (also mit 8 Koordinaten, die eine achsenparallele Bounding Box aufspannen) umgewandelt wurden. 
 
-Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) verdeutlicht, dass \acrshort{obb} im Mittel kompakter ist (Median \acrshort{abb}: ca. 1000 px, Median \acrshort{obb}: >700 px). Die \acrshort{abb}-Flächen entsprechen nahezu exakt den "abb in obb", da die Bounding Boxes fast identisch sind; der einzige Unterschied liegt im trainierten Modell und den Berechnungen der Ecken der \acrshort{abb}. Die Bounding Boxen nehmen  als \acrshort{obb} (ca. 700 px pro Box) etwa 0,066\% der Gesamtfläche des Bildes ein, als \acrshort{abb} (ca. 1000 px pro Box) etwa 0,095\%. Damit liegen \acrshort{obb} knapp unterhalb der Untergrenze für sehr kleine Objekte nach \citeauthor{Chen2017} \cite{Chen2017} (s. Kap. \ref{ch:state_of_research}) und gelten als "very small objects", während \acrshort{abb} oberhalb der Untergrenze für kleine Objekte liegt und damit als "small object" gilt.
+Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) verdeutlicht, dass \acrshort{obb} im Mittel kompakter ist (Median \acrshort{abb}: ca. 1000 px, Median \acrshort{obb}: >700 px). Die \acrshort{abb}-Flächen entsprechen nahezu exakt den "abb in obb", da die Bounding Boxes fast identisch sind; der einzige Unterschied liegt im trainierten Modell und den Berechnungen der Ecken der \acrshort{abb}. Die Bounding Boxen nehmen  als \acrshort{obb} (ca. 700 px pro Box) etwa 0,066\% der Gesamtfläche des Bildes ein, als \acrshort{abb} (ca. 1000 px pro Box) etwa 0,095\%. Damit liegen \acrshort{obb} knapp unterhalb der Untergrenze für sehr kleine Objekte nach \citeauthor{Chen2017} \cite{Chen2017} (s. Kap. \ref{ch:state_of_research}) und gelten als "very small objects", während \acrshort{abb} oberhalb der Untergrenze für kleine Objekte liegt und damit als "small object" gilt (Berechnung s. \ref{ap:calc_bb_area_percent}).
 
 
 % \begin{itemize}
@@ -95,7 +96,7 @@ Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) v
 \begin{figure}[htbp]
     \centering
     \includesvg[width=0.8\textwidth]{images/015Results/01abb_vs_obb/boxplot_areas.svg}
-    \caption[Comparison of Bounding Box Area in pixels for \acrshort{abb}, \acrshort{obb}, abb in obb]{Comparison of Bounding Box Area in pixels for \acrshort{abb}, \acrshort{obb}, abb in obb. "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. (Own representation)}
+    \caption[Comparison of Bounding Box Area in pixels for \acrshort{abb}, \acrshort{obb}, abb in obb]{Comparison of Bounding Box Area in pixels for \acrshort{abb}, \acrshort{obb}, abb in obb. "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. Due to their rotation-based adjustment, \acrshortpl{obb} are more compact than \acrshortpl{abb} and comprise less background. Since the calculation of ‘ABB in OBB’ areas yields almost identical values, it can be assumed that \acrshort{obb} models achieve higher performance due to more precise limitations (Own representation).}
     \label{fig:bbox_area}
 \end{figure}
 
@@ -103,7 +104,7 @@ Ein Vergleich aller Bounding Box-Flächen (vgl. Abbildung \ref{fig:bbox_area}) v
 \begin{figure}[htbp]
     \centering
     \includesvg[width=0.8\textwidth]{images/015Results/01abb_vs_obb/abb_obb_best_val_on_val.svg}
-    \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. (Own representation)}
+    \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on validation dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. \acrshort{abb} show a lower \acrshort{mAP}, presumably due to the model, while \acrshort{obb} are superior due to their better object adaptation. Notably, ‘ABB in OBB’ achieves higher values, which may indicate the strong rotation sensitivity of \acrshort{obb} (Own representation).}
     \label{fig:obb_abb_map50-95:val_on_val}
 \end{figure}
 Die Analyse der \acrshort{mAP}50--95 des besten Validierungsmodells auf dem Validierungsdatensatz (Abbildung \ref{fig:obb_abb_map50-95:val_on_val}) zeigt, dass das \acrshort{obb}-Modell in allen Fällen eine bessere Leistung erzielt als das \acrshort{abb}-Modell. Alle Modelle für die die Einschätzung der Performance von \acrshort{obb} und \acrshort{abb} wurden ausschließlich auf Basis von \acrshort{RGB}-Bildern trainiert. Interessanterweise erzielen \acrshortpl{abb} auf dem \acrshort{obb}-Modell eine höhere Performance als die angepassten \acrshort{obb}-Boxen innerhalb desselben Modells (yolov9u). Dasselbe Phänomen lässt sich auch auf dem Testdatensatz beobachten (Abbildung \ref{fig:obb_abb_map50-95:val_on_test}), sodass \acrshort{abb} in Verbindung mit dem \acrshort{obb}-Modell bessere Ergebnisse liefert. Auffällig ist, dass bei den \acrshort{abb}-basierten Modellen (sowohl \acrshort{abb} als auch "abb in obb") stets Fold 1 den besten Wert beim Validation Dataset auf dem Validation Dataset erreicht hat, während beim \acrshort{obb}-Modell Fold 0 dort die besten Ergebnisse lieferte (s. Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val}). Die Ergebnisse der jeweiligen Folds mit dem höchsten \acrshort{mAP}50-95 Wert aus Abb. \ref{fig:obb_abb_map50-95:val_on_val} sind durch den roten Punkt in Abbildung \ref{fig:obb_abb_map50-95:val_on_test} gekennzeichnet. Also hat laut Tab. \ref{tab:best_folds_area} und Fig. \ref{fig:obb_abb_map50-95:val_on_val} der Fold 1 den höchsten \acrshort{mAP} Wert im \acrshort{abb} Modell erzielt. Auf dem Testfold hat dieser Fold 1 jedoch lediglich das untere Quantil erreicht, wie in Abb. \ref{fig:obb_abb_map50-95:val_on_test} am roten Punkt zu sehen. \todo{nächster Satz ist eigentlich analyse (auskommentiert)}
@@ -147,7 +148,7 @@ Aufgrund der geringeren Wahrscheinlichkeit für Überlappungsfehler sowie der pr
 \begin{figure}[htbp]
     \centering
     \includesvg[width=0.8\textwidth]{images/015Results/01abb_vs_obb/aab_obb_best_val_on_test.svg}
-    \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on test dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:obb_abb_map50-95:val_on_val}).(Own representation)}
+    \caption[Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for \acrshort{abb} and \acrshort{obb} (Best validation model on test dataset). "aab in obb" means, that \acrlong{abb} converted to obb was used in the \acrshort{YOLO}v9u model with zero rotation. The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:obb_abb_map50-95:val_on_val}).  On the test dataset, \acrshort{abb} achieves poorer results, presumably due to model limitations, while \acrshort{obb} achieves significantly better performance due to more precise object boundaries. The ‘ABB in OBB’ configuration shows the best performance, as even small rotation deviations in the \acrshort{obb} model strongly influence the \acrshort{mAP} and the model's \acrshort{GT} \acrshort{BB} are significantly larger (Own representation). }
     \label{fig:obb_abb_map50-95:val_on_test}
 \end{figure}
 
@@ -191,14 +192,14 @@ Aufgrund der geringeren Wahrscheinlichkeit für Überlappungsfehler sowie der pr
 \begin{figure}[t]
     \centering
     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/perm_exp_best_val_on_test.svg}
-    \caption[Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on test dataset). The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:perm_exp_map50-95:val_on_val}). (Own representation)}
+    \caption[Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on test dataset). The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:perm_exp_map50-95:val_on_val}). \acrshort{RGIR} performs best, with models using \acrshort{NDVI} performing significantly worse than the five main permutations. \acrshort{NDVI} may introduce noise. Fluctuations between the quantiles in the main permutations are due to the fact that the channel changes do have an influence. \acrshort{RGBIR} has the third-best performance because it contains all bands. \acrshort{RGB} and \acrshort{RIRB} are better, possibly because too much information also causes noise. \Acrlong{B} does not appear to be important for vehicle detection. (Own representation)}
     \label{fig:perm_exp_map50-95:val_on_test}
 \end{figure}
 
 \begin{figure}[b]
     \centering
     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/perm_exp_best_val_on_val.svg}
-    \caption[Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on validation dataset).(Own representation)}
+    \caption[Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for different channel permutation models (Best validation model on validation dataset). The RGBIR channel permutation achieves the best performance, followed by the other main permutations, while RGIR performs worst among the five main permutations. Models with NDVI are again significantly worse due to additional noise. The small fluctuations between the five main quantiles indicate robust folds and stable training (Own representation).}
     \label{fig:perm_exp_map50-95:val_on_val}
 \end{figure}
 Im Folgenden werden zunächst die allgemeinen Ergebnisse der Modelle hinsichtlich der Detektionsleistung beschrieben und mit den in Abbildung \ref{fig:perm_exp_map50-95:val_on_test} dargestellten \acrshort{mAP}50--95-Werten verglichen. Anschließend erfolgt eine detaillierte Analyse der Klassenerkennungsleistung anhand der Differenzmatrizen.  
@@ -254,7 +255,7 @@ RGBNDVI  & 4 & 2 \\ \hline
 \begin{figure}[htbp]
     \centering
     \includesvg[width=0.9\textwidth]{images/015Results/02perm_exp/confusion_matrices/rgbir_F2.svg}
-    \caption[Confusion Matrix for RGBIR Modell (Fold 2)]{Confusion Matrix for RGBIR Modell (Fold 2). All values falling within the interval [–0.05, 0.05] are excluded from the matrix. (Own representation)}
+    \caption[Confusion Matrix for RGBIR Modell (Fold 2)]{Confusion Matrix for RGBIR Modell (Fold 2). All values falling within the interval [–0.05, 0.05] are excluded from the matrix. The model performs very well on the training data. The class \textit{Plane} is perfectly recognised and classified, while \textit{Car}, \textit{Ship} and \textit{Tractor} achieve excellent results. The generic class \textit{Vehicle} is often confused with the background, presumably due to the high variability of the object types it contains and because it is generic, meaning that there are no clear shapes and colours. The good recognition rate for \textit{Car} illustrates the strong influence of a large amount of training data on classification accuracy (Own representation).}
     \label{fig:perm_exp_confM_rgbir_f2}
 \end{figure}
 
@@ -285,7 +286,7 @@ Zur Interpretation der Differenzmatrizen gilt: Rot markiert eine bessere Perform
         \caption{Prediction} % Unterschrift für das zweite Bild
         \label{fig:cm_irgb} % Label für Referenzierung von Bild 2
     \end{subfigure}
-    \caption{Comparison of image 00000034\_co.png shows a discrepancy between ground truth and model prediction: vehicles are recognisable in the GT but not annotated, while the model (RGBIR, F0, (Validation on Validation)) detects and classifies them correctly. This calls into question the validity of GT-based metrics for distinguishing between background and object.} % Gemeinsame Unterschrift für beide Bilder
+    \caption{Comparison of image 00000034\_co.png shows a discrepancy between ground truth and model prediction: vehicles are recognisable in the GT but not annotated, while the model (RGBIR, F0, (Validation on Validation)) detects and classifies them correctly. This calls into question the validity of GT-based metrics for distinguishing between background and object (Own representation).} % Gemeinsame Unterschrift für beide Bilder
     \label{fig:wrong_labels} % Label für die gesamte Figure-Umgebung
 \end{figure}
 
@@ -346,7 +347,7 @@ Zur Interpretation der Differenzmatrizen gilt: Rot markiert eine bessere Perform
         \label{fig:perm_exp_diffM_RGIR_f3}
     \end{subfigure}
 
-    \caption[Difference Matrices compared to RGBIR (Fold 2)]{Difference Matrices for all models compared against RGBIR (Fold 2). Red indicates better performance for RGBIR, blue for the respective comparison model. All values falling within the interval [–0.05, 0.05] are excluded from the matrices.}
+    \caption[Difference Matrices compared to RGBIR (Fold 2)]{Difference Matrices for all models compared against RGBIR (Fold 2). Red indicates better performance for RGBIR, blue for the respective comparison model. All values falling within the interval [–0.05, 0.05] are excluded from the matrices. Clear differences exist between channel permutations. \textit{Ship} and \textit{Tractor} are best recognised by RGBIR, while RGIR shows minimal differences, suggesting the blue channel is less relevant. Object-background distinction remains challenging for all models, with RGIR yielding the most stable results (own representation).}
     \label{fig:perm_exp_diffM_all}
 \end{figure}
 \todo{Beschreibung Figures länger machen, mehr Analyse weniger "was sieht man"}
@@ -414,7 +415,7 @@ Abbildung \ref{fig:perm_exp_example_pics} verdeutlicht beispielhaft die Erkennun
 %     \item Ship wird von fast allen Modellen als Camping Car mit geringer Confidence fehlklassifiziert (bei rgbir  und irgb wird es doppelt als ship und CampingCar erkannt), nur rgbndvi klassifiziert richtig
 %     \item vehicle wird von keinem Modell erkannt 
 % \end{itemize}
-\todo{RGB Bild ist richitg weil er in bgr abspeichert. Farbdarstellung erläutern..}
+%\todo{RGB Bild ist richitg weil er in bgr abspeichert. Farbdarstellung erläutern..}
 \input{images/015Results/02perm_exp/comp_images/figure.tex}
 \FloatBarrier
 
@@ -622,7 +623,7 @@ Insgesamt weist das IR-Modell die höchste Performance auf und erzielt den höch
 \begin{figure}[htbp]
     \centering
     \includesvg[width=0.8\textwidth]{images/015Results/03ablation/best_val_on_test.svg}
-    \caption[Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on test dataset). The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:ablation_map50-95:val_on_val}).(Own representation)}
+    \caption[Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on test dataset)]{Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on test dataset). The red dot is the fold, that has the best \acrshort{mAP}50-95 at the validation dataset (see fig. \ref{fig:ablation_map50-95:val_on_val}). Minimal fluctuations in quantiles between individual channels indicate that a single channel is fundamentally suitable for object recognition, but that significantly better results can be achieved in combination with other channels. The grey value gradients of the individual channels are similar (with the exception of NDVI), although models with NDVI perform significantly worse, presumably due to greater gradations in the grey values (Own representation).}
     \label{fig:ablation_map50-95:val_on_test}
 \end{figure}
 
@@ -630,7 +631,7 @@ Insgesamt weist das IR-Modell die höchste Performance auf und erzielt den höch
 \begin{figure}[htbp]
     \centering
     \includesvg[width=0.8\textwidth]{images/015Results/03ablation/best_val_on_val.svg}
-    \caption[Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on validation dataset). (Own representation)}
+    \caption[Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on validation dataset)]{Comparison of \acrshort{mAP}50-95 values for channels: red, green, blue, ndvi (Best validation model on validation dataset). The quantile fluctuations of the R, G and B channels are very low, as the visible spectral colours probably contain similar information individually. The IR channel shows significantly broader quantiles, presumably due to stronger grey value fluctuations. NDVI perform significantly worse due to the pronounced gradations in the grey values. (Own representation)}
     \label{fig:ablation_map50-95:val_on_val}
 \end{figure}
 
@@ -670,10 +671,8 @@ Insgesamt weist das IR-Modell die höchste Performance auf und erzielt den höch
         \caption{NDVI (F0)}
         \label{fig:ablation_diffM_NDVI_f0}
     \end{subfigure}
-    
-
-
-    \caption[Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model]{Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model. Red indicates better performance for IR, blue for the respective comparison model. All values falling within the interval [–0.05, 0.05] are excluded from the matrices.}
+    \caption[Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model]{Confusion Matrix for IR Model at Fold 3 and the Difference Matrices compared to this Model. Red indicates better performance for IR, blue for the respective comparison model. All values falling within the interval [–0.05, 0.05] are excluded from the matrices. IR generally outperforms other channels, indicating that its additional spectral information improves feature discrimination. High performance for \textit{Car}, \textit{Tractor}, and \textit{Pick Up} reflects the influence of abundant training data, while persistent confusion for the generic \textit{Vehicle} class highlights limitations in distinguishing objects without distinctive shape or spectral cues (own representation).
+}
     \label{fig:ablation_diffM_all}
 \end{figure}
 
