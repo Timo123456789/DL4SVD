@@ -4,7 +4,7 @@
 \begin{figure}[htbp]
     \centering
     \includesvg[width=\textwidth]{images/Ablaufdiagramm_white}
-    \caption[Flowchart for workflow]{Flowchart for workflow. Source: own representation}
+    \caption[Flowchart for workflow]{Flowchart for workflow. The VEDAI dataset is first used to investigate the differences between \acrshort{abb} and \acrshort{obb}, with the channel permutation experiments based on the respective better bounding box format. In the next step, a self-trained model based on the DOTA dataset is used as a pre-trained model. The permutation experiments based on this model comprise five different channel combinations and, optionally, the inclusion of NDVI in combination with several true colour channels (Own representation).}
     \label{fig:Flowchart}
 \end{figure}
 
@@ -32,7 +32,9 @@
 % Im Rahmen der Experimente werden verschiedene Kanalpermutationen (s. Tab. \ref{tab:perm}) getestet.
 
 
-Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart (s. Fig. \ref{fig:Flowchart}) dargestellt. Im folgenden Abschnitt wird die Methodik dieser Arbeit beschrieben. Zunächst wird die Datengrundlage anhand der verwendeten Datensätze erläutert. Darauf aufbauend werden die eingesetzten \acrshort{YOLO}-Versionen vorgestellt. Im Anschluss folgt die Implementierung, bestehend aus den verwendeten Python-Packages sowie einer Beschreibung des Programmcodes, welcher auf Github \cite{Github_timo} zur Verfügung gestellt wird. Danach werden die zentralen Herausforderungen im Preprocessing dargestellt. Anschließend werden die Ergebnisse der 6-Fold-Cross-Validation präsentiert, wobei eigene Folds erstellt wurden, die für alle Experimente mit \acrshort{abb}, \acrshort{obb} sowie den Permutationen (s. Tab. \ref{tab:perm}) genutzt wurden. Abschließend wird die Hardware beschrieben, auf der die Experimente durchgeführt wurden, nämlich der \acrlong{HPC} \acrshort{PALMA}, sowie die dort ausgeführten Bash-Skripte mit den für \acrshort{YOLO} verwendeten Hyperparametern.  
+Die methodische Vorgehensweise dieser Arbeit ist im zugehörigen Flowchart (s. Fig. \ref{fig:Flowchart}) dargestellt. Das \acrshort{VEDAI}-Dataset wird zuerst zur Untersuchung der Unterschiede zwischen \acrshort{abb} und \acrshort{obb} verwendet, wobei die Experimente zu den Kanalpermutationen auf dem jeweils besseren Bounding-Box-Format basieren. Im nächsten Schritt kommt als vortrainiertes Modell ein selbst trainiertes Modell auf Basis des DOTA-Datensatzes zum Einsatz. Die darauf aufbauenden  Permutationsexperimente umfassen fünf verschiedene Kanalkombinationen sowie optional die Einbeziehung von NDVI in Kombination mit mehreren Echtfarbkanälen.
+
+Im folgenden Abschnitt wird die Methodik dieser Arbeit beschrieben. Zunächst wird die Datengrundlage anhand der verwendeten Datensätze erläutert. Darauf aufbauend werden die eingesetzten \acrshort{YOLO}-Versionen vorgestellt. Im Anschluss folgt die Implementierung, bestehend aus den verwendeten Python-Packages sowie einer Beschreibung des Programmcodes, welcher auf Github \cite{Github_timo} zur Verfügung gestellt wird. Danach werden die zentralen Herausforderungen im Preprocessing dargestellt. Anschließend werden die Ergebnisse der 6-Fold-Cross-Validation präsentiert, wobei eigene Folds erstellt wurden, die für alle Experimente mit \acrshort{abb}, \acrshort{obb} sowie den Permutationen (s. Tab. \ref{tab:perm}) genutzt wurden. Abschließend wird die Hardware beschrieben, auf der die Experimente durchgeführt wurden, nämlich der \acrlong{HPC} \acrshort{PALMA}, sowie die dort ausgeführten Bash-Skripte mit den für \acrshort{YOLO} verwendeten Hyperparametern.  
 
 % \begin{itemize}
 %     \item Im folgenden Abschbnitt wird die Methodik beschrieben
