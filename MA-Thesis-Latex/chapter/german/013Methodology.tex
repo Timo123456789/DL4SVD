@@ -97,7 +97,7 @@ Das Training wurde mit dem Modell \acrshort{YOLO}v9u über 1500 Epochen durchgef
 
 \section{YOLOv9}
 \label{sec:yolov9}
-\todo{warum kann yolov8 obb? was wurde dort eingefügt?}
+
 %##########################################################################
 %##########################################################################
 %##########################################################################
@@ -145,7 +145,7 @@ Das Training wurde mit dem Modell \acrshort{YOLO}v9u über 1500 Epochen durchgef
 %     \item yolov9 kann durch die \acrshort{PGI} Integartion das Problem vermeiden, dass wichtige Informationen bei der oberflächlichen Netzebene verloren gehen. PGI sorgen für eine robustere Leistung ,weil die Originalinformaitonen maximal tief beibehalten werden
 % \end{itemize}
 
-Die Entwicklung von \acrshort{YOLO} über die verschiedenen Versionen hinweg zeigt deutliche Fortschritte. Während \acrshort{YOLO}v1 (s. Fig. \ref{subfig_yolov1}) durch die One-Stage-Methode eine große Anzahl an Parametern und Rechenaufwand einsparen konnte, indem Vorhersagen durch die \acrshort{FCL} in der zweiten Schicht erzeugt wurden, baut \acrshort{YOLO}v8 (s. Fig. \ref{subfig_yolov1}) auf \acrshort{YOLO}v5 auf und integriert zahlreiche Optimierungen \cite{Wang2024_yolo_review}. Dazu gehört die \acrfull{ELAN}-Integration aus \acrshort{YOLO}v7, die um eine zusätzliche Residual Connection erweitert wurde, während der Decoder auf \acrshort{YOLO}v6 basiert und unverändert bleibt. Diese Version zeigt zudem eine Verbesserung der Trainingsleistung um etwa 30\% und ermöglicht verschiedene nachgelagerte Aufgaben wie Segmentierung, Instanzsegmentierung, Posenabschätzung und Multiple-Object-Tracking. \acrshort{YOLO}v9 (s. Fig. \ref{subfig_yolov9}) integriert schließlich \acrshort{PGI}, um zu verhindern, dass wichtige Informationen auf oberflächlicher Netzebene verloren gehen. \acrshort{PGI} sorgen für eine robustere Leistung, indem die Originalinformationen maximal tief beibehalten werden \cite{Wang2024_yolo_review}.
+Die Entwicklung von \acrshort{YOLO} über die verschiedenen Versionen hinweg zeigt deutliche Fortschritte. Während \acrshort{YOLO}v1 (s. Fig. \ref{subfig_yolov1}) durch die One-Stage-Methode eine große Anzahl an Parametern und Rechenaufwand einsparen konnte, indem Vorhersagen durch die \acrshort{FCL} in der zweiten Schicht erzeugt wurden, baut \acrshort{YOLO}v8 (s. Fig. \ref{subfig_yolov8}) auf \acrshort{YOLO}v5 auf und integriert zahlreiche Optimierungen \cite{Wang2024_yolo_review}. Dazu gehört die \acrfull{ELAN}-Integration aus \acrshort{YOLO}v7, die um eine zusätzliche Residual Connection erweitert wurde, während der Decoder auf \acrshort{YOLO}v6 basiert und unverändert bleibt. Diese Version zeigt zudem eine Verbesserung der Trainingsleistung um etwa 30\% und ermöglicht verschiedene nachgelagerte Aufgaben wie Segmentierung, Instanzsegmentierung, Posenabschätzung und Multiple-Object-Tracking. \acrshort{YOLO}v9 (s. Fig. \ref{subfig_yolov9}) integriert schließlich \acrshort{PGI}, um zu verhindern, dass wichtige Informationen auf oberflächlicher Netzebene verloren gehen. \acrshort{PGI} sorgen für eine robustere Leistung, indem die Originalinformationen maximal tief beibehalten werden \cite{Wang2024_yolo_review}.
 
 
 Die zentralen Stärken von \acrshort{YOLO}v9 liegen in seiner hohen Verarbeitungsgeschwindigkeit sowie der präzisen Objekterkennung, wodurch eine effiziente Analyse großer Datensätze ermöglicht wird. 
@@ -185,7 +185,7 @@ h_\text{norm} = \frac{h_\text{box}}{h_\text{image}}
 \subsection{YOLOv9u by Wong Kin Yiu}
 \label{subsec:yolov9u}
 
-Die Implementierung von \acrshort{YOLO}v9u basiert auf der Version \acrshort{YOLO}v8.1.23 \cite{yolo_v9u_github}, um die ursprüngliche \acrshort{YOLO}v9 Version um diverse nachgelagerte Aufgaben zu erweitern. Hierzu zählen Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung\cite{wang2024}. In der vorliegenden Arbeit wird \acrshort{YOLO}v9u eingesetzt, da diese als Open-Source-Variante verfügbar ist und die zugrundeliegende Methodik durch das veröffentlichte Paper dokumentiert wurde \cite{wang2024_sapkota}. Das Modell \acrshort{YOLO}v9e wird von Ultralytics bereitgestellt, jedoch ohne begleitende wissenschaftliche Veröffentlichung, sodass dessen Aufbau und methodische Grundlagen nicht nachvollziehbar dokumentiert sind \cite{ultralyics_2023}.
+Die Implementierung von \acrshort{YOLO}v9u basiert auf der Version \acrshort{YOLO}v8.1.23 \cite{yolo_v9u_github}, um die ursprüngliche \acrshort{YOLO}v9 Version um diverse nachgelagerte Aufgaben zu erweitern. Hierzu zählen Instanzsegmentierung, orientierte Objekterkennung, Posenabschätzung, Bildklassifikation sowie transformerbasierte Objekterkennung \cite{wang2024}, wobei mit \acrshort{YOLO}v8 als Basis ein \textit{Detect}-Layer integriert wird, der die Vorhersage orientierter \acrshort{BB} ermöglicht. In der vorliegenden Arbeit wird \acrshort{YOLO}v9u eingesetzt, da diese als Open-Source-Variante verfügbar ist und die zugrundeliegende Methodik durch das veröffentlichte Paper dokumentiert wurde \cite{wang2024_sapkota}. Das Modell \acrshort{YOLO}v9e wird von Ultralytics bereitgestellt, jedoch ohne begleitende wissenschaftliche Veröffentlichung, sodass dessen Aufbau und methodische Grundlagen nicht nachvollziehbar dokumentiert sind \cite{ultralyics_2023}.
 
  
 
@@ -239,10 +239,10 @@ YOLOv9e & 640 & 55.6 & 72.8 & 58.1 & 192.5 \\
 Die genutzte Programmiersprache ist Python. Die Scripte für den \acrshort{HPC} \acrshort{PALMA} wurden in Bash geschrieben.
 
 \subsection{Python Packages}
-Es wurden diverse Python Packages zur Implementatierung genutzt, die im folgenden kurz beschrieben werden. 
+Es wurden diverse Python Packages zur Implementierung genutzt, die im folgenden kurz beschrieben werden. 
 \subsubsection{Computer Vision 2}
 Ein Teil der "Open Source Computer Vision" Bibliothek ist \Acrfull{CV2} \cite{opencv_about}. Die aktuelle Version 4.12.0 wurde am 09.07.2025 veröffentlicht \cite{opencv_release}. \\
-Die Bibliothek bietet Algorithmen und Funktionen zur Bild- und Videobearbeitung an, die in dieser Arbeit hauptsächlich dazu genutzt werden, die verschiedenen Kanäle zu neuen Bildern zu kombinieren. Hierbei ist zu beachte, dass \acrshort{CV2} Bilder als BGR (Blue, Green, Red) Farbkombination abspeichert, was zu Falschfarbdarstellungen einiger Abbildungen, die in RGB abgeildet werden, (wie Fig. \ref{fig:perm_exp_example_pics}) führen kann.
+Die Bibliothek bietet Algorithmen und Funktionen zur Bild- und Videobearbeitung an, die in dieser Arbeit hauptsächlich dazu genutzt werden, die verschiedenen Kanäle zu neuen Bildern zu kombinieren. Hierbei ist zu beachten, dass \acrshort{CV2} Bilder als BGR (Blue, Green, Red) Farbkombination abspeichert, was zu Falschfarbdarstellungen einiger Abbildungen, die in RGB abgeildet werden, (wie Fig. \ref{fig:perm_exp_example_pics}) führen kann.
 \subsubsection{Numpy}
 Ein weiteres Open-Source Projekt ist NumPy, welches 2005 gegründet wurde, um numerische Operationen in Python zu implementieren \cite{numpy_about}. Die aktuelle Version ist 2.3.0 und wurde am 07.06.2025 veröffentlicht \cite{numpy_main_web}. \\
 Mithilfe dieser Bibliothek kann eine zufällige Verteilung der Bilddaten auf die Folds realisiert werden, indem die eingelesene Bildliste einer zufälligen Permutation unterzogen wird. Darüber hinaus stellt die Bibliothek Funktionen zur Verfügung, mit denen sowohl die Berechnung und Reskalierung des \acrshort{NDVI}-Kanals als auch die Transformation der Bounding-Box-Koordinaten in das für das \acrshort{YOLO}-Framework erforderliche Format durchgeführt werden können. Zusätzlich ermöglicht sie die Umrechnung axis-aligned Bounding Boxes in oriented Bounding Boxes sowie die Flächenberechnung beider Bounding-Box-Typen.
@@ -473,8 +473,7 @@ Nach Abschluss des Trainings wurde jeweils das Modell mit der besten Validierung
 
 \begin{table}[htbp]
 \centering
-\caption{Key training hyperparameters at the \acrshort{RGB} Permutation (Fold 4)}
-\label{tab:hyperparameters}
+
 \begin{tabular}{ll}
 \hline
 \textbf{Hyperparameter} & \textbf{Value / Description} \\
@@ -498,6 +497,8 @@ Workers & 8 \\
 Save directory & \texttt{/scratch/tmp/t\_liet02/cross\_validation/rgb/fold4} \\
 \hline
 \end{tabular}
+\caption{Key training hyperparameters at the \acrshort{RGB} Permutation (Fold 4)}
+\label{tab:hyperparameters}
 \end{table}
 
 % \begin{itemize}
