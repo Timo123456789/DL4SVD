@@ -1,0 +1,115 @@
+%!TEX root = ../thesis.tex
+% \chapter{Implementation}
+% \label{ch:implementation}
+
+
+\section{Implementation Preprocessing}
+
+In order for the training data to be processed by the YOLOv9 deep learning model, pre-processing is necessary to adapt its format and structure to the model's requirements. The exact sequence of this pre-processing is described below.
+\subsection{DOTA Dataset}
+Only the original raw images from the \acrshort{DOTA} dataset were used for data pre-processing, without any cropping or other modification of the image content. The focus of the processing was on converting the existing label data into the \acrshort{YOLO}v9-\acrshort{obb} format. (see section \ref{sec:yolov9}).
+
+For each image, \acrshort{DOTA} provides a separate text file containing all associated annotations. At the beginning, a standardised folder structure was created according to the \acrshort{YOLO} scheme, consisting of the subdirectories \texttt{train/images}, \texttt{train/labels}, \texttt{val/images} and \texttt{val/labels}. The annotation files were then read in line by line and processed.
+
+Each line describing a single object was first adjusted to the respective image size, whereby the absolute coordinates of the object frames were normalised to relative values. Since the resolution of the images in the \acrshort{DOTA} dataset varies greatly (between \(800 \times 800\) and \(20,000 \times 20,000\) pixels), dynamic scaling was necessary. The converted information was then transferred to the \acrshort{YOLO}v9u format, with the class ID at the beginning of each line. The label files generated in this way were saved while retaining the original file name.
+
+All 16 object classes contained in the \acrshort{DOTA} dataset were taken into account and converted accordingly. The image data itself remained untouched and was transferred in its original form to the HPC cluster \acrshort{PALMA}. Due to the high number of available annotations, both the conversion process and the training process proved to be time-consuming.
+
+
+\subsection{VEDAI Dataset}
+\label{subsec:impl_VEDAI}
+
+
+The \acrshort{VEDAI} data set is processed using a central main method in which several configurable parameters are provided in the form of Boolean variables. The parameter \lstinline|oriented| is particularly important here, as it specifies whether the \Acrfullpl{BB} are generated as axis-parallel rectangles or as oriented rectangles in \acrshort{obb} format. In addition, \lstinline|bool_create_yaml| can be used to control whether a corresponding \acrshort{YAML} file should be automatically generated for each training set created.
+
+Another parameter, \lstinline|merge_ir_bool|, allows the infrared image (IR) to be integrated into the generated image data. The parameter \lstinline|namestring| can be used to assign an individual name to each training set generated. The dictionary \lstinline|perm_object| is decisive for the composition of the image channels. It uses Boolean values to determine which channels (e.g. \acrshort{R}, \acrshort{G}, \acrshort{B}, \acrshort{IR}, \acrshort{NDVI}) are to be included in the final image.
+
+The central main function then determines which subsets of the data set are to be generated. This applies to ablation data sets, permutation data sets, and \acrshort{abb} and \acrshort{obb} data sets, among others. For the first two variants, the process follows a consistent pattern: The parameters \lstinline|oriented| and \lstinline|merge_ir_bool| are activated, a storage path for the generated dataset is defined, and the \lstinline|perm_object| is configured according to the desired channel composition. For example, for the combination \acrshort{RGIR}, only \acrshort{R}, \acrshort{G}, and \acrshort{IR} are set to \lstinline|True| in \lstinline|perm_object|. Subsequently, a \texttt{for} loop iterates over folds 0 to 5 and generates the corresponding dataset from training, validation, and test data for each fold using the \hyperlink{par:create_fold_cv}{\lstinline|create_fold_cross_validation|} method.
+
+\paragraph{Creation of folds (\lstinline|create_fold_cross_validation|)}
+\hypertarget{par:create_fold_cv}{}
+
+This method takes care of creating the entire folder structure in the format required for \acrshort{YOLO} (\texttt{train/images}, \texttt{train/labels}, \texttt{val/images}, \texttt{val/labels}, \texttt{test/images}, \texttt{test/labels}). In addition, a \acrshort{YAML} file is generated that contains both the paths to the image files and the number of channels they contain. A training dataset always consists of three components: 
+\begin{enumerate}
+    \item \textbf{Training data:} Consists of the images from the remaining folds (i.e. all except the current fold and fold 6).
+    \item \textbf{Validation data:} Corresponds to the images of the current fold.
+    \item \textbf{Test data:} Always consists of the images from fold 6.
+\end{enumerate}
+
+The currently selected fold is removed from the list of all folds to prevent overlap with training, validation, and test data. The central file containing all label information for the data set is then read in. A \texttt{for} loop is used to iterate through all folds that do not correspond to the current fold. The file containing the image names is read in and the function \lstinline|create_image_and_label| is called for each of these images.
+
+This function reads the corresponding \acrshort{RGB} and \acrshort{IR} images for each line and filters the labels so that only the annotations belonging to the current image are processed further. The new image is then copied to the respective destination path, using the internal function \lstinline|merge_RGB_IR_image|. This function ensures that only the channels specified in \lstinline|perm_object| are transferred to the target file (cf. function \hyperlink{par:merge_RGB_IR}{\lstinline|merge_RGB_IR\_image|}). The function \hyperlink{par:create_label_file}{\lstinline|create\_label\_file|} is then called to create the corresponding label file in the desired format.
+
+After processing all training folds, both the validation fold (current fold) and the test fold (always fold 6) are processed separately using the \lstinline|create_image_and_label| function. Once these have been successfully completed, the data set for the respective channel combination is considered to be fully created.
+
+
+\paragraph{Merging of RGB and IR images (\lstinline|merge_RGB_IR\_image|)}
+\hypertarget{par:merge_RGB_IR}{}
+This method loads the corresponding \acrshort{RGB} and \acrshort{IR} images and generates a combined image display based on the specifications defined in \lstinline|perm_object|. The channels are merged using \lstinline|cv2.merge|. It should be noted that \acrshort{CV2} uses the BGR format (Blue, Green, Red) by default when images are split or saved channel by channel. However, since the active channels are merged in the order specified in \lstinline|perm_object|, this aspect is of secondary importance for the result.
+
+Optionally, an \acrshort{NDVI} channel can also be generated within this function. For numerical stabilisation when calculating the \acrshort{NDVI} (see definition \ref{def:ndvi}), the denominator $(\acrshort{IR} + \acrshort{R})$ is set to a minimum value of $0{,}01$ to prevent division by zero. The resulting \acrshort{NDVI} values are then scaled and returned in an 8-bit format.
+
+Before merging, the \acrshort{RGB} channels are always extracted separately. The resulting image files are then written to the defined destination path using the \lstinline|copy_image| function.
+
+
+
+\begin{definition}
+Let $\rho_{\text{NIR}}$ denote the reflectance in the near-infrared band and 
+$\rho_{\text{RED}}$ denote the reflectance in the red band. 
+The \textit{Normalized Difference Vegetation Index} (NDVI) is defined as
+\begin{equation}
+NDVI := \frac{\rho_{\text{NIR}} - \rho_{\text{RED}}}{\rho_{\text{NIR}} + \rho_{\text{RED}}}.
+\end{equation}
+\label{def:ndvi}
+\end{definition}
+
+
+
+\paragraph{Erzeugung von Label-Dateien (\lstinline|create\_label\_file|)}
+\hypertarget{par:create_label_file}{}
+
+To create the label file, the path to the output file is first determined and the corresponding image is read in to determine the image dimensions for later normalisation. Then, all transferred label information is processed. For each label, the bounding box is calculated in pixel coordinates using the function \lstinline|get_bounding_box_in_px| (based on a script according to \citeauthor{Razakarivony2015}).
+
+The next step is to create the target line in \acrshort{YOLO} format: The class is converted into a numerical \acrshort{ID} between 0 and 8 (using an internal mapping function), followed by the eight coordinate points of the bounding box, each separated by a space.
+
+In the case of \lstinline|oriented == True|, the eight points of a rotatable box are stored. If \lstinline|oriented == False|, the coordinates can be stored either in classic \acrshort{YOLO} representation (centre-based with height and width) or as an axis-parallel rectangle in \acrshort{obb} format. The conversion is performed here by different conversion functions. Finally, the line is written to the file and the process is repeated for the next label.
+
+\paragraph{Berechnung der Bounding Box in Pixeln (\lstinline|get_bounding_box_in_px|)}
+
+This function is used to extract and transform the label coordinates from the original \acrshort{VEDAI} format. First, the label string is split into its components based on spaces. The position (x, y) and orientation are located at positions 1 to 3 of the array, while the class-\acrshort{ID} is located at position 12. The corner points of the bounding boxes (x-values: positions 4–8, y-values: 8–12) are extracted and used to calculate the side lengths.
+
+The longest sides of the object are identified and assumed to be the vehicle length, while the shorter sides are assumed to be the vehicle width. A direction vector is calculated from the longest sides, and the angle of the vehicle orientation is determined using the arctan. The four corner points of the oriented box are then calculated, taking into account the vehicle centre, length, width and rotation angle.
+
+If \lstinline|oriented == True|, the four corner points are returned as integer coordinate tuples. If \lstinline|oriented == False|, an axis-parallel bounding box is generated from the minimum and maximum x and y values of the rotated box and returned.
+
+
+\subsection{Fold Creation}
+\label{subsec:Fold_creation}
+
+
+The folds are created using the central main function \lstinline|main|, which is based on the pre-processing described in the previous chapter. This function reads text files in which each image name is contained line by line. The aim of the entire script is to generate text files that will later be used to create training, validation and test data. First, a list of all images in the source directory is created. For each image, the number of objects per class is also stored. Then the method \lstinline|create_own_folds| is called, whereby the number of folds can be selected flexibly – five folds are used by default.
+
+The method \lstinline|create_own_folds| increases the desired number of folds by one to account for a separate test fold. An empty multidimensional array is then created that corresponds to the new number of folds. The image list that is passed in is randomly shuffled once before each fold is initially assigned an image. A separate function (see function \hyperlink{par:count_objects_in_fold_arr}{\lstinline|count_objects_in_fold_arr|}) is then used to determine how many objects of each class are contained in each fold to ensure an even distribution.
+
+The actual distribution takes place iteratively in a while loop, which runs until all images have been distributed. Within this loop, each image is analysed to determine which class is least frequently present in the image (see function \hyperlink{par:get_smallest_class_in_image}{\lstinline|get_smallest_class_in_image|}). If exactly one rare class is identified, the image is assigned to the fold that currently contains the smallest number of objects of this class. If several rare classes are present, a decision is made based on a predefined frequency evaluation. Each class is evaluated based on its overall distribution in the \acrshort{VEDAI} dataset with a weight on a scale from 0 (frequent) to 8 (rare) (see Table \ref{tab:class_freq_val}). The class with the highest frequency value is selected, and the image is assigned to a fold according to the lowest number of objects in this class. Images without objects are stored separately in an array for empty images.
+
+Once all images have been distributed with objects, the empty images are assigned. To do this, the number of empty images is first divided by the number of folds to enable the most even basic distribution possible. The remaining remainder is then distributed via an additional loop to those folds that currently contain the smallest number of images.
+
+At the end of the distribution, the objects in each fold are counted again. The final fold assignments are then saved as text files – one file per fold (six files in total, fold 0 to fold 5), which contain only the corresponding image names. The files are kept in the same format as the original \acrshort{VEDAI} folds in order to make the application of the preprocessing described in Chapter \ref{subsec:impl_VEDAI} as simple and consistent as possible.
+
+
+\paragraph{Counting the objects in the folds (\lstinline|count_objects_in_fold_arr|)}
+\hypertarget{par:count_objects_in_fold_arr}{}
+
+The \lstinline|count_objects_in_fold_arr| method is used to evaluate the object distribution within the folds. This function generates a data structure that stores the number of objects per class contained in each fold. The count is performed by a double nested loop, in which all images of each fold are traversed and the objects are counted. At the end, the function provides a complete overview of the object distribution as a basis for further decisions.
+
+
+\paragraph{Identification of the smallest class distribution (\lstinline|get_indices_of_folds_with_smallest_object_count|)}
+\hypertarget{par:get_indices_folds_with_smallest_object_count}{}
+
+The method \lstinline|get_indices_of_folds_with_smallest_object_count| is used to determine the fold or folds with the smallest number of objects of a given class. Based on the count data from \hyperlink{par:count_objects_in_fold_arr}{\lstinline|count_objects_in_fold_arr|}, all folds are iterated and checked to see which fold contains the minimum number of objects for the corresponding class. If several folds have the same minimum value, a list of all applicable indices is returned.
+
+\paragraph{Determining the rarest class in the image (\lstinline|get_smallest_class_in_image|)}
+\hypertarget{par:get_smallest_class_in_image}{}
+
+The method \lstinline|get_smallest_class_in_image| analyses a given image and returns the object class that is least represented in that image. This information serves as a starting point for optimally assigning the image to a fold and contributes to the balance of object distribution.

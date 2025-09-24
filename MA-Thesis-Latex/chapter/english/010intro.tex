@@ -1,0 +1,26 @@
+%!TEX root = ../thesis.tex
+\chapter{Introduction}
+\label{ch:intro}
+\todo{sämtliche Abkürzungen mit glocaries einbinden und verwalten}
+\section{Motivation}
+
+
+The increasing availability of high-resolution satellite and aerial image data has made the global detection of objects technically possible. At the same time, the cost of the necessary computing power is falling, making it increasingly easier to use artificial intelligence (AI) methods for the fully automated analysis of such data. This opens up new possibilities for the efficient evaluation of large amounts of image data, which are of considerable relevance in both civil and military contexts.
+
+One important area of application is the monitoring of destroyed military installations or building structures in conflict regions, such as Darfur \cite{Knoth2017} or Ukraine. The use of AI-supported image analysis can provide valuable support here, as direct documentation on site is often impossible or associated with considerable risks due to the uncertain security situation. Aerial and satellite images are therefore particularly well suited for gathering information. \\
+
+In addition, continuous monitoring of military equipment at national borders could contribute to improving the assessment of the situation by identifying potential escalations or impending conflicts at an early stage. A key advantage of AI-supported analysis is that it reduces the workload for human analysts by providing models that suggest detections and classifications, which are then reviewed and validated. This makes workflows more efficient and provides decision-makers with relevant information more quickly. \\
+
+There are also many potential applications in the civilian sector. For example, the analysis of the population's mobility behaviour can be supported by recording vehicles in large public car parks. Automated detection and classification methods can be used to identify and count vehicles on satellite or aerial images, allowing conclusions to be drawn about the utilisation of parking spaces. This information can be used, for example, to determine the need for additional parking spaces or to evaluate the efficiency of existing infrastructure. In addition, it opens up the possibility of quantifying traffic volumes at regional or national level, provided that continuous vehicle detection is implemented. A further issue is the differentiation between moving and stationary vehicles, which can provide additional insights into mobility patterns and traffic flows. \\
+
+A key challenge in applying machine learning to high-resolution remote sensing images is the limited availability of suitable training data and the fact that vehicles are relatively small due to the scale. The precise detection and classification of these small objects requires adapted deep learning methods that can also reliably capture fine structures. \\
+Preliminary work in this field, as carried out in a previous bachelor's thesis \cite{Balzer2022}, shows that deep learning methods such as \acrfull{YOLO} (v3) can generally detect small objects in simple scenarios. By adjusting hyperparameters, the \acrfull{mAP} for very small objects could be improved. However, in the case of ship detection, it becomes clear that the achieved mAP must be evaluated critically and that YOLOv3 is not unreservedly suitable for the reliable detection of small objects \cite{Balzer2022}. \\
+
+This master's thesis builds on these results and applies the question to the detection and classification of small vehicles in high-resolution multispectral aerial image data. A newer version of \acrfull{YOLO} (v9) is used, which features improvements in the network architecture. In addition, the extent to which the integration of electro-optical and multispectral aerial images can increase the precision of the detection and classification of very small objects is investigated. In this way, the work expands existing research both in terms of content (focus on vehicles) and methodology (use of modern YOLO architecture and multispectral data) and addresses the research gap in object recognition in complex scenarios.
+
+
+
+\section{Structure of the thesis}
+
+
+This thesis provides a comprehensive overview of the methods, experiments and results of the research. It begins with an introduction that outlines the motivation and objectives of the work, followed by the fundamentals, which explain the theoretical background and relevant metrics. The state of research summarises the current literature before the methodology describes the data sets, tools and procedures used in detail. The results of the experiments are then presented and interpreted in the discussion and placed in the context of existing research. The work concludes with a conclusion and an outlook on possible future research directions. Supplementary material such as images and tables can be found in the appendix.

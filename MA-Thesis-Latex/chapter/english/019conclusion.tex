@@ -1,0 +1,18 @@
+%!TEX root = ../thesis.tex
+\chapter{Conclusion and Outlook}
+\label{ch:conclusion}
+
+\section{Conclusion}
+The research questions formulated in this study were successfully answered.
+It was found that additional image channels such as infrared (IR) can improve detection performance, especially for small objects, while spectral indices such as NDVI are not always beneficial. 
+The experiments illustrate that RGB data alone provides a robust basis for detecting small vehicles, although IR data further increases accuracy.
+It also became apparent that the availability of extensive, high-quality training data has a greater impact on model performance than expanding the input channels to include more spectral information. 
+The investigations confirm that \acrshort{YOLO}v9 is suitable for detecting small objects and that architectural enhancements over older versions such as \acrshort{YOLO}v3 lead to measurable improvements in classification and accuracy.
+
+
+\section{Outlook}
+Future work should evaluate the systematic integration of additional spectral indices and channels to more accurately determine their influence on model performance.
+Furthermore, the application and modification of additional \acrshort{YOLO} variants and comparison with two-stage detectors (e.g., \acrshort{R-CNN}-based methods) offer a promising field of investigation. 
+Another approach is to analyse scaling effects, for example by reducing the spatial resolution to satellite level, in order to evaluate the transferability to raw data from real systems (e.g. Airbus, 30 cm/pixel \cite{airbus_neo}). 
+The role of object-specific features, such as vehicle colour, should also be investigated in greater depth.
+In the long term, the use of multitemporal data in particular opens up new perspectives, as it allows dynamic patterns and changes in the space-time context (e.g. commuter traffic versus long-term parking) to be captured.
