@@ -150,9 +150,12 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
     sns.stripplot(data=df, x='Modell', y='mAP@50-95', color='black', alpha=0.5, jitter=False, dodge=True)
 
     #plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
-    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.ylabel("mAP@0.5-0.95", fontsize=14)
     plt.xlabel("Model", fontsize=14)
-    plt.xticks(rotation=0, fontsize=12)
+    plt.xticks(ticks=range(len(df['Modell'].unique())),
+           labels=["RGBIR", "RGB", "IRGB", "RIRB", "RGIR", "GBNDVI", "RGBNDVI"],
+           rotation=0,
+           fontsize=12)
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
     allsets_string = "_".join(set_paths_dict.keys())
     allsets_string="perm_exp"
@@ -197,9 +200,12 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
                 plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10)
 
     #plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
-    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.ylabel("mAP@0.5-0.95", fontsize=14)
     plt.xlabel("Model", fontsize=14)
-    plt.xticks(rotation=0, fontsize=12)
+    plt.xticks(ticks=range(len(df['Modell'].unique())),
+           labels=["RGBIR", "RGB", "IRGB", "RIRB", "RGIR", "GBNDVI", "RGBNDVI"],
+           rotation=0,
+           fontsize=12)
 
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
 

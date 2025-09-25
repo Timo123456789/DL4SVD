@@ -143,7 +143,7 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
         return
 
     df = pd.DataFrame(all_data)
-    df['Modell'] = df['Modell'].replace({'aab_old': 'AAB in OBB Model'})  # Hier ist die Änderung
+    df['Modell'] = df['Modell'].replace({'red': 'Red'}).replace({'green': 'Green'}).replace({'blue': 'Blue'}).replace({'ir': 'IR'}).replace({'ndvi': 'NDVI'})     # Hier ist die Änderung
     
     # Plot erstellen
     plt.figure(figsize=(10, 6))
@@ -151,7 +151,7 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
     sns.stripplot(data=df, x='Modell', y='mAP@50-95', color='black', alpha=0.5, jitter=False, dodge=True)
 
     #plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
-    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.ylabel("mAP@0.5-0.95", fontsize=14)
     plt.xlabel("Model", fontsize=14)
     plt.xticks(rotation=0, fontsize=12)
     plt.yticks(fontsize=12)
@@ -191,6 +191,7 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
         return
 
     df = pd.DataFrame(all_data)
+    df['Modell'] = df['Modell'].replace({'red': 'Red'}).replace({'green': 'Green'}).replace({'blue': 'Blue'}).replace({'ir': 'IR'}).replace({'ndvi': 'NDVI'})
    
 
     plt.figure(figsize=(10, 6))
@@ -210,7 +211,9 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
                 plt.scatter(x_pos, y_val, color='red', s=15, edgecolor='red', zorder=10)
 
     #plt.title("mAP@50-95 per Model (across 5 folds) -  best validation model's performance on the test fold", fontsize=10)
-    plt.ylabel("mAP@50-95", fontsize=14)
+
+    
+    plt.ylabel("mAP@0.5-0.95", fontsize=14)
     plt.xlabel("Model", fontsize=14)
     plt.xticks(rotation=0, fontsize=12)
     plt.yticks(fontsize=12)

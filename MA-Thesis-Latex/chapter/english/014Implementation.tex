@@ -65,7 +65,7 @@ NDVI := \frac{\rho_{\text{NIR}} - \rho_{\text{RED}}}{\rho_{\text{NIR}} + \rho_{\
 
 
 
-\paragraph{Erzeugung von Label-Dateien (\lstinline|create\_label\_file|)}
+\paragraph{Generation of label files (\lstinline|create\_label\_file|)}
 \hypertarget{par:create_label_file}{}
 
 To create the label file, the path to the output file is first determined and the corresponding image is read in to determine the image dimensions for later normalisation. Then, all transferred label information is processed. For each label, the bounding box is calculated in pixel coordinates using the function \lstinline|get_bounding_box_in_px| (based on a script according to \citeauthor{Razakarivony2015}).
@@ -74,7 +74,7 @@ The next step is to create the target line in \acrshort{YOLO} format: The class 
 
 In the case of \lstinline|oriented == True|, the eight points of a rotatable box are stored. If \lstinline|oriented == False|, the coordinates can be stored either in classic \acrshort{YOLO} representation (centre-based with height and width) or as an axis-parallel rectangle in \acrshort{obb} format. The conversion is performed here by different conversion functions. Finally, the line is written to the file and the process is repeated for the next label.
 
-\paragraph{Berechnung der Bounding Box in Pixeln (\lstinline|get_bounding_box_in_px|)}
+\paragraph{Calculation of the bounding box in pixels (\lstinline|get_bounding_box_in_px|)}
 
 This function is used to extract and transform the label coordinates from the original \acrshort{VEDAI} format. First, the label string is split into its components based on spaces. The position (x, y) and orientation are located at positions 1 to 3 of the array, while the class-\acrshort{ID} is located at position 12. The corner points of the bounding boxes (x-values: positions 4–8, y-values: 8–12) are extracted and used to calculate the side lengths.
 
@@ -98,13 +98,13 @@ Once all images have been distributed with objects, the empty images are assigne
 At the end of the distribution, the objects in each fold are counted again. The final fold assignments are then saved as text files – one file per fold (six files in total, fold 0 to fold 5), which contain only the corresponding image names. The files are kept in the same format as the original \acrshort{VEDAI} folds in order to make the application of the preprocessing described in Chapter \ref{subsec:impl_VEDAI} as simple and consistent as possible.
 
 
-\paragraph{Counting the objects in the folds (\lstinline|count_objects_in_fold_arr|)}
+\paragraph{Counting the objects in the folds \\ (\lstinline|count_objects_in_fold_arr|)}
 \hypertarget{par:count_objects_in_fold_arr}{}
 
 The \lstinline|count_objects_in_fold_arr| method is used to evaluate the object distribution within the folds. This function generates a data structure that stores the number of objects per class contained in each fold. The count is performed by a double nested loop, in which all images of each fold are traversed and the objects are counted. At the end, the function provides a complete overview of the object distribution as a basis for further decisions.
 
 
-\paragraph{Identification of the smallest class distribution (\lstinline|get_indices_of_folds_with_smallest_object_count|)}
+\paragraph{Identification of the smallest class distribution \\(\lstinline|get_indices_of_folds_with_smallest_object_count|)\\}
 \hypertarget{par:get_indices_folds_with_smallest_object_count}{}
 
 The method \lstinline|get_indices_of_folds_with_smallest_object_count| is used to determine the fold or folds with the smallest number of objects of a given class. Based on the count data from \hyperlink{par:count_objects_in_fold_arr}{\lstinline|count_objects_in_fold_arr|}, all folds are iterated and checked to see which fold contains the minimum number of objects for the corresponding class. If several folds have the same minimum value, a list of all applicable indices is returned.

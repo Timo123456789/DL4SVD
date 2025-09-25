@@ -146,26 +146,27 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
         return
 
     df = pd.DataFrame(all_data)
-    df['Modell'] = df['Modell'].replace({'aab_old': 'abb in obb'})  
-    df['Modell'] = df['Modell'].replace({'aab': 'abb'})
+    df['Modell'] = df['Modell'].replace({'aab_old': 'ABB in OBB'})  
+    df['Modell'] = df['Modell'].replace({'aab': 'ABB'})
+    df['Modell'] = df['Modell'].replace({'obb': 'OBB'})
     
     print("val on val")
     print(df)
 
     # Plot erstellen
     plt.figure(figsize=(10, 6))
-    sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette={"obb": "orange", "abb": "steelblue", "abb in obb": "green"})
+    sns.boxplot(data=df, x='Modell', y='mAP@50-95', palette={"OBB": "orange", "ABB": "steelblue", "ABB in OBB": "green"})
     sns.stripplot(data=df, x='Modell', y='mAP@50-95', color='black', alpha=0.5, jitter=False, dodge=True)
 
     #plt.title("mAP@50-95 per Model (for the best validation dataset on the validation data)", fontsize=14)
-    plt.ylabel("mAP@50-95", fontsize=14)
+    plt.ylabel("mAP@0.5-0.95", fontsize=14)
     plt.xlabel("Model", fontsize=14)
     plt.xticks(rotation=0, fontsize=12)  # Ticklabels an der X-Achse
     plt.yticks(fontsize=12)              # Ticklabels an der Y-Achse
     plt.grid(True, axis='y', linestyle='--', alpha=0.5)
     allsets_string = "_".join(set_paths_dict.keys())
     allsets_string = "abb_obb"
-    plt.savefig(allsets_string +"_best_val_on_val.svg", format="svg", transparent=True)
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\01abb_vs_obb\abb_obb_best_val_on_val.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()
 
@@ -208,16 +209,16 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
 
     # NACH dem Zeichnen Labels ändern
     new_labels = [
-    lbl.get_text().replace("aab_old", "abb in obb").replace("aab", "abb")
+    lbl.get_text().replace("aab_old", "ABB in OBB").replace("aab", "ABB").replace("obb", "OBB")
     for lbl in ax.get_xticklabels()
     ]
     ax.set_xticklabels(new_labels)
 
     ax.set_xlabel("Model", fontsize=14)
-    ax.set_ylabel("mAP@50-95", fontsize=14)
+    ax.set_ylabel("mAP@0.5-0.95", fontsize=14)
     ax.set_xticklabels(new_labels, fontsize=12)
 
-    plt.ylabel("mAP@50-95")
+    plt.ylabel("mAP@0.5-0.95")
     plt.xlabel("Bounding Box Type")
     plt.xticks(rotation=0)
 
@@ -239,7 +240,7 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
 
     allsets_string = "_".join(set_paths_dict.keys()) 
     allsets_string = "aab_obb"
-    plt.savefig(allsets_string + "_best_val_on_test.svg", format="svg", transparent=True)
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\01abb_vs_obb\aab_obb_best_val_on_test.svg", format="svg", transparent=True)
     plt.tight_layout()
     plt.show()
 

@@ -27,6 +27,9 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
     # Maske für Werte im Bereich [-0.05, 0.05]
     mask = diff_matrix_normalized.abs() <= 0.05
 
+    # Klassenlabels formatieren
+    class_labels = [cls.title() for cls in cm1.index]
+
     plt.figure(figsize=(10, 8))
     sns.heatmap(
         diff_matrix_normalized.T,      # Transponiere die Matrix!
@@ -38,7 +41,9 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
         mask=mask.T,                   # Maske ebenfalls transponieren!
         linewidths=0.5,
         linecolor='white',
-        annot_kws={"size": 16}
+        annot_kws={"size": 16},
+        xticklabels=class_labels,   # neue Labels für X
+        yticklabels=class_labels    # neue Labels für Y
     )
 
     plt.ylabel("Predicted Label", fontsize=12)  # Achsenbeschriftungen getauscht
@@ -50,6 +55,8 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
     svg_out_path = out_path.replace(".png", ".svg")
     plt.savefig(svg_out_path, format="svg", transparent=True)
     plt.close()
+
+
 def plot_and_save_diff_old(model_1, fold_1, model_2, fold_2, out_path):
     csv_path1 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation\new_val_detect\{model_1}\fold{fold_1}\metrics_and_confusion_test.csv"
     csv_path2 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation\new_val_detect\{model_2}\fold{fold_2}\metrics_and_confusion_test.csv"
@@ -71,7 +78,8 @@ def plot_and_save_diff_old(model_1, fold_1, model_2, fold_2, out_path):
         mask=mask.T,                  # Maske ebenfalls transponieren!
         linewidths=0.5,
         linecolor='white',
-        annot_kws={"size": 16}
+        annot_kws={"size": 16},
+        
     )
     #plt.title(f"Normalized Difference Matrix ({model_1}_F{fold_1} vs {model_2}_F{fold_2})")
     plt.ylabel("Predicted Label",fontsize=12)     # Achsenbeschriftungen getauscht
@@ -120,6 +128,9 @@ def plot_and_save_confusion_new(model, fold, out_path):
     # Maske für Werte im Bereich [-0.05, 0.05]
     mask = cm_normalized.abs() <= 0.05
 
+    # Klassenlabels formatieren
+    class_labels = [cls.title() for cls in cm.index]
+
     plt.figure(figsize=(10, 8))
     sns.heatmap(
         cm_normalized.T,           # Achsen tauschen
@@ -130,7 +141,9 @@ def plot_and_save_confusion_new(model, fold, out_path):
         mask=mask.T,               # Maske transponieren!
         linewidths=0.5,
         linecolor='white',
-        annot_kws={"size": 14}
+        annot_kws={"size": 14},
+        xticklabels=class_labels,   # neue Labels für X
+        yticklabels=class_labels    # neue Labels für Y
     )
     #plt.title(f"Normalized Confusion Matrix ({model}_F{fold})")
     plt.ylabel("Predicted Label", fontsize=16)

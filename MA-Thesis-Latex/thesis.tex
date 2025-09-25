@@ -47,40 +47,76 @@
 % set the page numbering back to arabic
 \pagenumbering{arabic}
 \setcounter{page}{1}
-\input{chapter/german/010intro.tex}
-\cleardoubleoddemptypage
+\ifgerman
+	% \input{chapter/german/010intro.tex}
+	% \cleardoubleoddemptypage
 
-\input{chapter/german/011Fundamentals.tex}
-\cleardoubleoddemptypage
+	% \input{chapter/german/011Fundamentals.tex}
+	% \cleardoubleoddemptypage
 
-\input{chapter/german/012State_of_research.tex}
-\cleardoubleoddemptypage
+	% \input{chapter/german/012State_of_research.tex}
+	% \cleardoubleoddemptypage
 
-\input{chapter/german/013Methodology.tex}
-\cleardoubleoddemptypage
+	% \input{chapter/german/013Methodology.tex}
+	% \cleardoubleoddemptypage
 
-% \input{chapter/german/014Implementation.tex}
-% \cleardoubleoddemptypage
+	% % \input{chapter/german/014Implementation.tex}
+	% % \cleardoubleoddemptypage
 
-\input{chapter/german/015Results.tex}
-\cleardoubleoddemptypage
+	% \input{chapter/german/015Results.tex}
+	% \cleardoubleoddemptypage
 
-\input{chapter/german/016Discussion.tex}
-\cleardoubleoddemptypage
+	% \input{chapter/german/016Discussion.tex}
+	% \cleardoubleoddemptypage
 
-\input{chapter/german/019conclusion.tex}
-\cleardoubleoddemptypage
+	% \input{chapter/german/019conclusion.tex}
+	% \cleardoubleoddemptypage
+
+	% \appendix % hier beginnt der Anhang
+	% \input{chapter/german/030appendix_chapter.tex}
+	% \cleardoubleoddemptypage
+
+	% \input{chapter/german/031List_of_abbrevations.tex}
+	% \cleardoubleoddemptypage
+\else
+    \input{chapter/english/010intro.tex}
+	\cleardoubleoddemptypage
+
+	\input{chapter/english/011Fundamentals.tex}
+	\cleardoubleoddemptypage
+
+	\input{chapter/english/012State_of_research.tex}
+	\cleardoubleoddemptypage
+
+	\input{chapter/english/013Methodology.tex}
+	\cleardoubleoddemptypage
+
+	% \input{chapter/english/014Implementation.tex}
+	% \cleardoubleoddemptypage
+
+	\input{chapter/english/015Results.tex}
+	\cleardoubleoddemptypage
+
+	\input{chapter/english/016Discussion.tex}
+	\cleardoubleoddemptypage
+
+	\input{chapter/english/019conclusion.tex}
+	\cleardoubleoddemptypage
+	
+	\appendix % hier beginnt der Anhang
+	\input{chapter/english/030appendix_chapter.tex}
+	\cleardoubleoddemptypage
+
+	\input{chapter/english/031List_of_abbrevations.tex}
+	\cleardoubleoddemptypage
+
+\fi
 
 % when adding a new chapter comment out this line
 %\input{chapter/chapterFile.tex}
 %cleardoubleoddemptypage
 
-\appendix % hier beginnt der Anhang
-\input{chapter/german/030appendix_chapter.tex}
-\cleardoubleoddemptypage
 
-\input{chapter/german/031List_of_abbrevations.tex}
-\cleardoubleoddemptypage
 
 \listoffigures
 \cleardoubleoddemptypage

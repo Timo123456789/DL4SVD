@@ -218,15 +218,15 @@ def plot_area_boxplots(obb_areas, aab_areas, aab_old_areas):
        # DataFrame for Seaborn
     df = pd.DataFrame({
         "Area": obb_areas + aab_areas + aab_old_areas,
-        "Type": (["obb"] * len(obb_areas)) 
-              + (["abb"] * len(aab_areas)) 
-              + (["abb in obb"] * len(aab_old_areas))
+        "Type": (["OBB"] * len(obb_areas)) 
+              + (["ABB"] * len(aab_areas)) 
+              + (["ABB in OBB"] * len(aab_old_areas))
     })
 
     plt.figure(figsize=(10, 6))
     ax = sns.boxplot(
         data=df, x="Type", y="Area",
-        palette={"obb": "orange", "abb": "steelblue", "abb in obb": "green"}
+        palette={"OBB": "orange", "ABB": "steelblue", "ABB in OBB": "green"}
     )
 
     # Schriftgrößen anpassen
@@ -238,7 +238,7 @@ def plot_area_boxplots(obb_areas, aab_areas, aab_old_areas):
 
     plt.grid(True, linestyle=":", alpha=0.6)
     plt.tight_layout()
-    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\abb_vs_obb\boxplot_areas.svg", format="svg", transparent=True)
+    plt.savefig(r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\master_thesis\MA-Thesis-Latex\images\015Results\01abb_vs_obb\boxplot_areas.svg", format="svg", transparent=True)
     plt.show()
 
 if __name__ == "__main__":

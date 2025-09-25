@@ -63,6 +63,9 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
     # Maske für Werte im Bereich [-0.05, 0.05]
     mask = diff_matrix_normalized.abs() <= 0.04
 
+    # Klassenlabels formatieren
+    class_labels = [cls.title() for cls in cm1.index]
+
     plt.figure(figsize=(10, 8))
     sns.heatmap(
         diff_matrix_normalized.T,
@@ -74,7 +77,9 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
         mask=mask.T,              # maskiert auch Annotationen
         linewidths=0.5,
         linecolor='white',
-        annot_kws={"size": 16}
+        annot_kws={"size": 16},
+        xticklabels=class_labels,   # neue Labels für X
+        yticklabels=class_labels    # neue Labels für Y
     )
 
     plt.ylabel("Predicted Label", fontsize=12)
@@ -126,6 +131,9 @@ def plot_and_save_confusion_new(model, fold, out_path):
     # Maske für Werte im Bereich [-0.05, 0.05]
     mask = cm_normalized.abs() <= 0.05
 
+    # Klassenlabels formatieren
+    class_labels = [cls.title() for cls in cm.index]
+
     plt.figure(figsize=(10, 8))
     sns.heatmap(
         cm_normalized.T,           # Achsen tauschen
@@ -136,7 +144,9 @@ def plot_and_save_confusion_new(model, fold, out_path):
         mask=mask.T,               # Maske transponieren!
         linewidths=0.5,
         linecolor='white',
-        annot_kws={"size": 16}
+        annot_kws={"size": 16},
+        xticklabels=class_labels,   # neue Labels für X
+        yticklabels=class_labels    # neue Labels für Y
     )
 
     plt.ylabel("Predicted Label", fontsize=12)
