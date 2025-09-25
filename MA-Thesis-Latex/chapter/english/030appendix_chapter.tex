@@ -161,31 +161,30 @@ Val-Fold & Train-Folds & \#Train-Objects & Plane (Train) & Plane (Val) & CV$_{tr
 4 & 0,1,2,3 & 2525 & 37 & 4  & 1.0073 & 24.84 \\
 \hline
 \end{tabular}
-\caption{Classbalance at 6-Fold Cross Validation (Fold 5 is Testdataset)}
+\caption[Classbalance at 6-Fold Cross Validation]{Classbalance at 6-Fold Cross Validation (Fold 5 is Testdataset)}
 \end{table}
 
 
-\begin{landscape}  % Beginn Querformatseite
-    \begin{table}[ht!]
-    \centering
-    \caption{Class distribution (train/val/test) for 6-fold CV with fold 5 as test -- All classesn}
-    \adjustbox{max width=\linewidth}{%
-    \begin{tabular}{c|ccc|ccc|ccc|ccc|ccc}
-    \hline
-    & \multicolumn{3}{c|}{Val=0} & \multicolumn{3}{c|}{Val=1} & \multicolumn{3}{c|}{Val=2} & \multicolumn{3}{c|}{Val=3} & \multicolumn{3}{c}{Val=4} \\
-    Klasse & Train & Val & Test & Train & Val & Test & Train & Val & Test & Train & Val & Test & Train & Val & Test \\
-    \hline
-    Car        & 934 & 229 & 225 & 930 & 239 & 225 & 933 & 226 & 225 & 934 & 225 & 225 & 934 & 240 & 225 \\
-    Truck      & 207 & 51  & 50  & 201 & 57  & 50  & 208 & 50  & 50  & 208 & 49  & 50  & 207 & 51  & 50  \\
-    Ship       & 117 & 30  & 27  & 116 & 28  & 27  & 115 & 29  & 27  & 114 & 30  & 27  & 117 & 27  & 27  \\
-    Tractor    & 123 & 30  & 30  & 124 & 32  & 30  & 126 & 33  & 30  & 124 & 30  & 30  & 125 & 31  & 30  \\
-    Campingcar & 269 & 65  & 63  & 262 & 72  & 63  & 270 & 64  & 63  & 267 & 69  & 63  & 265 & 64  & 63  \\
-    Van        & 67  & 18 & 16 & 68  & 17 & 16 & 68  & 17 & 16 & 68  & 17 & 16 & 69  & 16 & 16 \\
-    Vehicle    & 144 & 34 & 33 & 141 & 37 & 33 & 144 & 34 & 33 & 144 & 34 & 33 & 145 & 39 & 33 \\
-    Pick-Up    & 637 & 164 & 157 & 640 & 161 & 157 & 644 & 157 & 157 & 641 & 160 & 157 & 642 & 159 & 157 \\
-    Plane      & 37  & 4  & 7  & 30  & 11 & 7  & 37  & 4  & 7  & 23  & 18 & 7  & 37  & 4  & 7  \\
-    \hline
-    \end{tabular}%
-    }
-    \end{table}
-\end{landscape}
+% \begin{landscape}
+% \begin{table}[ht!]
+%     \centering
+%     \adjustbox{max width=\linewidth}{%
+%     \begin{tabular}{c|ccc|ccc|ccc|ccc|ccc}
+%     \hline
+%     & \multicolumn{3}{c|}{Val=0} & \multicolumn{3}{c|}{Val=1} & \multicolumn{3}{c|}{Val=2} & \multicolumn{3}{c|}{Val=3} & \multicolumn{3}{c}{Val=4} \\
+%     Klasse & Train & Val & Test & Train & Val & Test & Train & Val & Test & Train & Val & Test & Train & Val & Test \\
+%     \hline
+%     Car        & 934 & 229 & 225 & 930 & 239 & 225 & 933 & 226 & 225 & 934 & 225 & 225 & 934 & 240 & 225 \\
+%     Truck      & 207 & 51  & 50  & 201 & 57  & 50  & 208 & 50  & 50  & 208 & 49  & 50  & 207 & 51  & 50 \\
+%     Ship       & 117 & 30  & 27  & 116 & 28  & 27  & 115 & 29  & 27  & 114 & 30  & 27  & 117 & 27  & 27 \\
+%     Tractor    & 123 & 30  & 30  & 124 & 32  & 30  & 126 & 33  & 30  & 124 & 30  & 30  & 125 & 31  & 30 \\
+%     Campingcar & 269 & 65  & 63  & 262 & 72  & 63  & 270 & 64  & 63  & 267 & 69  & 63  & 265 & 64  & 63 \\
+%     Van        & 67  & 18 & 16 & 68  & 17 & 16 & 68  & 17 & 16 & 68  & 17 & 16 & 69  & 16 & 16 \\
+%     Vehicle    & 144 & 34 & 33 & 141 & 37 & 33 & 144 & 34 & 33 & 144 & 34 & 33 & 145 & 39 & 33 \\
+%     Pick-Up    & 637 & 164 & 157 & 640 & 161 & 157 & 644 & 157 & 157 & 641 & 160 & 157 & 642 & 159 & 157 \\
+%     Plane      & 37  & 4  & 7  & 30  & 11 & 7  & 37  & 4  & 7  & 23  & 18 & 7  & 37  & 4  & 7 \\
+%     \hline
+%     \end{tabular}%
+%     }
+%     \caption[Class distribution (train/val/test) for 6-fold CV]{Class distribution (train/val/test) for 6-fold CV with fold 5 as test -- All classes}
+% \end{table}

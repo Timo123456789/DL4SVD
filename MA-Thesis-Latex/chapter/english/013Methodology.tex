@@ -8,7 +8,7 @@
     \label{fig:Flowchart}
 \end{figure}
 
-The methodological approach of this work is illustrated in the accompanying flowchart (see Fig. \ref{fig:Flowchart}). The \acrshort{VEDAI} dataset is first used to investigate the differences between \acrshort{abb} and \acrshort{obb}, with the experiments on channel permutations based on the better bounding box format in each case. In the next step, a self-trained model based on the DOTA dataset is used as a pre-trained model. The permutation experiments based on this model comprise five different channel combinations and, optionally, the inclusion of NDVI in combination with several true colour channels.
+The methodological approach of this work is illustrated in the accompanying flowchart (see Fig. \ref{fig:Flowchart}). The \acrshort{VEDAI} dataset is first used to investigate the differences between \acrshort{abb} and \acrshort{obb}, with the experiments on channel permutations based on the better bounding box format. In the next step, a self-trained model based on the DOTA dataset is used as a pre-trained model. The permutation experiments based on this model comprise five different channel combinations and, optionally, the inclusion of NDVI in combination with several true colour channels.
 
 The following section describes the methodology of this work. First, the data basis is explained using the data sets used. Building on this, the \acrshort{YOLO} versions used are presented. This is followed by the implementation, consisting of the Python packages used and a description of the programme code, which is made available on Github \cite{Github_timo}. Next, the central challenges in preprocessing are presented. Finally, the results of the 6-fold cross-validation are presented, whereby our own folds were created, which were used for all experiments with \acrshort{abb}, \acrshort{obb} and the permutations (see Table \ref{tab:perm}). Finally, the hardware on which the experiments were performed is described, namely the \acrlong{HPC} \acrshort{PALMA}, as well as the Bash scripts executed there with the hyperparameters used for \acrshort{YOLO}. 
 
@@ -36,18 +36,18 @@ The database comprises two datasets containing annotated aerial and satellite im
 \subsection{Vehicle Detection on Aerial Images (VEDAI) Dataset}
 \label{subsec:VEDAI}
 
-The \Acrshort{VEDAI} dataset \cite{vedai_web}  from 2015 is a suitable data source as it contains high-resolution aerial images that are particularly suitable for vehicle detection \cite{Razakarivony2015}. It includes annotated data showing vehicles in different scenarios, sizes and orientations. It is also a benchmark for the detection of very small objects. The dataset contains both \acrshort{RGB} images and multispectral data, making it ideal for investigating the effects of additional channels such as \acrshort{IR} on object detection. More than 3700 objects are annotated in approximately 1200 images. These objects are divided into 9 classes (ship, camping car, car, pickup, plane, tractor, truck, van and vehicles) and the background of the objects is varied, which increases the robustness of the trained model \cite{Razakarivony2015}. \\
+The ‘\Acrfull{VEDAI}’ dataset \cite{vedai_web}  from 2015 is a suitable data source as it contains high-resolution aerial images that are particularly suitable for vehicle detection \cite{Razakarivony2015}. It includes annotated data showing vehicles in different scenarios, sizes and orientations. It is also a benchmark for the detection of very small objects. The dataset contains both \acrshort{RGB} images and multispectral data, making it ideal for investigating the effects of additional channels such as \acrshort{IR} on object detection. More than 3700 objects are annotated in approximately 1200 images. These objects are divided into 9 classes (\textit{Ship}, \textit{Camping Car}, \textit{Car}, \textit{Pick Up}, \textit{Plane}, \textit{Tractor}, \textit{Truck}, \textit{Van} and \textit{Vehicle}) and the background of the objects is varied, which increases the robustness of the trained model \cite{Razakarivony2015}. \\
 The resolution of the images is 12.5 cm \texttimes 12.5 cm per pixel, which is sufficient to recognise individual vehicles. The images, with a size of 1024 \texttimes 1024 pixels, were taken during a flight in 2012 in the US state of Utah \cite{Razakarivony2015}. Sample images for each class can be seen in Figures \ref{fig:aab_obb_example_pics}, \ref{fig:perm_exp_example_pics} and \ref{fig:ablation_example_pics}.
 
 
 
 \subsection{Dataset for Objectdetection in Aerial Images (DOTA) 1.5}
 \label{subsec:DOTA}
-Due to its diversity of classes and domain-specific orientation, \Acrfull{DOTA} is particularly well suited as a basis for pre-training in permutation experiments. The dataset contains a large number of annotated objects from different categories contained in high-resolution satellite images. The image resolutions in the \acrshort{DOTA} dataset vary greatly, ranging from 800~$\times$~800 to 20,000~$\times$~20,000 pixels. The dataset includes both \acrshort{RGB} images and greyscale images representing the panchromatic channel of the GF2 and JL1 satellites. The images come from various sources, including Google Earth and other commercial and institutional providers.
+Due to its diversity of classes and domain-specific orientation, the ‘\Acrfull{DOTA}’ is particularly well suited as a basis for pre-training in permutation experiments. The dataset contains a large number of annotated objects from different categories contained in high-resolution satellite images. The image resolutions in the \acrshort{DOTA} dataset vary greatly, ranging from 800~$\times$~800 to 20,000~$\times$~20,000 pixels. The dataset includes both \acrshort{RGB} images and greyscale images representing the panchromatic channel of the GF2 and JL1 satellites. The images come from various sources, including Google Earth and other commercial and institutional providers.
 
 All 16 available classes in the DOTA dataset were considered for training in this work. The classes \textit{Large Vehicle}, \textit{Small Vehicle}, \textit{Plane} and \textit{Ship} are particularly relevant for the subsequent experiments, as they are highly significant for object recognition in urban and infrastructural contexts.
 
-The training was performed with the \acrshort{YOLO}v9u model over 1500 epochs, using a \textit{Patience} of 150. All other hyperparameters were selected analogously to the settings shown in Table~\ref{tab:hyperparameters}. The results achieved show a mean \acrshort{mAP}50-95 of approximately 0.42, which can be considered a satisfactory value given the large number of images and classes. No overfitting is apparent, and the precision values are good overall. The metrics of the training process are shown in Figure~\ref{fig:DOTA_train_values} and example classes in Fig. \ref{fig:DOTA_exClasses}.
+The training was performed with the \acrshort{YOLO}v9u model over 1500 epochs, using a \textit{Patience} of 150. All other hyperparameters were selected analogously to the settings shown in Table~\ref{tab:hyperparameters}. The results achieved show a mean \acrshort{mAP}@0.5-0.95 of approximately 0.42, which can be considered a satisfactory value given the large number of images and classes. No overfitting is apparent, and the precision values are good overall. The metrics of the training process are shown in Figure~\ref{fig:DOTA_train_values} and example classes in Fig. \ref{fig:DOTA_exClasses}.
 
 
 
@@ -96,7 +96,7 @@ The training was performed with the \acrshort{YOLO}v9u model over 1500 epochs, u
 
 
 
-The development of \acrshort{YOLO} across the various versions shows significant progress. While \acrshort{YOLO}v1 (see Fig. \ref{subfig_yolov1}) was able to save a large number of parameters and computational effort using the one-stage method by generating predictions using the \acrshort{FCL} in the second layer, \acrshort{YOLO}v8 (see Fig. \ref{subfig_yolov8}) builds on \acrshort{YOLO}v5 and integrates numerous optimisations \cite{Wang2024_yolo_review}. These include the \acrfull{ELAN} integration from \acrshort{YOLO}v7, which has been extended by an additional residual connection, while the decoder is based on \acrshort{YOLO}v6 and remains unchanged. This version also shows an improvement in training performance of about 30\% and enables various downstream tasks such as segmentation, instance segmentation, pose estimation, and multiple object tracking. Finally, \acrshort{YOLO}v9 (see Fig. \ref{subfig_yolov9}) integrates \acrshort{PGI} to prevent important information from being lost at the superficial network level. \acrshort{PGI} ensures more robust performance by retaining the original information as deeply as possible \cite{Wang2024_yolo_review}.
+The development of \acrshort{YOLO} across the various versions shows significant progress. While \acrshort{YOLO}v1 (see Fig. \ref{subfig_yolov1}) was able to save a large number of parameters and computational effort using the One-Stage method by generating predictions using the \acrshort{FCL} in the second layer, \acrshort{YOLO}v8 (see Fig. \ref{subfig_yolov8}) builds on \acrshort{YOLO}v5 and integrates numerous optimisations \cite{Wang2024_yolo_review}. These include the \acrfull{ELAN} integration from \acrshort{YOLO}v7, which has been extended by an additional residual connection, while the decoder is based on \acrshort{YOLO}v6 and remains unchanged. This version also shows an improvement in training performance of about 30\% and enables various downstream tasks such as segmentation, instance segmentation, pose estimation, and multiple object tracking. Finally, \acrshort{YOLO}v9 (see Fig. \ref{subfig_yolov9}) integrates \acrshort{PGI} to prevent important information from being lost at the superficial network level. \acrshort{PGI} ensures more robust performance by retaining the original information as deeply as possible \cite{Wang2024_yolo_review}.
 
 The key strengths of \acrshort{YOLO}v9 lie in its high processing speed and precise object detection, which enable efficient analysis of large data sets.
  
@@ -130,9 +130,9 @@ The implementation of \acrshort{YOLO}v9u is based on version \acrshort{YOLO}v8.1
 \subsection{YOLOv9e by Ultralytics}
 \label{subsec:yolov9e}
 
-The \acrshort{YOLO}v9 model series from Ultralytics comprises several variants that differ in terms of model size, accuracy and computational complexity. All variants integrate the \acrshort{PGI} and \acrshort{GELAN} architectures developed by \citeauthor{wang2024_sapkota} and also support the processing of \acrshort{abb}. The range extends from the compact \texttt{YOLOv9t} variant with an input image size of $640 \times 640$ pixels, 2 million parameters and 7.7 \acrshortpl{GFLOP}, to the most powerful \acrshort{YOLO}v9e variant with 58.1 million parameters and 192.5 \acrshortpl{GFLOP} (see Table~\ref{tab:yolov9-models}).
+The \acrshort{YOLO}v9 model series from Ultralytics comprises several variants that differ in terms of model size, accuracy and computational complexity \cite{ultralyics_yolov9}. All variants integrate the \acrshort{PGI} and \acrshort{GELAN} architectures developed by \citeauthor{wang2024_sapkota} \cite{wang2024_sapkota} and also support the processing of \acrshort{abb}. The range extends from the compact \acrshort{YOLO}v9t variant with an input image size of $640 \times 640$ pixels, 2 million parameters and 7.7 \acrshortpl{GFLOP}, to the most powerful \acrshort{YOLO}v9e variant with 58.1 million parameters and 192.5 \acrshortpl{GFLOP} (see Table~\ref{tab:yolov9-models}).
 
-Due to the highest accuracy achieved (\acrshort{mAP}50-95 = 55.6) and the highest computing capacity, the \texttt{YOLOv9e} model was used for all experiments with axis-aligned bounding boxes. This variant was chosen with the aim of ensuring maximum detection performance during the evaluation. In addition, this version is used because it supports the processing of \acrlong{abb}.
+Due to the highest accuracy achieved (\acrshort{mAP}@0.5-0.95 = 55.6) and the highest computing capacity, the \acrshort{YOLO}v9e model was used for all experiments with axis-aligned bounding boxes. This variant was chosen with the aim of ensuring maximum detection performance during the evaluation. In addition, this version is used because it supports the processing of \acrlong{abb}.
 
 
 
@@ -148,7 +148,7 @@ YOLOv9m & 640 & 51.4 & 68.1 & 20.1 & 76.8 \\
 YOLOv9c & 640 & 53.0 & 70.2 & 25.5 & 102.8 \\
 YOLOv9e & 640 & 55.6 & 72.8 & 58.1 & 192.5 \\
 \end{tabular}
-\caption{Comparison of YOLOv9 model variants in terms of accuracy and computational complexity at an input resolution of 640$\times$640 pixels. \cite{ultralyics_yolov9,wang2024_sapkota}}
+\caption[Comparison of YOLOv9 model variants]{Comparison of YOLOv9 model variants in terms of accuracy and computational complexity at an input resolution of 640$\times$640 pixels. \cite{ultralyics_yolov9,wang2024_sapkota}}
 \label{tab:yolov9-models}
 \end{table}
 
@@ -165,7 +165,7 @@ YOLOv9e & 640 & 55.6 & 72.8 & 58.1 & 192.5 \\
 
 
 \section{Programming Environment}
-The programming language used is Python. The scripts for \acrshort{HPC} \acrshort{PALMA} were written in Bash.
+The programming language used is Python. The scripts for \acrlong{HPC} \acrshort{PALMA} were written in Bash.
 
 \subsection{Python Packages}
 Various Python packages were used for implementation, which are briefly described below.
@@ -193,7 +193,7 @@ The ‘pandas’ library is also an open source data analysis and manipulation t
 \section{Challenges Preprocessing}
 Several technical challenges arose during the processing of the VEDAI dataset.
 First, the existing labels had to be converted to the \acrshort{YOLO}v9-\acrshort{obb} format to be compatible with the selected model.
-It was found that a small portion of the data (7 out of 3,757 instances) had coordinate values that were outside the permissible range (i.e., less than 0 (see Fig. \ref{fig:smaller0}) or greater than 1 (see Fig. \ref{fig:higher1})). 
+It was found that a small subset of the data (7 out of 3,757 cases) had coordinate values outside the permissible range (i.e. less than 0 (see Fig. \ref{fig:smaller0}) or greater than 1 (see Fig. \ref{fig:higher1})). 
 This problem was resolved by using exception handling and rounding the values to the valid value range.
  
 
@@ -263,7 +263,7 @@ Overall, this procedure contributes to the high validity of the experimental res
 
 \section{High-Performance-Cluster PALMA}
 
-The \acrfull{HPC} \Acrshort{PALMA} at the University of Münster was used to train the models. An isolated \texttt{Python} environment (UV \cite{palma_uv}) was used as the working environment. The training processes were executed using self-developed \texttt{Bash} scripts, which were distributed across different \acrshort{GPU} nodes of the cluster (including HGX nodes) to enable efficient parallelisation of the training.
+The \acrfull{HPC} \Acrshort{PALMA} at the University of Münster was used to train the models. An isolated Python environment (UV \cite{palma_uv}) was used as the working environment. The training processes were executed using self-developed Bash scripts, which were distributed across different \acrshort{GPU} nodes of the cluster (including HGX nodes) to enable efficient parallelisation of the training.
 
 PALMA (abbreviation for ‘\Acrlong{PALMA}’) is provided by the \Acrfull{CIT} at the University of Münster, based on hardware from MEGWARE \cite{palma_spec}, and has the technical specifications listed in Table \ref{tab:Spec_Palma} \cite{palma_spec}:
 
@@ -294,11 +294,11 @@ The cluster's high computing power and storage capacity made it possible to proc
 
 \section{Bash Scripts}
 
-Several \texttt{Bash} scripts were developed for training the models, which were designed for the high-performance computer \acrshort{PALMA}. The training runs were primarily carried out using \acrshort{SLURM} job arrays, with each fold of a permutation being assigned to a separate job. Thus, a model always corresponded to a fold within a specific permutation.  
+Several Bash scripts were developed for training the models, which were designed for the high-performance computer \acrshort{PALMA}. The training runs were primarily carried out using \acrshort{SLURM} job arrays, with each fold of a permutation being assigned to a separate job. Thus, a model always corresponded to a fold within a specific permutation.  
 
-The decision between \acrlong{abb} and \acrlong{obb} was made using the same training parameters as in the permutation experiments (see Table~\ref{tab:hyperparameters}), but with different models: \acrshort{YOLO}v9e for \acrshort{abb} and \acrshort{YOLO}v9u for \acrshort{obb}, as only these variants support the corresponding bounding box formats. In this case, no pre-trained model was used; instead, training was carried out \textit{from scratch}.
+The decision between \acrlongpl{abb} and \acrlongpl{obb} was made using the same training parameters as in the permutation experiments (see Table~\ref{tab:hyperparameters}), but with different models: \acrshort{YOLO}v9e for \acrshort{abb} and \acrshort{YOLO}v9u for \acrshort{obb}, as only these variants support the corresponding bounding box formats. In this case, no pre-trained model was used; instead, training was carried out \textit{from scratch}.
   
-The permutation experiments were then carried out. The hyperparameters listed in Table~\ref{tab:hyperparameters} were used consistently. The image resolution was 1024 × 1024 pixels, the training duration was 500 epochs, and early termination was disabled by setting the \texttt{patience} value to 0 to ensure consistent comparability. The basis was a model pre-trained on the \acrshort{DOTA} dataset, using the \acrshort{YOLO}v9u architecture (see section~\ref{subsec:yolov9u}) throughout.
+The permutation experiments were then carried out. The hyperparameters listed in Table~\ref{tab:hyperparameters} were used consistently. The image resolution was 1024~$\times$~1024 pixels, the training duration was 500 epochs, and early termination was disabled by setting the \texttt{patience} value to 0 to ensure consistent comparability. The basis was a model pre-trained on the \acrshort{DOTA} dataset, using the \acrshort{YOLO}v9u architecture (see section~\ref{subsec:yolov9u}) throughout.
   
 For the ablation studies, however, the use of a pre-trained model was dispensed with, while all other training parameters remained unchanged.  
 
