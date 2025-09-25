@@ -10,4 +10,4 @@
  having the greatest impact on model performance. YOLOv9 proves to be particularly suitable for
  small objects. The results confirm the potential of deep learning methods for vehicle detection in
  multispectral remote sensing data and open up perspectives for further research, for example on
- the use of multitemporal data or scaling effects
+ the use of multitemporal data or scaling effects.
