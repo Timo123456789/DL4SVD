@@ -5,6 +5,13 @@ import os
 import sys
 
 def main():
+    """
+    Main entry point for transforming DOTA label files to YOLO OBB format.
+
+    - Sets the path to the DOTA dataset.
+    - Calls transform_label_folder for the training set.
+    - Prints a success message when transformation is complete.
+    """
     path_dota = rf'Code\data\DOTA'
 
     transform_label_folder(path_dota,"train")
@@ -13,6 +20,18 @@ def main():
 
 
 def transform_label_folder(folder_path, string_tag):
+    """
+    Transforms all label files in a given folder to YOLO OBB format.
+
+    Args:
+        folder_path (str): Path to the DOTA dataset folder.
+        string_tag (str): Subset tag ("train" or "test").
+
+    Side effects:
+        Creates necessary output folders.
+        Processes each label file and writes transformed labels.
+        Prints progress and error messages.
+    """
     folder_path = rf"{folder_path}\{string_tag}\labels" 
     counter = 0
 
@@ -46,6 +65,19 @@ def transform_label_folder(folder_path, string_tag):
         print(f"Error: '{folder_path}' is not a valid folder.")
 
 def transform_label(filepath, string_tag, path_obj):
+    """
+    Transforms a single label file to YOLO OBB format and writes the result.
+
+    Args:
+        filepath (str): Path to the label file.
+        string_tag (str): Subset tag ("train" or "test").
+        path_obj (dict): Dictionary with output folder paths.
+
+    Side effects:
+        Reads the corresponding image to get dimensions.
+        Writes the transformed label to the output folder.
+        Prints warnings for malformed lines or write errors.
+    """
     new_labels=[]
    
     new_labels_path = filepath.replace(rf'{string_tag}\label', rf'new_labels\{string_tag}\label')
@@ -81,6 +113,17 @@ def transform_label(filepath, string_tag, path_obj):
 
 
 def create_folder_structure():
+    """
+    Creates the output folder structure for transformed labels and images.
+
+    Returns:
+        dict: Dictionary with paths for train/val images and labels.
+
+    Side effects:
+        Creates directories if they do not exist.
+        Prints status messages about directory creation.
+    """
+
     def make_directories(path):
         try:
             os.makedirs(path)
@@ -108,6 +151,20 @@ def create_folder_structure():
     return path_obj
     
 def transform_line(arr, width, height):
+    """
+    Transforms a list of DOTA label values into a YOLO OBB label string.
+
+    Args:
+        arr (list): List of 10 elements (8 coordinates, class name, class id).
+        width (int): Image width in pixels.
+        height (int): Image height in pixels.
+
+    Returns:
+        str or None: YOLO OBB label string if valid, otherwise None.
+
+    Prints:
+        Warning if the line does not have the expected number of elements.
+    """
     
     data_list=arr
     if len(data_list) == 10:
@@ -144,16 +201,16 @@ def transform_line(arr, width, height):
 
 
 def get_number_from_string(input_string):
-  """
-  Extracts the number from a string similar to an entry in the class list.
+    """
+    Maps a class name string to its corresponding numeric class ID.
 
-  Args:
-    input_string: The string from which to extract the number (e.g., "plane").
+    Args:
+        input_string (str): Class name.
 
-  Returns:
-    The corresponding number as an integer, or None if no matching number is found.
-  """
-  class_mapping = {
+    Returns:
+        int or None: Numeric class ID, or None if not found.
+    """
+    class_mapping = {
       "plane": 0,
       "ship": 1,
       "storage-tank": 2,
@@ -171,23 +228,20 @@ def get_number_from_string(input_string):
       "swimming-pool": 14,
       "container-crane": 15
   }
-  return class_mapping.get(input_string.lower())
+    return class_mapping.get(input_string.lower())
 
 
 def convert_to_yolo_obb(corners_pixel, img_width, img_height):
     """
-    Konvertiert Pixelkoordinaten von Eckpunkten in das normalisierte
-    YOLO OBB Format.
+    Converts pixel corner coordinates to normalized YOLO OBB format.
 
     Args:
-        corners_pixel (list or tuple): Eine Liste oder ein Tupel mit 8
-            Integer-Werten (x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px).
-        img_width (int): Die Breite des Bildes in Pixeln.
-        img_height (int): Die Höhe des Bildes in Pixeln.
+        corners_pixel (list): List of 8 pixel coordinates (x1, y1, ..., x4, y4).
+        img_width (int): Image width in pixels.
+        img_height (int): Image height in pixels.
 
     Returns:
-        tuple: Ein Tupel mit 8 Float-Werten (x1_norm, y1_norm, x2_norm, y2_norm,
-               x3_norm, y3_norm, x4_norm, y4_norm) im Bereich [0, 1].
+        list: List of 8 normalized corner coordinates in [0, 1].
     """
     x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px = corners_pixel
 
@@ -207,14 +261,14 @@ def convert_to_yolo_obb(corners_pixel, img_width, img_height):
 
 def check_normalvalues(normalized_values, cp):
     """
-    Prüft eine Liste von normierten Werten und wirft einen Fehler,
-    wenn ein Wert kleiner als 0 oder größer als 1 ist.
+    Checks a list of normalized values and clamps them to [0, 1] if out of bounds.
 
     Args:
-        normwerte: Eine Liste von numerischen Werten.
+        normalized_values (list): List of normalized coordinates.
+        cp (list): Original pixel coordinates (unused).
 
-    Raises:
-        ValueError: Wenn ein Wert in der Liste kleiner als 0 oder größer als 1 ist.
+    Returns:
+        list: Corrected list of normalized coordinates.
     """
     found = False
     cp_normalized_values = normalized_values

@@ -11,6 +11,38 @@ from ultralytics.utils.ops import xyxy2xywhn
 
 
 def convert_labels(fname=Path("xView/xView_train.geojson")):
+    """
+    Converts xView geoJSON labels to YOLO format and saves them as text files.
+
+    Args:
+        fname (Path or str, optional): Path to the xView geoJSON file. Defaults to "xView/xView_train.geojson".
+
+    Process:
+        - Loads the geoJSON annotation file.
+        - Creates the output directory for YOLO labels.
+        - Maps xView class IDs (11-94) to YOLO class indices (0-59) using a predefined mapping.
+        - Iterates through each feature in the geoJSON:
+            - Checks if bounding box coordinates are present.
+            - Loads the corresponding image to get its dimensions.
+            - Converts bounding box coordinates from xyxy to normalized xywh format.
+            - Writes the YOLO label (class and box) to a text file for each image.
+        - Skips and warns about any invalid or missing labels.
+
+    Returns:
+        None
+    """
+
+# Script logic (outside functions):
+
+"""
+- Downloads the xView dataset manually (commented URLs provided).
+- Sets the dataset root directory from a YAML configuration.
+- Calls convert_labels to process and convert the geoJSON labels to YOLO format.
+- Moves train and validation images into a unified images directory with train/val subfolders.
+- Splits the training images into train/val sets using ultralytics' autosplit utility.
+"""
+
+def convert_labels(fname=Path("xView/xView_train.geojson")):
       """Converts xView geoJSON labels to YOLO format, mapping classes to indices 0-59 and saving as text files."""
       path = fname.parent
       with open(fname, encoding="utf-8") as f:
@@ -53,22 +85,22 @@ def convert_labels(fname=Path("xView/xView_train.geojson")):
 
 
   # Download manually from https://challenge.xviewdataset.org
-  dir = Path(yaml["path"])  # dataset root dir
-  # urls = [
-  #     "https://d307kc0mrhucc3.cloudfront.net/train_labels.zip",  # train labels
-  #     "https://d307kc0mrhucc3.cloudfront.net/train_images.zip",  # 15G, 847 train images
-  #     "https://d307kc0mrhucc3.cloudfront.net/val_images.zip",  # 5G, 282 val images (no labels)
-  # ]
-  # download(urls, dir=dir)
+    dir = Path(yaml["path"])  # dataset root dir
+    # urls = [
+    #     "https://d307kc0mrhucc3.cloudfront.net/train_labels.zip",  # train labels
+    #     "https://d307kc0mrhucc3.cloudfront.net/train_images.zip",  # 15G, 847 train images
+    #     "https://d307kc0mrhucc3.cloudfront.net/val_images.zip",  # 5G, 282 val images (no labels)
+    # ]
+    # download(urls, dir=dir)
 
-  # Convert labels
-  convert_labels(dir / "xView_train.geojson")
+    # Convert labels
+    convert_labels(dir / "xView_train.geojson")
 
-  # Move images
-  images = Path(dir / "images")
-  images.mkdir(parents=True, exist_ok=True)
-  Path(dir / "train_images").rename(dir / "images" / "train")
-  Path(dir / "val_images").rename(dir / "images" / "val")
+    # Move images
+    images = Path(dir / "images")
+    images.mkdir(parents=True, exist_ok=True)
+    Path(dir / "train_images").rename(dir / "images" / "train")
+    Path(dir / "val_images").rename(dir / "images" / "val")
 
-  # Split
-  autosplit(dir / "images" / "train")
+    # Split
+    autosplit(dir / "images" / "train")

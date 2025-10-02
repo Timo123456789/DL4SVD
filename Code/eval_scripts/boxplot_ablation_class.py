@@ -7,6 +7,23 @@ import glob
 import re
 
 def main():
+    """
+    Main function to perform ablation analysis and generate boxplots for different data channels and classes.
+
+    - Defines the set of channels to analyze.
+    - Sets boolean flags for different evaluation metrics.
+    - Specifies input and output directories for data and plots.
+    - Extracts metric values from files in the input directory.
+    - Prints the first set of extracted values for inspection.
+    - Counts boxplot values per channel and class.
+    - Generates boxplots for all classes and saves them to the output directory.
+
+    Assumes existence of helper functions:
+        - get_file_Values(main_dir)
+        - count_boxp_values_per_channel_and_class(extracted_values, all_sets)
+        - create_bp_all_classes(extracted_values, all_sets, out_path, bool_value)
+    """
+
     all_sets = ["r", "g","b", "ir", "ndvi"]
     set_arr = {s: s for s in all_sets}
 
@@ -31,6 +48,17 @@ def main():
 
 
 def count_boxp_values_per_channel_and_class(extracted_values, all_sets):
+    """
+    Counts the number of valid "Box(P)" values for each class and channel.
+
+    Args:
+        extracted_values (list): List of dictionaries containing metric values for each file.
+        all_sets (list): List of channel names to analyze.
+
+    Prints:
+        The number of valid "Box(P)" values for each class in each channel.
+    """
+
     # Alle Klassen sammeln
     all_class_names = set()
     for file_dict in extracted_values:
@@ -54,6 +82,18 @@ def count_boxp_values_per_channel_and_class(extracted_values, all_sets):
 
 
 def create_bp(extracted_values, all_sets, selected_class):
+    """
+    Generates and displays a boxplot for the "Box(P)" metric for a specific class across all channels.
+
+    Args:
+        extracted_values (list): List of dictionaries containing metric values for each file.
+        all_sets (list): List of channel names to analyze.
+        selected_class (str): The class name for which the boxplot is generated.
+
+    Displays:
+        A boxplot of "Box(P)" values for the selected class per channel.
+    """
+
     data = []
     for file_dict in extracted_values:
         # Kanal aus Pfad extrahieren (z.B. .../r/fold0.dat → r)
@@ -79,6 +119,19 @@ def create_bp(extracted_values, all_sets, selected_class):
 
 
 def create_bp_all_classes(extracted_values, all_sets, out_path, bool_values):
+    """
+    Generates and saves boxplots for all classes and selected metrics across all channels.
+
+    Args:
+        extracted_values (list): List of dictionaries containing metric values for each file.
+        all_sets (list): List of channel names to analyze.
+        out_path (str): Output directory for saving boxplot images.
+        bool_values (dict): Dictionary specifying which metrics to plot (True/False).
+
+    Saves:
+        Boxplot images (SVG and PNG) for each class and selected metric in the output directory.
+    """
+
     # Alle Klassen sammeln
     all_class_names = set()
     for file_dict in extracted_values:
@@ -125,6 +178,19 @@ def create_bp_all_classes(extracted_values, all_sets, out_path, bool_values):
 
 
 def get_file_Values(main_dir):
+    """
+    Extracts metric values from all .dat files in the specified directory.
+
+    Args:
+        main_dir (str): Path to the main directory containing .dat files.
+
+    Returns:
+        list: List of dictionaries, each containing the file path and class-specific metric values.
+
+    Special handling:
+        - Handles the special case where the class name is "Camping Car" (with a space).
+    """
+
     #dat_files = glob.glob(os.path.join(main_dir, '**', '*.dat'), recursive=True)
     dat_files = glob.glob(os.path.join(main_dir, '*', 'fold*.dat'))
     extracted_values = []
@@ -160,6 +226,17 @@ def get_file_Values(main_dir):
     return extracted_values
 
 def get_channel_from_path(filepath, all_sets):
+    """
+    Extracts the channel name from a file path.
+
+    Args:
+        filepath (str): The file path to analyze.
+        all_sets (list): List of possible channel names.
+
+    Returns:
+        str or None: The channel name if found in the path, otherwise None.
+    """
+
     # Extrahiere den Kanal aus dem Pfad (z.B. .../b/fold0.dat → b)
     parts = os.path.normpath(filepath).split(os.sep)
     for part in parts:

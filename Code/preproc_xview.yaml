@@ -153,3 +153,36 @@ download: |
 
   # Split
   autosplit(dir / "images" / "train")
+
+# Documentation for preproc_xview.yaml
+
+"""
+This YAML configuration file describes the dataset structure and preprocessing steps for the xView 2018 Challenge dataset,
+intended for use with the Ultralytics YOLO framework.
+
+Sections:
+
+- path: Specifies the root directory of the xView dataset.
+- train: Relative path to the training image list (autosplit).
+- val: Relative path to the validation image list (autosplit).
+- names: Dictionary mapping class indices (0-59) to human-readable class names for all xView object categories.
+
+Download Section:
+- Provides a Python script for converting xView geoJSON labels to YOLO format.
+- Maps xView class IDs (11-94) to YOLO class indices (0-59) using a predefined mapping.
+- Loads the geoJSON annotation file and iterates through each feature:
+    - Checks for valid bounding box coordinates.
+    - Loads the corresponding image to get its dimensions.
+    - Converts bounding box coordinates from xyxy to normalized xywh format.
+    - Writes YOLO label files for each image.
+    - Skips and warns about any invalid or missing labels.
+- Moves train and validation images into a unified images directory with train/val subfolders.
+- Splits the training images into train/val sets using ultralytics' autosplit utility.
+
+Usage:
+- Run the conversion and splitting script after manually downloading the xView dataset and extracting images.
+- Use the resulting YAML file as input for YOLO training (e.g., yolo train data=xView.yaml).
+
+Returns:
+- The configuration enables YOLO to locate images and labels, understand class mappings, and train/validate on the xView dataset.
+"""

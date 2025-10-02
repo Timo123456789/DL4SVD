@@ -5,6 +5,16 @@ import os
 from matplotlib.lines import Line2D  # Manuelle Legenden mit allen Folds
 
 def main():
+    """
+    Main routine for loading ablation experiment results, extracting mAP@50-95 values,
+    identifying best validation folds, and generating boxplots for both validation and test sets.
+
+    - Defines channel sets and configuration flags.
+    - Loads paths for validation and test results.
+    - Extracts mAP@50-95 values for each fold and model.
+    - Identifies the best-performing fold per model.
+    - Generates boxplots for validation and test results, highlighting best folds.
+    """
     all_sets = ["red", "green","blue", "ir", "ndvi"]
     set_arr = {s: s for s in all_sets}
     window_size = 20
@@ -85,6 +95,15 @@ def main():
 
 # Funktion zum Einlesen von mAP50-95 aus CSV
 def extract_map50_95(csv_path):
+    """
+    Extracts the mAP@50-95 value from a given CSV file.
+
+    Args:
+        csv_path (str): Path to the CSV file containing metrics.
+
+    Returns:
+        float or None: The extracted mAP@50-95 value, or None if extraction fails.
+    """
     try:
         # Nur Zeilen 1 und 2 einlesen (Index 0 wird übersprungen)
         df = pd.read_csv(csv_path, skiprows=1, nrows=1)
@@ -94,6 +113,16 @@ def extract_map50_95(csv_path):
         return None
 
 def load_paths_for_set(set_name, test_bool):
+    """
+    Loads the file paths for all folds of a given model/channel set.
+
+    Args:
+        set_name (str): Name of the model/channel set.
+        test_bool (bool): If True, loads test CSVs; otherwise, loads validation CSVs.
+
+    Returns:
+        list: List of file paths for each fold (existing files only).
+    """
     paths = []
     file_name = "fold"
     for i in range(5):
@@ -108,6 +137,16 @@ def load_paths_for_set(set_name, test_bool):
     return paths
 
 def load_all_sets(set_arr, test_bool):
+    """
+    Loads file paths for all channel sets and their folds.
+
+    Args:
+        set_arr (dict): Dictionary mapping set names to channel names.
+        test_bool (bool): If True, loads test CSVs; otherwise, loads validation CSVs.
+
+    Returns:
+        dict: Dictionary mapping set names to lists of file paths per fold.
+    """
     set_path_folds_arr = {}
     for key, value in set_arr.items():
         if value is not None:
@@ -126,6 +165,19 @@ def load_all_sets(set_arr, test_bool):
 #         # Optional: hier könntest du Boxplots aus map_values erstellen
 
 def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
+    """
+    Generates and displays a boxplot of mAP@50-95 values for each model/channel set across all folds.
+
+    Args:
+        set_paths_dict (dict): Dictionary mapping set names to lists of file paths per fold.
+        window_size (int): Unused parameter (for compatibility).
+        bool_arr (dict): Dictionary of metric flags (unused in this function).
+
+    Displays:
+        Boxplot and stripplot of mAP@50-95 values per model.
+        Prints best fold and mAP@50-95 value for each model.
+        Saves the plot as an SVG file.
+    """
     all_data = []
 
     for set_name, paths in set_paths_dict.items():
@@ -174,6 +226,22 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
 
 
 def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best_fold_indices=None):
+    """
+    Generates and displays a boxplot of mAP@50-95 values for each model/channel set,
+    marking the best validation fold for each model with a red dot.
+
+    Args:
+        set_paths_dict (dict): Dictionary mapping set names to lists of file paths per fold.
+        window_size (int): Unused parameter (for compatibility).
+        bool_arr (dict): Dictionary of metric flags (unused in this function).
+        best_fold_indices (dict, optional): Dictionary mapping model names to best fold indices.
+
+    Displays:
+        Boxplot and stripplot of mAP@50-95 values per model.
+        Highlights best validation fold with a red dot.
+        Prints best fold and mAP@50-95 value for each model.
+        Saves the plot as an SVG file.
+    """
     all_data = []
 
     for set_name, paths in set_paths_dict.items():
@@ -251,7 +319,16 @@ def create_boxplot_from_sets_red_dot(set_paths_dict, window_size, bool_arr, best
     
 
 def get_top_val_folds(set_paths_dict, top_n=2):
-    """Gibt die Indizes der Top-N Validierungsfolds pro Modell zurück."""
+    """
+    Returns the indices of the top-N validation folds per model based on mAP@50-95.
+
+    Args:
+        set_paths_dict (dict): Dictionary mapping set names to lists of file paths per fold.
+        top_n (int): Number of top folds to return per model.
+
+    Returns:
+        dict: Dictionary mapping set names to lists of top-N fold indices.
+    """
     top_folds = {}
 
     for set_name, paths in set_paths_dict.items():
@@ -267,7 +344,20 @@ def get_top_val_folds(set_paths_dict, top_n=2):
     return top_folds
 
 def create_boxplot_top_folds(val_paths_dict, test_paths_dict, top_n=1):
-    """Creates a bar plot of the test mAP@50-95 values from the top-N validation folds, with the best one highlighted in red."""
+    """
+    Creates a boxplot of test mAP@50-95 values from the top-N validation folds,
+    highlighting the best-performing fold in red.
+
+    Args:
+        val_paths_dict (dict): Dictionary mapping set names to validation file paths per fold.
+        test_paths_dict (dict): Dictionary mapping set names to test file paths per fold.
+        top_n (int): Number of top validation folds to consider per model.
+
+    Displays:
+        Boxplot and scatterplot of test mAP@50-95 values for top validation folds.
+        Highlights the best-performing fold in red.
+        Saves the plot as an SVG file.
+    """
     top_folds = get_top_val_folds(val_paths_dict, top_n=top_n)
     all_data = []
 

@@ -3,6 +3,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def read_confusion_matrix(csv_path):
+    """
+    Reads a confusion matrix from a CSV file, skipping header rows until the matrix starts.
+
+    Args:
+        csv_path (str): Path to the CSV file containing the confusion matrix.
+
+    Returns:
+        pd.DataFrame: Confusion matrix as a pandas DataFrame with proper row and column labels.
+    """
     with open(csv_path, encoding="utf-8") as f:
         lines = f.readlines()
     for idx, line in enumerate(lines):
@@ -14,6 +23,19 @@ def read_confusion_matrix(csv_path):
     return cm
 
 def plot_and_save_diff_old(model_1, fold_1, model_2, fold_2, out_path):
+    """
+    Plots and saves the normalized difference between two confusion matrices from different models/folds.
+
+    Args:
+        model_1 (str): Name of the first model.
+        fold_1 (int): Fold number for the first model.
+        model_2 (str): Name of the second model.
+        fold_2 (int): Fold number for the second model.
+        out_path (str): Output path for saving the PNG and SVG images.
+
+    Saves:
+        A heatmap of the normalized difference matrix as PNG and SVG files.
+    """
     csv_path1 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_1}\fold{fold_1}\metrics_and_confusion_test.csv"
     csv_path2 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_2}\fold{fold_2}\metrics_and_confusion_test.csv"
     cm1 = read_confusion_matrix(csv_path1)
@@ -49,6 +71,19 @@ def plot_and_save_diff_old(model_1, fold_1, model_2, fold_2, out_path):
 
 
 def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
+    """
+    Plots and saves the normalized difference between two confusion matrices, masking small differences.
+
+    Args:
+        model_1 (str): Name of the first model.
+        fold_1 (int): Fold number for the first model.
+        model_2 (str): Name of the second model.
+        fold_2 (int): Fold number for the second model.
+        out_path (str): Output path for saving the PNG and SVG images.
+
+    Saves:
+        A heatmap of the normalized difference matrix as PNG and SVG files, masking values with absolute difference <= 0.04.
+    """
     csv_path1 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_1}\fold{fold_1}\metrics_and_confusion_test.csv"
     csv_path2 = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model_2}\fold{fold_2}\metrics_and_confusion_test.csv"
 
@@ -94,6 +129,17 @@ def plot_and_save_diff(model_1, fold_1, model_2, fold_2, out_path):
     plt.close()
 
 def plot_and_save_confusion(model, fold, out_path):
+    """
+    Plots and saves the normalized confusion matrix for a given model and fold.
+
+    Args:
+        model (str): Name of the model.
+        fold (int): Fold number.
+        out_path (str): Output path for saving the PNG and SVG images.
+
+    Displays:
+        The normalized confusion matrix and saves it as PNG and SVG files.
+    """
     csv_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model}\fold{fold}\metrics_and_confusion_test.csv"
     cm = read_confusion_matrix(csv_path)
     cm_normalized = cm.div(cm.sum(axis=1), axis=0).fillna(0)
@@ -123,6 +169,17 @@ def plot_and_save_confusion(model, fold, out_path):
     plt.show()
     plt.close()
 def plot_and_save_confusion_new(model, fold, out_path):
+    """
+    Plots and saves the normalized confusion matrix for a given model and fold, masking small values.
+
+    Args:
+        model (str): Name of the model.
+        fold (int): Fold number.
+        out_path (str): Output path for saving the PNG and SVG images.
+
+    Displays:
+        The normalized confusion matrix with values <= 0.05 masked, and saves it as PNG and SVG files.
+    """
     csv_path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation_ablation\{model}\fold{fold}\metrics_and_confusion_test.csv"
     cm = read_confusion_matrix(csv_path)
     cm_normalized = cm.div(cm.sum(axis=1), axis=0).fillna(0)

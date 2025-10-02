@@ -18,6 +18,17 @@ CSV_PATH = rf"Code/data/airbus-plane-detection/annotations.csv"
 CLASS_ID = 0
 
 def convert_to_yolo_obb(corners_pixel, img_width, img_height):
+    """
+    Converts pixel corner coordinates to normalized YOLO OBB format.
+
+    Args:
+        corners_pixel (list): List of 8 pixel coordinates (x1, y1, ..., x4, y4).
+        img_width (int): Image width in pixels.
+        img_height (int): Image height in pixels.
+
+    Returns:
+        list: List of 8 normalized corner coordinates in [0, 1].
+    """
     x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px = corners_pixel
 
     x1_norm = x1_px / img_width
@@ -37,6 +48,15 @@ def convert_to_yolo_obb(corners_pixel, img_width, img_height):
     return norm_values
 
 def check_normalvalues(normalized_values):
+    """
+    Checks a list of normalized values and clamps them to [0, 1] if out of bounds.
+
+    Args:
+        normalized_values (list): List of normalized coordinates.
+
+    Returns:
+        list: Corrected list of normalized coordinates.
+    """
     for i in range(len(normalized_values)):
         if normalized_values[i] < 0:
             normalized_values[i] = 0
@@ -45,6 +65,17 @@ def check_normalvalues(normalized_values):
     return normalized_values
 
 def transform_line(corner_list, width, height):
+    """
+    Transforms a list of four coordinate pairs into a YOLO OBB label string.
+
+    Args:
+        corner_list (list): List of four (x, y) coordinate pairs.
+        width (int): Image width in pixels.
+        height (int): Image height in pixels.
+
+    Returns:
+        str: YOLO OBB label string for the given corners.
+    """
     # Flache Liste mit 8 Werten aus 4 Koordinatenpaaren
     flat_coords = [coord for pair in corner_list for coord in pair]
     obb_vals = convert_to_yolo_obb(flat_coords, width, height)
@@ -52,6 +83,18 @@ def transform_line(corner_list, width, height):
     return string
 
 def process_csv(csv_path, output_dir):
+    """
+    Processes a CSV file containing image IDs and polygon geometries, and writes YOLO OBB label files.
+
+    Args:
+        csv_path (str): Path to the input CSV file.
+        output_dir (str): Directory to save YOLO label files.
+
+    Side effects:
+        Creates the output directory if it does not exist.
+        Writes YOLO OBB label files for each image.
+        Prints progress information to the console.
+    """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

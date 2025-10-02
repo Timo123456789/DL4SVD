@@ -25,14 +25,21 @@ CLASS_MAP = {  # BGR
 }
 def draw_predictions(input_path, json_path, output_path, image_id, score_threshold=0.3, allowed_classes=None, all_images=True):
     """
-    Zeichnet Vorhersagen in ein Bild.
-    
-    :param json_path: Pfad zur JSON-Datei mit den Predictions
-    :param output_path: Ausgabeort für gespeichertes Bild
-    :param image_id: ID des Bildes (ohne Endung)
-    :param score_threshold: minimaler Score
-    :param allowed_classes: Liste von Klassennamen (z.B. ["Car", "Truck"]) oder None für alle
+    Draws predicted bounding boxes and scores onto an image and saves the result.
+
+    Args:
+        input_path (list): List containing the prediction set name and fold number.
+        json_path (str): Path to the JSON file containing predictions.
+        output_path (str): Output subfolder for saving the image.
+        image_id (int or str): ID of the image (without file extension).
+        score_threshold (float, optional): Minimum score for a prediction to be drawn. Default is 0.3.
+        allowed_classes (list or None, optional): List of class names to include, or None for all classes.
+        all_images (bool, optional): If True, loads images from the full dataset; otherwise, uses testfold images.
+
+    Returns:
+        bool: True if the image was processed and saved, False otherwise.
     """
+
     pred_name = input_path[0]
     fold_num = input_path[1]
     image_id_path = str(image_id).zfill(8)
@@ -163,8 +170,13 @@ import numpy as np
 
 def bbox_to_cv2_polygon(bbox):
     """
-    Wandelt eine bbox [x, y, w, h] in ein cv2-kompatibles Polygon um.
-    Rückgabe: numpy array, dtype=int32, Form (n_points, 1, 2)
+    Converts a bounding box [x, y, w, h] to a cv2-compatible polygon.
+
+    Args:
+        bbox (list or tuple): Bounding box in the format [x, y, width, height].
+
+    Returns:
+        np.ndarray: Polygon points as a numpy array of shape (4, 1, 2), dtype=int32.
     """
     x, y, w, h = bbox
     # Eckpunkte berechnen
@@ -179,7 +191,21 @@ def bbox_to_cv2_polygon(bbox):
     # OpenCV benötigt Form (n_points, 1, 2)
     points = points.reshape((-1, 1, 2))
     return points
-def generate_ground_truth(results_base,output_path, images, abb, perm_exp):
+def generate_ground_truth(results_base, output_path, images, abb, perm_exp):
+    """
+    Generates and saves ground truth images with bounding boxes for a list of image IDs.
+
+    Args:
+        results_base (Path or str): Base path for results.
+        output_path (str): Output subfolder for saving images.
+        images (list): List of tuples (class_name, image_id) to process.
+        abb (bool): If True, generates axis-aligned bounding boxes (ABB).
+        perm_exp (bool): If True, processes permutation experiment images.
+
+    Returns:
+        int: Always returns 0 after processing.
+    """
+
     path_labels = r'Code\data\annotation.txt'
     base_output = r"MA-Thesis-Latex/images/015Results"
     output_path_full = rf"{base_output}\{output_path}\comp_images\ground_truth"

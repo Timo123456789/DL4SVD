@@ -4,6 +4,21 @@ import shutil
 source_dir = '../../../scratch/tmp/t_liet02/airbus_datasets/train_v2'
 destination_dir = '../../../scratch/tmp/t_liet02/DOTA_exp_AS_AP/train/images'
 
+"""
+Copies all image files from a source directory to a destination directory, ensuring the destination exists.
+
+- Creates the destination directory if it does not exist.
+- Iterates over all files in the source directory.
+- Copies each file to the destination directory using shutil.copy2 (preserving metadata).
+- Prints progress for each copied file.
+- Handles and prints errors if files cannot be copied or if the source directory does not exist.
+
+Variables:
+    source_dir (str): Path to the source directory containing images.
+    destination_dir (str): Path to the destination directory for copied images.
+"""
+
+
 try:
     # Stelle sicher, dass der Zielordner existiert
     os.makedirs(destination_dir, exist_ok=True)

@@ -5,6 +5,14 @@ import os
     # Manuelle Legenden mit allen Folds
 from matplotlib.lines import Line2D
 def main():
+    """
+    Main function for generating cross-validation graphs for different channel sets.
+
+    - Defines channel sets and configuration flags.
+    - Iterates over all metrics in bool_arr to generate graphs for each.
+    - Loads best model files for each set and metric.
+    - Calls create_graphs to generate and save comparison plots.
+    """
 
 
     all_sets = ["rgbir", "rgb", "irgb", "rirb", "rgir", "gbndvi", "rgbndvi"]
@@ -39,6 +47,16 @@ def main():
 
 
 def create_graphs_main(bool_arr, setA, window_size):
+    """
+    Iterates over all metrics in bool_arr, sets each to True one at a time,
+    and generates graphs for all channel sets compared to setA.
+
+    Args:
+        bool_arr (dict): Dictionary of metric flags.
+        setA (str): Reference channel set for comparison.
+        window_size (int): Smoothing window size for rolling mean.
+    """
+
     keys_to_toggle = [key for key in bool_arr.keys() if key != "tail"]
 
     for key_to_set_true in keys_to_toggle:
@@ -66,6 +84,18 @@ def create_graphs_main(bool_arr, setA, window_size):
     #create_graphs_from_sets(set_paths_dict, window_size, bool_arr)
   
 def create_graphs_from_sets(set_paths_dict, window_size, bool_arr):
+    """
+    Generates and displays line plots for all channel sets and folds.
+
+    Args:
+        set_paths_dict (dict): Dictionary mapping set names to lists of file paths per fold.
+        window_size (int): Smoothing window size for rolling mean.
+        bool_arr (dict): Dictionary of metric flags.
+
+    Displays:
+        Line plots for each set and fold, with legends and grid.
+    """
+
     all_combined_dfs = []
     palette_list = sns.color_palette("husl", n_colors=len(set_paths_dict))  # Farben für Sets
 
@@ -143,6 +173,23 @@ def create_graphs_from_sets(set_paths_dict, window_size, bool_arr):
 
 
 def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_arr, head, tail, namestring):
+    """
+    Generates and saves comparison line plots for two channel sets across all folds.
+
+    Args:
+        fold_paths_setA (list): List of file paths for setA folds.
+        fold_paths_setB (list): List of file paths for setB folds.
+        setA (str): Name of the first channel set.
+        setB (str): Name of the second channel set.
+        window_size (int): Smoothing window size for rolling mean.
+        bool_arr (dict): Dictionary of metric flags.
+        head (int or None): If set, only the first 'head' epochs per fold are plotted.
+        tail (int or None): If set, only the last 'tail' epochs per fold are plotted.
+        namestring (str): String to append to the output filename.
+
+    Saves:
+        PNG plot comparing setA and setB over epochs.
+    """
 
     for key, value in bool_arr.items():
         if value is True:
@@ -233,6 +280,18 @@ def create_graphs(fold_paths_setA,fold_paths_setB,setA,setB,window_size, bool_ar
 
 
 def get_smooth_Folds(fold_paths, window_size, bool_arr, set_string):
+    """
+    Loads and smooths metric values for all folds of a channel set.
+
+    Args:
+        fold_paths (list): List of file paths for each fold.
+        window_size (int): Smoothing window size for rolling mean.
+        bool_arr (dict): Dictionary of metric flags.
+        set_string (str): Name of the channel set.
+
+    Returns:
+        tuple: (list of DataFrames for each fold, string title for the metric)
+    """
 
     # Für alle Elemente in bool_arr eine if-Abfrage ergänzen
     if bool_arr.get("train/box_loss", False):
@@ -305,6 +364,16 @@ def get_smooth_Folds(fold_paths, window_size, bool_arr, set_string):
 
 # Die Ladefunktion für einen Pfadtyp
 def load_paths_for_set(set_name):
+    """
+    Loads the file paths for all folds of a given channel set.
+
+    Args:
+        set_name (str): Name of the channel set.
+
+    Returns:
+        list: List of file paths for each fold (existing files only).
+    """
+
     paths = []
     for i in range(5):
         path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation\{set_name}\fold{i}\results.csv"
@@ -316,6 +385,16 @@ def load_paths_for_set(set_name):
 
 # Hauptfunktion: lädt für alle gültigen Sets die Pfade
 def load_all_sets(set_arr):
+    """
+    Loads file paths for all channel sets and their folds.
+
+    Args:
+        set_arr (dict): Dictionary mapping set names to channel names.
+
+    Returns:
+        dict: Dictionary mapping set names to lists of file paths per fold.
+    """
+
     set_path_folds_arr = {}
 
     for key, value in set_arr.items():
@@ -326,6 +405,17 @@ def load_all_sets(set_arr):
 
 
 def load_best_model_files(setA, setB):
+    """
+    Loads the file paths for all folds of two channel sets for comparison.
+
+    Args:
+        setA (str): Name of the first channel set.
+        setB (str): Name of the second channel set.
+
+    Returns:
+        tuple: (list of file paths for setA folds, list of file paths for setB folds)
+    """
+
     fold_paths_setA = []
     fold_paths_setB = []
 
@@ -345,6 +435,15 @@ def load_best_model_files(setA, setB):
     return fold_paths_setA, fold_paths_setB
 
 def create_sav_dir(bool_arr):
+    """
+    Creates the output directory for saving plots based on the active metric in bool_arr.
+
+    Args:
+        bool_arr (dict): Dictionary of metric flags.
+
+    Side effects:
+        Creates the directory if it does not exist.
+    """
         
     for key, value in bool_arr.items():
         if value is True:

@@ -4,6 +4,15 @@ import os
 from preproc_folds import read_file, select_all_labels_in_img
 
 def main():
+    """
+    Main routine for creating custom folds from a list of images and their class counts.
+
+    - Sets configuration flags and output paths.
+    - Loads all image filenames and corresponding label data.
+    - Creates a list of image-class objects.
+    - Calls create_own_folds to split images into folds and writes results to disk.
+    """
+
     bools_object = {
         "palma":False,
     }
@@ -30,6 +39,18 @@ def main():
 
 
 def create_own_folds(number_of_folds, image_class_list, output_path):
+    """
+    Splits images into a specified number of folds, balancing object counts across folds.
+
+    Args:
+        number_of_folds (int): Number of folds to create.
+        image_class_list (list): List of dictionaries with image IDs and object counts.
+        output_path (str): Directory to write fold files and statistics.
+
+    Returns:
+        int: Always returns 0 after processing.
+    """
+
     number_of_folds += 1
     img_counter = 0
     print(number_of_folds)
@@ -162,6 +183,17 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
     return 0
 
 def write_folds(arr, object_counter, fold_image_count_arr, output_dir, error_counter, number_empty_images):
+    """
+    Writes the fold assignments and statistics to text files.
+
+    Args:
+        arr (list): List of lists, each containing image IDs for a fold.
+        object_counter (list): List of dictionaries with object counts per fold.
+        fold_image_count_arr (list): List of image counts per fold.
+        output_dir (str): Directory to write output files.
+        error_counter (int): Number of images with no objects.
+        number_empty_images (np.ndarray): Array with number of empty images per fold.
+    """
     print("write data")
     os.makedirs(output_dir, exist_ok=True)
     for i in range(len(arr)):
@@ -184,16 +216,14 @@ def write_folds(arr, object_counter, fold_image_count_arr, output_dir, error_cou
 
 def get_indices_of_folds_with_smallest_object_count(fold_arr_counter, object_name):
     """
-    Findet den/die Index(e) des Folds/der Folds mit der kleinsten Anzahl eines gegebenen Objekts.
+    Finds the indices of folds with the smallest count of a given object.
 
     Args:
-        fold_arr_counter (list): Die Liste von Dictionaries, die die Fold-Zählungen enthalten.
-        object_name (str): Der Name des zu zählenden Objekts (z.B. "car").
+        fold_arr_counter (list): List of dictionaries with object counts per fold.
+        object_name (str): Name of the object to count (e.g., "car").
 
     Returns:
-        list: Eine Liste von Indizes (Integer), die den Fold(s) mit der kleinsten Anzahl
-              des angegebenen Objekts entsprechen. Gibt eine leere Liste zurück, wenn
-              das Objekt nicht gefunden wird oder fold_arr_counter leer ist.
+        list: List of indices of folds with the smallest count for the specified object.
     """
     if not fold_arr_counter:
         return []
@@ -216,6 +246,16 @@ def get_indices_of_folds_with_smallest_object_count(fold_arr_counter, object_nam
 
 
 def get_smallest_class_in_image(i, image_class_list):
+    """
+    Finds the class(es) with the smallest count in a given image.
+
+    Args:
+        i (str): Image ID.
+        image_class_list (list): List of dictionaries with image IDs and object counts.
+
+    Returns:
+        list: List of class names with the smallest count in the image.
+    """
     result = next((item for item in image_class_list if item["image_id"] == i), None)
     if result is None:
         return None
@@ -234,6 +274,16 @@ def get_smallest_class_in_image(i, image_class_list):
     return smallest_classes
     
 def count_objects_in_fold_arr(fold_arr, image_class_list):
+    """
+    Counts the number of objects per class in each fold.
+
+    Args:
+        fold_arr (list): List of lists, each containing image IDs for a fold.
+        image_class_list (list): List of dictionaries with image IDs and object counts.
+
+    Returns:
+        list: List of dictionaries with object counts per fold.
+    """
     fold_arr_counter = []
     for i in range(len(fold_arr)):
         fold_counter = {
@@ -262,6 +312,17 @@ def count_objects_in_fold_arr(fold_arr, image_class_list):
     return fold_arr_counter
 
 def create_image_class_object(list_all_files, path_labels):
+    """
+    Creates a list of image-class objects by counting objects in each image.
+
+    Args:
+        list_all_files (list): List of image filenames.
+        path_labels (str): Path to the label file.
+
+    Returns:
+        list: List of dictionaries with image IDs and object counts.
+    """
+
     labels = read_file(path_labels)
     image_class_list = []
 
@@ -277,6 +338,15 @@ def create_image_class_object(list_all_files, path_labels):
 
 
 def count_objects(filtered_labels):
+    """
+    Counts the number of objects per class in a list of label strings.
+
+    Args:
+        filtered_labels (list): List of label strings for one image.
+
+    Returns:
+        dict: Dictionary with object counts for each class.
+    """
     def convert_class_to_yolo(class_id):
         if class_id == '001':
             label = 'Car'
@@ -348,6 +418,15 @@ def count_objects(filtered_labels):
 
 
 def list_files(folder_path):
+    """
+    Lists all image files in a folder, removing file endings.
+
+    Args:
+        folder_path (str): Path to the folder containing image files.
+
+    Returns:
+        list: List of image IDs without file endings.
+    """
     all_images = [f.name for f in Path(folder_path).iterdir() if f.is_file()]
     all_images_without_ending = list(set(i[:-7] if len(i) >= 7 else '' for i in all_images))
     return all_images_without_ending

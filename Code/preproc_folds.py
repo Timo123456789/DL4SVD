@@ -4,6 +4,21 @@ from scipy.spatial import ConvexHull
 import os
 
 def main():
+    """
+    Main function to configure and execute various preprocessing tasks for VEDAI dataset images and annotations.
+    This function sets up parameters for image and label paths, dataset options, and feature selection.
+    Depending on the configuration, it can display images with oriented bounding boxes, create cross-validation folds,
+    generate permutation datasets, or perform ablation studies. The function supports toggling infrared and NDVI channels,
+    merging IR data, and switching between local and remote (Palma) paths.
+    Key operations (some commented out) include:
+    - Displaying images with oriented bounding boxes.
+    - Creating cross-validation folds with specified features.
+    - Generating permutation and ablation datasets.
+    Parameters are set within the function and not passed as arguments.
+    Note:
+    - Modify the boolean flags and parameters to select the desired preprocessing operation.
+    - Ensure the required data files and directories exist at the specified paths.
+    """
     oriented = True
     ir = False
     bool_create_yaml = True
@@ -50,6 +65,23 @@ def main():
     print_divideline()
 
 def create_ablation_datasets(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma):
+    """
+    Creates ablation datasets for cross-validation by generating dataset folds with different channel permutations.
+    This function generates cross-validation datasets where each dataset contains only one of the image channels 
+    (red, green, blue, infrared, or NDVI) enabled at a time. For each channel, five folds are created using the 
+    `create_fold_cross_validation` function. The datasets are saved in corresponding directories.
+    Args:
+        path_all_images (str): Path to the directory containing all images.
+        path_labels (str): Path to the directory containing label files.
+        ir (Any): Infrared channel information or configuration.
+        bool_create_yaml (bool): Whether to create a YAML file for each fold.
+        limiter (Any): Limiting parameter for dataset creation (e.g., number of samples).
+        merge_ir_bool (bool): Whether to merge infrared channel data.
+        namestring (str): String used for naming or identification.
+        palma (Any): Additional parameter for dataset creation (purpose context-dependent).
+    Returns:
+        int: Returns 0 upon completion.
+    """
     oriented=True
     merge_ir_bool = True
     # path_fold_dest_string = r'data/cross_validation_ablation/red'
@@ -108,6 +140,22 @@ def create_ablation_datasets(path_all_images, path_labels, ir, bool_create_yaml,
 
 
 def create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma):
+    """
+    Creates cross-validation folds using the out-of-bag (OOB) method for image data.
+    This function generates five cross-validation folds by calling `create_fold_cross_validation` for each fold.
+    The folds are created using the provided image and label paths, along with various configuration parameters.
+    Args:
+        path_all_images (str): Path to the directory containing all images.
+        path_labels (str): Path to the labels corresponding to the images.
+        ir (Any): Infrared-related parameter passed to the fold creation function.
+        bool_create_yaml (bool): If True, YAML files are created for each fold.
+        limiter (Any): Parameter to limit the number of samples or other aspects during fold creation.
+        merge_ir_bool (bool): If True, infrared data is merged during fold creation.
+        namestring (str): A string used for naming or identification purposes.
+        palma (Any): Additional parameter for fold creation, possibly related to data or configuration.
+    Returns:
+        int: Returns 0 upon completion.
+    """
 
     path_fold_dest_string = r'data/cross_validation/obb'
    
@@ -127,6 +175,24 @@ def create_aab_oob_cross_method(path_all_images, path_labels, ir, bool_create_ya
 
 
 def create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limiter, merge_ir_bool, namestring, palma, perm_object):
+    """
+    Creates multiple cross-validation dataset folds with different channel permutations.
+    This function generates datasets for cross-validation by varying the inclusion of image channels
+    (e.g., RGB, IR, NDVI) according to predefined permutations. For each permutation, it calls
+    `create_fold_cross_validation` for five folds and organizes the output in corresponding directories.
+    Args:
+        path_all_images (str): Path to the directory containing all images.
+        path_labels (str): Path to the labels file or directory.
+        ir (Any): Infrared channel data or configuration.
+        bool_create_yaml (bool): Whether to create YAML configuration files for each fold.
+        limiter (Any): Limiting parameter for dataset creation (e.g., number of samples).
+        merge_ir_bool (bool): Whether to merge IR channel with other channels.
+        namestring (str): Name identifier for the dataset or experiment.
+        palma (Any): Additional configuration or parameter for dataset creation.
+        perm_object (dict): Dictionary specifying which channels to include (keys: 'r', 'g', 'b', 'ir', 'ndvi').
+    Returns:
+        int: Returns 0 upon completion.
+    """
     merge_ir_bool=True
     oriented = True
     path_fold_dest_string = r'data/cross_validation/rgbir'
@@ -212,6 +278,25 @@ def create_perm_dataset(path_all_images, path_labels, ir, bool_create_yaml, limi
 
 
 def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml, limiter, merge_ir_bool, namestring, palma, path_fold_dest_string, perm_object):
+    """
+    Creates multiple data folds for cross-validation or similar purposes.
+    Iterates through a predefined number of folds (12), and for each fold (except the first and last),
+    calls the `create_fold` function with appropriate parameters. For the 10th fold, a specific flag is set.
+    Args:
+        path_all_images (str): Path to the directory containing all images.
+        path_labels (str): Path to the labels file or directory.
+        ir (Any): Infrared-related parameter, passed to `create_fold`.
+        oriented (Any): Orientation-related parameter, passed to `create_fold`.
+        bool_create_yaml (bool): Whether to create a YAML file for each fold.
+        limiter (Any): Parameter to limit the number of samples or other aspects.
+        merge_ir_bool (bool): Whether to merge infrared data.
+        namestring (str): String used for naming or identification.
+        palma (Any): Additional parameter, possibly related to processing or configuration.
+        path_fold_dest_string (str): Destination path for the created folds.
+        perm_object (Any): Permutation or randomization object for fold creation.
+    Returns:
+        None
+    """
     fold_nr = 1
 
 
@@ -230,6 +315,22 @@ def create_all_folds(path_all_images, path_labels, ir, oriented,bool_create_yaml
 
 
 def merge_RGB_and_IR_image(rgb_path, ir_path, perm_object):
+    """
+    Merges an RGB image and an infrared (IR) image into a multi-channel image, optionally including an NDVI channel.
+    Args:
+        rgb_path (str): Path to the RGB image file.
+        ir_path (str): Path to the IR image file (expected as a single-band grayscale image).
+        perm_object (dict): Dictionary specifying which channels to include in the output.
+            Keys should include 'r', 'g', 'b', 'ir', and optionally 'ndvi' (boolean values).
+    Returns:
+        numpy.ndarray or None: The merged image containing the selected channels as specified in perm_object.
+            Returns None if images cannot be loaded or if their dimensions do not match.
+    Notes:
+        - The function expects both images to have the same height and width.
+        - The merged image may have 2 or more channels, depending on perm_object.
+        - If 'ndvi' is True in perm_object, the NDVI channel is calculated and included.
+        - Visualization of the resulting multi-channel image may require custom handling.
+    """
     # Load the RGB image
     rgb_img = cv2.imread(rgb_path)
 
@@ -289,6 +390,26 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, perm_object):
         # cv2.destroyAllWindows()
 
 def calc_ndvi(r,ir):
+    """
+    Calculates the Normalized Difference Vegetation Index (NDVI) from red and infrared bands.
+
+    Parameters
+    ----------
+    r : np.ndarray
+        The red band of the image as a NumPy array.
+    ir : np.ndarray
+        The infrared band of the image as a NumPy array.
+
+    Returns
+    -------
+    np.ndarray
+        The NDVI values scaled to the range [0, 255] as an unsigned 8-bit integer array.
+
+    Notes
+    -----
+    NDVI is computed as (ir - r) / (ir + r). To avoid division by zero, a small value (0.01)
+    is added where the denominator is zero. The result is scaled to [0, 255] for visualization.
+    """
     r = r.astype(np.float32)
     ir = ir.astype(np.float32)
     bottom = (ir + r)
@@ -297,8 +418,62 @@ def calc_ndvi(r,ir):
     return (ndvi*255).astype(np.uint8)
 
 
-def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma_bool, fold_dest_path, perm_object):
+
+def create_fold(
+    fold_nr,
+    path_all_images,
+    path_labels,
+    ir,
+    fold10bool,
+    bool_create_yaml,
+    limiter,
+    oriented,
+    merge_ir_bool,
+    namestring,
+    palma_bool,
+    fold_dest_path,
+    perm_object
+):
+    """
+    Creates a data fold for training and validation by organizing images and labels into the appropriate directory structure,
+    copying and processing images, generating label files, and optionally creating a YAML configuration file.
+    Args:
+        fold_nr (int): The fold number to process.
+        path_all_images (str): Path to the directory containing all images.
+        path_labels (str): Path to the file containing all labels.
+        ir (bool): Whether to include infrared images.
+        fold10bool (bool): If True, use the 10th fold configuration; otherwise, use the specified fold number.
+        bool_create_yaml (bool): If True, create a YAML configuration file for the fold.
+        limiter (int or None): Limits the number of images processed for training and validation. If None, processes all images.
+        oriented (bool): Whether to use oriented bounding boxes for labels.
+        merge_ir_bool (bool): If True, merge infrared images with color images.
+        namestring (str): A string tag to identify the fold.
+        palma_bool (bool): If True, use Palma-specific paths and structure.
+        fold_dest_path (str): Destination path for the fold's output.
+        perm_object (object): An object containing permission or configuration information for image copying.
+    Returns:
+        int: Returns 0 upon successful creation of the fold.
+    Side Effects:
+        - Copies images and creates label files in the specified directory structure.
+        - Optionally creates a YAML configuration file.
+        - Prints progress and status messages to the console.
+    """
     def create_image_and_label(lines,  string_tag):
+        """
+        Processes a list of image identifiers to create corresponding image and label files for a specified dataset split.
+        Args:
+            lines (list): List of image identifiers (strings) to process.
+            string_tag (str): Tag indicating the dataset split (e.g., 'train', 'val').
+        Side Effects:
+            - Copies image files to the target directory.
+            - Creates label files for each image.
+            - Prints progress information to the console.
+            - May break early if a limiter is set for the number of images to process.
+        Notes:
+            - Uses global variables: path_all_images, labels, paths_object, merge_ir_bool, perm_object, ir, oriented, fold_nr, limiter.
+            - For 'train', stops after 'limiter' images if limiter is set.
+            - For 'val', stops after ceil(limiter/10) images if limiter is set.
+        """
         counter = 0
         for line in lines:
             counter += 1
@@ -364,7 +539,44 @@ def create_fold(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create
 
 
 def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
+    """
+    Creates a YOLO-format label file for a given image and its associated labels.
+    Args:
+        target (str): The base name for the output label file.
+        labels (list): A list of label data, each containing class and bounding box information.
+        path (str): Directory path where the label file will be saved.
+        img_path (str): Path to the image file corresponding to the labels.
+        ir (bool): Indicates whether the image is infrared (currently unused).
+        oriented (bool): If True, uses oriented bounding boxes (OBB) format; otherwise, uses classic YOLO format.
+        string_tag (str): Tag indicating the dataset split (e.g., "train", "val", "test").
+    Raises:
+        Exception: If an error occurs during file writing or label processing.
+    Notes:
+        - The function reads the image to obtain its dimensions for bounding box normalization.
+        - Bounding boxes are converted to YOLO format (classic or OBB) depending on the 'oriented' flag.
+        - The output file is named '{target}.txt' and saved in the specified 'path'.
+        - Class IDs are mapped to YOLO class indices using an internal mapping.
+    """
     def convert_class_to_yolo(class_id):
+        """
+        Converts a given class ID string to its corresponding YOLO class index as a string.
+
+        Args:
+            class_id (str): The class ID to convert. Expected values are:
+                '001' - Car
+                '002' - Truck
+                '023' - Ship
+                '004' - Tractor
+                '005' - Camping Car
+                '009' - van
+                '010' - vehicle
+                '011' - pick-up
+                '031' - plane
+
+        Returns:
+            str: The YOLO class index as a string. If the class_id does not match any known value,
+                 returns '6' (vehicle) by default.
+        """
         if class_id == '001':
             label = 'Car'
             return str(0)
@@ -527,19 +739,19 @@ def convert_label_to_yolo_classic(corners_pixel, img_width, img_height):
 
 def convert_to_yolo_obb(corners_pixel, img_width, img_height):
     """
-    Konvertiert Pixelkoordinaten von Eckpunkten in das normalisierte
-    YOLO OBB Format.
-
+    Converts the pixel coordinates of the four corners of an oriented bounding box (OBB)
+    to normalized coordinates suitable for YOLO OBB format.
     Args:
-        corners_pixel (list or tuple): Eine Liste oder ein Tupel mit 8
-            Integer-Werten (x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px).
-        img_width (int): Die Breite des Bildes in Pixeln.
-        img_height (int): Die HÃ¶he des Bildes in Pixeln.
-
+        corners_pixel (list or tuple): A sequence of 8 values representing the pixel coordinates
+            of the four corners of the bounding box in the order:
+            [x1, y1, x2, y2, x3, y3, x4, y4].
+        img_width (int or float): The width of the image in pixels.
+        img_height (int or float): The height of the image in pixels.
     Returns:
-        tuple: Ein Tupel mit 8 Float-Werten (x1_norm, y1_norm, x2_norm, y2_norm,
-               x3_norm, y3_norm, x4_norm, y4_norm) im Bereich [0, 1].
+        list: A list of 8 normalized values corresponding to the input corners,
+            checked and possibly adjusted by the `check_normalvalues` function.
     """
+    
     x1_px, y1_px, x2_px, y2_px, x3_px, y3_px, x4_px, y4_px = corners_pixel
 
     x1_norm = x1_px / img_width
@@ -558,15 +770,15 @@ def convert_to_yolo_obb(corners_pixel, img_width, img_height):
 
 def check_normalvalues(normalized_values):
     """
-    PrÃ¼ft eine Liste von normierten Werten und wirft einen Fehler,
-    wenn ein Wert kleiner als 0 oder grÃ¶ÃŸer als 1 ist.
-
+    Ensures that all values in the input list are within the range [0, 1].
+    If a value is less than 0, it is set to 0. If a value is greater than 1, it is set to 1.
+    Returns the modified list.
     Args:
-        normwerte: Eine Liste von numerischen Werten.
-
-    Raises:
-        ValueError: Wenn ein Wert in der Liste kleiner als 0 oder grÃ¶ÃŸer als 1 ist.
+        normalized_values (list or array-like): List of numeric values to check and correct.
+    Returns:
+        list: List with all values clipped to the range [0, 1].
     """
+    
     found = False
     cp_normalized_values = normalized_values
     for i in range(len(cp_normalized_values)): # Iteriere Ã¼ber die Indizes der Liste
@@ -584,6 +796,25 @@ def check_normalvalues(normalized_values):
     
 
 def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_rgb, image_path_ir, perm_object):
+    """
+    Copies an image from the source path to the destination folder, optionally merging RGB and IR images.
+    If `merge_ir_bool` is True and `perm_object` is provided, merges the RGB and IR images using the specified
+    channel permissions and saves the result as a TIFF file if the number of channels exceeds 3. Otherwise,
+    copies the source image as-is.
+    The destination filename is constructed from the first part of the original filename (up to 8 characters)
+    and retains the original extension unless merging with more than 3 channels, in which case '.tiff' is used.
+    Args:
+        source_image_path (str): Path to the source image file.
+        destination_folder (str): Path to the destination folder where the image will be copied.
+        merge_ir_bool (bool): Whether to merge RGB and IR images.
+        image_path_rgb (str): Path to the RGB image (used if merging).
+        image_path_ir (str): Path to the IR image (used if merging).
+        perm_object (dict or None): Dictionary specifying which channels to include in the merge. If None, defaults to 3 channels.
+    Raises:
+        FileNotFoundError: If the source image file does not exist.
+        PermissionError: If there is no permission to read the source or write to the destination.
+        Exception: For any other unexpected errors.
+    """
     if perm_object is not None:
         number_of_channels = sum(1 for v in perm_object.values() if v)
     else:
@@ -627,6 +858,20 @@ def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_
         print(f"An unexpected error occurred: {e}")
 
 def create_folder_structure(fold_nr, namestring, palma_bool, dest_path, test_dataset_bool):
+    """
+    Creates a folder structure for training, validation, and optionally test datasets, 
+    based on the specified parameters and returns the paths as a dictionary.
+    Args:
+        fold_nr (int): The fold number to include in the folder names.
+        namestring (str): Additional string to append to the folder names.
+        palma_bool (bool): If True, use Palma cluster paths; if False, use local paths.
+        dest_path (str): Destination path segment to include in the folder structure.
+        test_dataset_bool (bool): If True, include test dataset folders; otherwise, exclude them.
+    Returns:
+        dict: A dictionary containing the paths for train, val, and optionally test images and labels.
+    Side Effects:
+        Creates the specified directories on the filesystem. Prints status messages for each directory.
+    """
     def make_directories(path):
         try:
             os.makedirs(path)
@@ -688,6 +933,28 @@ def create_folder_structure(fold_nr, namestring, palma_bool, dest_path, test_dat
 
 
 def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, path_labels, oriented, ir, ret_pts, perm_object):
+    """
+    Displays every image specified in the fold file with oriented bounding boxes drawn on them.
+    For each image listed in the fold file, this function:
+    - Loads the corresponding RGB and IR images.
+    - Merges RGB and IR images if required.
+    - Selects all labels for the current image.
+    - Draws oriented bounding boxes on the RGB, IR, and merged images for each label.
+    - Optionally prints label information.
+    - Saves the processed RGB image to a temporary location.
+    - Optionally splits and saves color channels as grayscale images.
+    - Displays the RGB image in a resizable window.
+    Args:
+        path_all_images (str): Path to the directory containing all images.
+        path_folds (str): Path to the file listing image identifiers for the current fold.
+        path_labels (str): Path to the file containing label information.
+        oriented (bool): Whether to draw oriented bounding boxes.
+        ir (bool): If True, use IR images; otherwise, use RGB images.
+        ret_pts (bool): If True, return bounding box corner points.
+        perm_object (Any): Permutation object used for merging RGB and IR images.
+    Returns:
+        None
+    """
     lines_fold = read_file(path_folds)
     labels = read_file(path_labels)
     
@@ -766,6 +1033,25 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
 
 
 def label_as_txt(string):
+    """
+    Converts a vehicle type code extracted from a space-separated string into a human-readable label.
+
+    Args:
+        string (str): A space-separated string where the vehicle type code is expected at index 12.
+
+    Returns:
+        str or None: The corresponding vehicle label if the code matches known types, otherwise the code itself or None.
+        Known vehicle type codes:
+            '001' -> 'Car'
+            '002' -> 'Truck'
+            '023' -> 'Ship'
+            '004' -> 'Tractor'
+            '005' -> 'Camping Car'
+            '009' -> 'van'
+            '010' -> 'vehicle'
+            '011' -> 'pick-up'
+            '031' -> 'plane'
+    """
     parts = string.split()
     veh_type = parts[12]
     if veh_type is not None:
@@ -794,19 +1080,36 @@ def label_as_txt(string):
 
 def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_car, orientationVehicle, veh_type, color=(255, 0, 0), thickness=2):
     """
-    Zeichnet die achsenparallele Bounding Box eines Fahrzeugs auf ein OpenCV-Bild.
-
+    Draws an axis-aligned bounding box around a rotated vehicle on the given image and annotates it with its type.
+    The function computes the rotated corners of the vehicle based on its position, size, and orientation,
+    then determines the axis-aligned bounding box that encloses these corners. It draws this bounding box
+    on the image and adds a label indicating the vehicle type.
     Args:
-        image (np.ndarray): Das OpenCV-Bild.
-        Xvehicle (int): X-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
-        Yvehicle (int): Y-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
-        width_car (float): Breite des Fahrzeugs.
-        length_car (float): LÃ¤nge des Fahrzeugs.
-        orientationVehicle (float): Orientierung des Fahrzeugs in Radiant.
-        veh_type (int): Typ des Fahrzeugs fÃ¼r die Textanzeige.
-        color (tuple): Farbe der Bounding Box im BGR-Format (Standard: Blau).
-        thickness (int): Dicke der Linien der Bounding Box (Standard: 1).
+        image (np.ndarray): The image on which to draw the bounding box.
+        Xvehicle (float): The x-coordinate (column) of the vehicle's center.
+        Yvehicle (float): The y-coordinate (row) of the vehicle's center.
+        width_car (float): The width of the vehicle.
+        length_car (float): The length of the vehicle.
+        orientationVehicle (float): The orientation angle of the vehicle in radians.
+        veh_type (int): The type of the vehicle (used for labeling).
+        color (tuple, optional): The color of the bounding box in BGR format. Default is (255, 0, 0).
+        thickness (int, optional): The thickness of the bounding box lines. Default is 2.
+    Returns:
+        np.ndarray: The image with the drawn bounding box and label.
+    Notes:
+        - The function prints the area of the axis-aligned bounding box using `calculate_bounding_box_area`.
+        - Supported vehicle types and their labels include:
+            1: 'Car'
+            2: 'Truck'
+            23: 'Ship'
+            4: 'Tractor'
+            5: 'Camping Car'
+            9: 'van'
+            10: 'vehicle'
+            11: 'pick-up'
+            31: 'plane'
     """
+    
     cos_theta = np.cos(-orientationVehicle)
     sin_theta = np.sin(-orientationVehicle)
 
@@ -880,20 +1183,26 @@ def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_
 
 def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh_type, color=(0, 255, 0), thickness=1):
     """
-    Zeichnet ein Fahrzeugpolygon und optional einen Textlabel auf ein OpenCV-Bild.
-
+    Draws an oriented bounding box around a vehicle on the given image and optionally labels it with its type.
     Args:
-        image (np.ndarray): Das OpenCV-Bild, auf das gezeichnet werden soll.
-        Xvehicle (int): X-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
-        Yvehicle (int): Y-Koordinate des Fahrzeugmittelpunkts (Integer fÃ¼r Textpositionierung).
-        pt1 (np.ndarray): Koordinaten des ersten Eckpunkts [y, x].
-        pt2 (np.ndarray): Koordinaten des zweiten Eckpunkts [y, x].
-        pt3 (np.ndarray): Koordinaten des dritten Eckpunkts [y, x].
-        pt4 (np.ndarray): Koordinaten des vierten Eckpunkts [y, x].
-        veh_type (int): Typ des Fahrzeugs fÃ¼r die Textanzeige.
-        color (tuple): Farbe des Polygons im BGR-Format (Standard: GrÃ¼n).
-        thickness (int): Dicke der Polygonlinien (Standard: 2).
+        image (np.ndarray): The image on which to draw the bounding box.
+        Xvehicle (float or int): The X coordinate of the vehicle's center (used for label placement).
+        Yvehicle (float or int): The Y coordinate of the vehicle's center (used for label placement).
+        pt1 (tuple): The first corner point (row, col) of the bounding box.
+        pt2 (tuple): The second corner point (row, col) of the bounding box.
+        pt3 (tuple): The third corner point (row, col) of the bounding box.
+        pt4 (tuple): The fourth corner point (row, col) of the bounding box.
+        veh_type (str or None): The vehicle type code (e.g., '001' for Car, '002' for Truck, etc.).
+        color (tuple, optional): The color of the bounding box lines in BGR format. Default is (0, 255, 0).
+        thickness (int, optional): The thickness of the bounding box lines. Default is 1.
+    Returns:
+        np.ndarray: The image with the drawn bounding box (and optionally the label).
+    Notes:
+        - The function prints the area (in pixels) of the oriented bounding box.
+        - The label drawing code is currently commented out.
+        - Vehicle type codes are mapped to human-readable labels.
     """
+    
     # Konvertiere die Punktkoordinaten in Integer-Tupel fÃ¼r cv2.line
     p1 = (int(pt1[1]), int(pt1[0]))
     p2 = (int(pt2[1]), int(pt2[0]))
@@ -956,6 +1265,24 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
 
 
 def get_bounding_box_in_px(img, label, oriented, ret_pts):
+    """
+    Calculates the bounding box of a vehicle in pixel coordinates from a label string and image.
+    Args:
+        img (np.ndarray): The image array on which the bounding box may be drawn.
+        label (str): A string containing vehicle information, including position, orientation, and corner coordinates.
+        oriented (bool): If True, returns or draws an oriented bounding box; if False, returns or draws an axis-aligned bounding box.
+        ret_pts (bool): If True, returns the bounding box corner points; if False, draws the bounding box on the image.
+    Returns:
+        list or np.ndarray:
+            - If ret_pts is True and oriented is True: Returns a list [veh_type, p1, p2, p3, p4] with vehicle type and oriented bounding box corner points.
+            - If ret_pts is True and oriented is False: Returns a list [veh_type, p1, p2, p3, p4] with vehicle type and axis-aligned bounding box corner points.
+            - If ret_pts is False and oriented is True: Draws the oriented bounding box on the image and returns the result.
+            - If ret_pts is False and oriented is False: Draws the axis-aligned bounding box on the image and returns the result.
+    Notes:
+        - The function parses the label string to extract vehicle position, orientation, type, and corner coordinates.
+        - Bounding box coordinates are calculated based on vehicle geometry and orientation.
+        - Drawing functions `draw_oriented_vehicle_box` and `draw_axis_aligned_vehicle_bbox` must be defined elsewhere.
+    """
     indice_vehicle = label.split()
     Xvehicle = np.float64(indice_vehicle[1])
     Yvehicle = np.float64(indice_vehicle[2])
@@ -1074,20 +1401,24 @@ def get_bounding_box_in_px(img, label, oriented, ret_pts):
 
 def calculate_bounding_box_area(points):
     """
-    Berechnet die FlÃ¤che (Anzahl der Pixel) der achsenparallelen Bounding Box
-    um eine Menge von Punkten.
-
-    Args:
-        points (list or np.ndarray): Eine Liste von Tupeln oder ein NumPy-Array
-                                      der Form (n, 2) mit den (y, x)
-                                      oder (x, y) Koordinaten der Punkte. Die Funktion
-                                      versucht, die richtige Ordnung zu erkennen,
-                                      nimmt aber standardmÃ¤ÃŸig (y, x) an.
-
-    Returns:
-        int: Die Anzahl der Pixel innerhalb der Bounding Box. Gibt 0 zurÃ¼ck,
-             wenn keine Punkte vorhanden sind.
+    Calculates the area (in pixels) of the bounding box that encloses a set of 2D points.
+    Assumes points are in the format [y, x]. If the second column has a higher mean than the first,
+    the columns are swapped to [x, y]. The function computes the minimum and maximum coordinates
+    along both axes to determine the bounding box, then calculates its area.
+    Parameters
+    ----------
+    points : list or numpy.ndarray
+        A list or array of points, each represented as [y, x] or [x, y]. Must have shape (n, 2).
+    Returns
+    -------
+    int
+        The area of the bounding box in pixels. Returns 0 if points is None or empty.
+    Raises
+    ------
+    ValueError
+        If the input does not have shape (n, 2).
     """
+    
     if points is None or len(points) < 1:
         return 0
     print(points)
@@ -1119,18 +1450,19 @@ def calculate_bounding_box_area(points):
 
 def calculate_oriented_bounding_box_area(points):
     """
-    Berechnet die FlÃ¤che (Anzahl der Pixel) der orientierten Bounding Box
-    um eine Menge von Punkten.
-
+    Calculates the area of the oriented (minimum area) bounding box that encloses a set of 2D points.
     Args:
-        points (list or np.ndarray): Eine Liste von Tupeln oder ein NumPy-Array
-                                      der Form (n, 2) mit den (y, x)
-                                      oder (x, y) Koordinaten der Punkte.
-
+        points (array-like): An iterable of 2D points with shape (n, 2), where n >= 3.
     Returns:
-        float: Die FlÃ¤che der orientierten Bounding Box in Pixeleinheiten.
-               Gibt 0.0 zurÃ¼ck, wenn keine oder weniger als 3 Punkte vorhanden sind.
+        float: The area of the oriented bounding box. Returns 0.0 if fewer than 3 points are provided.
+    Raises:
+        ValueError: If the input points do not have shape (n, 2).
+    Notes:
+        - The function first computes the convex hull of the input points.
+        - It then finds the minimum-area rectangle that encloses the convex hull using OpenCV's `minAreaRect`.
+        - The area is calculated as width * height of the rectangle.
     """
+    
     points_np = np.array(points)
     if points_np.shape[0] < 3:
         return 0.0
@@ -1150,12 +1482,39 @@ def calculate_oriented_bounding_box_area(points):
 
 
 def select_all_labels_in_img(target, labels):
+    """
+    Filters and returns all labels from the given list that start with the specified target prefix.
+
+    Args:
+        target (str): The prefix to match at the start of each label.
+        labels (list of str): The list of label strings to filter.
+
+    Returns:
+        list of str: A list containing all labels that start with the target prefix.
+    """
     # Filtert alle Labels, die mit den Anfangsziffern von 'target' Ã¼bereinstimmen
     filtered_labels = [label for label in labels if label.startswith(target)]
     return filtered_labels
 
  
 def transform_labels_to_yolo_format(labels, width, height):
+    """
+    Converts a list of label strings into YOLO format.
+    Each label string is expected to contain at least 13 space-separated values:
+    - The first value is the class ID (integer).
+    - The second and third values are the x and y center coordinates (floats).
+    - The next eight values are the coordinates of four points (x1, y1, x2, y2, x3, y3, x4, y4) as integers.
+    The function parses these values, converts them to the required types, and uses the
+    `convert_to_yolo_classic` function to transform them into YOLO format, normalizing
+    coordinates based on the provided image width and height.
+    Invalid labels or parsing errors are reported via printed messages.
+    Args:
+        labels (list of str): List of label strings to be converted.
+        width (int): Width of the image for normalization.
+        height (int): Height of the image for normalization.
+    Returns:
+        list: List of labels converted to YOLO format.
+    """
     yolo_labels = []  # Liste fÃ¼r die konvertierten YOLO-Labels
     for label in labels:
         label_parts = label.split()  # Teilt das Label in Teile basierend auf Leerzeichen
@@ -1186,6 +1545,30 @@ def transform_labels_to_yolo_format(labels, width, height):
     return yolo_labels
 
 def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, img_width, img_height):
+    """
+    Converts bounding box coordinates and class ID to YOLO classic format.
+    The function takes the center coordinates of the bounding box, the coordinates of its four corners,
+    the class ID, and the image dimensions. It computes the minimum and maximum x and y values to
+    determine the bounding box, normalizes the center coordinates and dimensions by the image size,
+    and returns a formatted string in the YOLO classic annotation format.
+    Args:
+        x_center (float): X coordinate of the bounding box center.
+        y_center (float): Y coordinate of the bounding box center.
+        x1 (float): X coordinate of the first corner.
+        y1 (float): Y coordinate of the first corner.
+        x2 (float): X coordinate of the second corner.
+        y2 (float): Y coordinate of the second corner.
+        x3 (float): X coordinate of the third corner.
+        y3 (float): Y coordinate of the third corner.
+        x4 (float): X coordinate of the fourth corner.
+        y4 (float): Y coordinate of the fourth corner.
+        class_id (int): Class identifier for the object.
+        img_width (int): Width of the image.
+        img_height (int): Height of the image.
+    Returns:
+        str: A string in YOLO classic format: "<class_id> <x_center_norm> <y_center_norm> <width_norm> <height_norm>",
+             where coordinates and dimensions are normalized to [0, 1] range.
+    """
     x_min = min(x1, x2, x3, x4)
     y_min = min(y1, y2, y3, y4)
     x_max = max(x1, x2, x3, x4)
@@ -1201,6 +1584,21 @@ def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, 
 
     return f"{class_id} {x_center_norm:.6f} {y_center_norm:.6f} {width_norm:.6f} {height_norm:.6f}"
 def show_one_picture_with_yolo_label(fold_nr,img_nr,ir, string_tag):
+    def show_one_picture_with_yolo_label(fold_nr, img_nr, ir, string_tag):
+        """
+        Displays an image with YOLO label points overlaid.
+        Args:
+            fold_nr (int): The fold number to select the dataset partition.
+            img_nr (int): The image number to select the specific image.
+            ir (bool): If True, selects the IR image path (currently same as else).
+            string_tag (str): Tag specifying the subfolder (e.g., 'train', 'val', 'test').
+        Reads the image and its corresponding YOLO label file, overlays the labeled points
+        on the image, and displays it in a window.
+        Note:
+            - The function expects images and labels to be stored in a specific folder structure.
+            - Requires OpenCV (`cv2`) and helper functions `read_file` and 
+              `add_labeled_normalized_coordinates_as_points`.
+        """
     if ir == True:
         image_path = rf'Code\data\folds\data\fold{fold_nr}\{string_tag}\images\{img_nr}_co.png'
     else:
@@ -1221,18 +1619,19 @@ def show_one_picture_with_yolo_label(fold_nr,img_nr,ir, string_tag):
 
 def add_labeled_normalized_coordinates_as_points(image_path, labels_string, point_color=(0, 0, 255), point_radius=5, point_thickness=-1):
     """
-    FÃ¼gt normierte Koordinaten aus einer Label-Zeichenkette als farbige Punkte in ein Bild ein.
-    Das erste Element der Label-Zeile wird Ã¼bersprungen.
-
+    Draws labeled points on an image using normalized coordinates.
     Args:
-        image_path (str): Der Pfad zum Bild.
-        labels_string (str): Eine Zeichenkette mit den Labels und normierten Koordinaten,
-                             z.B. "8 0.32421875 0.1240234375 ...".
-                             Es wird erwartet, dass die Koordinaten paarweise folgen.
-        point_color (tuple): Die Farbe der Punkte im BGR-Format (Standard: Rot).
-        point_radius (int): Der Radius der Punkte in Pixeln (Standard: 5).
-        point_thickness (int): Die Dicke der Punkte (-1 fÃ¼r gefÃ¼llte Kreise, Standard: -1).
+        image_path (str): Path to the image file.
+        labels_string (str): String containing label information, where normalized coordinates (x, y) start from the second element.
+        point_color (tuple, optional): BGR color tuple for the points. Defaults to (0, 0, 255) (red).
+        point_radius (int, optional): Radius of the drawn points. Defaults to 5.
+        point_thickness (int, optional): Thickness of the points. Defaults to -1 (filled circle).
+    Returns:
+        numpy.ndarray or None: The image with drawn points, or None if the image could not be loaded.
+    Raises:
+        Exception: If an error occurs during processing.
     """
+   
     try:
         img = cv2.imread(image_path)
         if img is None:
@@ -1274,6 +1673,22 @@ def add_labeled_normalized_coordinates_as_points(image_path, labels_string, poin
 
 
 def create_yaml(path, fold_nr, namestring, palma, fold_dest_path, test_dataset_bool, number_of_channels):
+    """
+    Creates a YAML configuration file for dataset splits and class information.
+    Args:
+        path (str): Directory path where the YAML file will be saved.
+        fold_nr (int): Fold number for cross-validation.
+        namestring (str): Additional string to append to the fold directory name.
+        palma (bool): If True, use Palma cluster paths; otherwise, use local paths.
+        fold_dest_path (str): Destination path for fold data (used in Palma mode).
+        test_dataset_bool (bool): If True, include test dataset paths in the YAML file.
+        number_of_channels (int): Number of image channels; adds 'channels' field if >3 or ==1.
+    Side Effects:
+        Writes a YAML file named 'data.yaml' to the specified path containing dataset split paths,
+        number of classes, class names, and optionally the number of channels.
+    Raises:
+        IOError: If there is an error writing the YAML file.
+    """
     file_path = f"{path}/data.yaml"
     number_channel_string = "channels: " + str(number_of_channels)
 
@@ -1302,13 +1717,82 @@ def create_yaml(path, fold_nr, namestring, palma, fold_dest_path, test_dataset_b
         print(f"Fehler beim Schreiben der YAML-Datei: {e}")
 
 def read_file(path):
+    """
+    Reads a text file and returns a list of its lines with leading and trailing whitespace removed.
+
+    Args:
+        path (str): The path to the text file to be read.
+
+    Returns:
+        list of str: A list containing each line of the file, stripped of leading and trailing whitespace.
+    """
     with open(path, 'r', encoding='utf-8') as file:
         lines = [line.strip() for line in file]  # Entfernt \n aus allen Zeilen
     return lines
 
 
-def create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, fold10bool, bool_create_yaml, limiter, oriented, merge_ir_bool, namestring, palma_bool, fold_dest_path, perm_object):
+
+def create_fold_cross_validation(
+        fold_nr,
+        path_all_images,
+        path_labels,
+        ir,
+        fold10bool,
+        bool_create_yaml,
+        limiter,
+        oriented,
+        merge_ir_bool,
+        namestring,
+        palma_bool,
+        fold_dest_path,
+        perm_object
+    ):
+    """
+    Creates cross-validation folds for image and label datasets, organizing images and labels into train, validation, and test splits.
+    Args:
+        fold_nr (int): The current fold number to be used as validation.
+        path_all_images (str): Path to the directory containing all images.
+        path_labels (str): Path to the file containing all labels.
+        ir (bool): Whether to include infrared images.
+        fold10bool (bool): If True, use 10-fold cross-validation logic.
+        bool_create_yaml (bool): If True, create a YAML configuration file for the fold.
+        limiter (int or None): Limits the number of images processed per split; if None, all images are processed.
+        oriented (bool): Whether to use oriented bounding boxes for labels.
+        merge_ir_bool (bool): If True, merge IR images with color images.
+        namestring (str): String to append to fold names and paths.
+        palma_bool (bool): If True, use PALMA cluster paths; otherwise, use local paths.
+        fold_dest_path (str): Destination path for the fold output.
+        perm_object (dict or None): Dictionary specifying which image channels to include.
+    Returns:
+        int: Returns 0 upon successful creation of the fold.
+    Side Effects:
+        - Copies images and creates label files for train, validation, and test splits.
+        - Optionally creates a YAML configuration file for the fold.
+        - Prints progress and status messages to the console.
+        - Creates necessary folder structures for the fold output.
+    Notes:
+        - Assumes existence of helper functions: create_folder_structure, create_yaml, read_file, select_all_labels_in_img, copy_image, create_label_file.
+        - The function processes images and labels according to the specified fold and configuration.
+        - The train split consists of all folds except the current validation fold.
+        - The test split is always taken from fold 5.
+    """
     def create_image_and_label(lines,  string_tag, current_fold_nr):
+        """
+        Processes a list of image identifiers, copies corresponding images, creates label files, and prints progress information.
+        Args:
+            lines (list): List of image identifiers (strings) to process.
+            string_tag (str): Tag indicating the dataset split ('train', 'val', or 'test').
+            current_fold_nr (int or None): Current fold number for cross-validation, or None if not applicable.
+        Side Effects:
+            - Copies images to designated directories.
+            - Creates label files for each image.
+            - Prints progress information to the console.
+            - Applies a limiter to restrict the number of processed images for each split.
+        Notes:
+            - Uses global variables and functions: path_all_images, labels, select_all_labels_in_img, copy_image, 
+              paths_object, merge_ir_bool, perm_object, create_label_file, ir, oriented, fold_nr, limiter, np.
+            - The limiter restricts the number of processed images for 'train', 'val', and 'test' splits differently.
+        """
         counter = 0
         for line in lines:
             counter += 1
@@ -1387,6 +1871,9 @@ def create_fold_cross_validation(fold_nr,path_all_images,path_labels, ir, fold10
     return 0
 
 def print_divideline():
+    """
+    Prints a long horizontal dividing line to the console for visual separation of output sections.
+    """
     print("________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________")
 
 if __name__ == "__main__":

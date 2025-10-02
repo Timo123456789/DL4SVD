@@ -5,6 +5,14 @@ import os
     # Manuelle Legenden mit allen Folds
 from matplotlib.lines import Line2D
 def main():
+    """
+    Main function for generating boxplots comparing different channel sets across all folds and epochs.
+
+    - Defines channel sets and configuration flags.
+    - Loads result file paths for each set and fold.
+    - Extracts and combines metric values for all folds and sets.
+    - Calls create_boxplot_from_sets to generate and display boxplots.
+    """
     all_sets = ["rgbir", "rgb", "irgb", "rirb", "rgir", "gbndvi", "rgbndvi"]
     set_arr = {s: s for s in all_sets}
     window_size = 20
@@ -34,6 +42,19 @@ def main():
     
 
 def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
+    """
+    Generates and displays a boxplot of metric values for each channel set across all folds.
+
+    Args:
+        set_paths_dict (dict): Dictionary mapping set names to lists of file paths per fold.
+        window_size (int): Smoothing window size for rolling mean (unused here).
+        bool_arr (dict): Dictionary of metric flags to select the metric column.
+
+    Displays:
+        Boxplot of metric values for each channel set.
+        Prints the maximum metric value per fold and set.
+        Saves the plot as an SVG file.
+    """
     all_combined_dfs = []
 
     for set_name, fold_paths in set_paths_dict.items():
@@ -84,7 +105,20 @@ def create_boxplot_from_sets(set_paths_dict, window_size, bool_arr):
 
 
 def get_data_Folds(fold_paths, bool_arr, set_string):
+    """
+    Loads and extracts metric values for all folds of a channel set.
 
+    Args:
+        fold_paths (list): List of file paths for each fold.
+        bool_arr (dict): Dictionary of metric flags to select the metric column.
+        set_string (str): Name of the channel set.
+
+    Returns:
+        tuple: (list of DataFrames for each fold, string title for the selected metric)
+
+    Prints:
+        Warnings if columns are missing or files are not found.
+    """
     # Für alle Elemente in bool_arr eine if-Abfrage ergänzen
     if bool_arr.get("train/box_loss", False):
         map_spalte = 'train/box_loss'
@@ -172,6 +206,18 @@ def get_data_Folds(fold_paths, bool_arr, set_string):
 
 # Die Ladefunktion für einen Pfadtyp
 def load_paths_for_set(set_name):
+    """
+    Loads the file paths for all folds of a given channel set.
+
+    Args:
+        set_name (str): Name of the channel set.
+
+    Returns:
+        list: List of file paths for each fold (existing files only).
+
+    Prints:
+        Warning if a file is not found.
+    """
     paths = []
     for i in range(5):
         path = rf"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\cross_validation\{set_name}\fold{i}\results.csv"
@@ -183,6 +229,15 @@ def load_paths_for_set(set_name):
 
 # Hauptfunktion: lädt für alle gültigen Sets die Pfade
 def load_all_sets(set_arr):
+    """
+    Loads file paths for all channel sets and their folds.
+
+    Args:
+        set_arr (dict): Dictionary mapping set names to channel names.
+
+    Returns:
+        dict: Dictionary mapping set names to lists of file paths per fold.
+    """
     set_path_folds_arr = {}
 
     for key, value in set_arr.items():
@@ -193,6 +248,19 @@ def load_all_sets(set_arr):
 
 
 def load_best_model_files(setA, setB):
+    """
+    Loads the file paths for all folds of two channel sets for comparison.
+
+    Args:
+        setA (str): Name of the first channel set.
+        setB (str): Name of the second channel set.
+
+    Returns:
+        tuple: (list of file paths for setA folds, list of file paths for setB folds)
+
+    Prints:
+        Warning if a file is not found.
+    """
     fold_paths_setA = []
     fold_paths_setB = []
 
@@ -212,6 +280,16 @@ def load_best_model_files(setA, setB):
     return fold_paths_setA, fold_paths_setB
 
 def create_sav_dir(bool_arr):
+    """
+    Creates the output directory for saving plots based on the active metric in bool_arr.
+
+    Args:
+        bool_arr (dict): Dictionary of metric flags.
+
+    Side effects:
+        Creates the directory if it does not exist.
+        Prints status messages about directory creation.
+    """
         
     for key, value in bool_arr.items():
         if value is True:

@@ -3,6 +3,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 def main():
+    """
+    Main function for comparing AAB, OBB, and AAB in OBB model types using cross-validation results.
+
+    - Defines file paths for each fold and model type.
+    - Loads and smooths metric values for each fold and model type.
+    - Combines results into DataFrames and assigns model type labels.
+    - Calls plot_boxplots to visualize the top mAP values for each model type.
+    - Prints a warning if no valid data is found.
+    """
+
     # === Pfade zu deinen 10 Folds ===
     fold_paths_aab_old = [
         r"C:\Users\timol\OneDrive - Universität Münster\14. Fachsemester_SS_24\Palma_Runs\obb_aab_runs\aab_old\orFalse_Ep500_F0/results.csv",
@@ -87,6 +97,20 @@ def main():
 
 
 def get_smooth_Folds(fold_paths, window_size, bool_arr):
+    """
+    Loads and smooths metric values for all folds of a given model type.
+
+    Args:
+        fold_paths (list): List of file paths for each fold.
+        window_size (int): Smoothing window size for rolling mean.
+        bool_arr (dict): Dictionary of metric flags to select the metric column.
+
+    Returns:
+        tuple: (list of DataFrames for each fold, string title for the selected metric)
+
+    Prints:
+        Warnings if columns are missing or files are not found.
+    """
     if bool_arr["mAP@50-95"] == True:
         map_spalte = 'metrics/mAP50-95(B)'
         string_title = "mAP50-95(B)"
@@ -131,6 +155,19 @@ def get_smooth_Folds(fold_paths, window_size, bool_arr):
     return alle_folds_df, string_title
 
 def plot_boxplots(df_aab, df_obb, df_aab_old, string_title):
+    """
+    Generates and displays a boxplot of the top mAP values for each model type.
+
+    Args:
+        df_aab (pd.DataFrame): DataFrame of smoothed mAP values for AAB model.
+        df_obb (pd.DataFrame): DataFrame of smoothed mAP values for OBB model.
+        df_aab_old (pd.DataFrame): DataFrame of smoothed mAP values for AAB in OBB model.
+        string_title (str): Title for the metric being plotted.
+
+    Displays:
+        Boxplot of top mAP values per model type.
+        Saves the plot as an SVG file.
+    """
     # === Nur die Top 100 mAP-Werte je Gruppe auswählen ===
     no_top_val = 1500
     top_aab = df_aab.nlargest(no_top_val, 'mAP')
