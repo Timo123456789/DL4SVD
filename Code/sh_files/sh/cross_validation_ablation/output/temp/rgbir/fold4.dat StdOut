@@ -1,0 +1,14 @@
+################################# JOB REPORT ##################################
+Job ID: 33176658
+Array Job ID: 33176658_4
+Cluster: palma2
+User/Group: t_liet02/u0dawin
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 4
+CPU Utilized: 00:00:18
+CPU Efficiency: 30.00% of 00:01:00 core-walltime
+Job Wall-clock time: 00:00:15
+Memory Utilized: 0.00 MB (estimated maximum)
+Memory Efficiency: 0.00% of 50.00 GB (50.00 GB/node)
+###############################################################################

@@ -1,0 +1,44 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) palma/2023b
+Starte YOLOv9-OBB Training für Fold 2
+Verwende YAML: /scratch/tmp/t_liet02/data/cross_validation/rgbir/fold2/data.yaml
+WARNING ⚠️ conflicting 'task=detect' passed with 'task=obb' model. Ignoring 'task=detect' and updating to 'task=obb' to match model.
+Ultralytics 8.3.145 🚀 Python-3.10.16 torch-2.7.0+cu126 CUDA:0 (NVIDIA GeForce RTX 4090, 24111MiB)
+YOLOv9-obb summary (fused): 160 layers, 32,138,990 parameters, 0 gradients, 121.2 GFLOPs
+[34m[1mval: [0mFast image access ✅ (ping: 0.4±0.1 ms, read: 1512.7±161.1 MB/s, size: 2830.5 KB)
+[34m[1mval: [0mScanning /scratch/tmp/t_liet02/data/cross_validation/rgbir/fold2/val/labels.cache... 221 images, 3 backgrounds, 0 corrupt: 100%|██████████| 221/221 [00:00<?, ?it/s][34m[1mval: [0mScanning /scratch/tmp/t_liet02/data/cross_validation/rgbir/fold2/val/labels.cache... 221 images, 3 backgrounds, 0 corrupt: 100%|██████████| 221/221 [00:00<?, ?it/s]
+/scratch/tmp/t_liet02/envs/__mt_uv__/.venv/lib/python3.10/site-packages/torch/utils/data/dataloader.py:626: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 4, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):   0%|          | 0/56 [00:00<?, ?it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):   2%|▏         | 1/56 [00:00<00:13,  4.08it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):   4%|▎         | 2/56 [00:00<00:09,  5.53it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):   5%|▌         | 3/56 [00:00<00:08,  6.23it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):   7%|▋         | 4/56 [00:00<00:07,  6.54it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):   9%|▉         | 5/56 [00:00<00:07,  6.78it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  12%|█▎        | 7/56 [00:00<00:05,  9.51it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  16%|█▌        | 9/56 [00:01<00:04, 11.28it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  20%|█▉        | 11/56 [00:01<00:03, 12.61it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  23%|██▎       | 13/56 [00:01<00:03, 13.31it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  27%|██▋       | 15/56 [00:01<00:02, 13.84it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  30%|███       | 17/56 [00:01<00:02, 14.24it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  34%|███▍      | 19/56 [00:01<00:02, 14.52it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  38%|███▊      | 21/56 [00:01<00:02, 14.81it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  41%|████      | 23/56 [00:01<00:02, 14.82it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  45%|████▍     | 25/56 [00:02<00:02, 14.91it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  48%|████▊     | 27/56 [00:02<00:01, 15.03it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  52%|█████▏    | 29/56 [00:02<00:01, 14.50it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  55%|█████▌    | 31/56 [00:02<00:01, 14.89it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  59%|█████▉    | 33/56 [00:02<00:01, 14.99it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  62%|██████▎   | 35/56 [00:02<00:01, 15.16it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  66%|██████▌   | 37/56 [00:02<00:01, 15.41it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  70%|██████▉   | 39/56 [00:03<00:01, 15.44it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  73%|███████▎  | 41/56 [00:03<00:00, 15.23it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  77%|███████▋  | 43/56 [00:03<00:00, 15.38it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  80%|████████  | 45/56 [00:03<00:00, 15.48it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  84%|████████▍ | 47/56 [00:03<00:00, 15.51it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  88%|████████▊ | 49/56 [00:03<00:00, 15.50it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  91%|█████████ | 51/56 [00:03<00:00, 15.66it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  95%|█████████▍| 53/56 [00:03<00:00, 15.77it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95):  98%|█████████▊| 55/56 [00:04<00:00, 15.66it/s]                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 56/56 [00:04<00:00, 13.62it/s]
+                   all        221        614      0.703      0.755      0.771      0.608
+                   Car        128        226       0.74      0.903      0.884      0.716
+                 Truck         39         50      0.632       0.78       0.78      0.616
+                  Ship         22         29       0.62      0.552      0.655      0.505
+               Tractor         23         33          1      0.738      0.883      0.648
+           Camping Car         49         64      0.611      0.766      0.671      0.562
+                   van         17         17      0.559      0.821      0.716      0.596
+               vehicle         26         34      0.476      0.529      0.504      0.356
+               pick-up         97        157      0.685      0.847      0.852      0.698
+                 plane          3          4          1      0.856      0.995      0.771
+Speed: 0.4ms preprocess, 10.1ms inference, 0.0ms loss, 1.7ms postprocess per image
+Saving /scratch/tmp/t_liet02/new_val_detect/rgbir/fold2/val/predictions.json...
+Results saved to [1m/scratch/tmp/t_liet02/new_val_detect/rgbir/fold2/val[0m
+💡 Learn more at https://docs.ultralytics.com/modes/val
+python: can't open file '/home/t/t_liet02/sh/cross_validation/yolo_val_csv.py': [Errno 2] No such file or directory
+Python-Skript fehlgeschlagen
+################################# JOB REPORT ##################################
+Job ID: 33176683
+Array Job ID: 33176658_2
+Cluster: palma2
+User/Group: t_liet02/u0dawin
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 4
+CPU Utilized: 00:00:19
+CPU Efficiency: 29.69% of 00:01:04 core-walltime
+Job Wall-clock time: 00:00:16
+Memory Utilized: 0.00 MB (estimated maximum)
+Memory Efficiency: 0.00% of 50.00 GB (50.00 GB/node)
+###############################################################################
