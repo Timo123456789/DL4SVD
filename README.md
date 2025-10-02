@@ -1,1 +1,13 @@
-# master_thesis
+# Master Thesis:
+### Deep Learning for Small Vehicle Detection and Classification on High-Resolution Multispectral Remote Sensing Imagery
+ 
+ The precise detection and classification of small vehicles in high-resolution remote sensing data
+ is essential for applications such as traffic monitoring and urban planning. The aim of this work
+ was to investigate the influence of additional spectral channels on object detection performance.
+ Experiments on multispectral aerial images show the that infrared channel improve the detection
+ accuracy of small vehicles, while vegetation indices such as NDVI are not consistently beneficial.
+ RGB data alone already provides solid results, with the availability of extensive training data
+ having the greatest impact on model performance. YOLOv9 proves to be particularly suitable for
+ small objects. The results confirm the potential of deep learning methods for vehicle detection in
+ multispectral remote sensing data and open up perspectives for further research, for example on
+ the use of multitemporal data or scaling effects.
