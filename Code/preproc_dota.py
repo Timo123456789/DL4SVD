@@ -272,7 +272,7 @@ def check_normalvalues(normalized_values, cp):
     """
     found = False
     cp_normalized_values = normalized_values
-    for i in range(len(cp_normalized_values)): # Iteriere über die Indizes der Liste
+    for i in range(len(cp_normalized_values)): # Iteriere ueber die Indizes der Liste
         if cp_normalized_values[i] < 0:
             cp_normalized_values[i] = 0
             found = True
@@ -283,6 +283,6 @@ def check_normalvalues(normalized_values, cp):
     # if found:
     #     print(cp_normalized_values)
     return cp_normalized_values
-    #raise ValueError(f"Ungültiger Normwert gefunden: {wert}. Normwerte müssen zwischen 0 und 1 liegen.")
+    #raise ValueError(f"Ungueltiger Normwert gefunden: {wert}. Normwerte muessen zwischen 0 und 1 liegen.")
 
 main()

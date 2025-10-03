@@ -367,7 +367,7 @@ def merge_RGB_and_IR_image(rgb_path, ir_path, perm_object):
         elif len(active_channels) == 1:
             merged_img = active_channels[0]
         else:
-            print("Mindestens zwei aktive KanÃ¤le nÃ¶tig fÃ¼r cv2.merge()")
+            print("Mindestens zwei aktive Kanaele noetig fuer cv2.merge()")
 
         # The resulting image now has 4 channels: Blue, Green, Red, Infrared.
         # Note that the interpretation and visualization of such a
@@ -639,7 +639,7 @@ def create_label_file(target, labels, path, img_path, ir, oriented, string_tag):
                         str(yolo_transf_label[6])+" "+
                         str(yolo_transf_label[7]) + '\n')
                 elif oriented == False:
-                    #UrsprÃ¼ngliches YOLO Format
+                    #Urspruengliches YOLO Format
 
 
                     yolo_transf_label = convert_label_to_yolo_classic(px_corner,img.shape[1], img.shape[0])
@@ -781,7 +781,7 @@ def check_normalvalues(normalized_values):
     
     found = False
     cp_normalized_values = normalized_values
-    for i in range(len(cp_normalized_values)): # Iteriere Ã¼ber die Indizes der Liste
+    for i in range(len(cp_normalized_values)): # Iteriere ueber die Indizes der Liste
         if cp_normalized_values[i] < 0:
             cp_normalized_values[i] = 0
             found = True
@@ -792,7 +792,7 @@ def check_normalvalues(normalized_values):
     # if found:
     #     print(cp_normalized_values)
     return cp_normalized_values
-    #raise ValueError(f"UngÃ¼ltiger Normwert gefunden: {wert}. Normwerte mÃ¼ssen zwischen 0 und 1 liegen.")
+    #raise ValueError(f"Ungueltiger Normwert gefunden: {wert}. Normwerte muessen zwischen 0 und 1 liegen.")
     
 
 def copy_image(source_image_path, destination_folder, merge_ir_bool, image_path_rgb, image_path_ir, perm_object):
@@ -1010,7 +1010,7 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
         cv2.imwrite(r"Code\data\folds\tempfold\output_image_smaller0.png", img_rgb)
 
         if img_rgb is not None:
-    # Kanäle extrahieren
+    # Kanaele extrahieren
             b, g, r = cv2.split(img_rgb)
             # Speichern als Graustufenbilder
             #cv2.imwrite(r"Code\data\folds\tempfold\output_image_blue.png", b)
@@ -1020,7 +1020,7 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
         if img_rgb is not None and img_ir is not None:
             cv2.imshow(window_name_rgb, img_rgb)  # Bild anzeigen
          
-            cv2.resizeWindow(window_name_rgb, 1000, 1000)  # Breite=800px, Höhe=600px
+            cv2.resizeWindow(window_name_rgb, 1000, 1000)  # Breite=800px, Hoehe=600px
 
          
             #cv2.resizeWindow(window_name_rgb, 1024, 1024)
@@ -1028,8 +1028,8 @@ def show_every_picture_with_oriented_bounding_box(path_all_images, path_folds, p
             #cv2.resizeWindow(window_name_ir, 1024, 1024)
             #cv2.imshow(window_name_merged, img_merged)  # Bild anzeigen
             #cv2.resizeWindow(window_name_merged, 1024, 1024)
-            cv2.waitKey(0)  # Warten, bis eine Taste gedrÃ¼ckt wird
-            cv2.destroyAllWindows()  # Fenster schlieÃŸen
+            cv2.waitKey(0)  # Warten, bis eine Taste gedrueckt wird
+            cv2.destroyAllWindows()  # Fenster schliessen
 
 
 def label_as_txt(string):
@@ -1164,7 +1164,7 @@ def draw_axis_aligned_vehicle_bbox(image, Xvehicle, Yvehicle, width_car, length_
         text_x = int(Xvehicle + 15)
         text_y = int(Yvehicle - 15)
         text_bg_color = (0, 0, 0)  # Schwarz
-        text_color = (255, 255, 255)  # WeiÃŸ
+        text_color = (255, 255, 255)  # Weiss
         padding = 2
 
         # Zeichne den Hintergrund des Textes
@@ -1203,7 +1203,7 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
         - Vehicle type codes are mapped to human-readable labels.
     """
     
-    # Konvertiere die Punktkoordinaten in Integer-Tupel fÃ¼r cv2.line
+    # Konvertiere die Punktkoordinaten in Integer-Tupel fuer cv2.line
     p1 = (int(pt1[1]), int(pt1[0]))
     p2 = (int(pt2[1]), int(pt2[0]))
     p3 = (int(pt3[1]), int(pt3[0]))
@@ -1249,7 +1249,7 @@ def draw_oriented_vehicle_box(image, Xvehicle, Yvehicle, pt1, pt2, pt3, pt4, veh
     #     text_x = int(Xvehicle + 15)
     #     text_y = int(Yvehicle - 15)
     #     text_bg_color = (0, 0, 0)  # Schwarz
-    #     text_color = (255, 255, 255)  # WeiÃŸ
+    #     text_color = (255, 255, 255)  # Weiss
     #     padding = 2
 
     #     #Zeichne den Hintergrund des Textes
@@ -1302,7 +1302,7 @@ def get_bounding_box_in_px(img, label, oriented, ret_pts):
     l = np.array([l_1,l_2,l_3,l_4])
 
     ktri = np.argsort(l)[::-1] #key triangle
-    ltri = l[ktri]              # lÃ¤ngen Triangle
+    ltri = l[ktri]              # laengen Triangle
 
     length_car = np.mean(ltri[:2])
     width_car = np.mean(ltri[2:])
@@ -1425,12 +1425,12 @@ def calculate_bounding_box_area(points):
     points_np = np.array(points)
 
     # Annahme: Punkte sind im Format [y, x]. Wenn nicht, transponieren wir.
-    # ÃœberprÃ¼fen anhand des Mittelwerts, welche Spalte tendenziell grÃ¶ÃŸere Werte hat (oft x).
+    # Ueberpruefen anhand des Mittelwerts, welche Spalte tendenziell groessere Werte hat (oft x).
     if points_np.shape[1] == 2 and np.mean(points_np[:, 1]) > np.mean(points_np[:, 0]):
         points_np = points_np[:, [1, 0]]  # Spalten tauschen: [x, y] -> [y, x]
 
     if points_np.shape[1] != 2:
-        raise ValueError("Die Eingabepunkte mÃ¼ssen die Form (n, 2) haben.")
+        raise ValueError("Die Eingabepunkte muessen die Form (n, 2) haben.")
 
     min_y = int(np.min(points_np[:, 0]))
     max_y = int(np.max(points_np[:, 0]))
@@ -1468,9 +1468,9 @@ def calculate_oriented_bounding_box_area(points):
         return 0.0
 
     if points_np.shape[1] != 2:
-        raise ValueError("Die Eingabepunkte mÃ¼ssen die Form (n, 2) haben.")
+        raise ValueError("Die Eingabepunkte muessen die Form (n, 2) haben.")
 
-    # Finde die konvexe HÃ¼lle der Punkte
+    # Finde die konvexe Huelle der Punkte
     hull = ConvexHull(points_np)
     hull_points = points_np[hull.vertices]
 
@@ -1492,7 +1492,7 @@ def select_all_labels_in_img(target, labels):
     Returns:
         list of str: A list containing all labels that start with the target prefix.
     """
-    # Filtert alle Labels, die mit den Anfangsziffern von 'target' Ã¼bereinstimmen
+    # Filtert alle Labels, die mit den Anfangsziffern von 'target' uebereinstimmen
     filtered_labels = [label for label in labels if label.startswith(target)]
     return filtered_labels
 
@@ -1515,10 +1515,10 @@ def transform_labels_to_yolo_format(labels, width, height):
     Returns:
         list: List of labels converted to YOLO format.
     """
-    yolo_labels = []  # Liste fÃ¼r die konvertierten YOLO-Labels
+    yolo_labels = []  # Liste fuer die konvertierten YOLO-Labels
     for label in labels:
         label_parts = label.split()  # Teilt das Label in Teile basierend auf Leerzeichen
-        if len(label_parts) >= 13:  # Sicherstellen, dass genÃ¼gend Teile vorhanden sind
+        if len(label_parts) >= 13:  # Sicherstellen, dass genuegend Teile vorhanden sind
             try:
                 class_id = int(label_parts[0])  # Konvertiere die Klasse in eine Ganzzahl
                 x_center = float(label_parts[1])  # Konvertiere x_center in eine Gleitkommazahl
@@ -1541,7 +1541,7 @@ def transform_labels_to_yolo_format(labels, width, height):
             except ValueError as e:
                 print(f"Fehler beim Verarbeiten des Labels: {label} - {e}")
         else:
-            print(f"UngÃ¼ltiges Label-Format: {label}")
+            print(f"Ungueltiges Label-Format: {label}")
     return yolo_labels
 
 def convert_to_yolo_classic(x_center, y_center, x1, y1, x2, y2, x3, y3, x4, y4, class_id, img_width, img_height):
@@ -1640,7 +1640,7 @@ def add_labeled_normalized_coordinates_as_points(image_path, labels_string, poin
 
         height, width, _ = img.shape
 
-        # Teile die Label-Zeichenkette auf und Ã¼berspringe das erste Element
+        # Teile die Label-Zeichenkette auf und Ueberspringe das erste Element
         parts = labels_string.split()
         coordinates_str = parts[1:]
 

@@ -84,7 +84,7 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
                 
                 fold_arr_object_counter = count_objects_in_fold_arr(fold_arr, image_class_list)
             elif len(smallest_classes) >= 2:
-                #Reihenfolge nach Häufigkeit: Car, Pick-up, Camping-Car, Truck, Vehicle, Tractor, Ship, van, plane
+                #Reihenfolge nach Haeufigkeit: Car, Pick-up, Camping-Car, Truck, Vehicle, Tractor, Ship, van, plane
                 freq_val_arr=[]
                 for j in smallest_classes:
                     if j == "car":
@@ -144,11 +144,11 @@ def create_own_folds(number_of_folds, image_class_list, output_path):
             number_empty_images[i] += 1
 
     while empty_images:
-        # Bestimme das Fold mit der kleinsten Länge
+        # Bestimme das Fold mit der kleinsten Laenge
         min_index = min(range(len(fold_arr)), key=lambda i: len(fold_arr[i]) if isinstance(fold_arr[i], list) else float('inf'))
 
-        # Füge das nächste Element aus empty_images hinzu
-        fold_arr[min_index].append(empty_images.pop())  # oder pop() für schnellere Variante
+        # Fuege das naechste Element aus empty_images hinzu
+        fold_arr[min_index].append(empty_images.pop())  # oder pop() fuer schnellere Variante
         number_empty_images[min_index] += 1
 
 
@@ -229,7 +229,7 @@ def get_indices_of_folds_with_smallest_object_count(fold_arr_counter, object_nam
         return []
 
     min_count = float('inf')
-    # Speichern der Indizes der Folds mit der kleinsten Zählung
+    # Speichern der Indizes der Folds mit der kleinsten Zaehlung
     smallest_fold_indices = []
 
     for i, fold_data in enumerate(fold_arr_counter):
@@ -240,7 +240,7 @@ def get_indices_of_folds_with_smallest_object_count(fold_arr_counter, object_nam
                 min_count = current_count
                 smallest_fold_indices = [i] # Starte eine neue Liste, da ein kleinerer Wert gefunden wurde
             elif current_count == min_count:
-                smallest_fold_indices.append(i) # Füge Index hinzu, wenn der Wert gleich ist
+                smallest_fold_indices.append(i) # Fuege Index hinzu, wenn der Wert gleich ist
 
     return smallest_fold_indices
 

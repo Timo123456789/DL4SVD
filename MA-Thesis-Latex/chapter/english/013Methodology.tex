@@ -10,7 +10,7 @@
 
 The methodological approach of this work is illustrated in the accompanying flowchart (see Fig. \ref{fig:Flowchart}). The \acrshort{VEDAI} dataset is first used to investigate the differences between \acrshort{abb} and \acrshort{obb}, with the experiments on channel permutations based on the better bounding box format. In the next step, a self-trained model based on the DOTA dataset is used as a pre-trained model. The permutation experiments based on this model comprise five different channel combinations and, optionally, the inclusion of NDVI in combination with several true colour channels.
 
-The following section describes the methodology of this work. First, the data basis is explained using the data sets used. Building on this, the \acrshort{YOLO} versions used are presented. This is followed by the implementation, consisting of the Python packages used and a description of the programme code, which is made available on Github \cite{Github_timo}. Next, the central challenges in preprocessing are presented. Finally, the results of the 6-fold cross-validation are presented, whereby our own folds were created, which were used for all experiments with \acrshort{abb}, \acrshort{obb} and the permutations (see Table \ref{tab:perm}). Finally, the hardware on which the experiments were performed is described, namely the \acrlong{HPC} \acrshort{PALMA}, as well as the Bash scripts executed there with the hyperparameters used for \acrshort{YOLO}. 
+The following section describes the methodology of this work. First, the data basis is explained using the data sets used. Building on this, the \acrshort{YOLO} versions used are presented. This is followed by the implementation, consisting of the Python packages used and a description of the programme code, which is made available on Github \cite{Github_timo}. Next, the central challenges in preprocessing are presented. The results of the 6-fold cross-validation are presented, whereby our own folds were created, which were used for all experiments with \acrshort{abb}, \acrshort{obb} and the permutations (see Table \ref{tab:perm}). The following section describes the hardware on which the experiments were performed, namely the \acrlong{HPC} \acrshort{PALMA}, as well as the Bash scripts executed there with the hyperparameters used for \acrshort{YOLO}.
 
 
 
@@ -212,7 +212,7 @@ This problem was resolved by using exception handling and rounding the values to
         \caption{Two Coordinates out ouf range and higher 1}
         \label{fig:higher1}
     \end{subfigure}
-    \caption[Example for label coordinates outside of the image]{Example for label coordinates outside of the image (for full-sized Image see \ref{fig:example_coords_ooR_fs})}
+    \caption[Example for label coordinates outside of the image]{Example for label coordinates outside of the image (for full-sized images see \ref{fig:example_coords_ooR_fs})}
     \label{fig:example_coords_ooR}
 \end{figure}
 

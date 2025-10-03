@@ -20,12 +20,12 @@ module purge
 module load uv
 source /scratch/tmp/t_liet02/envs/__mt_uv__/.venv/bin/activate
 
-# Array-abhängiger Ordnername und YAML-Datei
+# Array-abhaengiger Ordnername und YAML-Datei
 PERM_SET="rgb"
 FOLD_ID=${SLURM_ARRAY_TASK_ID}
 DATA_YAML="/scratch/tmp/t_liet02/data/cross_validation/${PERM_SET}/fold${FOLD_ID}/data.yaml"
 
-echo "Starte YOLOv9-OBB Training für Fold ${FOLD_ID}"
+echo "Starte YOLOv9-OBB Training fuer Fold ${FOLD_ID}"
 echo "Verwende YAML: ${DATA_YAML}"
 # Training mit yolo CLI starten
 #yolo detect val \
