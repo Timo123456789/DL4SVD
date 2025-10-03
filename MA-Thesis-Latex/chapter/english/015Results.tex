@@ -177,7 +177,7 @@ RGBNDVI  & 4 & 2 \\ \hline
 
 
 \FloatBarrier
-\subsection{Comparison with Confusion Matrices}
+\subsection*{Comparison with Confusion Matrices}
 \label{subsec:permexp_comp_confusion_matric}
 
 
@@ -392,6 +392,10 @@ Overall, the IR model shows the highest performance and achieves the highest \ac
     \label{fig:ablation_diffM_all}
 \end{figure}
 
+\FloatBarrier
+\subsection*{Comparison with Confusion Matrices}
+\label{subsec:ablation_comp_confusion_matric}
+
 Following the analysis of the permutation experiments (see Section \ref{subsec:permexp_comp_confusion_matric}), the classification performance of the models is now examined using the confusion matrix of the IR model as a reference (see Figure \ref{fig:ablation_confM_IR_f0}). The evaluation is carried out in the same way as the categorisation of the differences in Table \ref{tab:diff_cat}.  
 
 The IR model shows a perfect recognition rate of 100\,\% for the class \textit{Plane}. Very high recognition rates of over 80\,\% were also achieved for the classes \textit{Car} and \textit{Tractor}.
@@ -425,11 +429,11 @@ In summary, it can be said that all models – with the exception of the NDVI mo
 \hline
 \textbf{Channel} & \textbf{Best mAP Fold (Validation)} & \textbf{Best mAP Fold (Test)} \\ 
 \hline
-red   & 4 & 2 (0.5408) \\
-green & 4 & 3 (0.5449) \\
-blue  & 4 & 2 (0.5449) \\
-ir    & 4 & 0 (0.5777) \\
-ndvi  & 2 & 0 (0.4467) \\
+Red   & 4 & 2 (0.5408) \\
+Green & 4 & 3 (0.5449) \\
+Blue  & 4 & 2 (0.5449) \\
+IR    & 4 & 0 (0.5777) \\
+NDVI  & 2 & 0 (0.4467) \\
 \hline
 \end{tabular}
 \caption{Best fold per model on validation and test sets, with test mAP@50-95 values}
